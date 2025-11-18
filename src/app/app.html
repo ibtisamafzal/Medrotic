@@ -1,0 +1,78 @@
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h1 style="color: #1976d2;">Medrotic - Navigation Test 🏥</h1>
+  
+  <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+    <h2 style="color: #333;">🔐 Auth Routes</h2>
+    <nav style="margin: 10px 0;">
+      <a routerLink="/auth/login" routerLinkActive="active" style="margin-right: 15px;">Login</a>
+      <a routerLink="/auth/register" routerLinkActive="active" style="margin-right: 15px;">Register</a>
+      <a routerLink="/auth/forgot-password" routerLinkActive="active">Forgot Password</a>
+    </nav>
+  </div>
+
+  <div style="margin: 20px 0; padding: 15px; background: #fff3e0; border-radius: 8px;">
+    <h2 style="color: #333;">👨‍💼 Admin Routes</h2>
+    <nav style="margin: 10px 0;">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" style="margin-right: 15px;">Dashboard</a>
+      <a routerLink="/admin/manage-doctors" routerLinkActive="active" style="margin-right: 15px;">Manage Doctors</a>
+      <a routerLink="/admin/manage-patients" routerLinkActive="active">Manage Patients</a>
+    </nav>
+  </div>
+
+  <div style="margin: 20px 0; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+    <h2 style="color: #333;">👨‍⚕️ Doctor Portal Routes</h2>
+    <nav style="margin: 10px 0;">
+      <a routerLink="/doctor-portal/dashboard" routerLinkActive="active" style="margin-right: 15px;">Dashboard</a>
+      <a routerLink="/doctor-portal/patient-management" routerLinkActive="active" style="margin-right: 15px;">Patient Management</a>
+      <a routerLink="/doctor-portal/upload-prescription" routerLinkActive="active">Upload Prescription</a>
+    </nav>
+  </div>
+
+  <div style="margin: 20px 0; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+    <h2 style="color: #333;">🏥 Patient Portal Routes</h2>
+    <nav style="margin: 10px 0;">
+      <a routerLink="/patient-portal/dashboard" routerLinkActive="active" style="margin-right: 15px;">Dashboard</a>
+      <a routerLink="/patient-portal/view-medical-history" routerLinkActive="active" style="margin-right: 15px;">Medical History</a>
+      <a routerLink="/patient-portal/ai-chatbot" routerLinkActive="active">AI Chatbot</a>
+    </nav>
+  </div>
+
+  <div style="margin: 20px 0; padding: 15px; background: #f3e5f5; border-radius: 8px;">
+    <h2 style="color: #333;">🌐 Common Pages</h2>
+    <nav style="margin: 10px 0;">
+      <a routerLink="/home" routerLinkActive="active" style="margin-right: 15px;">Home</a>
+      <a routerLink="/about" routerLinkActive="active" style="margin-right: 15px;">About</a>
+      <a routerLink="/services" routerLinkActive="active" style="margin-right: 15px;">Services</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    </nav>
+  </div>
+
+  <hr style="margin: 30px 0;">
+  
+  <div style="padding: 20px; background: #fafafa; border-radius: 8px; min-height: 200px;">
+    <h3 style="color: #666;">👇 Active Component Display:</h3>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<style>
+  a {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #1976d2;
+    border-radius: 4px;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  
+  a:hover {
+    background: #e3f2fd;
+    text-decoration: none;
+  }
+  
+  a.active {
+    font-weight: bold;
+    background: #1976d2;
+    color: white;
+  }
+</style>
