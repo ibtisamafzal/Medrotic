@@ -1,0 +1,9 @@
+[build]
+  base = "frontend"
+  command = "npm ci && npm run build:static"
+  publish = "dist/frontend"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
