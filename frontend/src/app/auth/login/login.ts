@@ -1,53 +1,312 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService, LoginRequest } from '../auth.service';
+import { Header } from '../../common/header/header';
+import { Footer } from '../../common/footer/footer';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class LoginComponent {
+  // Login credentials
   email: string = '';
+  phone: string = '';
+  cnic: string = '';
   password: string = '';
   selectedRole: 'admin' | 'doctor' | 'patient' = 'patient';
+  rememberMe: boolean = false;
+  
+  // UI state
+  loginMethod: 'email' | 'phone' | 'cnic' = 'email';
+  showPassword: boolean = false;
   loading: boolean = false;
   error: string = '';
+  
+  // Return URL for redirect after login
+  returnUrl: string = '';
+
+  // Eye icon paths
+  eyeOpenIcon = '/images/icons/eye-open-outline.svg';
+  eyeOffIcon = '/images/icons/eye-off-outline.svg';
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) {}
+    public router: Router
+  ) {
+    // Get return URL from query params
+    this.router.routerState.root.queryParams.subscribe(params => {
+      this.returnUrl = params['returnUrl'] || '';
+    });
+    
+    // Check if remember me was set
+    if (typeof localStorage !== 'undefined') {
+      const remembered = localStorage.getItem('rememberMe');
+      if (remembered === 'true') {
+        this.rememberMe = true;
+        // Optionally pre-fill email if stored
+        const storedEmail = localStorage.getItem('rememberedEmail');
+        if (storedEmail) {
+          this.email = storedEmail;
+        }
+      }
+    }
+  }
 
+  /**
+   * Format CNIC input as user types
+   */
+  onCNICInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const formatted = this.authService.formatCNIC(input.value);
+    this.cnic = formatted;
+    input.value = formatted;
+  }
+
+  /**
+   * Format phone input
+   */
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    // Format as +92 XXX XXXXXXX
+    if (value.startsWith('92')) {
+      value = '+92' + value.substring(2);
+    } else if (value.startsWith('0')) {
+      value = '+92' + value.substring(1);
+    } else if (!value.startsWith('+92')) {
+      value = '+92' + value;
+    }
+    
+    // Format with spaces
+    if (value.length > 4) {
+      value = value.slice(0, 4) + ' ' + value.slice(4);
+    }
+    if (value.length > 8) {
+      value = value.slice(0, 8) + ' ' + value.slice(8);
+    }
+    
+    this.phone = value;
+    input.value = value;
+  }
+
+  /**
+   * Toggle password visibility
+   */
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  /**
+   * Validate form before submission
+   */
+  validateForm(): boolean {
+    this.error = '';
+
+    // Validate based on login method
+    if (this.loginMethod === 'email') {
+      if (!this.email.trim()) {
+        this.error = 'Email is required';
+        return false;
+      }
+      if (!this.authService.validateEmail(this.email)) {
+        this.error = 'Please enter a valid email address';
+        return false;
+      }
+    } else if (this.loginMethod === 'phone') {
+      if (!this.phone.trim()) {
+        this.error = 'Phone number is required';
+        return false;
+      }
+      if (!this.authService.validatePhone(this.phone)) {
+        this.error = 'Please enter a valid phone number';
+        return false;
+      }
+    } else if (this.loginMethod === 'cnic') {
+      if (!this.cnic.trim()) {
+        this.error = 'CNIC is required';
+        return false;
+      }
+      if (!this.authService.validateCNIC(this.cnic)) {
+        this.error = 'Please enter a valid CNIC (format: 12345-1234567-1)';
+        return false;
+      }
+    }
+
+    if (!this.password) {
+      this.error = 'Password is required';
+      return false;
+    }
+
+    if (this.password.length < 6) {
+      this.error = 'Password must be at least 6 characters';
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Handle login form submission
+   */
   onLogin(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
-    this.authService.login(this.email, this.password, this.selectedRole).subscribe({
+    const loginRequest: LoginRequest = {
+      password: this.password,
+      role: this.selectedRole,
+      rememberMe: this.rememberMe
+    };
+
+    // Add identifier based on login method
+    if (this.loginMethod === 'email') {
+      loginRequest.email = this.email.trim();
+    } else if (this.loginMethod === 'phone') {
+      loginRequest.phone = this.phone.trim();
+    } else if (this.loginMethod === 'cnic') {
+      loginRequest.cnic = this.cnic.trim();
+    }
+
+    this.authService.login(loginRequest).subscribe({
       next: (user) => {
         this.loading = false;
-        // Redirect based on role
-        switch (user.role) {
-          case 'admin':
-            this.router.navigate(['/admin/dashboard']);
-            break;
-          case 'doctor':
-            this.router.navigate(['/doctor-portal/dashboard']);
-            break;
-          case 'patient':
-            this.router.navigate(['/patient-portal/dashboard']);
-            break;
+        
+        // Store email if remember me is checked
+        if (this.rememberMe && this.loginMethod === 'email') {
+          localStorage.setItem('rememberedEmail', this.email);
+        }
+
+        // Redirect based on role or return URL
+        if (this.returnUrl) {
+          this.router.navigateByUrl(this.returnUrl);
+        } else {
+          this.redirectByRole(user.role);
         }
       },
       error: (err) => {
         this.loading = false;
-        this.error = 'Login failed. Please check your credentials.';
+        this.error = err.error?.message || 'Login failed. Please check your credentials.';
         console.error('Login error:', err);
       }
     });
+  }
+
+  /**
+   * Handle Google sign-in
+   */
+  onGoogleLogin(): void {
+    this.loading = true;
+    this.error = '';
+
+    this.authService.loginWithGoogle(this.selectedRole).subscribe({
+      next: (user) => {
+        this.loading = false;
+        if (this.returnUrl) {
+          this.router.navigateByUrl(this.returnUrl);
+        } else {
+          this.redirectByRole(user.role);
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err.error?.message || 'Google sign-in failed. Please try again.';
+        console.error('Google login error:', err);
+      }
+    });
+  }
+
+  /**
+   * Redirect user based on their role
+   */
+  private redirectByRole(role: string): void {
+    switch (role) {
+      case 'admin':
+        this.router.navigate(['/admin/dashboard']);
+        break;
+      case 'doctor':
+        this.router.navigate(['/doctor-portal/dashboard']);
+        break;
+      case 'patient':
+        this.router.navigate(['/patient-portal/dashboard']);
+        break;
+      default:
+        this.router.navigate(['/home']);
+    }
+  }
+
+  /**
+   * Get placeholder text based on login method
+   */
+  getIdentifierPlaceholder(): string {
+    switch (this.loginMethod) {
+      case 'email':
+        return 'Enter your email';
+      case 'phone':
+        return 'Enter your phone number';
+      case 'cnic':
+        return '12345-1234567-1';
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * Get identifier label
+   */
+  getIdentifierLabel(): string {
+    switch (this.loginMethod) {
+      case 'email':
+        return 'Email';
+      case 'phone':
+        return 'Phone Number';
+      case 'cnic':
+        return 'CNIC';
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * Get current identifier value based on login method
+   */
+  get identifierValue(): string {
+    switch (this.loginMethod) {
+      case 'email':
+        return this.email;
+      case 'phone':
+        return this.phone;
+      case 'cnic':
+        return this.cnic;
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * Set current identifier value based on login method
+   */
+  set identifierValue(value: string) {
+    switch (this.loginMethod) {
+      case 'email':
+        this.email = value;
+        break;
+      case 'phone':
+        this.phone = value;
+        break;
+      case 'cnic':
+        this.cnic = value;
+        break;
+    }
   }
 }

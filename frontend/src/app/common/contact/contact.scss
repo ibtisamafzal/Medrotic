@@ -1,1 +1,109 @@
+.contact-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #1b123d;
+  border-radius: 30px;
+  padding: 8px 20px;
+  background: #fff;
+  height: auto;
+  width: auto;
+  
+  .badge-text {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+    text-transform: capitalize;
+    letter-spacing: -0.16px;
+    line-height: 1.2;
+  }
+}
 
+.contact-card {
+  background-color: #f5f6f9;
+}
+
+.contact-card .bg-white {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.bg-white.rounded-4.p-4 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.form-control,
+.form-select {
+  min-height: 48px;
+  font-size: 14px;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+}
+
+textarea.form-control {
+  min-height: 220px;
+  resize: vertical;
+}
+
+// Responsive styles for contact badge
+@media (max-width: 767px) {
+  .contact-badge {
+    padding: 6px 16px;
+    
+    .badge-text {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .contact-badge {
+    padding: 5px 12px;
+    
+    .badge-text {
+      font-size: 12px;
+    }
+  }
+
+  .contact-icon {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  .bg-white.rounded-4.p-4 {
+    padding: 1rem !important;
+  }
+}
+
+// Collaboration banner on contact page
+.border.border-primary.border-2.rounded-4 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(52, 97, 255, 0.15);
+  }
+}
+
+.collaboration-image {
+  animation: gentleTilt 6s ease-in-out infinite;
+}

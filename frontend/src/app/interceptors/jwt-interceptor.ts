@@ -12,13 +12,17 @@ export class JwtInterceptor implements HttpInterceptor {
     // Get token from auth service
     const token = this.authService.getToken();
     
-    // If token exists and user is logged in, add Authorization header
-    if (token && this.authService.isLoggedIn()) {
+    // If token exists, user is logged in, and token is not expired, add Authorization header
+    if (token && this.authService.isLoggedIn() && !this.authService.isTokenExpired()) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
         }
       });
+    } else if (token && this.authService.isTokenExpired()) {
+      // Token expired, logout user
+      console.warn('JWT token expired, logging out...');
+      this.authService.logout();
     }
 
     return next.handle(request);

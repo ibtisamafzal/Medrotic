@@ -1,1 +1,220 @@
-<p>home works!</p>
+<app-header></app-header>
+
+<main class="home-page">
+  <!-- HERO -->
+  <section class="hero section-spacing">
+    <img class="hero-shape hero-shape-left" [src]="heroAssets.leftShape" alt="" aria-hidden="true">
+    <img class="hero-shape hero-shape-right" [src]="heroAssets.rightShape" alt="" aria-hidden="true">
+
+    <div class="container">
+      <div class="hero-heading text-center mx-auto">
+        <h1>
+          We Take Care Of <span>Your Health</span><br>
+          With Medrotic
+        </h1>
+        <p>
+          Take control of your health and experience the benefits<br>of healthcare with our platform.
+        </p>
+      </div>
+
+      <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3">
+        <a class="btn btn-primary hero-btn" [routerLink]="['/auth/login']">
+          Get Started
+        </a>
+        <button class="btn btn-outline-primary hero-btn">
+          Book An Appointment
+        </button>
+      </div>
+
+      <div class="hero-panels row g-4 justify-content-center">
+        <div class="col-md-4 col-lg-3">
+          <article class="hero-panel hero-panel--rating h-100">
+            <p class="eyebrow">Top-Rated By</p>
+            <p class="value">99%</p>
+            <p class="subline">Of Clients</p>
+            <button class="btn btn-outline-light w-100 hero-panel-cta">
+              Our Services
+            </button>
+          </article>
+        </div>
+
+        <div class="col-md-4 col-lg-5">
+          <article class="hero-panel hero-panel--image h-100">
+            <img [src]="heroAssets.heroDoctor" alt="Doctor providing care" class="hero-main-image">
+          </article>
+        </div>
+
+        <div class="col-md-4 col-lg-4">
+          <article class="hero-panel hero-panel--virtual h-100">
+            <div class="hero-panel-copy">
+              <h3>Virtual Consultation</h3>
+              <p>Timely care with virtual consultation typically being scheduled.</p>
+            </div>
+            <div class="virtual-gallery">
+              <img [src]="heroAssets.virtualMain" alt="Virtual consultation session" class="virtual-main">
+              <img [src]="heroAssets.virtualOverlay" alt="" class="virtual-overlay" aria-hidden="true">
+            </div>
+            <button class="btn btn-outline-primary w-100 hero-panel-cta">
+              Contact Us
+            </button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <section class="sponsor-strip">
+    <div class="container">
+      <div class="logos-row">
+        <img *ngFor="let logo of sponsorLogos" [src]="logo.src" [alt]="logo.alt">
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLABORATION CTA -->
+  <section class="collaboration section-spacing">
+    <div class="container">
+      <div class="collab-card">
+        <div class="collab-visual">
+          <img [src]="collaboration.image" alt="Enhanced collaboration illustration">
+        </div>
+        <div class="collab-content">
+          <p class="overline">Enhanced Collaboration</p>
+          <h3>{{ collaboration.title }}</h3>
+          <p>{{ collaboration.copy }}</p>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary rounded-pill px-4">
+              {{ collaboration.cta }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENTIATORS -->
+  <section class="difference section-spacing">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-5">
+          <div class="difference-copy">
+            <h2>Here's What Makes Us Different From Conventional Clinics</h2>
+            <p>
+              At Medrotic, we are passionate about improving lives through knowledge and empowerment.
+            </p>
+          </div>
+          <div class="difference-stats">
+            <div class="stat" *ngFor="let stat of differenceStats">
+              <p class="value">{{ stat.value }}</p>
+              <p class="label">{{ stat.label }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="commitments-card">
+            <article class="commitment" *ngFor="let commitment of commitments">
+              <div class="icon">
+                <img [src]="commitment.icon" [alt]="commitment.title">
+              </div>
+              <div>
+                <h4>{{ commitment.title }}</h4>
+                <p>{{ commitment.copy }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="workflow section-spacing">
+    <div class="container">
+      <div class="row g-5 align-items-start">
+        <div class="col-lg-5">
+          <div class="workflow-copy">
+            <h2>How It Works</h2>
+            <p>
+              We believe that the best way to create successful marketing campaigns is to work closely with our clients to understand their goals and challenges.
+            </p>
+          </div>
+          <div class="workflow-visual">
+            <div class="workflow-placeholder"></div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="workflow-steps">
+            <article class="workflow-step" *ngFor="let step of workflowSteps">
+              <div class="workflow-icon">
+                <img [src]="step.icon" [alt]="step.title">
+              </div>
+              <div>
+                <h5>{{ step.title }}</h5>
+                <p>{{ step.copy }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials section-spacing">
+    <div class="container">
+      <div class="testimonial-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <h2>What Our Client Said About Us</h2>
+        <div class="testimonial-controls d-flex gap-2">
+          <button class="btn nav-circle" aria-label="Previous testimonial">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15L7 10L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="btn nav-circle" aria-label="Next testimonial">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-8">
+          <article class="testimonial-card h-100">
+            <img class="quote-icon" [src]="testimonial.quoteIcon" alt="" aria-hidden="true">
+            <p class="testimonial-quote">
+              {{ testimonial.quote }}
+            </p>
+            <div class="testimonial-author">
+              <img [src]="testimonial.avatar" alt="{{ testimonial.author }}">
+              <div>
+                <p class="name">{{ testimonial.author }}</p>
+                <p class="role">{{ testimonial.role }}</p>
+              </div>
+            </div>
+            <div class="testimonial-pagination">
+              <button class="btn pagination-arrow" aria-label="Go to previous slide">
+                <img [src]="testimonial.prevArrow" alt="">
+              </button>
+              <div class="pagination-track">
+                <span *ngFor="let indicator of testimonial.pagination" [class.is-active]="indicator === testimonial.activeIndex">
+                  {{ indicator }}
+                </span>
+              </div>
+              <button class="btn pagination-arrow" aria-label="Go to next slide">
+                <img [src]="testimonial.nextArrow" alt="">
+              </button>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <div class="testimonial-side-panel h-100"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+

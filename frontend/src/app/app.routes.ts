@@ -1,9 +1,16 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard';
 import { RoleGuard } from './guards/role-guard';
+import { Home } from './common/home/home';
+import { About } from './common/about/about';
+import { Services } from './common/services/services';
+import { Contact } from './common/contact/contact';
+import { Faq } from './common/faq/faq';
+import { Terms } from './common/terms/terms';
+import { Privacy } from './common/privacy/privacy';
 
 export const routes: Routes = [
-  // Public routes
+  // Public routes - Common pages
   {
     path: '',
     redirectTo: '/home',
@@ -11,7 +18,31 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./common/common-module').then(m => m.CommonModule)
+    component: Home
+  },
+  {
+    path: 'about',
+    component: About
+  },
+  {
+    path: 'services',
+    component: Services
+  },
+  {
+    path: 'contact',
+    component: Contact
+  },
+  {
+    path: 'faq',
+    component: Faq
+  },
+  {
+    path: 'terms',
+    component: Terms
+  },
+  {
+    path: 'privacy',
+    component: Privacy
   },
   
   // Auth routes (public)

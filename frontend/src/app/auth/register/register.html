@@ -1,1 +1,220 @@
-<p>register works!</p>
+<app-header></app-header>
+
+<div class="auth-page-wrapper">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7 col-sm-9">
+        <div class="auth-card">
+          <div class="auth-card-header text-center">
+            <div class="auth-logo">
+              <span class="logo-text">
+                Med<span class="text-primary">rotic</span>
+              </span>
+              <div class="logo-icon position-relative">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9.5" cy="9.5" r="9.5" fill="#3461FF"/>
+                </svg>
+                <svg class="position-absolute top-50 start-50 translate-middle medrotic-logo-inner" width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.52 0.98L17.48 0.98L10.5 17.02L3.52 0.98Z" fill="white"/>
+                </svg>
+              </div>
+            </div>
+            <h2 class="auth-title">Create Account</h2>
+            <p class="auth-subtitle">Register as a patient to get started with Medrotic</p>
+            <p class="register-note text-muted small mt-2">
+              <i class="bi bi-info-circle me-1"></i>
+              Doctors and admins are registered by administrators only
+            </p>
+          </div>
+
+          <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="auth-form">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input
+                id="name"
+                type="text"
+                class="custom-input-simple"
+                placeholder="Enter your full name"
+                [(ngModel)]="name"
+                name="name"
+                required
+              />
+            </div>
+
+            <!-- CNIC (Required for Patients) -->
+            <div class="form-group">
+              <label for="cnic" class="form-label">CNIC <span class="text-danger">*</span></label>
+              <input
+                id="cnic"
+                type="text"
+                class="custom-input-simple"
+                placeholder="12345-1234567-1"
+                [(ngModel)]="cnic"
+                name="cnic"
+                required
+                maxlength="15"
+                (input)="onCNICInput($event)"
+              />
+              <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Format: 12345-1234567-1</small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="custom-input-simple"
+                placeholder="Enter your email (optional)"
+                [(ngModel)]="email"
+                name="email"
+              />
+              <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Either email or phone is required</small>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input
+                id="phone"
+                type="text"
+                class="custom-input-simple"
+                placeholder="+92 XXX XXXXXXX"
+                [(ngModel)]="phone"
+                name="phone"
+                (input)="onPhoneInput($event)"
+              />
+              <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Either email or phone is required</small>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+              <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+              <input
+                id="dateOfBirth"
+                type="date"
+                class="custom-input-simple"
+                [(ngModel)]="dateOfBirth"
+                name="dateOfBirth"
+                required
+                [max]="getMaxDate()"
+              />
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+              <select
+                id="gender"
+                class="form-select auth-select"
+                [(ngModel)]="gender"
+                name="gender"
+                required
+              >
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+              <div class="custom-input-wrapper password-wrapper">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="custom-input password-input"
+                  placeholder="Enter your password"
+                  [(ngModel)]="password"
+                  name="password"
+                  required
+                  minlength="8"
+                />
+                <button 
+                  class="custom-input-eye-btn" 
+                  type="button"
+                  (click)="togglePasswordVisibility('password')"
+                  aria-label="Toggle password visibility"
+                >
+                  <img 
+                    [src]="showPassword ? eyeOpenIcon : eyeOffIcon" 
+                    alt="Toggle password visibility"
+                    title="Toggle password visibility"
+                    class="eye-icon"
+                  />
+                </button>
+              </div>
+              <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">
+                Must be at least 8 characters with uppercase, lowercase, and number
+              </small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+              <div class="custom-input-wrapper password-wrapper">
+                <input
+                  id="confirmPassword"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  class="custom-input password-input"
+                  placeholder="Confirm your password"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  required
+                />
+                <button 
+                  class="custom-input-eye-btn" 
+                  type="button"
+                  (click)="togglePasswordVisibility('confirm')"
+                  aria-label="Toggle confirm password visibility"
+                >
+                  <img 
+                    [src]="showConfirmPassword ? eyeOpenIcon : eyeOffIcon" 
+                    alt="Toggle password visibility"
+                    title="Toggle password visibility"
+                    class="eye-icon"
+                  />
+                </button>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="error" class="alert alert-danger" role="alert">
+              <i class="bi bi-exclamation-circle me-2"></i>
+              {{ error }}
+            </div>
+
+            <!-- Success Message -->
+            <div *ngIf="success" class="alert alert-success" role="alert">
+              <i class="bi bi-check-circle me-2"></i>
+              Registration successful! Redirecting to login...
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100 auth-submit-btn"
+              [disabled]="loading || !registerForm.form.valid"
+            >
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Registering...' : 'Create Account' }}
+            </button>
+
+            <!-- Login Link -->
+            <div class="text-center auth-footer">
+              <p class="mb-0 auth-footer-text">
+                Already have an account?
+                <a [routerLink]="['/auth/login']" class="text-decoration-none signup-link">Sign in</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

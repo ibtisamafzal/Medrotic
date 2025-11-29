@@ -1,0 +1,68 @@
+@import '../login/login.scss';
+
+.medrotic-logo-inner {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.otp-container {
+  margin: 32px 0;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.otp-inputs {
+  .otp-input {
+    width: 50px;
+    height: 60px;
+    font-size: 24px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Public Sans', 'Inter', sans-serif;
+    color: #001047;
+    background: #ffffff;
+    animation: scaleIn 0.4s ease-out both;
+    
+    // Stagger animation for OTP inputs
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{0.4 + ($i * 0.05)}s;
+      }
+    }
+
+    &:focus {
+      border-color: #3461ff;
+      box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.1);
+      outline: none;
+      transform: scale(1.05) translateY(-2px);
+    }
+
+    &:not(:placeholder-shown) {
+      border-color: #3461ff;
+      animation: pulse 0.3s ease-out;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 767.98px) {
+  .otp-inputs {
+    .otp-input {
+      width: 45px;
+      height: 55px;
+      font-size: 20px;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .otp-inputs {
+    gap: 8px !important;
+
+    .otp-input {
+      width: 40px;
+      height: 50px;
+      font-size: 18px;
+    }
+  }
+}

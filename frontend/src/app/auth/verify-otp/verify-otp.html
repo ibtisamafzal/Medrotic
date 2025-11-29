@@ -1,0 +1,99 @@
+<app-header></app-header>
+
+<div class="auth-page-wrapper">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7 col-sm-9">
+        <div class="auth-card">
+          <div class="auth-card-header text-center">
+            <div class="auth-logo">
+              <span class="logo-text">
+                Med<span class="text-primary">rotic</span>
+              </span>
+              <div class="logo-icon position-relative">
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9.5" cy="9.5" r="9.5" fill="#3461FF"/>
+                </svg>
+                <svg class="position-absolute top-50 start-50 translate-middle medrotic-logo-inner" width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.52 0.98L17.48 0.98L10.5 17.02L3.52 0.98Z" fill="white"/>
+                </svg>
+              </div>
+            </div>
+            <h2 class="auth-title">Verify OTP</h2>
+            <p class="auth-subtitle">
+              Enter the 6-digit code sent to 
+              <span *ngIf="email">{{ email }}</span>
+              <span *ngIf="phone">{{ phone }}</span>
+            </p>
+          </div>
+
+          <form (ngSubmit)="onVerify()" #verifyOTPForm="ngForm" class="auth-form">
+            <!-- OTP Input Fields -->
+            <div class="otp-container mb-4">
+              <div class="otp-inputs d-flex justify-content-center gap-2">
+                <input
+                  *ngFor="let i of [0,1,2,3,4,5]; let idx = index"
+                  type="text"
+                  class="otp-input form-control text-center"
+                  [attr.data-index]="idx"
+                  maxlength="1"
+                  pattern="[0-9]"
+                  [(ngModel)]="otp"
+                  [name]="'otp' + idx"
+                  (input)="onOTPInput($event)"
+                  (paste)="onOTPPaste($event)"
+                  (keydown)="onOTPKeyDown($event, idx)"
+                  (keyup)="onOTPKeyUp($event, idx)"
+                  [value]="getOTPDigit(idx)"
+                />
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="error" class="alert alert-danger" role="alert">
+              <i class="bi bi-exclamation-circle me-2"></i>
+              {{ error }}
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100 auth-submit-btn"
+              [disabled]="loading || otp.length !== 6"
+            >
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Verifying...' : 'Verify OTP' }}
+            </button>
+
+            <!-- Resend OTP -->
+            <div class="text-center mb-3">
+              <p class="mb-2 text-muted small" style="font-size: 0.875rem; color: rgba(0, 16, 71, 0.6);">
+                Didn't receive the code?
+              </p>
+              <button
+                type="button"
+                class="btn btn-link p-0 signup-link"
+                (click)="onResendOTP()"
+                [disabled]="!canResend || resending"
+              >
+                <span *ngIf="resending">Resending...</span>
+                <span *ngIf="!resending && canResend">Resend OTP</span>
+                <span *ngIf="!resending && !canResend">Resend OTP ({{ countdown }}s)</span>
+              </button>
+            </div>
+
+            <!-- Back to Login Link -->
+            <div class="text-center auth-footer">
+              <a [routerLink]="['/auth/login']" class="text-decoration-none signup-link">
+                <i class="bi bi-arrow-left me-1"></i>
+                Back to Sign In
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

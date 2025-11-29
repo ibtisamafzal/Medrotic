@@ -1,11 +1,248 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService, RegisterRequest } from '../auth.service';
+import { Header } from '../../common/header/header';
+import { Footer } from '../../common/footer/footer';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
   templateUrl: './register.html',
-  styleUrl: './register.scss',
+  styleUrl: './register.scss'
 })
 export class Register {
+  // Registration form fields
+  name: string = '';
+  email: string = '';
+  phone: string = '';
+  cnic: string = '';
+  password: string = '';
+  confirmPassword: string = '';
+  dateOfBirth: string = '';
+  gender: string = '';
+  
+  // UI state
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+  loading: boolean = false;
+  error: string = '';
+  success: boolean = false;
 
+  // Eye icon paths
+  eyeOpenIcon = '/images/icons/eye-open-outline.svg';
+  eyeOffIcon = '/images/icons/eye-off-outline.svg';
+
+  constructor(
+    private authService: AuthService,
+    public router: Router
+  ) {}
+
+  /**
+   * Get maximum date for date of birth (18 years ago)
+   */
+  getMaxDate(): string {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    return maxDate.toISOString().split('T')[0];
+  }
+
+  /**
+   * Format CNIC input as user types
+   */
+  onCNICInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const formatted = this.authService.formatCNIC(input.value);
+    this.cnic = formatted;
+    input.value = formatted;
+  }
+
+  /**
+   * Format phone input
+   */
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    
+    // Format as +92 XXX XXXXXXX
+    if (value.startsWith('92')) {
+      value = '+92' + value.substring(2);
+    } else if (value.startsWith('0')) {
+      value = '+92' + value.substring(1);
+    } else if (!value.startsWith('+92')) {
+      value = '+92' + value;
+    }
+    
+    // Format with spaces
+    if (value.length > 4) {
+      value = value.slice(0, 4) + ' ' + value.slice(4);
+    }
+    if (value.length > 8) {
+      value = value.slice(0, 8) + ' ' + value.slice(8);
+    }
+    
+    this.phone = value;
+    input.value = value;
+  }
+
+  /**
+   * Toggle password visibility
+   */
+  togglePasswordVisibility(field: 'password' | 'confirm'): void {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
+  }
+
+  /**
+   * Validate form before submission
+   */
+  validateForm(): boolean {
+    this.error = '';
+
+    if (!this.name.trim()) {
+      this.error = 'Full name is required';
+      return false;
+    }
+
+    if (!this.cnic.trim()) {
+      this.error = 'CNIC is required for patient registration';
+      return false;
+    }
+
+    if (!this.authService.validateCNIC(this.cnic)) {
+      this.error = 'Please enter a valid CNIC (format: 12345-1234567-1)';
+      return false;
+    }
+
+    // Email or phone is required
+    if (!this.email.trim() && !this.phone.trim()) {
+      this.error = 'Either email or phone number is required';
+      return false;
+    }
+
+    if (this.email.trim() && !this.authService.validateEmail(this.email)) {
+      this.error = 'Please enter a valid email address';
+      return false;
+    }
+
+    if (this.phone.trim() && !this.authService.validatePhone(this.phone)) {
+      this.error = 'Please enter a valid phone number';
+      return false;
+    }
+
+    if (!this.password) {
+      this.error = 'Password is required';
+      return false;
+    }
+
+    if (this.password.length < 8) {
+      this.error = 'Password must be at least 8 characters long';
+      return false;
+    }
+
+    // Check password strength (at least one uppercase, one lowercase, one number)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+    if (!passwordRegex.test(this.password)) {
+      this.error = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+      return false;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Passwords do not match';
+      return false;
+    }
+
+    if (!this.dateOfBirth) {
+      this.error = 'Date of birth is required';
+      return false;
+    }
+
+    // Check if user is at least 18 years old
+    const birthDate = new Date(this.dateOfBirth);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      // Not yet birthday this year
+      if (age - 1 < 18) {
+        this.error = 'You must be at least 18 years old to register';
+        return false;
+      }
+    } else if (age < 18) {
+      this.error = 'You must be at least 18 years old to register';
+      return false;
+    }
+
+    if (!this.gender) {
+      this.error = 'Gender is required';
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Handle registration form submission
+   */
+  onRegister(): void {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+    this.success = false;
+
+    const registerRequest: RegisterRequest = {
+      name: this.name.trim(),
+      cnic: this.cnic.trim(),
+      password: this.password,
+      role: 'patient', // Only patients can self-register
+      dateOfBirth: this.dateOfBirth,
+      gender: this.gender
+    };
+
+    // Add email or phone
+    if (this.email.trim()) {
+      registerRequest.email = this.email.trim();
+    }
+    if (this.phone.trim()) {
+      registerRequest.phone = this.phone.trim();
+    }
+
+    this.authService.register(registerRequest).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.success = true;
+        
+        // Redirect to OTP verification if required
+        if (response.requiresOTP) {
+          this.router.navigate(['/auth/verify-otp'], {
+            queryParams: {
+              email: this.email || undefined,
+              phone: this.phone || undefined,
+              type: 'registration'
+            }
+          });
+        } else {
+          // Registration successful, redirect to login
+          setTimeout(() => {
+            this.router.navigate(['/auth/login'], {
+              queryParams: { registered: 'true' }
+            });
+          }, 2000);
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err.error?.message || 'Registration failed. Please try again.';
+        console.error('Registration error:', err);
+      }
+    });
+  }
 }
