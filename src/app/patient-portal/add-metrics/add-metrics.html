@@ -1,1 +1,97 @@
-<p>add-metrics works!</p>
+<div class="add-metrics-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Add Health Metrics</h2>
+    <p class="page-subtitle">Record your vitals and health data for self-management</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Enter Health Data</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" [(ngModel)]="metric.date" name="date" required>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Blood Pressure (mmHg)</label>
+                <input type="text" class="form-control" [(ngModel)]="metric.bloodPressure" 
+                       name="bloodPressure" placeholder="120/80">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Heart Rate (bpm)</label>
+                <input type="number" class="form-control" [(ngModel)]="metric.heartRate" 
+                       name="heartRate" placeholder="72" min="40" max="200">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Temperature (°F)</label>
+                <input type="number" class="form-control" [(ngModel)]="metric.temperature" 
+                       name="temperature" placeholder="98.6" step="0.1" min="90" max="110">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" [(ngModel)]="metric.weight" 
+                       name="weight" placeholder="70" step="0.1" min="20" max="300">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Height (cm)</label>
+                <input type="number" class="form-control" [(ngModel)]="metric.height" 
+                       name="height" placeholder="170" min="50" max="250">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Blood Sugar (mg/dL)</label>
+                <input type="number" class="form-control" [(ngModel)]="metric.bloodSugar" 
+                       name="bloodSugar" placeholder="100" min="50" max="500">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Symptoms</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="metric.symptoms" 
+                          name="symptoms" placeholder="Describe any symptoms you're experiencing"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="metric.notes" 
+                          name="notes" placeholder="Additional notes"></textarea>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary" [disabled]="saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+                {{ saving ? 'Saving...' : 'Save Metrics' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary ms-2" (click)="resetForm()">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Metrics</h3>
+        </div>
+        <div class="card-body">
+          <div class="metrics-list" *ngIf="recentMetrics.length > 0">
+            <div class="metric-item" *ngFor="let m of recentMetrics">
+              <div class="metric-date">{{ m.date | date:'shortDate' }}</div>
+              <div class="metric-values">
+                <span *ngIf="m.bloodPressure" class="badge bg-primary me-1">BP: {{ m.bloodPressure }}</span>
+                <span *ngIf="m.heartRate" class="badge bg-danger me-1">HR: {{ m.heartRate }}</span>
+                <span *ngIf="m.temperature" class="badge bg-warning me-1">Temp: {{ m.temperature }}°F</span>
+                <span *ngIf="m.weight" class="badge bg-success">Weight: {{ m.weight }}kg</span>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="recentMetrics.length === 0">
+            <p class="text-muted">No recent metrics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

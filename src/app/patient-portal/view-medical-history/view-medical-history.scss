@@ -1,0 +1,163 @@
+:host {
+  display: block;
+}
+
+.view-medical-history-page {
+  .page-header {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #001047;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: rgba(0, 16, 71, 0.6);
+      margin: 0;
+    }
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #001047;
+        margin: 0;
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 1.5rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e8eaf0;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .timeline-marker {
+        position: absolute;
+        left: -3rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        border: 3px solid #e8eaf0;
+        z-index: 1;
+
+        &.type-prescription {
+          border-color: #f59e0b;
+          background: rgba(245, 158, 11, 0.1);
+        }
+
+        &.type-xray {
+          border-color: #ef4444;
+          background: rgba(239, 68, 68, 0.1);
+        }
+
+        &.type-test {
+          border-color: #8b5cf6;
+          background: rgba(139, 92, 246, 0.1);
+        }
+
+        &.type-visit {
+          border-color: #10b981;
+          background: rgba(16, 185, 129, 0.1);
+        }
+
+        &.type-metric {
+          border-color: #3461ff;
+          background: rgba(52, 97, 255, 0.1);
+        }
+
+        .timeline-icon {
+          font-size: 1.25rem;
+        }
+      }
+
+      .timeline-content {
+        flex: 1;
+        background: #f5f6f9;
+        border-radius: 12px;
+        padding: 1.25rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #e8eaf0;
+          transform: translateX(4px);
+        }
+
+        .timeline-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.75rem;
+
+          .timeline-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #001047;
+            margin: 0;
+          }
+
+          .timeline-date {
+            font-size: 0.875rem;
+            color: rgba(0, 16, 71, 0.6);
+          }
+        }
+
+        .timeline-body {
+          .timeline-description {
+            color: rgba(0, 16, 71, 0.7);
+            margin-bottom: 0.75rem;
+          }
+
+          .timeline-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            .timeline-doctor {
+              font-size: 0.875rem;
+              color: rgba(0, 16, 71, 0.6);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

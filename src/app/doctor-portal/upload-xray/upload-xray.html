@@ -1,1 +1,86 @@
-<p>upload-xray works!</p>
+<div class="upload-xray-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Upload X-Ray</h2>
+    <p class="page-subtitle">Upload X-Ray image with AI-assisted analysis</p>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-8 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-4">
+              <label class="form-label">Select Patient <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="xray.patientId" name="patientId" required>
+                <option value="">Select a patient</option>
+                <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} ({{ patient.cnic }})</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Upload X-Ray Image <span class="text-danger">*</span></label>
+              <input 
+                type="file" 
+                class="form-control" 
+                accept="image/*"
+                (change)="onFileSelected($event)"
+                required>
+              <div class="form-text">Supported formats: JPG, PNG, DICOM</div>
+            </div>
+
+            <div *ngIf="previewUrl" class="mb-4">
+              <label class="form-label">Preview</label>
+              <div class="border rounded p-3 text-center bg-dark">
+                <img [src]="previewUrl" alt="X-Ray preview" class="img-fluid" style="max-height: 500px; filter: invert(1);">
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <button type="button" class="btn btn-outline-info" (click)="processAI()" [disabled]="!selectedFile || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                Run AI Analysis
+              </button>
+            </div>
+
+            <div *ngIf="showAiAnalysis && aiAnalysis" class="mb-4">
+              <div class="alert alert-info">
+                <strong>AI Analysis:</strong>
+                <p class="mb-0 mt-2">{{ aiAnalysis }}</p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Findings</label>
+              <textarea 
+                class="form-control" 
+                rows="4"
+                [(ngModel)]="xray.findings"
+                name="findings"
+                placeholder="Clinical findings from X-Ray"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Recommendations</label>
+              <textarea 
+                class="form-control" 
+                rows="4"
+                [(ngModel)]="xray.recommendations"
+                name="recommendations"
+                placeholder="Recommendations based on X-Ray analysis"></textarea>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/dashboard">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="uploading || !selectedFile || !xray.patientId">
+                <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
+                Upload X-Ray
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

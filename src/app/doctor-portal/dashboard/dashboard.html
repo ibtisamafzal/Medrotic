@@ -1,1 +1,229 @@
-<p>dashboard works!</p>
+<div class="dashboard-page">
+  <div class="page-header mb-4 fade-in-down">
+    <h2 class="page-title">Doctor Dashboard</h2>
+    <p class="page-subtitle">Overview of your patients and practice metrics</p>
+  </div>
+
+  <!-- Key Metrics Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
+      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff' },
+      { label: 'Active Patients', value: metrics.activePatients, icon: 'active', color: '#10b981' },
+      { label: 'Prescriptions', value: metrics.totalPrescriptions, icon: 'prescriptions', color: '#f59e0b' },
+      { label: 'X-Rays', value: metrics.totalXrays, icon: 'xrays', color: '#ef4444' }
+    ]; let i = index">
+      <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
+        <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
+          <svg *ngIf="metric.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'active'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="metric.color" stroke-width="2"/>
+            <path d="M8 12L11 15L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'prescriptions'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6H20M4 6L2 4H22L20 6M4 6V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V6" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 10L12 14L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'xrays'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 7H21M3 7C2.44772 7 2 7.44772 2 8V18C2 18.5523 2.44772 19 3 19H21C21.5523 19 22 18.5523 22 18V8C22 7.44772 21.5523 7 21 7M3 7V5C3 4.44772 3.44772 4 4 4H20C20.5523 4 21 4.44772 21 5V7" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <h3 class="metric-value count-up">{{ metric.value }}</h3>
+          <p class="metric-label">{{ metric.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'400ms'">
+        <div class="action-header">
+          <div class="action-icon patients">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.66667C10.9205 1.66667 11.6667 2.41286 11.6667 3.33333V8.33333H16.6667C17.5871 8.33333 18.3333 9.07952 18.3333 10C18.3333 10.9205 17.5871 11.6667 16.6667 11.6667H11.6667V16.6667C11.6667 17.5871 10.9205 18.3333 10 18.3333C9.07952 18.3333 8.33333 17.5871 8.33333 16.6667V11.6667H3.33333C2.41286 11.6667 1.66667 10.9205 1.66667 10C1.66667 9.07952 2.41286 8.33333 3.33333 8.33333H8.33333V3.33333C8.33333 2.41286 9.07952 1.66667 10 1.66667Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3 class="section-title">Register Patient</h3>
+        </div>
+        <div class="action-content">
+          <p class="action-label">Add a new patient to your practice</p>
+          <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm mt-3">Register Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'450ms'">
+        <div class="action-header">
+          <div class="action-icon messages">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="section-title">Messages</h3>
+        </div>
+        <div class="action-content">
+          <div class="action-value">{{ metrics.pendingMessages }}</div>
+          <p class="action-label">Unread messages from patients</p>
+          <a routerLink="/doctor-portal/secure-communication" class="btn btn-outline-primary btn-sm mt-3">View Messages</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'500ms'">
+        <div class="action-header">
+          <div class="action-icon upload">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.33333 10L10 11.6667L11.6667 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="section-title">Upload Documents</h3>
+        </div>
+        <div class="action-content">
+          <p class="action-label">Upload prescriptions or X-rays</p>
+          <div class="d-flex gap-2 mt-3">
+            <a routerLink="/doctor-portal/upload-prescription" class="btn btn-outline-primary btn-sm">Prescription</a>
+            <a routerLink="/doctor-portal/upload-xray" class="btn btn-outline-primary btn-sm">X-Ray</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assigned Patients & Recent Uploads -->
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="section-card fade-in-up" [style.animation-delay]="'600ms'">
+        <h3 class="section-title mb-4">Assigned Patients ({{ assignedPatients.length }})</h3>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>CNIC</th>
+                <th>Phone</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let patient of assignedPatients">
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.cnic || 'N/A' }}</td>
+                <td>{{ patient.phone || 'N/A' }}</td>
+                <td>
+                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-sm btn-outline-primary">View</a>
+                </td>
+              </tr>
+              <tr *ngIf="assignedPatients.length === 0">
+                <td colspan="4" class="text-center text-muted py-4">No assigned patients</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-3">
+          <a routerLink="/doctor-portal/patient-management" class="btn btn-outline-primary btn-sm">View All Patients</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="section-card fade-in-up" [style.animation-delay]="'650ms'">
+        <h3 class="section-title mb-4">Recent Uploads</h3>
+        <div class="list-group list-group-flush">
+          <div *ngFor="let upload of recentUploads" class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <div class="fw-bold">
+                <span class="badge me-2" [class.bg-info]="upload.type === 'prescription'" [class.bg-warning]="upload.type === 'xray'">
+                  {{ upload.type }}
+                </span>
+                {{ upload.title }}
+              </div>
+              <small class="text-muted">Patient ID: {{ upload.patientId }}</small>
+            </div>
+            <small class="text-muted">{{ upload.date | date:'short' }}</small>
+          </div>
+          <div *ngIf="recentUploads.length === 0" class="list-group-item text-center text-muted py-4">
+            No recent uploads
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Patients -->
+  <div class="row g-4 mt-2">
+    <div class="col-12 col-lg-8">
+      <div class="section-card fade-in-up" [style.animation-delay]="'700ms'">
+        <h3 class="section-title mb-4">Recent Patients</h3>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>CNIC</th>
+                <th>Phone</th>
+                <th>Last Visit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let patient of recentPatients">
+                <td>{{ patient.name }}</td>
+                <td>{{ patient.cnic || 'N/A' }}</td>
+                <td>{{ patient.phone || 'N/A' }}</td>
+                <td>{{ patient.updatedAt ? (patient.updatedAt | date:'short') : 'N/A' }}</td>
+                <td>
+                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-sm btn-outline-primary">View</a>
+                </td>
+              </tr>
+              <tr *ngIf="recentPatients.length === 0">
+                <td colspan="5" class="text-center text-muted py-4">No recent patients</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="section-card fade-in-up" [style.animation-delay]="'650ms'">
+        <h3 class="section-title mb-4">Quick Links</h3>
+        <div class="d-flex flex-column gap-2">
+          <a routerLink="/doctor-portal/patient-management" class="quick-link-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M2.5 18.3333C2.5 15.1117 5.11167 12.5 8.33333 12.5H11.6667C14.8883 12.5 17.5 15.1117 17.5 18.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>Patient Management</span>
+          </a>
+          <a routerLink="/doctor-portal/secure-communication" class="quick-link-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Secure Communication</span>
+          </a>
+          <a routerLink="/doctor-portal/document-storage" class="quick-link-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Document Storage</span>
+          </a>
+          <a routerLink="/doctor-portal/notifications" class="quick-link-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.66667C8.15905 1.66667 6.66667 3.15905 6.66667 5V8.33333L4.16667 10.8333V12.5H15.8333V10.8333L13.3333 8.33333V5C13.3333 3.15905 11.8409 1.66667 10 1.66667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 12.5V14.1667C7.5 15.0871 8.24619 15.8333 9.16667 15.8333H10.8333C11.7538 15.8333 12.5 15.0871 12.5 14.1667V12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,221 @@
-<p>patient-details works!</p>
+<div class="patient-details-page">
+  <div class="page-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Patient Details</h2>
+        <p class="page-subtitle" *ngIf="patient">{{ patient.name }}</p>
+      </div>
+      <div>
+        <a [routerLink]="['/doctor-portal/patient-analytics', patientId]" class="btn btn-outline-primary me-2">
+          View Analytics
+        </a>
+        <button class="btn btn-outline-secondary" (click)="router.navigate(['/doctor-portal/patient-management'])">
+          Back to List
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && patient" class="row g-4">
+    <!-- Patient Information -->
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Patient Information</h5>
+          <button *ngIf="!isEditing" class="btn btn-sm btn-outline-primary" (click)="startEdit()">
+            Edit
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="!isEditing">
+            <div class="mb-3">
+              <label class="text-muted small">Name</label>
+              <p class="mb-0 fw-bold">{{ patient.name }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">CNIC</label>
+              <p class="mb-0">{{ patient.cnic || 'N/A' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">Email</label>
+              <p class="mb-0">{{ patient.email || 'N/A' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">Phone</label>
+              <p class="mb-0">{{ patient.phone || 'N/A' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">Date of Birth</label>
+              <p class="mb-0">{{ patient.dateOfBirth || 'N/A' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">Gender</label>
+              <p class="mb-0">{{ patient.gender || 'N/A' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small">Status</label>
+              <p class="mb-0">
+                <span class="badge" [class.bg-success]="patient.status === 'active'" [class.bg-secondary]="patient.status === 'inactive'">
+                  {{ patient.status }}
+                </span>
+              </p>
+            </div>
+            <div *ngIf="patient.address">
+              <label class="text-muted small">Address</label>
+              <p class="mb-0">{{ patient.address }}</p>
+            </div>
+          </div>
+          <form *ngIf="isEditing" (ngSubmit)="savePatient()">
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" [(ngModel)]="editForm.phone" name="phone">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="editForm.email" name="email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="editForm.address" name="address"></textarea>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-sm btn-primary" [disabled]="saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+                Save
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Medical History</h5>
+          <button *ngIf="!isEditing" class="btn btn-sm btn-outline-primary" (click)="startEdit()">
+            Edit
+          </button>
+        </div>
+        <div class="card-body">
+          <div *ngIf="!isEditing">
+            <p *ngIf="patient.medicalHistory" class="whitespace-pre-line">{{ patient.medicalHistory }}</p>
+            <p *ngIf="!patient.medicalHistory" class="text-muted">No medical history recorded</p>
+          </div>
+          <div *ngIf="isEditing">
+            <textarea 
+              class="form-control" 
+              rows="6"
+              [(ngModel)]="editForm.medicalHistory"
+              placeholder="Enter medical history, previous conditions, allergies, medications, etc."></textarea>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-sm btn-primary" (click)="savePatient()" [disabled]="saving">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+                Save
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label small">Add Note</label>
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="newNote"
+                placeholder="Add a note to medical history..."
+                (keyup.enter)="addNote()">
+              <button class="btn btn-outline-primary" type="button" (click)="addNote()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prescriptions and X-Rays -->
+    <div class="col-12 col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Prescriptions ({{ prescriptions.length }})</h5>
+          <a routerLink="/doctor-portal/upload-prescription" [queryParams]="{patientId: patientId}" class="btn btn-sm btn-primary">
+            Upload New
+          </a>
+        </div>
+        <div class="card-body">
+          <div *ngIf="prescriptions.length === 0" class="text-center text-muted py-4">
+            No prescriptions found
+          </div>
+          <div *ngFor="let prescription of prescriptions" class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <strong>Prescription #{{ prescription.id }}</strong>
+              <small class="text-muted">{{ prescription.createdAt | date:'short' }}</small>
+            </div>
+            <p *ngIf="prescription.notes" class="mb-2">{{ prescription.notes }}</p>
+            <div *ngIf="prescription.aiAnalysis" class="alert alert-info mb-2">
+              <strong>AI Analysis:</strong> {{ prescription.aiAnalysis }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">X-Rays ({{ xrays.length }})</h5>
+          <a routerLink="/doctor-portal/upload-xray" [queryParams]="{patientId: patientId}" class="btn btn-sm btn-primary">
+            Upload New
+          </a>
+        </div>
+        <div class="card-body">
+          <div *ngIf="xrays.length === 0" class="text-center text-muted py-4">
+            No X-rays found
+          </div>
+          <div *ngFor="let xray of xrays" class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between mb-2">
+              <strong>X-Ray #{{ xray.id }}</strong>
+              <small class="text-muted">{{ xray.createdAt | date:'short' }}</small>
+            </div>
+            <div *ngIf="xray.aiAnalysis" class="alert alert-info mb-2">
+              <strong>AI Analysis:</strong> {{ xray.aiAnalysis }}
+            </div>
+            <div *ngIf="xray.findings">
+              <strong>Findings:</strong> {{ xray.findings }}
+            </div>
+            <div *ngIf="xray.recommendations">
+              <strong>Recommendations:</strong> {{ xray.recommendations }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update History -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Update History</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="updateHistory.length === 0" class="text-center text-muted py-4">
+            No update history
+          </div>
+          <div *ngFor="let update of updateHistory" class="d-flex gap-3 mb-3 pb-3 border-bottom">
+            <div class="flex-shrink-0">
+              <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 1.66667C10.9205 1.66667 11.6667 2.41286 11.6667 3.33333V8.33333H16.6667C17.5871 8.33333 18.3333 9.07952 18.3333 10C18.3333 10.9205 17.5871 11.6667 16.6667 11.6667H11.6667V16.6667C11.6667 17.5871 10.9205 18.3333 10 18.3333C9.07952 18.3333 8.33333 17.5871 8.33333 16.6667V11.6667H3.33333C2.41286 11.6667 1.66667 10.9205 1.66667 10C1.66667 9.07952 2.41286 8.33333 3.33333 8.33333H8.33333V3.33333C8.33333 2.41286 9.07952 1.66667 10 1.66667Z" fill="#3461ff"/>
+                </svg>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <div class="fw-bold">{{ update.action }}</div>
+              <div class="text-muted small">{{ update.by }} • {{ update.date | date:'short' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

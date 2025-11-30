@@ -1,7 +1,11 @@
 // Services Banner Section
 .services-banner-section {
-  padding: 80px 0 40px;
+  padding: 100px 0 60px;
   background: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
 }
 
 .services-badge {
@@ -23,7 +27,7 @@
 }
 
 .services-main-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 60px;
   line-height: 72px;
@@ -31,37 +35,24 @@
   letter-spacing: -1.68px;
   text-transform: capitalize;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 // Services Grid Section
 .services-grid-section {
-  padding: 60px 0;
+  padding: 80px 0;
   background: #fff;
 }
 
 .service-card {
   min-height: 280px;
   box-shadow: 0px 6.478px 54.897px 0px rgba(0, 134, 255, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   padding: 40px 20px !important;
-  cursor: pointer;
-  
-  &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0px 12px 60px 0px rgba(0, 134, 255, 0.2);
-  }
-
-  .service-icon-wrapper {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover .service-icon-wrapper {
-    transform: scale(1.1);
-  }
+  margin-bottom: 2rem;
 }
 
 .service-icon-wrapper {
@@ -88,12 +79,12 @@
 }
 
 .service-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   font-size: 26px;
   line-height: normal;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .service-description {
@@ -119,38 +110,35 @@
 
 // Collaboration Section
 .collaboration-section {
-  padding: 60px 0;
+  padding: 80px 0;
   background: #fff;
 }
 
 .collaboration-banner {
   background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(52, 97, 255, 0.15);
-  }
+  margin: 2rem 0;
 
   img {
-    animation: gentleTilt 6s ease-in-out infinite;
+    width: 100%;
+    height: auto;
   }
 }
 
 // Trusted Care Section
 .trusted-care-section {
-  padding: 80px 0;
+  padding: 100px 0;
   background: #fff;
 }
 
 .trusted-care-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 56px;
   line-height: 72px;
   color: #1b123d;
   letter-spacing: -1.68px;
   text-transform: capitalize;
+  margin-bottom: 2rem;
 }
 
 .trusted-care-description {
@@ -178,7 +166,7 @@
 
 // Statistics Section
 .statistics-section {
-  padding: 80px 0;
+  padding: 100px 0;
   background: #fff;
   border-top: 1px solid #e0e0e0;
 }
@@ -253,7 +241,7 @@
   }
   
   .services-grid-section {
-    padding: 40px 0;
+    padding: 60px 0;
   }
   
   .service-card {

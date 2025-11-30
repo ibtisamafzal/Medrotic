@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PatientPortalLayout } from './patient-portal-layout/patient-portal-layout';
 import { Dashboard } from './dashboard/dashboard';
 import { ProfileSettings } from './profile-settings/profile-settings';
 import { ViewMedicalHistory } from './view-medical-history/view-medical-history';
@@ -14,19 +15,25 @@ import { Notifications } from './notifications/notifications';
 import { AccessRecords } from './access-records/access-records';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'profile-settings', component: ProfileSettings },
-  { path: 'view-medical-history', component: ViewMedicalHistory },
-  { path: 'add-metrics', component: AddMetrics },
-  { path: 'ai-chatbot', component: AiChatbot },
-  { path: 'doctor-search', component: DoctorSearch },
-  { path: 'test-report-analysis', component: TestReportAnalysis },
-  { path: 'upload-documents', component: UploadDocuments },
-  { path: 'view-prescriptions', component: ViewPrescriptions },
-  { path: 'view-xrays', component: ViewXrays },
-  { path: 'notifications', component: Notifications },
-  { path: 'access-records', component: AccessRecords }
+  {
+    path: '',
+    component: PatientPortalLayout,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: Dashboard },
+      { path: 'profile-settings', component: ProfileSettings },
+      { path: 'view-medical-history', component: ViewMedicalHistory },
+      { path: 'add-metrics', component: AddMetrics },
+      { path: 'ai-chatbot', component: AiChatbot },
+      { path: 'doctor-search', component: DoctorSearch },
+      { path: 'test-report-analysis', component: TestReportAnalysis },
+      { path: 'upload-documents', component: UploadDocuments },
+      { path: 'view-prescriptions', component: ViewPrescriptions },
+      { path: 'view-xrays', component: ViewXrays },
+      { path: 'notifications', component: Notifications },
+      { path: 'access-records', component: AccessRecords }
+    ]
+  }
 ];
 
 @NgModule({

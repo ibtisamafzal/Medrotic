@@ -1,1 +1,157 @@
-<p>profile-settings works!</p>
+<div class="profile-settings-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Profile Settings</h2>
+    <p class="page-subtitle">Manage your profile information, specialty, experience, and password</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Profile Information -->
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Profile Information</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+            Profile updated successfully!
+            <button type="button" class="btn-close" (click)="success = false"></button>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" (click)="error = ''"></button>
+          </div>
+
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <form *ngIf="!loading" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="doctor.name"
+                name="name"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                [(ngModel)]="doctor.email"
+                name="email"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                [(ngModel)]="doctor.phone"
+                name="phone">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Specialization</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="doctor.specialization"
+                name="specialization"
+                placeholder="e.g., Cardiology, Pediatrics">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">License Number</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="doctor.licenseNumber"
+                name="licenseNumber">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Hospital/Clinic</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="doctor.hospital"
+                name="hospital">
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+              <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+              Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Change Password</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="passwordSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+            Password changed successfully!
+            <button type="button" class="btn-close" (click)="passwordSuccess = false"></button>
+          </div>
+
+          <div *ngIf="passwordError" class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ passwordError }}
+            <button type="button" class="btn-close" (click)="passwordError = ''"></button>
+          </div>
+
+          <form (ngSubmit)="onChangePassword()">
+            <div class="mb-3">
+              <label class="form-label">Current Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                [(ngModel)]="passwordForm.currentPassword"
+                name="currentPassword"
+                required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">New Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                [(ngModel)]="passwordForm.newPassword"
+                name="newPassword"
+                required
+                minlength="8">
+              <div class="form-text">Password must be at least 8 characters long</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Confirm New Password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                [(ngModel)]="passwordForm.confirmPassword"
+                name="confirmPassword"
+                required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="changingPassword">
+              <span *ngIf="changingPassword" class="spinner-border spinner-border-sm me-2"></span>
+              Change Password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

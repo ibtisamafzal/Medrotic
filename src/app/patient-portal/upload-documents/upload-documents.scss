@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.upload-documents-page {
+  .page-header {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #001047;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: rgba(0, 16, 71, 0.6);
+      margin: 0;
+    }
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #001047;
+        margin: 0;
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .upload-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f5f6f9;
+    border-radius: 8px;
+  }
+
+  .guidelines-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: rgba(0, 16, 71, 0.7);
+      font-size: 0.875rem;
+
+      &:before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: bold;
+      }
+    }
+  }
+}
+

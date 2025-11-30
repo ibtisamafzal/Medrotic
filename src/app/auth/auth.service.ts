@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { isDefaultAdminCredentials, createDefaultAdminUser } from '../config/default-admin';
+import { isDefaultAdminCredentials, createDefaultAdminUser, isDefaultDoctorCredentials, createDefaultDoctorUser, isDefaultPatientCredentials, createDefaultPatientUser } from '../config/default-admin';
 
 export interface User {
   id: string;
@@ -143,6 +143,40 @@ export class AuthService {
       this.currentUserSubject.next(defaultAdmin);
       return new Observable(observer => {
         observer.next(defaultAdmin);
+        observer.complete();
+      });
+    }
+
+    // DEVELOPMENT MODE: Check for default doctor credentials
+    // This allows testing the doctor portal without backend setup
+    if (credentials.email && isDefaultDoctorCredentials(credentials.email, credentials.password, credentials.role)) {
+      const defaultDoctor = createDefaultDoctorUser();
+      if (this.isBrowser) {
+        localStorage.setItem('currentUser', JSON.stringify(defaultDoctor));
+        if (credentials.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+      }
+      this.currentUserSubject.next(defaultDoctor);
+      return new Observable(observer => {
+        observer.next(defaultDoctor);
+        observer.complete();
+      });
+    }
+
+    // DEVELOPMENT MODE: Check for default patient credentials
+    // This allows testing the patient portal without backend setup
+    if (credentials.email && isDefaultPatientCredentials(credentials.email, credentials.password, credentials.role)) {
+      const defaultPatient = createDefaultPatientUser();
+      if (this.isBrowser) {
+        localStorage.setItem('currentUser', JSON.stringify(defaultPatient));
+        if (credentials.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+      }
+      this.currentUserSubject.next(defaultPatient);
+      return new Observable(observer => {
+        observer.next(defaultPatient);
         observer.complete();
       });
     }

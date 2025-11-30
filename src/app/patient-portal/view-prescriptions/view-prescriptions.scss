@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+.view-prescriptions-page {
+  .page-header {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #001047;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: rgba(0, 16, 71, 0.6);
+      margin: 0;
+    }
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  .prescriptions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .prescription-card {
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: #f5f6f9;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #e8eaf0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .prescription-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+        .prescription-doctor {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: #001047;
+          margin: 0 0 0.25rem 0;
+        }
+
+        .prescription-date {
+          font-size: 0.875rem;
+          color: rgba(0, 16, 71, 0.6);
+          margin: 0;
+        }
+      }
+
+      .prescription-body {
+        .medications-section,
+        .instructions-section {
+          margin-bottom: 1rem;
+
+          h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #001047;
+            margin-bottom: 0.75rem;
+          }
+        }
+
+        .medications-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #ffffff;
+            border-radius: 8px;
+            border-left: 3px solid #3461ff;
+          }
+        }
+      }
+    }
+  }
+}
+

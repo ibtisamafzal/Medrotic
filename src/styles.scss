@@ -1,78 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* Global Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Global heading styles - Poppins for all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes gentleTilt {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(2deg);
-  }
-  75% {
-    transform: rotate(-2deg);
-  }
-}
-
-/* Page Load Animation */
-main,
-section {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-/* Smooth transitions for interactive elements */
-a,
-button,
-.btn {
-  transition: all 0.3s ease;
-}
-
-/* Card hover animations */
-.card,
-.service-card,
-.hero-panel {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-  }
-}
-
-/* Image fade-in and responsive styles */
+/* Image responsive styles */
 img {
-  animation: fadeIn 0.5s ease-out;
-  transition: opacity 0.3s ease;
   max-width: 100%;
   height: auto;
   display: block;
@@ -131,7 +66,6 @@ img {
   width: 100%;
   height: auto;
   object-fit: contain;
-  animation: gentleTilt 6s ease-in-out infinite;
   
   @media (max-width: 991px) {
     margin-bottom: 1rem;
@@ -146,40 +80,7 @@ img {
   object-fit: contain;
 }
 
-/* Stagger animation for lists */
-@keyframes staggerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Apply stagger to ngFor items */
-*[ng-reflect-ng-for-of] > *,
-.workflow-step,
-.commitment,
-.service-card {
-  animation: staggerFadeIn 0.5s ease-out;
-  animation-fill-mode: both;
-}
-
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }

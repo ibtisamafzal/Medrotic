@@ -1,1 +1,67 @@
-<p>test-report-analysis works!</p>
+<div class="test-report-analysis-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Test Report Analysis</h2>
+    <p class="page-subtitle">Upload test reports for AI-powered analysis</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Upload Report</h3>
+        </div>
+        <div class="card-body">
+          <div class="upload-area">
+            <input type="file" class="form-control" (change)="onFileSelected($event)" 
+                   accept=".pdf,.jpg,.jpeg,.png" id="fileInput">
+            <div class="upload-preview" *ngIf="selectedFile">
+              <p><strong>Selected:</strong> {{ selectedFile.name }}</p>
+              <p class="text-muted"><small>Size: {{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</small></p>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary" (click)="uploadAndAnalyze()" 
+                    [disabled]="!selectedFile || uploading">
+              <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ uploading ? 'Uploading & Analyzing...' : 'Upload & Analyze' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4" *ngIf="currentAnalysis">
+        <div class="card-header">
+          <h3 class="card-title">AI Analysis Results</h3>
+        </div>
+        <div class="card-body">
+          <div class="analysis-content">
+            <p>{{ currentAnalysis }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Previous Reports</h3>
+        </div>
+        <div class="card-body">
+          <div class="reports-list" *ngIf="reports.length > 0">
+            <div class="report-item" *ngFor="let report of reports">
+              <div class="report-header">
+                <h5>{{ report.fileName || 'Report' }}</h5>
+                <small class="text-muted">{{ report.uploadedAt | date:'short' }}</small>
+              </div>
+              <p class="report-analysis" *ngIf="report.analysis">{{ report.analysis.substring(0, 100) }}...</p>
+              <button class="btn btn-sm btn-outline-primary mt-2">View Details</button>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="reports.length === 0">
+            <p class="text-muted">No reports uploaded yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

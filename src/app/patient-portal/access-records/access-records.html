@@ -1,1 +1,69 @@
-<p>access-records works!</p>
+<div class="access-records-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Access Medical Records</h2>
+    <p class="page-subtitle">Search and export your medical records</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h3 class="card-title mb-0">Medical Records</h3>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary btn-sm" (click)="exportRecords('pdf')" [disabled]="exporting">
+            <span *ngIf="exporting" class="spinner-border spinner-border-sm me-2"></span>
+            Export PDF
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="exportRecords('csv')" [disabled]="exporting">
+            Export CSV
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="search-section mb-4">
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="searchQuery" 
+                 (input)="onSearch()" placeholder="Search records by title, description, doctor, or type...">
+          <button class="btn btn-primary" type="button" (click)="onSearch()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.5 17.5L13.875 13.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-3 text-muted">Loading records...</p>
+      </div>
+
+      <div *ngIf="!loading && filteredRecords.length === 0" class="text-center py-5">
+        <p class="text-muted">No records found</p>
+      </div>
+
+      <div class="records-table" *ngIf="!loading && filteredRecords.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Title</th>
+              <th>Doctor</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of filteredRecords">
+              <td>{{ record.date | date:'shortDate' }}</td>
+              <td><span class="badge" [class]="'bg-' + getTypeColor(record.type)">{{ record.type }}</span></td>
+              <td><strong>{{ record.title }}</strong></td>
+              <td>{{ record.doctorName || 'N/A' }}</td>
+              <td>{{ record.description || 'N/A' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

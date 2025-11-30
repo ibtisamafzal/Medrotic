@@ -1,7 +1,11 @@
 // FAQ Banner Section
 .faq-banner-section {
-  padding: 80px 0 40px;
+  padding: 100px 0 60px;
   background: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
 }
 
 .faq-badge {
@@ -23,7 +27,7 @@
 }
 
 .faq-main-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 60px;
   line-height: 72px;
@@ -31,18 +35,20 @@
   letter-spacing: -1.68px;
   text-transform: capitalize;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 // FAQ Accordion Section
 .faq-accordion-section {
-  padding: 60px 0;
+  padding: 80px 0;
   background: #fff;
 }
 
 .faq-container {
   background: #f5f6f9;
   min-height: 748px;
-  padding: 40px !important;
+  padding: 50px !important;
+  margin: 2rem 0;
 }
 
 .accordion-item {
@@ -108,7 +114,7 @@
 
 .faq-question {
   font-family: 'Poppins', sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 24px;
   line-height: 24px;
   color: #000;
@@ -131,15 +137,15 @@
 
 .faq-icon-plus,
 .faq-icon-minus {
-  transition: opacity 0.3s ease;
+  // No transitions
 }
 
 .accordion-body {
-  padding: 0 20px 20px 20px !important;
+  padding: 0 20px 24px 20px !important;
   background: rgba(255, 255, 255, 0.96);
   border-radius: 0 0 20px 20px;
   margin-top: -20px;
-  padding-top: 20px !important;
+  padding-top: 24px !important;
 }
 
 .faq-answer {
@@ -155,21 +161,17 @@
 
 // Collaboration Section
 .collaboration-section {
-  padding: 60px 0;
+  padding: 80px 0;
   background: #fff;
 }
 
 .collaboration-banner {
   background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(52, 97, 255, 0.15);
-  }
+  margin: 2rem 0;
 
   img {
-    animation: gentleTilt 6s ease-in-out infinite;
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -199,7 +201,7 @@
 
 @media (max-width: 991px) {
   .faq-banner-section {
-    padding: 60px 0 30px;
+    padding: 80px 0 50px;
   }
   
   .faq-main-title {
@@ -208,7 +210,7 @@
   }
   
   .faq-accordion-section {
-    padding: 40px 0;
+    padding: 60px 0;
   }
   
   .faq-container {

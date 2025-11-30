@@ -1,1 +1,120 @@
-<p>document-storage works!</p>
+<div class="document-storage-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Document Storage</h2>
+    <p class="page-subtitle">Manage patient documents and files</p>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">Upload Document</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <label class="form-label">Select Patient</label>
+          <select class="form-select" [(ngModel)]="newDocument.patientId" name="patientId">
+            <option value="">All Patients</option>
+            <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }}</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3">
+          <label class="form-label">Document Type</label>
+          <select class="form-select" [(ngModel)]="newDocument.type" name="type">
+            <option value="prescription">Prescription</option>
+            <option value="xray">X-Ray</option>
+            <option value="report">Report</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-5">
+          <label class="form-label">File</label>
+          <input type="file" class="form-control" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary" (click)="uploadDocument()" [disabled]="uploading || !selectedFile || !newDocument.patientId">
+            <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
+            Upload Document
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-4">
+          <label class="form-label">Filter by Patient</label>
+          <select class="form-select" [(ngModel)]="selectedPatient" (change)="onPatientFilterChange()" name="filterPatient">
+            <option value="">All Patients</option>
+            <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Documents List -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Documents ({{ documents.length }})</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Patient</th>
+              <th>Size</th>
+              <th>Uploaded</th>
+              <th>Verification Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documents">
+              <td>{{ doc.name }}</td>
+              <td>
+                <span class="badge bg-secondary">{{ doc.type }}</span>
+              </td>
+              <td>{{ doc.patientId }}</td>
+              <td>{{ formatFileSize(doc.size) }}</td>
+              <td>{{ doc.uploadedAt | date:'short' }}</td>
+              <td>
+                <span class="badge" 
+                  [class.bg-warning]="doc.verificationStatus === 'pending' || !doc.verificationStatus"
+                  [class.bg-success]="doc.verificationStatus === 'verified'"
+                  [class.bg-danger]="doc.verificationStatus === 'rejected'">
+                  {{ doc.verificationStatus || 'pending' }}
+                </span>
+                <div *ngIf="doc.verifiedAt" class="small text-muted mt-1">
+                  Verified: {{ doc.verifiedAt | date:'short' }}
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteDocument(doc.id!)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="documents.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                No documents found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

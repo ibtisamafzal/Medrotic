@@ -1,1 +1,95 @@
-<p>secure-communication works!</p>
+<div class="secure-communication-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Secure Communication</h2>
+    <p class="page-subtitle">Secure messaging with your patients</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Patient List -->
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Patients</h5>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="loading" class="text-center py-4">
+            <div class="spinner-border spinner-border-sm text-primary"></div>
+          </div>
+          <div *ngIf="!loading" class="list-group list-group-flush">
+            <button 
+              *ngFor="let patient of patients"
+              type="button"
+              class="list-group-item list-group-item-action"
+              [class.active]="selectedPatient?.id === patient.id"
+              (click)="selectPatient(patient)">
+              <div class="fw-bold">{{ patient.name }}</div>
+              <small class="text-muted">{{ patient.cnic || 'N/A' }}</small>
+            </button>
+            <div *ngIf="patients.length === 0" class="list-group-item text-center text-muted">
+              No patients found
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="col-12 col-md-8">
+      <div class="card h-100 d-flex flex-column">
+        <div class="card-header">
+          <h5 class="mb-0" *ngIf="selectedPatient">
+            Chat with {{ selectedPatient.name }}
+          </h5>
+          <p class="mb-0 text-muted small" *ngIf="!selectedPatient">
+            Select a patient to start messaging
+          </p>
+        </div>
+        <div class="card-body flex-grow-1 d-flex flex-column p-0">
+          <div *ngIf="!selectedPatient" class="flex-grow-1 d-flex align-items-center justify-content-center text-muted">
+            <div class="text-center">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-3 opacity-50">
+                <path d="M32 58.6667C46.7279 58.6667 58.6667 46.7279 58.6667 32C58.6667 17.2721 46.7279 5.33333 32 5.33333C17.2721 5.33333 5.33333 17.2721 5.33333 32C5.33333 46.7279 17.2721 58.6667 32 58.6667Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M21.3333 32L28 38.6667L42.6667 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p>Select a patient from the list to start messaging</p>
+            </div>
+          </div>
+
+          <div *ngIf="selectedPatient" class="flex-grow-1 d-flex flex-column">
+            <!-- Messages -->
+            <div class="messages-container p-3 flex-grow-1 overflow-auto" style="max-height: 400px;">
+              <div *ngFor="let message of messages" class="mb-3">
+                <div class="d-flex" [class.justify-content-end]="message.from">
+                  <div class="message-bubble" [class.sent]="message.from" [class.received]="!message.from">
+                    <p class="mb-1">{{ message.content }}</p>
+                    <small class="text-muted">{{ message.timestamp | date:'short' }}</small>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="messages.length === 0" class="text-center text-muted py-4">
+                No messages yet. Start the conversation!
+              </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="border-top p-3">
+              <form (ngSubmit)="sendMessage()" class="d-flex gap-2">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="newMessage"
+                  name="newMessage"
+                  placeholder="Type your message..."
+                  [disabled]="sending">
+                <button type="submit" class="btn btn-primary" [disabled]="sending || !newMessage.trim()">
+                  <span *ngIf="sending" class="spinner-border spinner-border-sm me-2"></span>
+                  Send
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

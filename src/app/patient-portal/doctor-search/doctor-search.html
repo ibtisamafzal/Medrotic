@@ -1,1 +1,101 @@
-<p>doctor-search works!</p>
+<div class="doctor-search-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Find a Doctor</h2>
+    <p class="page-subtitle">Search for doctors by specialty, city, disease, or experience</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Search Filters</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="searchDoctors()">
+            <div class="mb-3">
+              <label class="form-label">City</label>
+              <select class="form-select" [(ngModel)]="filters.city" name="city">
+                <option value="">All Cities</option>
+                <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Specialty</label>
+              <select class="form-select" [(ngModel)]="filters.specialty" name="specialty">
+                <option value="">All Specialties</option>
+                <option *ngFor="let spec of specialties" [value]="spec">{{ spec }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Disease/Condition</label>
+              <input type="text" class="form-control" [(ngModel)]="filters.disease" 
+                     name="disease" placeholder="e.g., Diabetes, Hypertension">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Minimum Experience (years)</label>
+              <input type="number" class="form-control" [(ngModel)]="filters.experience" 
+                     name="experience" placeholder="e.g., 5" min="0">
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ loading ? 'Searching...' : 'Search Doctors' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary" (click)="clearFilters()">Clear Filters</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0">Search Results</h3>
+          <span class="badge bg-primary">{{ doctors.length }} doctors found</span>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-3 text-muted">Searching doctors...</p>
+          </div>
+
+          <div *ngIf="!loading && doctors.length === 0" class="text-center py-5">
+            <p class="text-muted">No doctors found. Try adjusting your filters.</p>
+          </div>
+
+          <div class="doctors-list" *ngIf="!loading && doctors.length > 0">
+            <div class="doctor-card" *ngFor="let doctor of doctors">
+              <div class="doctor-info">
+                <div class="doctor-header">
+                  <h4 class="doctor-name">{{ doctor.name }}</h4>
+                  <div class="doctor-rating" *ngIf="doctor.rating">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 0L10.1631 5.52786L16 6.47214L11.8541 10.4721L12.9443 16L8 13.5279L3.05573 16L4.1459 10.4721L0 6.47214L5.83686 5.52786L8 0Z" fill="#fbbf24"/>
+                    </svg>
+                    <span>{{ doctor.rating }}</span>
+                  </div>
+                </div>
+                <div class="doctor-details">
+                  <span class="badge bg-primary me-2">{{ doctor.specialty }}</span>
+                  <span class="badge bg-secondary me-2">{{ doctor.city }}</span>
+                  <span class="badge bg-info" *ngIf="doctor.experience">{{ doctor.experience }} years</span>
+                </div>
+                <div class="doctor-qualifications" *ngIf="doctor.qualifications">
+                  <small class="text-muted">Qualifications: {{ doctor.qualifications.join(', ') }}</small>
+                </div>
+                <div class="doctor-hospital" *ngIf="doctor.hospital">
+                  <small class="text-muted">Hospital: {{ doctor.hospital }}</small>
+                </div>
+              </div>
+              <div class="doctor-actions">
+                <button class="btn btn-outline-primary btn-sm">View Profile</button>
+                <button class="btn btn-primary btn-sm">Book Appointment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,114 @@
-<p>register-patient works!</p>
+<div class="register-patient-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Register New Patient</h2>
+    <p class="page-subtitle">Add a new patient to your practice</p>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-8 mx-auto">
+      <div class="card">
+        <div class="card-body">
+          <div *ngIf="success" class="alert alert-success" role="alert">
+            Patient registered successfully! Redirecting...
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ error }}
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #patientForm="ngForm">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="patient.name"
+                  name="name"
+                  required>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">CNIC <span class="text-danger">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="patient.cnic"
+                  name="cnic"
+                  placeholder="12345-1234567-1"
+                  required>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  [(ngModel)]="patient.email"
+                  name="email">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Phone</label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  [(ngModel)]="patient.phone"
+                  name="phone">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Date of Birth</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  [(ngModel)]="patient.dateOfBirth"
+                  name="dateOfBirth">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Gender</label>
+                <select class="form-select" [(ngModel)]="patient.gender" name="gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Address</label>
+                <textarea 
+                  class="form-control" 
+                  rows="3"
+                  [(ngModel)]="patient.address"
+                  name="address"></textarea>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Medical History</label>
+                <textarea 
+                  class="form-control" 
+                  rows="4"
+                  [(ngModel)]="patient.medicalHistory"
+                  name="medicalHistory"
+                  placeholder="Previous conditions, allergies, medications, etc."></textarea>
+              </div>
+
+              <div class="col-12">
+                <div class="d-flex gap-2 justify-content-end">
+                  <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/patient-management">
+                    Cancel
+                  </button>
+                  <button type="submit" class="btn btn-primary" [disabled]="loading || !patientForm.valid">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    Register Patient
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

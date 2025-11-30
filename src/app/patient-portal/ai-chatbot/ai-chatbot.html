@@ -1,1 +1,90 @@
-<p>ai-chatbot works!</p>
+<div class="ai-chatbot-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">AI Health Chatbot</h2>
+    <p class="page-subtitle">Ask health-related questions and get AI-powered responses</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card chat-card">
+        <div class="card-header">
+          <div class="d-flex align-items-center">
+            <div class="chatbot-avatar me-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="#3461ff"/>
+                <path d="M12 6V10M12 14H12.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="card-title mb-0">AI Health Assistant</h3>
+              <small class="text-muted">Online</small>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="chat-messages" #chatContainer>
+            <div class="message" *ngFor="let message of messages" [class]="'message-' + message.type">
+              <div class="message-content">
+                <p>{{ message.content }}</p>
+                <small class="message-time">{{ message.timestamp | date:'short' }}</small>
+              </div>
+            </div>
+            <div class="message message-bot" *ngIf="sending">
+              <div class="message-content">
+                <div class="typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="currentQuery" 
+                     (keyup.enter)="sendMessage()" placeholder="Type your question here..."
+                     [disabled]="sending">
+              <button class="btn btn-primary" type="button" (click)="sendMessage()" [disabled]="sending || !currentQuery.trim()">
+                <svg *ngIf="!sending" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.3333 1.66667L9.16667 10.8333M18.3333 1.66667L12.5 18.3333L9.16667 10.8333M18.3333 1.66667L1.66667 7.5L9.16667 10.8333" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span *ngIf="sending" class="spinner-border spinner-border-sm"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Suggested Questions</h3>
+        </div>
+        <div class="card-body">
+          <div class="suggestions-list">
+            <button class="suggestion-item" *ngFor="let suggestion of suggestions" 
+                    (click)="useSuggestion(suggestion)">
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">Tips</h3>
+        </div>
+        <div class="card-body">
+          <ul class="tips-list">
+            <li>Be specific about your symptoms or concerns</li>
+            <li>Ask about medication interactions</li>
+            <li>Request explanations of medical terms</li>
+            <li>Get general health advice and tips</li>
+            <li>Remember: This is not a substitute for professional medical advice</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

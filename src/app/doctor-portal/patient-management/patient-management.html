@@ -1,1 +1,93 @@
-<p>patient-management works!</p>
+<div class="patient-management-page">
+  <div class="page-header mb-4">
+    <h2 class="page-title">Patient Management</h2>
+    <p class="page-subtitle">Search and manage your patients</p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-4">
+          <label class="form-label">Search By</label>
+          <select class="form-select" [(ngModel)]="searchBy">
+            <option value="cnic">CNIC</option>
+            <option value="name">Name</option>
+            <option value="phone">Phone</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">Search Term</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            [placeholder]="'Enter ' + (searchBy === 'cnic' ? 'CNIC' : searchBy === 'name' ? 'patient name' : 'phone number')">
+        </div>
+        <div class="col-12 col-md-2">
+          <button class="btn btn-outline-secondary w-100" (click)="clearSearch()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patients Table -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Patients ({{ filteredPatients.length }})</h5>
+      <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.33333V14.6667M1.33333 8H14.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Register New Patient
+      </a>
+    </div>
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>CNIC</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let patient of filteredPatients">
+              <td>{{ patient.name }}</td>
+              <td>{{ patient.cnic || 'N/A' }}</td>
+              <td>{{ patient.phone || 'N/A' }}</td>
+              <td>{{ patient.email || 'N/A' }}</td>
+              <td>
+                <span class="badge" [class.bg-success]="patient.status === 'active'" [class.bg-secondary]="patient.status === 'inactive'">
+                  {{ patient.status }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-outline-primary">View</a>
+                  <a [routerLink]="['/doctor-portal/patient-analytics', patient.id]" class="btn btn-outline-info">Analytics</a>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredPatients.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                No patients found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

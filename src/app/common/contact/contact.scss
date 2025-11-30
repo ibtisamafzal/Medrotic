@@ -1,3 +1,7 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
 .contact-badge {
   display: inline-flex;
   align-items: center;
@@ -8,6 +12,7 @@
   background: #fff;
   height: auto;
   width: auto;
+  margin-bottom: 2rem;
   
   .badge-text {
     font-family: 'Public Sans', sans-serif;
@@ -22,26 +27,16 @@
 
 .contact-card {
   background-color: #f5f6f9;
+  padding: 3rem 0;
 }
 
 .contact-card .bg-white {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-  }
+  margin-bottom: 2rem;
 }
 
 .bg-white.rounded-4.p-4 {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  }
+  margin-bottom: 1.5rem;
 }
 
 .form-control,
@@ -96,14 +91,11 @@ textarea.form-control {
 
 // Collaboration banner on contact page
 .border.border-primary.border-2.rounded-4 {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(52, 97, 255, 0.15);
-  }
+  margin: 3rem 0;
+  padding: 2rem;
 }
 
 .collaboration-image {
-  animation: gentleTilt 6s ease-in-out infinite;
+  width: 100%;
+  height: auto;
 }
