@@ -1,0 +1,151 @@
+@import '../shared/admin-styles.scss';
+
+:host {
+  display: block;
+}
+
+.notifications-page {
+  .page-header {
+    @extend .admin-page-header;
+  }
+
+  .notifications-list {
+    .notification-item {
+      @extend .admin-card;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      animation: fadeInUp 0.6s ease-out both;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .notification-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+
+      .notification-content {
+        flex: 1;
+
+        .notification-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          .notification-type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #3461ff;
+            text-transform: uppercase;
+          }
+
+          .notification-date {
+            font-size: 0.75rem;
+            color: rgba(0, 16, 71, 0.6);
+          }
+        }
+
+        .notification-message {
+          color: rgba(0, 16, 71, 0.8);
+          margin: 0 0 0.75rem 0;
+        }
+
+        .notification-targets {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      color: rgba(0, 16, 71, 0.6);
+    }
+  }
+
+  .modal {
+    &.show {
+      display: block;
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .modal-content {
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      animation: scaleIn 0.3s ease-out;
+
+      .modal-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 1.5rem;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+
+        .form-label {
+          font-weight: 500;
+          color: #001047;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-control,
+        .form-select {
+          border-radius: 8px;
+          border: 1.5px solid #e5e7eb;
+          padding: 0.625rem 1rem;
+
+          &:focus {
+            border-color: #3461ff;
+            box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.1);
+          }
+        }
+
+        textarea.form-control {
+          resize: vertical;
+        }
+
+        .target-options {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          background: #f5f6f9;
+          padding: 1rem;
+          border-radius: 8px;
+
+          .form-check {
+            margin: 0;
+
+            .form-check-label {
+              color: rgba(0, 16, 71, 0.8);
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 1.5rem;
+      }
+    }
+  }
+
+  .modal-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    
+    &.show {
+      opacity: 1;
+    }
+  }
+}
+

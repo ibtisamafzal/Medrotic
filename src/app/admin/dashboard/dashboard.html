@@ -1,1 +1,120 @@
-<p>dashboard works!</p>
+<div class="dashboard-page">
+  <div class="page-header mb-4 fade-in-down">
+    <h2 class="page-title">Admin Dashboard</h2>
+    <p class="page-subtitle">Overview of system metrics and quick access to management sections</p>
+  </div>
+
+  <!-- Key Metrics Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
+      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff' },
+      { label: 'Total Doctors', value: metrics.totalDoctors, icon: 'doctors', color: '#10b981' },
+      { label: 'Total Users', value: metrics.totalUsers, icon: 'users', color: '#f59e0b' },
+      { label: 'Active Appointments', value: metrics.activeAppointments, icon: 'appointments', color: '#ef4444' }
+    ]; let i = index">
+      <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
+        <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
+          <svg *ngIf="metric.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'doctors'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'users'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="metric.color" stroke-width="2"/>
+            <path d="M8 12L11 15L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="metric.icon === 'appointments'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <h3 class="metric-value count-up">{{ metric.value }}</h3>
+          <p class="metric-label">{{ metric.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="section-card fade-in-up" [style.animation-delay]="'400ms'">
+        <h3 class="section-title mb-4">Quick Links</h3>
+        <div class="row g-3">
+          <div class="col-6 col-md-4 col-lg-3" *ngFor="let link of quickLinks; let i = index">
+            <a [routerLink]="link.route" class="quick-link-card fade-in-up" [style.animation-delay]="(400 + i * 50) + 'ms'">
+              <div class="quick-link-icon" [style.color]="link.color">{{ link.icon }}</div>
+              <h4 class="quick-link-title">{{ link.title }}</h4>
+              <p class="quick-link-count">{{ link.count }} items</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Cards -->
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'800ms'">
+        <div class="action-header">
+          <div class="action-icon pending">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 18.3333C14.6024 18.3333 18.3333 14.6024 18.3333 10C18.3333 5.39763 14.6024 1.66667 10 1.66667C5.39763 1.66667 1.66667 5.39763 1.66667 10C1.66667 14.6024 5.39763 18.3333 10 18.3333Z" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7.5 10L9.16667 11.6667L12.5 8.33333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="section-title">Pending Verifications</h3>
+        </div>
+        <div class="action-content">
+          <div class="action-value">{{ metrics.pendingVerifications }}</div>
+          <p class="action-label">Users awaiting verification approval</p>
+          <a routerLink="/admin/user-verification" class="btn btn-primary btn-sm mt-3">Review Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'850ms'">
+        <div class="action-header">
+          <div class="action-icon system">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.66667V10M10 18.3333C14.6024 18.3333 18.3333 14.6024 18.3333 10C18.3333 5.39763 14.6024 1.66667 10 1.66667C5.39763 1.66667 1.66667 5.39763 1.66667 10C1.66667 14.6024 5.39763 18.3333 10 18.3333Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="section-title">System Health</h3>
+        </div>
+        <div class="action-content">
+          <div class="status-badge healthy">
+            <span class="status-dot"></span>
+            <span>All Systems Operational</span>
+          </div>
+          <p class="action-label mt-2">System running smoothly</p>
+          <a routerLink="/admin/system-health" class="btn btn-outline-primary btn-sm mt-3">View Details</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="section-card action-card fade-in-up" [style.animation-delay]="'900ms'">
+        <div class="action-header">
+          <div class="action-icon analytics">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.33333 15L8.33333 10L11.6667 13.3333L16.6667 8.33333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13.3333 8.33333H16.6667V11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="section-title">Analytics & Reports</h3>
+        </div>
+        <div class="action-content">
+          <div class="action-value">{{ metrics.totalUsers }}</div>
+          <p class="action-label">Total system users</p>
+          <a routerLink="/admin/analytics" class="btn btn-outline-primary btn-sm mt-3">View Analytics</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

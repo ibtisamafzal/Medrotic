@@ -1,1 +1,86 @@
-<p>manage-repository works!</p>
+<div class="manage-repository-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Manage Repository</h2>
+        <p class="page-subtitle">Content management for data storage and uploads oversight</p>
+      </div>
+      <div>
+        <input type="file" id="fileUpload" class="d-none" (change)="onFileSelected($event)">
+        <label for="fileUpload" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1.33333V14.6667M1.33333 8H14.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Upload File
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search files..."
+          [(ngModel)]="searchTerm">
+      </div>
+      <div class="col-md-6">
+        <select class="form-select" [(ngModel)]="typeFilter">
+          <option value="all">All Types</option>
+          <option value="document">Documents</option>
+          <option value="image">Images</option>
+          <option value="data">Data Files</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Repository Items -->
+  <div class="table-card fade-in-up" [style.animation-delay]="'200ms'">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Uploaded By</th>
+            <th>Uploaded At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let i = index" class="fade-in-up" [style.animation-delay]="(300 + i * 30) + 'ms'">
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <span class="file-icon">{{ getTypeIcon(item.type) }}</span>
+                <span>{{ item.name }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-secondary">{{ item.type | titlecase }}</span>
+            </td>
+            <td>{{ formatFileSize(item.size) }}</td>
+            <td>{{ item.uploadedBy || 'System' }}</td>
+            <td>{{ item.uploadedAt | date: 'short' }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteItem(item.id)" title="Delete">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 4H14M5.33333 4V2.66667C5.33333 2.31305 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31305 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31305 10.6667 2.66667V4M12.6667 4V13.3333C12.6667 13.687 12.5262 14.0261 12.2761 14.2761C12.0261 14.5262 11.687 14.6667 11.3333 14.6667H4.66667C4.31305 14.6667 3.97391 14.5262 3.72386 14.2761C3.47381 14.0261 3.33333 13.687 3.33333 13.3333V4H12.6667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="items.length === 0">
+            <td colspan="6" class="text-center py-4">
+              <p class="text-muted mb-0">No files in repository</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

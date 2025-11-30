@@ -1,1 +1,86 @@
-<p>system-health works!</p>
+<div class="system-health-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h2 class="page-title">System Health & Logs</h2>
+        <p class="page-subtitle">Monitor system logs, error reports, and performance statistics</p>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <label class="form-check-label d-flex align-items-center gap-2">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="autoRefresh" (change)="toggleAutoRefresh()">
+          <span>Auto Refresh</span>
+        </label>
+        <button class="btn btn-outline-primary btn-sm" (click)="loadLogs(); loadErrorReports(); loadPerformanceStats()">
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Stats -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-6 col-lg-3" *ngFor="let stat of [
+      { value: (performanceStats.uptime || '99.9') + '%', label: 'System Uptime', icon: 'uptime', color: '#10b981' },
+      { value: (performanceStats.avgResponseTime || '120') + 'ms', label: 'Avg Response Time', icon: 'response', color: '#3461ff' },
+      { value: errorLogs.length.toString(), label: 'Error Reports', icon: 'error', color: '#ef4444' },
+      { value: (performanceStats.activeUsers || '0').toString(), label: 'Active Users', icon: 'users', color: '#f59e0b' }
+    ]; let i = index">
+      <div class="stat-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
+        <div class="stat-icon" [style.background]="'rgba(' + getRgbFromHex(stat.color) + ', 0.1)'">
+          <svg *ngIf="stat.icon === 'uptime'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="stat.color" stroke-width="2"/>
+            <path d="M8 12L11 15L16 10" [attr.stroke]="stat.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="stat.icon === 'response'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" [attr.stroke]="stat.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="stat.icon === 'error'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" [attr.stroke]="stat.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="stat.icon === 'users'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="stat.color" stroke-width="2"/>
+            <path d="M12 6V12L16 14" [attr.stroke]="stat.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ stat.value }}</h3>
+          <p class="stat-label">{{ stat.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logs Section -->
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="section-card fade-in-up" [style.animation-delay]="'400ms'">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+          <h3 class="section-title">System Logs</h3>
+          <select class="form-select form-select-sm select-filter" [(ngModel)]="logLevelFilter" title="Filter logs by level">
+            <option value="all">All Levels</option>
+            <option value="info">Info</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+        
+        <div class="logs-container">
+          <div class="log-item fade-in-up" *ngFor="let log of getFilteredLogs(); let i = index" [class]="getLogLevelClass(log.level)" [style.animation-delay]="(500 + i * 30) + 'ms'">
+            <div class="log-icon">{{ getLogIcon(log.level) }}</div>
+            <div class="log-content">
+              <div class="log-header">
+                <span class="log-level-badge">{{ log.level | titlecase }}</span>
+                <span class="log-timestamp">{{ log.timestamp | date: 'short' }}</span>
+              </div>
+              <p class="log-message">{{ log.message }}</p>
+              <span class="log-source" *ngIf="log.source">{{ log.source }}</span>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="getFilteredLogs().length === 0">
+            <p>No logs found</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

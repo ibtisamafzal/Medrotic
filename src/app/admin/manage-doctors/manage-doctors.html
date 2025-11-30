@@ -1,1 +1,198 @@
-<p>manage-doctors works!</p>
+<div class="manage-doctors-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Manage Doctors</h2>
+        <p class="page-subtitle">List, add, edit, and verify doctor accounts</p>
+      </div>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.33333V14.6667M1.33333 8H14.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Add Doctor
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search by name, email, or license..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()">
+      </div>
+      <div class="col-md-6">
+        <select class="form-select" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="verified">Verified</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctors Table -->
+  <div class="table-card fade-in-up" [style.animation-delay]="'200ms'">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>License</th>
+            <th>Specialization</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doctor of filteredDoctors; let i = index" class="fade-in-up" [style.animation-delay]="(300 + i * 50) + 'ms'">
+            <td>{{ doctor.name }}</td>
+            <td>{{ doctor.email }}</td>
+            <td>{{ doctor.license }}</td>
+            <td>{{ doctor.specialization }}</td>
+            <td>{{ doctor.phone || 'N/A' }}</td>
+            <td>
+              <span [class]="getStatusBadgeClass(doctor.status)">
+                {{ doctor.status | titlecase }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(doctor)" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.3333 2.00001C11.5084 1.8249 11.7163 1.68601 11.9447 1.5913C12.1731 1.49659 12.4173 1.44824 12.6633 1.44824C12.9094 1.44824 13.1536 1.49659 13.382 1.5913C13.6104 1.68601 13.8183 1.8249 13.9933 2.00001C14.1684 2.17512 14.3073 2.38301 14.402 2.61141C14.4967 2.83981 14.5451 3.08401 14.5451 3.33001C14.5451 3.57601 14.4967 3.82021 14.402 4.04861C14.3073 4.27701 14.1684 4.4849 13.9933 4.66001L5.33333 13.32L1.33333 14.6667L2.68 10.6667L11.3333 2.00001Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="btn btn-sm btn-outline-success" (click)="openVerifyModal(doctor)" title="Verify">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.3333 4L6 11.3333L2.66667 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteDoctor(doctor.id)" title="Delete">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 4H14M5.33333 4V2.66667C5.33333 2.31305 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31305 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31305 10.6667 2.66667V4M12.6667 4V13.3333C12.6667 13.687 12.5262 14.0261 12.2761 14.2761C12.0261 14.5262 11.687 14.6667 11.3333 14.6667H4.66667C4.31305 14.6667 3.97391 14.5262 3.72386 14.2761C3.47381 14.0261 3.33333 13.687 3.33333 13.3333V4H12.6667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredDoctors.length === 0">
+            <td colspan="7" class="text-center py-4">
+              <p class="text-muted mb-0">No doctors found</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add Doctor Modal -->
+  <div class="modal fade" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1" (click)="closeAddModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Doctor</h5>
+          <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="newDoctor.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="newDoctor.email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">License Number</label>
+              <input type="text" class="form-control" [(ngModel)]="newDoctor.license" name="license" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Specialization</label>
+              <input type="text" class="form-control" [(ngModel)]="newDoctor.specialization" name="specialization" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" [(ngModel)]="newDoctor.phone" name="phone">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="addDoctor()">Add Doctor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Doctor Modal -->
+  <div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'" tabindex="-1" *ngIf="selectedDoctor" (click)="closeEditModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Doctor</h5>
+          <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedDoctor.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="selectedDoctor.email" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">License Number</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedDoctor.license" name="license" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Specialization</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedDoctor.specialization" name="specialization" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" [(ngModel)]="selectedDoctor.phone" name="phone">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="updateDoctor()">Update Doctor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Verify Doctor Modal -->
+  <div class="modal fade" [class.show]="showVerifyModal" [style.display]="showVerifyModal ? 'block' : 'none'" tabindex="-1" *ngIf="selectedDoctor" (click)="closeVerifyModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Verify Doctor</h5>
+          <button type="button" class="btn-close" (click)="closeVerifyModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Verify doctor details for <strong>{{ selectedDoctor.name }}</strong>?</p>
+          <div class="doctor-details">
+            <p><strong>License:</strong> {{ selectedDoctor.license }}</p>
+            <p><strong>Specialization:</strong> {{ selectedDoctor.specialization }}</p>
+            <p><strong>Email:</strong> {{ selectedDoctor.email }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeVerifyModal()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="verifyDoctor(false)">Reject</button>
+          <button type="button" class="btn btn-success" (click)="verifyDoctor(true)">Verify</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,147 @@
-<p>manage-integrations works!</p>
+<div class="manage-integrations-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Manage Integrations</h2>
+        <p class="page-subtitle">Configure APIs, EHR systems, and external services</p>
+      </div>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.33333V14.6667M1.33333 8H14.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Add Integration
+      </button>
+    </div>
+  </div>
+
+  <!-- Integrations Grid -->
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let integration of integrations; let i = index">
+      <div class="integration-card fade-in-up" [style.animation-delay]="(i * 50) + 'ms'">
+        <div class="integration-header">
+          <div class="integration-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#3461ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="#3461ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="#3461ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="integration-info">
+            <h4 class="integration-name">{{ integration.name }}</h4>
+            <span [class]="getStatusBadgeClass(integration.status)">{{ integration.status | titlecase }}</span>
+          </div>
+        </div>
+        <div class="integration-details">
+          <div class="detail-row">
+            <span class="detail-label">Type:</span>
+            <span class="detail-value">{{ integration.type | uppercase }}</span>
+          </div>
+          <div class="detail-row" *ngIf="integration.endpoint">
+            <span class="detail-label">Endpoint:</span>
+            <span class="detail-value endpoint-text">{{ integration.endpoint }}</span>
+          </div>
+          <div class="detail-row" *ngIf="integration.lastSync">
+            <span class="detail-label">Last Sync:</span>
+            <span class="detail-value">{{ integration.lastSync | date: 'short' }}</span>
+          </div>
+        </div>
+        <div class="integration-actions">
+          <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(integration)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteIntegration(integration.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12" *ngIf="integrations.length === 0">
+      <div class="empty-state">
+        <p>No integrations configured</p>
+        <button class="btn btn-primary" (click)="openAddModal()">Add First Integration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Integration Modal -->
+  <div class="modal fade" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1" (click)="closeAddModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Integration</h5>
+          <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="newIntegration.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select class="form-select" [(ngModel)]="newIntegration.type" name="type">
+                <option value="ehr">EHR System</option>
+                <option value="api">API</option>
+                <option value="external">External Service</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Endpoint URL</label>
+              <input type="url" class="form-control" [(ngModel)]="newIntegration.endpoint" name="endpoint">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" [(ngModel)]="newIntegration.status" name="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="addIntegration()">Add Integration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Integration Modal -->
+  <div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'" tabindex="-1" *ngIf="selectedIntegration" (click)="closeEditModal()">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Integration</h5>
+          <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedIntegration.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select class="form-select" [(ngModel)]="selectedIntegration.type" name="type">
+                <option value="ehr">EHR System</option>
+                <option value="api">API</option>
+                <option value="external">External Service</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Endpoint URL</label>
+              <input type="url" class="form-control" [(ngModel)]="selectedIntegration.endpoint" name="endpoint">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" [(ngModel)]="selectedIntegration.status" name="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="error">Error</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="updateIntegration()">Update Integration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -80,15 +80,84 @@ export class Home {
     },
   ];
 
-  testimonial = {
-    quote: '"From the moment I walked in I felt welcomed and well cared for. The doctors and nurses were incredibly attentive, and I\'m so grateful for their expertise."',
-    author: 'Adnan Tariq',
-    role: 'Product Designer',
-    avatar: '/images/testimonials/testimonial-avatar.svg',
+  testimonials = [
+    {
+      quote: '"From the moment I walked in I felt welcomed and well cared for. The doctors and nurses were incredibly attentive, and I\'m so grateful for their expertise."',
+      author: 'Adnan Tariq',
+      role: 'Product Designer',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+    {
+      quote: '"Medrotic has transformed how I manage my health. The platform is intuitive, and the medical team is always available when I need them. Highly recommended!"',
+      author: 'Sarah Johnson',
+      role: 'Marketing Manager',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+    {
+      quote: '"As someone with a busy schedule, Medrotic\'s flexible appointment system and virtual consultations have been a lifesaver. The care quality never compromises."',
+      author: 'Michael Chen',
+      role: 'Software Engineer',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+    {
+      quote: '"I\'ve been using Medrotic for over a year now, and the experience has been outstanding. The doctors are knowledgeable, caring, and always take time to listen."',
+      author: 'Emily Rodriguez',
+      role: 'Business Analyst',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+    {
+      quote: '"The seamless integration of health records and the ability to track my medical history in one place has made managing my health so much easier. Thank you, Medrotic!"',
+      author: 'David Thompson',
+      role: 'Project Manager',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+    {
+      quote: '"As someone with a busy schedule, Medrotic\'s flexible appointment system and virtual consultations have been a lifesaver. The care quality never compromises."',
+      author: 'Lisa Anderson',
+      role: 'HR Director',
+      avatar: '/images/testimonials/testimonial-avatar.svg',
+    },
+  ];
+
+  currentTestimonialIndex = 0;
+
+  testimonialAssets = {
     quoteIcon: '/images/testimonials/testimonial-quote-icon.svg',
     prevArrow: '/images/testimonials/testimonial-prev-arrow.svg',
     nextArrow: '/images/testimonials/testimonial-next-arrow.svg',
-    pagination: ['01', '02', '03', '04'],
-    activeIndex: '03',
   };
+
+  get currentTestimonial() {
+    return this.testimonials[this.currentTestimonialIndex];
+  }
+
+  get paginationNumbers() {
+    return this.testimonials.map((_, index) => 
+      String(index + 1).padStart(2, '0')
+    );
+  }
+
+  get activePaginationIndex() {
+    return String(this.currentTestimonialIndex + 1).padStart(2, '0');
+  }
+
+  previousTestimonial() {
+    this.currentTestimonialIndex = 
+      this.currentTestimonialIndex === 0 
+        ? this.testimonials.length - 1 
+        : this.currentTestimonialIndex - 1;
+  }
+
+  nextTestimonial() {
+    this.currentTestimonialIndex = 
+      this.currentTestimonialIndex === this.testimonials.length - 1 
+        ? 0 
+        : this.currentTestimonialIndex + 1;
+  }
+
+  goToTestimonial(index: number) {
+    if (index >= 0 && index < this.testimonials.length) {
+      this.currentTestimonialIndex = index;
+    }
+  }
 }

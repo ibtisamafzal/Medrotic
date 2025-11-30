@@ -1,1 +1,75 @@
-<p>analytics works!</p>
+<div class="analytics-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div>
+      <h2 class="page-title">Analytics & Reports</h2>
+      <p class="page-subtitle">Real-time charts and graphs for patients, doctors counts, and KPIs</p>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-6 col-lg-3" *ngFor="let kpi of [
+      { value: analytics?.totalPatients || 0, label: 'Total Patients', icon: 'patients', color: '#3461ff' },
+      { value: analytics?.totalDoctors || 0, label: 'Total Doctors', icon: 'doctors', color: '#10b981' },
+      { value: (analytics?.kpis?.avgResponseTime || 0) + 'ms', label: 'Avg Response Time', icon: 'response', color: '#f59e0b' },
+      { value: (analytics?.kpis?.systemUptime || 0) + '%', label: 'System Uptime', icon: 'uptime', color: '#ef4444' }
+    ]; let i = index">
+      <div class="kpi-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
+        <div class="kpi-icon" [style.background]="'rgba(' + getRgbFromHex(kpi.color) + ', 0.1)'">
+          <svg *ngIf="kpi.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="kpi.color" stroke-width="2"/>
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="kpi.color" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg *ngIf="kpi.icon === 'doctors'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="kpi.color" stroke-width="2"/>
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="kpi.color" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg *ngIf="kpi.icon === 'response'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" [attr.stroke]="kpi.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg *ngIf="kpi.icon === 'uptime'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="kpi.color" stroke-width="2"/>
+            <path d="M12 6V12L16 14" [attr.stroke]="kpi.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="kpi-content">
+          <h3 class="kpi-value">{{ kpi.value }}</h3>
+          <p class="kpi-label">{{ kpi.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="chart-card fade-in-up" [style.animation-delay]="'400ms'">
+        <h3 class="chart-title">Patient Growth</h3>
+        <div class="chart-placeholder">
+          <p class="text-muted">Chart visualization would be rendered here using Chart.js</p>
+          <div class="chart-data-preview">
+            <div *ngFor="let data of analytics?.patientGrowth; let i = index" class="data-item fade-in-up" [style.animation-delay]="(500 + i * 50) + 'ms'">
+              <span>{{ data.month }}</span>
+              <span class="badge bg-primary">{{ data.count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="chart-card fade-in-up" [style.animation-delay]="'450ms'">
+        <h3 class="chart-title">Doctor Growth</h3>
+        <div class="chart-placeholder">
+          <p class="text-muted">Chart visualization would be rendered here using Chart.js</p>
+          <div class="chart-data-preview">
+            <div *ngFor="let data of analytics?.doctorGrowth; let i = index" class="data-item fade-in-up" [style.animation-delay]="(550 + i * 50) + 'ms'">
+              <span>{{ data.month }}</span>
+              <span class="badge bg-primary">{{ data.count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

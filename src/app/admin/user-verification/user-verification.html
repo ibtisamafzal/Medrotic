@@ -1,1 +1,88 @@
-<p>user-verification works!</p>
+<div class="user-verification-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div>
+      <h2 class="page-title">User Verification</h2>
+      <p class="page-subtitle">Approve or deny user registrations and manage role assignments</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search by name or email..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()">
+      </div>
+      <div class="col-md-6">
+        <select class="form-select" [(ngModel)]="roleFilter" (change)="onRoleFilterChange()">
+          <option value="all">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="doctor">Doctor</option>
+          <option value="patient">Patient</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Users -->
+  <div class="section-card fade-in-up" [style.animation-delay]="'200ms'">
+    <h3 class="section-title mb-4">Pending Verifications ({{ pendingUsers.length }})</h3>
+    
+    <div class="row g-3" *ngIf="pendingUsers.length > 0">
+      <div class="col-md-6 col-lg-4" *ngFor="let user of pendingUsers; let i = index">
+        <div class="user-card fade-in-up" [style.animation-delay]="(300 + i * 50) + 'ms'">
+          <div class="user-header">
+            <div class="user-avatar">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </div>
+            <div class="user-info">
+              <h4 class="user-name">{{ user.name }}</h4>
+              <p class="user-email">{{ user.email }}</p>
+            </div>
+          </div>
+          <div class="user-details">
+            <div class="detail-item">
+              <span class="detail-label">Role:</span>
+              <span [class]="getRoleBadgeClass(user.role)">{{ user.role | titlecase }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Status:</span>
+              <span class="badge bg-warning">Pending</span>
+            </div>
+            <div class="detail-item" *ngIf="user.createdAt">
+              <span class="detail-label">Registered:</span>
+              <span>{{ user.createdAt | date: 'short' }}</span>
+            </div>
+          </div>
+          <div class="user-actions">
+            <select class="form-select form-select-sm mb-2" [value]="user.role" (change)="updateUserRole(user, $any($event.target).value)">
+              <option value="admin">Admin</option>
+              <option value="doctor">Doctor</option>
+              <option value="patient">Patient</option>
+            </select>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success btn-sm flex-fill" (click)="approveUser(user)">
+                Approve
+              </button>
+              <button class="btn btn-danger btn-sm flex-fill" (click)="rejectUser(user)">
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="pendingUsers.length === 0">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="30" stroke="#3461ff" stroke-width="2" stroke-dasharray="4 4"/>
+        <path d="M32 20V32L40 40" stroke="#3461ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p>No pending verifications</p>
+    </div>
+  </div>
+</div>

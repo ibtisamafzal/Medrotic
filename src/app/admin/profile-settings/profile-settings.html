@@ -1,1 +1,102 @@
-<p>profile-settings works!</p>
+<div class="profile-settings-page">
+  <div class="page-header mb-4 fade-in-down">
+    <div>
+      <h2 class="page-title">Profile Settings</h2>
+      <p class="page-subtitle">Manage your admin profile, password, and preferences</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Profile Information -->
+    <div class="col-md-6">
+      <div class="settings-card fade-in-up" [style.animation-delay]="'100ms'">
+        <h3 class="card-title">Profile Information</h3>
+        <form (ngSubmit)="updateProfile()">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="profile.name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-control" [(ngModel)]="profile.phone" name="phone">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <input type="text" class="form-control" [value]="profile.role" disabled>
+          </div>
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="col-md-6">
+      <div class="settings-card fade-in-up" [style.animation-delay]="'200ms'">
+        <h3 class="card-title">Change Password</h3>
+        <form (ngSubmit)="changePassword()">
+          <div class="mb-3">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordForm.currentPassword" name="currentPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordForm.newPassword" name="newPassword" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Preferences -->
+    <div class="col-12">
+      <div class="settings-card fade-in-up" [style.animation-delay]="'300ms'">
+        <h3 class="card-title">Preferences</h3>
+        <form (ngSubmit)="savePreferences()">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="emailNotifications" [(ngModel)]="preferences.emailNotifications" name="emailNotifications">
+                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="pushNotifications" [(ngModel)]="preferences.pushNotifications" name="pushNotifications">
+                <label class="form-check-label" for="pushNotifications">Push Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="smsNotifications" [(ngModel)]="preferences.smsNotifications" name="smsNotifications">
+                <label class="form-check-label" for="smsNotifications">SMS Notifications</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Language</label>
+                <select class="form-select" [(ngModel)]="preferences.language" name="language">
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Timezone</label>
+                <select class="form-select" [(ngModel)]="preferences.timezone" name="timezone">
+                  <option value="UTC">UTC</option>
+                  <option value="EST">EST</option>
+                  <option value="PST">PST</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Preferences</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

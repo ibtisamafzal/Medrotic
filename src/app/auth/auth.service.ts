@@ -1,9 +1,10 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { isDefaultAdminCredentials, createDefaultAdminUser } from '../config/default-admin';
 
 export interface User {
   id: string;
@@ -129,6 +130,23 @@ export class AuthService {
    * HIPAA Note: Password is hashed on server-side, never sent in plain text in production
    */
   login(credentials: LoginRequest): Observable<User> {
+    // DEVELOPMENT MODE: Check for default admin credentials
+    // This allows testing the admin portal without backend setup
+    if (credentials.email && isDefaultAdminCredentials(credentials.email, credentials.password, credentials.role)) {
+      const defaultAdmin = createDefaultAdminUser();
+      if (this.isBrowser) {
+        localStorage.setItem('currentUser', JSON.stringify(defaultAdmin));
+        if (credentials.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+      }
+      this.currentUserSubject.next(defaultAdmin);
+      return new Observable(observer => {
+        observer.next(defaultAdmin);
+        observer.complete();
+      });
+    }
+
     // In production, password should be hashed client-side before sending
     // For now, this is a placeholder - backend should handle hashing
     return this.http.post<User>(`${this.API_BASE}/login`, credentials).pipe(
@@ -142,6 +160,12 @@ export class AuthService {
           }
         }
         this.currentUserSubject.next(user);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        // If backend is not available and it's a network error, 
+        // we could fall back to default admin in development
+        // But for now, just throw the error
+        return throwError(() => error);
       })
     );
   }

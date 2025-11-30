@@ -1,0 +1,229 @@
+// Shared Admin Styles - Animations and Common Styles
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Animation utility classes
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.fade-in-down {
+  animation: fadeInDown 0.6s ease-out both;
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out both;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out both;
+}
+
+// Common page header styles
+.admin-page-header {
+  animation: fadeInDown 0.6s ease-out;
+  
+  .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #001047;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: rgba(0, 16, 71, 0.6);
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+// Common card styles
+.admin-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+
+    .metric-icon,
+    .kpi-icon,
+    .stat-icon,
+    .integration-icon {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// Table styles
+.admin-table-card {
+  @extend .admin-card;
+  overflow: hidden;
+
+  .table {
+    margin-bottom: 0;
+
+    thead {
+      background: #f5f6f9;
+      
+      th {
+        font-weight: 600;
+        color: #001047;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+        padding: 1rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    tbody {
+      tr {
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #f5f6f9;
+          transform: scale(1.01);
+        }
+
+        td {
+          padding: 1rem;
+          vertical-align: middle;
+          color: rgba(0, 16, 71, 0.8);
+          font-size: 0.9375rem;
+        }
+      }
+    }
+  }
+}
+
+// Modal styles
+.modal {
+  &.show {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal-dialog {
+    position: relative;
+    margin: 1.75rem auto;
+    max-width: 500px;
+  }
+
+  .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.5rem;
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #001047;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.5rem;
+  }
+}
+
+// Responsive breakpoints
+@media (max-width: 991px) {
+  .admin-page-header .page-title {
+    font-size: 1.75rem;
+  }
+  
+  .admin-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-page-header .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .admin-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .modal .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+}
+

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
@@ -13,7 +13,7 @@ import { Footer } from '../../common/footer/footer';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   // Login credentials
   email: string = '';
   phone: string = '';
@@ -37,11 +37,15 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    public router: Router
-  ) {
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
     // Get return URL from query params
-    this.router.routerState.root.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'] || '';
+      console.log('Return URL:', this.returnUrl);
     });
     
     // Check if remember me was set
@@ -181,6 +185,8 @@ export class LoginComponent {
     this.authService.login(loginRequest).subscribe({
       next: (user) => {
         this.loading = false;
+        console.log('Login successful, user:', user);
+        console.log('Return URL:', this.returnUrl);
         
         // Store email if remember me is checked
         if (this.rememberMe && this.loginMethod === 'email') {
@@ -189,8 +195,20 @@ export class LoginComponent {
 
         // Redirect based on role or return URL
         if (this.returnUrl) {
-          this.router.navigateByUrl(this.returnUrl);
+          console.log('Navigating to return URL:', this.returnUrl);
+          this.router.navigateByUrl(this.returnUrl).then(
+            (success) => {
+              if (!success) {
+                console.error('Navigation failed, redirecting by role');
+                this.redirectByRole(user.role);
+              }
+            }
+          ).catch((error) => {
+            console.error('Navigation error:', error);
+            this.redirectByRole(user.role);
+          });
         } else {
+          console.log('No return URL, redirecting by role');
           this.redirectByRole(user.role);
         }
       },

@@ -1,0 +1,27 @@
+@import '../shared/admin-styles.scss';
+
+:host {
+  display: block;
+}
+
+.manage-repository-page {
+  .page-header {
+    @extend .admin-page-header;
+  }
+
+  .filters-card {
+    @extend .admin-card;
+    margin-bottom: 1.5rem;
+    animation-delay: 100ms;
+  }
+
+  .table-card {
+    @extend .admin-table-card;
+    animation-delay: 200ms;
+
+    .file-icon {
+      font-size: 1.25rem;
+    }
+  }
+}
+

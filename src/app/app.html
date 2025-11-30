@@ -1,1 +1,10 @@
 <router-outlet></router-outlet>
+<app-alert 
+  *ngIf="showAlert && alertMessage"
+  [type]="alertMessage.type"
+  [message]="alertMessage.message"
+  [show]="showAlert"
+  [autoClose]="alertMessage.autoClose ?? true"
+  [autoCloseDelay]="alertMessage.autoCloseDelay ?? 5000"
+  (closed)="onAlertClosed()">
+</app-alert>
