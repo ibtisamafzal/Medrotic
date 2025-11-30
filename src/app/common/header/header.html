@@ -32,32 +32,8 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact us</a>
         </li>
-        <li class="nav-item dropdown" 
-            (mouseenter)="showDropdown = true" 
-            (mouseleave)="showDropdown = false"
-            [class.show]="showDropdown">
-          <a class="nav-link dropdown-toggle" 
-             (click)="toggleDropdown(); $event.preventDefault()" 
-             [class.show]="showDropdown"
-             role="button" 
-             aria-expanded="false"
-             tabindex="0">
-            All Pages
-            <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <ul class="dropdown-menu" [class.show]="showDropdown">
-            <li>
-              <a class="dropdown-item" routerLink="/faq" (click)="closeDropdown()">FAQ</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/terms" (click)="closeDropdown()">Terms</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/privacy" (click)="closeDropdown()">Privacy</a>
-            </li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/faq" routerLinkActive="active">FAQ</a>
         </li>
       </ul>
       
