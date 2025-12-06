@@ -31,9 +31,9 @@ export class LoginComponent implements OnInit {
   // Return URL for redirect after login
   returnUrl: string = '';
 
-  // Eye icon paths
-  eyeOpenIcon = '/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/images/icons/eye-off-outline.svg';
+  // Eye icon paths (assume these exist in assets)
+  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
+  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
 
   constructor(
     private authService: AuthService,
@@ -42,18 +42,15 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get return URL from query params
     this.route.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'] || '';
       console.log('Return URL:', this.returnUrl);
     });
     
-    // Check if remember me was set
     if (typeof localStorage !== 'undefined') {
       const remembered = localStorage.getItem('rememberMe');
       if (remembered === 'true') {
         this.rememberMe = true;
-        // Optionally pre-fill email if stored
         const storedEmail = localStorage.getItem('rememberedEmail');
         if (storedEmail) {
           this.email = storedEmail;
@@ -62,9 +59,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  /**
-   * Format CNIC input as user types
-   */
   onCNICInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const formatted = this.authService.formatCNIC(input.value);
@@ -72,14 +66,10 @@ export class LoginComponent implements OnInit {
     input.value = formatted;
   }
 
-  /**
-   * Format phone input
-   */
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     
-    // Format as +92 XXX XXXXXXX
     if (value.startsWith('92')) {
       value = '+92' + value.substring(2);
     } else if (value.startsWith('0')) {
@@ -88,7 +78,6 @@ export class LoginComponent implements OnInit {
       value = '+92' + value;
     }
     
-    // Format with spaces
     if (value.length > 4) {
       value = value.slice(0, 4) + ' ' + value.slice(4);
     }
@@ -100,20 +89,13 @@ export class LoginComponent implements OnInit {
     input.value = value;
   }
 
-  /**
-   * Toggle password visibility
-   */
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
-  /**
-   * Validate form before submission
-   */
   validateForm(): boolean {
     this.error = '';
 
-    // Validate based on login method
     if (this.loginMethod === 'email') {
       if (!this.email.trim()) {
         this.error = 'Email is required';
@@ -148,17 +130,14 @@ export class LoginComponent implements OnInit {
       return false;
     }
 
-    if (this.password.length < 6) {
-      this.error = 'Password must be at least 6 characters';
+    if (this.password.length < 8) {
+      this.error = 'Password must be at least 8 characters';
       return false;
     }
 
     return true;
   }
 
-  /**
-   * Handle login form submission
-   */
   onLogin(): void {
     if (!this.validateForm()) {
       return;
@@ -173,7 +152,6 @@ export class LoginComponent implements OnInit {
       rememberMe: this.rememberMe
     };
 
-    // Add identifier based on login method
     if (this.loginMethod === 'email') {
       loginRequest.email = this.email.trim();
     } else if (this.loginMethod === 'phone') {
@@ -188,12 +166,10 @@ export class LoginComponent implements OnInit {
         console.log('Login successful, user:', user);
         console.log('Return URL:', this.returnUrl);
         
-        // Store email if remember me is checked
         if (this.rememberMe && this.loginMethod === 'email') {
           localStorage.setItem('rememberedEmail', this.email);
         }
 
-        // Redirect based on role or return URL
         if (this.returnUrl) {
           console.log('Navigating to return URL:', this.returnUrl);
           this.router.navigateByUrl(this.returnUrl).then(
@@ -220,9 +196,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  /**
-   * Handle Google sign-in
-   */
   onGoogleLogin(): void {
     this.loading = true;
     this.error = '';
@@ -244,11 +217,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  /**
-   * Redirect user based on their role
-   */
   private redirectByRole(role: string): void {
-    switch (role) {
+    switch (role.toLowerCase()) {
       case 'admin':
         this.router.navigate(['/admin/dashboard']);
         break;
@@ -263,13 +233,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  /**
-   * Get placeholder text based on login method
-   */
   getIdentifierPlaceholder(): string {
     switch (this.loginMethod) {
       case 'email':
-        return 'Enter your email';
+        return 'Enter your email address';
       case 'phone':
         return 'Enter your phone number';
       case 'cnic':
@@ -279,25 +246,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  /**
-   * Get identifier label
-   */
   getIdentifierLabel(): string {
     switch (this.loginMethod) {
       case 'email':
-        return 'Email';
+        return 'Email Address';
       case 'phone':
         return 'Phone Number';
       case 'cnic':
-        return 'CNIC';
+        return 'CNIC (National Identity Card Number)';
       default:
         return '';
     }
   }
 
-  /**
-   * Get current identifier value based on login method
-   */
   get identifierValue(): string {
     switch (this.loginMethod) {
       case 'email':
@@ -311,9 +272,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  /**
-   * Set current identifier value based on login method
-   */
   set identifierValue(value: string) {
     switch (this.loginMethod) {
       case 'email':
