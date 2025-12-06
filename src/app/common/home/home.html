@@ -7,7 +7,7 @@
     <img class="hero-shape hero-shape-right" [src]="heroAssets.rightShape" alt="" aria-hidden="true">
 
     <div class="container">
-      <div class="hero-heading text-center mx-auto">
+      <div class="hero-heading text-center mx-auto mb-5 mt-5">
         <h1>
           We Take Care Of <span>Your Health</span><br>
           With Medrotic
@@ -200,8 +200,8 @@
                 <img [src]="testimonialAssets.prevArrow" alt="">
               </button>
               <div class="pagination-track">
-                <span 
-                  *ngFor="let indicator of paginationNumbers; let i = index" 
+                <span
+                  *ngFor="let indicator of paginationNumbers; let i = index"
                   [class.is-active]="indicator === activePaginationIndex"
                   (click)="goToTestimonial(i)"
                   class="pagination-indicator">
