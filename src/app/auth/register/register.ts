@@ -14,7 +14,6 @@ import { Footer } from '../../common/footer/footer';
   styleUrl: './register.scss'
 })
 export class Register {
-  // Registration form fields
   name: string = '';
   email: string = '';
   phone: string = '';
@@ -23,35 +22,29 @@ export class Register {
   confirmPassword: string = '';
   dateOfBirth: string = '';
   gender: string = '';
+  city: string = ''; // Added
+  province: string = ''; // Added
   
-  // UI state
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   loading: boolean = false;
   error: string = '';
   success: boolean = false;
 
-  // Eye icon paths
-  eyeOpenIcon = '/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/images/icons/eye-off-outline.svg';
+  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
+  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
 
   constructor(
     private authService: AuthService,
     public router: Router
   ) {}
 
-  /**
-   * Get maximum date for date of birth (18 years ago)
-   */
   getMaxDate(): string {
     const today = new Date();
     const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
     return maxDate.toISOString().split('T')[0];
   }
 
-  /**
-   * Format CNIC input as user types
-   */
   onCNICInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const formatted = this.authService.formatCNIC(input.value);
@@ -59,14 +52,10 @@ export class Register {
     input.value = formatted;
   }
 
-  /**
-   * Format phone input
-   */
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     
-    // Format as +92 XXX XXXXXXX
     if (value.startsWith('92')) {
       value = '+92' + value.substring(2);
     } else if (value.startsWith('0')) {
@@ -75,7 +64,6 @@ export class Register {
       value = '+92' + value;
     }
     
-    // Format with spaces
     if (value.length > 4) {
       value = value.slice(0, 4) + ' ' + value.slice(4);
     }
@@ -87,9 +75,6 @@ export class Register {
     input.value = value;
   }
 
-  /**
-   * Toggle password visibility
-   */
   togglePasswordVisibility(field: 'password' | 'confirm'): void {
     if (field === 'password') {
       this.showPassword = !this.showPassword;
@@ -98,9 +83,6 @@ export class Register {
     }
   }
 
-  /**
-   * Validate form before submission
-   */
   validateForm(): boolean {
     this.error = '';
 
@@ -119,7 +101,6 @@ export class Register {
       return false;
     }
 
-    // Email or phone is required
     if (!this.email.trim() && !this.phone.trim()) {
       this.error = 'Either email or phone number is required';
       return false;
@@ -135,6 +116,16 @@ export class Register {
       return false;
     }
 
+    if (!this.city.trim()) {
+      this.error = 'City is required';
+      return false;
+    }
+
+    if (!this.province.trim()) {
+      this.error = 'Province is required';
+      return false;
+    }
+
     if (!this.password) {
       this.error = 'Password is required';
       return false;
@@ -145,7 +136,6 @@ export class Register {
       return false;
     }
 
-    // Check password strength (at least one uppercase, one lowercase, one number)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
     if (!passwordRegex.test(this.password)) {
       this.error = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
@@ -162,18 +152,14 @@ export class Register {
       return false;
     }
 
-    // Check if user is at least 18 years old
     const birthDate = new Date(this.dateOfBirth);
     const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
+    let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      // Not yet birthday this year
-      if (age - 1 < 18) {
-        this.error = 'You must be at least 18 years old to register';
-        return false;
-      }
-    } else if (age < 18) {
+      age--;
+    }
+    if (age < 18) {
       this.error = 'You must be at least 18 years old to register';
       return false;
     }
@@ -186,9 +172,6 @@ export class Register {
     return true;
   }
 
-  /**
-   * Handle registration form submission
-   */
   onRegister(): void {
     if (!this.validateForm()) {
       return;
@@ -202,12 +185,13 @@ export class Register {
       name: this.name.trim(),
       cnic: this.cnic.trim(),
       password: this.password,
-      role: 'patient', // Only patients can self-register
+      role: 'patient',
       dateOfBirth: this.dateOfBirth,
-      gender: this.gender
+      gender: this.gender,
+      city: this.city.trim(),
+      province: this.province.trim()
     };
 
-    // Add email or phone
     if (this.email.trim()) {
       registerRequest.email = this.email.trim();
     }
@@ -220,7 +204,6 @@ export class Register {
         this.loading = false;
         this.success = true;
         
-        // Redirect to OTP verification if required
         if (response.requiresOTP) {
           this.router.navigate(['/auth/verify-otp'], {
             queryParams: {
@@ -230,7 +213,6 @@ export class Register {
             }
           });
         } else {
-          // Registration successful, redirect to login
           setTimeout(() => {
             this.router.navigate(['/auth/login'], {
               queryParams: { registered: 'true' }

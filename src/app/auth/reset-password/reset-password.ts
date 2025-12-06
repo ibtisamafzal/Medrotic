@@ -17,6 +17,7 @@ export class ResetPassword implements OnInit {
   token: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  email: string = ''; // Added for request
   
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
@@ -24,9 +25,8 @@ export class ResetPassword implements OnInit {
   error: string = '';
   success: boolean = false;
 
-  // Eye icon paths
-  eyeOpenIcon = '/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/images/icons/eye-off-outline.svg';
+  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
+  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
 
   constructor(
     private authService: AuthService,
@@ -35,7 +35,6 @@ export class ResetPassword implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get token from query params
     this.route.queryParams.subscribe(params => {
       this.token = params['token'] || '';
       
@@ -48,9 +47,6 @@ export class ResetPassword implements OnInit {
     });
   }
 
-  /**
-   * Toggle password visibility
-   */
   togglePasswordVisibility(field: 'password' | 'confirm'): void {
     if (field === 'password') {
       this.showPassword = !this.showPassword;
@@ -59,9 +55,6 @@ export class ResetPassword implements OnInit {
     }
   }
 
-  /**
-   * Validate form before submission
-   */
   validateForm(): boolean {
     this.error = '';
 
@@ -75,7 +68,6 @@ export class ResetPassword implements OnInit {
       return false;
     }
 
-    // Check password strength (at least one uppercase, one lowercase, one number)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
     if (!passwordRegex.test(this.newPassword)) {
       this.error = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
@@ -90,9 +82,6 @@ export class ResetPassword implements OnInit {
     return true;
   }
 
-  /**
-   * Handle reset password form submission
-   */
   onSubmit(): void {
     if (!this.validateForm()) {
       return;
@@ -118,7 +107,6 @@ export class ResetPassword implements OnInit {
         this.loading = false;
         this.success = true;
         
-        // Redirect to login after 2 seconds
         setTimeout(() => {
           this.router.navigate(['/auth/login'], {
             queryParams: { passwordReset: 'true' }
@@ -133,4 +121,3 @@ export class ResetPassword implements OnInit {
     });
   }
 }
-

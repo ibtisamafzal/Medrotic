@@ -88,6 +88,34 @@
               <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Either email or phone is required</small>
             </div>
 
+            <!-- City -->
+            <div class="form-group">
+              <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+              <input
+                id="city"
+                type="text"
+                class="custom-input-simple"
+                placeholder="Enter your city"
+                [(ngModel)]="city"
+                name="city"
+                required
+              />
+            </div>
+
+            <!-- Province -->
+            <div class="form-group">
+              <label for="province" class="form-label">Province <span class="text-danger">*</span></label>
+              <input
+                id="province"
+                type="text"
+                class="custom-input-simple"
+                placeholder="Enter your province"
+                [(ngModel)]="province"
+                name="province"
+                required
+              />
+            </div>
+
             <!-- Date of Birth -->
             <div class="form-group">
               <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-danger">*</span></label>

@@ -33,7 +33,9 @@ export interface RegisterRequest {
   name: string;
   role: 'patient'; // Only patients can self-register
   dateOfBirth?: string;
-  gender?: string;
+  gender: string;
+  city?: string;
+  province?: string;
 }
 
 export interface ForgotPasswordRequest {
@@ -62,7 +64,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private isBrowser: boolean;
-  private readonly API_BASE = '/api/auth';
+  private readonly API_BASE = 'https://localhost:7124/api/auth'; // Full URL for backend
 
   constructor(
     private http: HttpClient,
@@ -70,7 +72,6 @@ export class AuthService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    // Load user from localStorage on service initialization (only in browser)
     const storedUser = this.isBrowser ? localStorage.getItem('currentUser') : null;
     this.currentUserSubject = new BehaviorSubject<User | null>(
       storedUser ? JSON.parse(storedUser) : null
@@ -82,27 +83,22 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  // Check if user is logged in
   isLoggedIn(): boolean {
     return !!this.currentUserValue && !!this.currentUserValue.token;
   }
 
-  // Get user role
   getUserRole(): string | null {
     return this.currentUserValue?.role || null;
   }
 
-  // Check if user has specific role
   hasRole(role: string): boolean {
     return this.currentUserValue?.role === role;
   }
 
-  // Get JWT token
   getToken(): string | null {
     return this.currentUserValue?.token || null;
   }
 
-  // Decode JWT token (basic implementation - you might want to use a library like jwt-decode)
   decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
@@ -113,7 +109,6 @@ export class AuthService {
     }
   }
 
-  // Check if token is expired
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (!token) return true;
@@ -125,13 +120,7 @@ export class AuthService {
     return expirationDate < new Date();
   }
 
-  /**
-   * Login with email/phone/CNIC, password, and role
-   * HIPAA Note: Password is hashed on server-side, never sent in plain text in production
-   */
   login(credentials: LoginRequest): Observable<User> {
-    // DEVELOPMENT MODE: Check for default admin credentials
-    // This allows testing the admin portal without backend setup
     if (credentials.email && isDefaultAdminCredentials(credentials.email, credentials.password, credentials.role)) {
       const defaultAdmin = createDefaultAdminUser();
       if (this.isBrowser) {
@@ -147,8 +136,6 @@ export class AuthService {
       });
     }
 
-    // DEVELOPMENT MODE: Check for default doctor credentials
-    // This allows testing the doctor portal without backend setup
     if (credentials.email && isDefaultDoctorCredentials(credentials.email, credentials.password, credentials.role)) {
       const defaultDoctor = createDefaultDoctorUser();
       if (this.isBrowser) {
@@ -164,8 +151,6 @@ export class AuthService {
       });
     }
 
-    // DEVELOPMENT MODE: Check for default patient credentials
-    // This allows testing the patient portal without backend setup
     if (credentials.email && isDefaultPatientCredentials(credentials.email, credentials.password, credentials.role)) {
       const defaultPatient = createDefaultPatientUser();
       if (this.isBrowser) {
@@ -181,51 +166,33 @@ export class AuthService {
       });
     }
 
-    // In production, password should be hashed client-side before sending
-    // For now, this is a placeholder - backend should handle hashing
     return this.http.post<User>(`${this.API_BASE}/login`, credentials).pipe(
       tap(user => {
-        // Store user in localStorage after successful login (only in browser)
         if (this.isBrowser && user) {
           localStorage.setItem('currentUser', JSON.stringify(user));
           if (credentials.rememberMe) {
-            // Store remember me preference
             localStorage.setItem('rememberMe', 'true');
           }
         }
         this.currentUserSubject.next(user);
       }),
       catchError((error: HttpErrorResponse) => {
-        // If backend is not available and it's a network error, 
-        // we could fall back to default admin in development
-        // But for now, just throw the error
         return throwError(() => error);
       })
     );
   }
 
-  /**
-   * Register new patient (CNIC-based)
-   * Only patients can self-register; doctors/admins are registered by admin
-   */
   register(userData: RegisterRequest): Observable<any> {
-    // HIPAA Note: Password should be hashed on server-side
-    return this.http.post<any>(`${this.API_BASE}/register`, userData);
+    return this.http.post<any>(`${this.API_BASE}/register-patient`, userData);
   }
 
-  /**
-   * Request password reset via email or SMS
-   */
   forgotPassword(request: ForgotPasswordRequest): Observable<{ message: string; otpSent: boolean }> {
     return this.http.post<{ message: string; otpSent: boolean }>(
-      `${this.API_BASE}/forgot-password`,
+      `${this.API_BASE}/forget-password`,
       request
     );
   }
 
-  /**
-   * Verify OTP for password reset, registration, or login
-   */
   verifyOTP(request: VerifyOTPRequest): Observable<{ verified: boolean; token?: string }> {
     return this.http.post<{ verified: boolean; token?: string }>(
       `${this.API_BASE}/verify-otp`,
@@ -233,30 +200,20 @@ export class AuthService {
     );
   }
 
-  /**
-   * Resend OTP
-   */
   resendOTP(email?: string, phone?: string): Observable<{ message: string; otpSent: boolean }> {
     return this.http.post<{ message: string; otpSent: boolean }>(
-      `${this.API_BASE}/resend-otp`,
+      `${this.API_BASE}/resend-otp`, // Add this endpoint in backend if needed
       { email, phone }
     );
   }
 
-  /**
-   * Reset password with token from OTP verification
-   */
   resetPassword(request: ResetPasswordRequest): Observable<{ message: string; success: boolean }> {
-    // HIPAA Note: Password should be hashed on server-side
     return this.http.post<{ message: string; success: boolean }>(
       `${this.API_BASE}/reset-password`,
       request
     );
   }
 
-  /**
-   * Google OAuth login
-   */
   loginWithGoogle(role?: 'admin' | 'doctor' | 'patient'): Observable<User> {
     return this.http.post<User>(`${this.API_BASE}/google`, { role }).pipe(
       tap(user => {
@@ -268,33 +225,21 @@ export class AuthService {
     );
   }
 
-  /**
-   * Change password (for authenticated users)
-   */
   changePassword(oldPassword: string, newPassword: string): Observable<{ message: string; success: boolean }> {
-    // HIPAA Note: Passwords should be hashed on server-side
     return this.http.post<{ message: string; success: boolean }>(
       `${this.API_BASE}/change-password`,
       { oldPassword, newPassword }
     );
   }
 
-  /**
-   * Validate CNIC format (Pakistani CNIC: 12345-1234567-1)
-   */
   validateCNIC(cnic: string): boolean {
     const cnicRegex = /^\d{5}-\d{7}-\d{1}$/;
     return cnicRegex.test(cnic);
   }
 
-  /**
-   * Format CNIC input
-   */
   formatCNIC(value: string): string {
-    // Remove all non-digits
     const digits = value.replace(/\D/g, '');
     
-    // Format as 12345-1234567-1
     if (digits.length <= 5) {
       return digits;
     } else if (digits.length <= 12) {
@@ -304,23 +249,16 @@ export class AuthService {
     }
   }
 
-  /**
-   * Validate phone number (Pakistani format)
-   */
   validatePhone(phone: string): boolean {
     const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
     return phoneRegex.test(phone.replace(/[\s-]/g, ''));
   }
 
-  /**
-   * Validate email
-   */
   validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
-  // Logout
   logout(): void {
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');

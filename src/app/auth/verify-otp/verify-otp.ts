@@ -32,22 +32,17 @@ export class VerifyOTP implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get email/phone and type from query params
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || '';
       this.phone = params['phone'] || '';
       this.type = params['type'] || 'password_reset';
     });
 
-    // Start countdown timer
     this.startCountdown();
   }
 
-  /**
-   * Start countdown timer for resend OTP
-   */
   startCountdown(): void {
-    this.countdown = 60; // 60 seconds
+    this.countdown = 60;
     this.canResend = false;
     
     const interval = setInterval(() => {
@@ -59,46 +54,34 @@ export class VerifyOTP implements OnInit {
     }, 1000);
   }
 
-  /**
-   * Handle OTP input (auto-submit when 6 digits entered)
-   */
   onOTPInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, ''); // Only digits
-    value = value.slice(0, 6); // Max 6 digits
+    let value = input.value.replace(/\D/g, '');
+    value = value.slice(0, 6);
     this.otp = value;
     input.value = value;
 
-    // Auto-submit when 6 digits entered
     if (value.length === 6) {
       this.onVerify();
     }
   }
 
-  /**
-   * Handle OTP paste
-   */
   onOTPPaste(event: ClipboardEvent): void {
     event.preventDefault();
     const pastedData = event.clipboardData?.getData('text') || '';
     const digits = pastedData.replace(/\D/g, '').slice(0, 6);
     this.otp = digits;
     
-    // Update all input fields
     const inputs = document.querySelectorAll('.otp-input');
     inputs.forEach((input, index) => {
       (input as HTMLInputElement).value = digits[index] || '';
     });
 
-    // Auto-submit if 6 digits
     if (digits.length === 6) {
       this.onVerify();
     }
   }
 
-  /**
-   * Handle backspace to move to previous input
-   */
   onOTPKeyDown(event: KeyboardEvent, index: number): void {
     const input = event.target as HTMLInputElement;
     
@@ -111,9 +94,6 @@ export class VerifyOTP implements OnInit {
     }
   }
 
-  /**
-   * Focus next input when digit entered
-   */
   onOTPKeyUp(event: KeyboardEvent, index: number): void {
     const input = event.target as HTMLInputElement;
     
@@ -125,9 +105,6 @@ export class VerifyOTP implements OnInit {
     }
   }
 
-  /**
-   * Validate OTP before submission
-   */
   validateOTP(): boolean {
     this.error = '';
 
@@ -144,9 +121,6 @@ export class VerifyOTP implements OnInit {
     return true;
   }
 
-  /**
-   * Handle OTP verification
-   */
   onVerify(): void {
     if (!this.validateOTP()) {
       return;
@@ -172,19 +146,15 @@ export class VerifyOTP implements OnInit {
         this.loading = false;
         
         if (response.verified) {
-          // Redirect based on type
           if (this.type === 'password_reset') {
-            // Redirect to reset password with token
             this.router.navigate(['/auth/reset-password'], {
               queryParams: { token: response.token }
             });
           } else if (this.type === 'registration') {
-            // Registration verified, redirect to login
             this.router.navigate(['/auth/login'], {
               queryParams: { verified: 'true' }
             });
           } else {
-            // Login OTP verified
             this.router.navigate(['/home']);
           }
         } else {
@@ -195,11 +165,9 @@ export class VerifyOTP implements OnInit {
         this.loading = false;
         this.error = err.error?.message || 'OTP verification failed. Please try again.';
         console.error('OTP verification error:', err);
-        // Clear OTP on error
         this.otp = '';
         const inputs = document.querySelectorAll('.otp-input');
         inputs.forEach(input => (input as HTMLInputElement).value = '');
-        // Focus first input
         const firstInput = document.querySelector('.otp-input[data-index="0"]') as HTMLInputElement;
         if (firstInput) {
           firstInput.focus();
@@ -208,9 +176,6 @@ export class VerifyOTP implements OnInit {
     });
   }
 
-  /**
-   * Resend OTP
-   */
   onResendOTP(): void {
     if (!this.canResend) {
       return;
@@ -224,11 +189,6 @@ export class VerifyOTP implements OnInit {
         this.resending = false;
         if (response.otpSent) {
           this.startCountdown();
-          // Show success message briefly
-          const successMsg = this.email 
-            ? 'OTP has been resent to your email.' 
-            : 'OTP has been resent to your phone.';
-          // You could show a toast notification here
         }
       },
       error: (err) => {
@@ -239,11 +199,7 @@ export class VerifyOTP implements OnInit {
     });
   }
 
-  /**
-   * Get OTP input value for display
-   */
   getOTPDigit(index: number): string {
     return this.otp[index] || '';
   }
 }
-
