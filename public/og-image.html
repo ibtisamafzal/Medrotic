@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medrotic OpenGraph Image</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 1200px;
+      height: 630px;
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #f8f9ff 0%, #f5f6f9 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Animated background shapes */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: float 20s infinite ease-in-out;
+    }
+    
+    .bg-shape-1 {
+      width: 400px;
+      height: 400px;
+      background: #3461ff;
+      top: -150px;
+      left: -150px;
+      animation-delay: 0s;
+    }
+    
+    .bg-shape-2 {
+      width: 300px;
+      height: 300px;
+      background: #3461ff;
+      bottom: -100px;
+      right: -100px;
+      animation-delay: 5s;
+    }
+    
+    .bg-shape-3 {
+      width: 200px;
+      height: 200px;
+      background: #3461ff;
+      top: 50%;
+      right: 10%;
+      animation-delay: 10s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(30px, -30px) scale(1.1);
+      }
+    }
+    
+    /* Main content container */
+    .container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px;
+      max-width: 1000px;
+    }
+    
+    /* Logo/Brand section */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    
+    .brand-icon {
+      width: 60px;
+      height: 60px;
+      background: #3461ff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(52, 97, 255, 0.3);
+    }
+    
+    .brand-icon::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+      border-radius: 16px;
+    }
+    
+    .brand-icon svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .brand-text {
+      font-size: 48px;
+      font-weight: 700;
+      color: #001047;
+      letter-spacing: -2px;
+    }
+    
+    .brand-text .primary {
+      color: #3461ff;
+    }
+    
+    /* Main heading */
+    .main-heading {
+      font-size: 72px;
+      font-weight: 700;
+      color: #001047;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -3px;
+    }
+    
+    .main-heading .highlight {
+      color: #3461ff;
+      display: block;
+    }
+    
+    /* Subtitle */
+    .subtitle {
+      font-size: 32px;
+      font-weight: 400;
+      color: #676c80;
+      line-height: 1.4;
+      margin-bottom: 50px;
+      max-width: 800px;
+    }
+    
+    /* Feature badges */
+    .features {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .feature-badge {
+      background: white;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #001047;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .feature-badge:hover {
+      border-color: #3461ff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(52, 97, 255, 0.2);
+    }
+    
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      color: #3461ff;
+    }
+    
+    /* Decorative elements */
+    .decoration {
+      position: absolute;
+      z-index: 5;
+    }
+    
+    .decoration-1 {
+      top: 80px;
+      right: 100px;
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, rgba(52, 97, 255, 0.1) 0%, rgba(52, 97, 255, 0.05) 100%);
+      border-radius: 30px;
+      transform: rotate(45deg);
+    }
+    
+    .decoration-2 {
+      bottom: 80px;
+      left: 100px;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(52, 97, 255, 0.15) 0%, rgba(52, 97, 255, 0.08) 100%);
+      border-radius: 20px;
+      transform: rotate(-45deg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Background shapes -->
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+  <div class="bg-shape bg-shape-3"></div>
+  
+  <!-- Decorative elements -->
+  <div class="decoration decoration-1"></div>
+  <div class="decoration decoration-2"></div>
+  
+  <!-- Main content -->
+  <div class="container">
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
+          <path d="M2 17L12 22L22 17V12L12 17L2 12V17Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="primary">Med</span>rotic
+      </div>
+    </div>
+    
+    <!-- Main heading -->
+    <h1 class="main-heading">
+      AI Powered
+      <span class="highlight">Healthcare System</span>
+    </h1>
+    
+    <!-- Subtitle -->
+    <p class="subtitle">
+      Revolutionizing patient care with advanced medical technology and digital solutions
+    </p>
+    
+    <!-- Features -->
+    <div class="features">
+      <div class="feature-badge">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>AI Diagnostics</span>
+      </div>
+      <div class="feature-badge">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 20H22V18C22 16.3431 20.6569 15 19 15H18.968M15 9C15 11.2091 13.2091 13 11 13C8.79086 13 7 11.2091 7 9C7 6.79086 8.79086 5 11 5C13.2091 5 15 6.79086 15 9ZM13 20H9C6.79086 20 5 18.2091 5 16V15C5 13.8954 5.89543 13 7 13H15C16.1046 13 17 13.8954 17 15V16C17 18.2091 15.2091 20 13 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Telemedicine</span>
+      </div>
+      <div class="feature-badge">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Smart Records</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

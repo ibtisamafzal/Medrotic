@@ -1,0 +1,80 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5f6f9;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Animated background shapes -->
+  <circle cx="100" cy="100" r="200" fill="#3461ff" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="150" fill="#3461ff" opacity="0.1"/>
+  <circle cx="1080" cy="315" r="100" fill="#3461ff" opacity="0.1"/>
+  
+  <!-- Decorative elements -->
+  <rect x="980" y="80" width="120" height="120" fill="rgba(52,97,255,0.1)" transform="rotate(45 1040 140)"/>
+  <rect x="100" y="470" width="80" height="80" fill="rgba(52,97,255,0.15)" transform="rotate(-45 140 510)"/>
+  
+  <!-- Brand Icon -->
+  <g transform="translate(570, 120)">
+    <rect x="-30" y="-30" width="60" height="60" rx="16" fill="#3461ff" filter="url(#shadow)"/>
+    <path d="M0 -12 L-10 -7 L0 -2 L10 -7 Z M-10 3 L0 8 L10 3 L10 -2 L0 3 L-10 -2 Z" fill="white"/>
+  </g>
+  
+  <!-- Brand Text -->
+  <text x="600" y="150" font-family="Rubik, sans-serif" font-size="48" font-weight="700" fill="#001047" letter-spacing="-2">
+    <tspan fill="#3461ff">Med</tspan>rotic
+  </text>
+  
+  <!-- Main Heading -->
+  <text x="600" y="280" font-family="Rubik, sans-serif" font-size="72" font-weight="700" fill="#001047" text-anchor="middle" letter-spacing="-3">
+    <tspan x="600" dy="0">AI Powered</tspan>
+    <tspan x="600" dy="85" fill="#3461ff">Healthcare System</tspan>
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="420" font-family="Rubik, sans-serif" font-size="32" font-weight="400" fill="#676c80" text-anchor="middle">
+    <tspan x="600" dy="0">Revolutionizing patient care with advanced</tspan>
+    <tspan x="600" dy="40">medical technology and digital solutions</tspan>
+  </text>
+  
+  <!-- Feature Badges -->
+  <g transform="translate(600, 500)">
+    <!-- AI Diagnostics Badge -->
+    <g transform="translate(-200, 0)">
+      <rect x="-80" y="-20" width="160" height="40" rx="20" fill="white" filter="url(#shadow)"/>
+      <circle cx="-60" cy="0" r="8" fill="#3461ff"/>
+      <path d="M-65 -3 L-63 -1 L-60 -4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="-45" y="5" font-family="Rubik, sans-serif" font-size="20" font-weight="500" fill="#001047">AI Diagnostics</text>
+    </g>
+    
+    <!-- Telemedicine Badge -->
+    <g transform="translate(0, 0)">
+      <rect x="-90" y="-20" width="180" height="40" rx="20" fill="white" filter="url(#shadow)"/>
+      <circle cx="-70" cy="0" r="8" fill="#3461ff"/>
+      <path d="M-75 -2 L-70 2 L-65 -2" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="-55" y="5" font-family="Rubik, sans-serif" font-size="20" font-weight="500" fill="#001047">Telemedicine</text>
+    </g>
+    
+    <!-- Smart Records Badge -->
+    <g transform="translate(200, 0)">
+      <rect x="-85" y="-20" width="170" height="40" rx="20" fill="white" filter="url(#shadow)"/>
+      <rect x="-70" y="-8" width="16" height="16" rx="2" fill="#3461ff"/>
+      <text x="-48" y="5" font-family="Rubik, sans-serif" font-size="20" font-weight="500" fill="#001047">Smart Records</text>
+    </g>
+  </g>
+</svg>
