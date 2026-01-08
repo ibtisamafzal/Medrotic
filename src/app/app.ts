@@ -4,10 +4,11 @@ import { filter, Subscription } from 'rxjs';
 import { Alert } from './common/alert/alert';
 import { AlertService, AlertMessage } from './services/alert.service';
 import { CommonModule } from '@angular/common';
+import { VercelAnalyticsComponent } from './common/vercel-analytics/vercel-analytics';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Alert, CommonModule],
+  imports: [RouterOutlet, Alert, CommonModule, VercelAnalyticsComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
