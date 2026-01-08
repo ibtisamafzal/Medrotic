@@ -526,23 +526,99 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-@media (max-width: 1199px) {
+// ============================================
+// RESPONSIVE DESIGN - Mobile-first approach
+// ============================================
+
+// Large tablets and small desktops (max-width: 1199.98px)
+@media (max-width: 1199.98px) {
   .collab-card {
     grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .hero-heading h1 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
   }
 }
 
-@media (max-width: 991px) {
+// Tablets (max-width: 991.98px)
+@media (max-width: 991.98px) {
+  .section-spacing {
+    padding: 3rem 0;
+  }
+
+  .hero {
+    padding: 2rem 0;
+  }
+
   .hero-shape {
     display: none;
   }
 
+  .hero-heading {
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+
+    h1 {
+      font-size: clamp(1.875rem, 4vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-btn {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .hero-panels {
+    margin-top: 2rem;
+  }
+
+  .hero-panel {
+    min-height: 280px;
+    max-height: 350px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-panel--image {
+    min-height: 280px;
+    max-height: 350px;
+
+    .hero-main-image {
+      min-height: 280px;
+      max-height: 350px;
+    }
+  }
+
+  .hero-panel--rating {
+    .value {
+      font-size: 3rem;
+    }
+  }
+
   .difference-stats {
     flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
   }
 
   .virtual-gallery {
-    min-height: 150px;
+    min-height: 140px;
+    max-height: 160px;
     
     .virtual-overlay {
       width: 50%;
@@ -555,15 +631,47 @@ h1, h2, h3, h4, h5, h6 {
     object-fit: cover;
   }
 
-  .sponsor-strip img {
-    max-width: 120px;
-    height: auto;
+  .sponsor-strip {
+    padding: 2rem 0;
+    margin: 1.5rem 0;
+
+    img {
+      max-width: 120px;
+      height: auto;
+    }
+  }
+
+  .collab-card {
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .commitments-card {
+    padding: 1.5rem;
+    gap: 1rem;
+
+    .commitment {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+  }
+
+  .workflow-step {
+    padding: 1.5rem;
+    gap: 1rem;
   }
 
   .testimonials {
+    padding: 2.5rem 0;
+
     .testimonial-header {
       flex-direction: column;
       align-items: flex-start;
+      gap: 1rem;
+
+      h2 {
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+      }
     }
 
     .testimonial-content-row {
@@ -571,20 +679,99 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .testimonial-card {
+      padding: 2.5rem 2rem;
+
       .testimonial-quote-wrapper {
         min-height: 100px;
       }
 
       .testimonial-quote {
-        font-size: 1.4rem;
+        font-size: 1.25rem;
       }
     }
   }
 }
 
-@media (max-width: 767px) {
+// Mobile (max-width: 767.98px)
+@media (max-width: 767.98px) {
+  .section-spacing {
+    padding: 2.5rem 0;
+  }
+
+  .hero {
+    padding: 1.5rem 0;
+  }
+
+  .hero-heading {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      margin-bottom: 0.875rem;
+    }
+
+    p {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+  }
+
+  .hero-actions {
+    gap: 0.625rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-btn {
+    font-size: 0.9375rem;
+    padding: 0.875rem 1.5rem;
+  }
+
+  .hero-panels {
+    margin-top: 1.5rem;
+  }
+
+  .hero-panel {
+    min-height: 250px;
+    max-height: 320px;
+    padding: 1.25rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .hero-panel--image {
+    min-height: 250px;
+    max-height: 320px;
+
+    .hero-main-image {
+      min-height: 250px;
+      max-height: 320px;
+    }
+  }
+
+  .hero-panel--rating {
+    .value {
+      font-size: 2.5rem;
+    }
+
+    .eyebrow,
+    .subline {
+      font-size: 0.875rem;
+    }
+  }
+
+  .hero-panel--virtual {
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+    }
+  }
+
   .virtual-gallery {
-    min-height: 130px;
+    min-height: 120px;
+    max-height: 140px;
+    margin-top: 0.75rem;
     
     .virtual-overlay {
       width: 45%;
@@ -593,33 +780,162 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 
-  .sponsor-strip img {
-    max-width: 100px;
+  .sponsor-strip {
+    padding: 1.5rem 0;
+    margin: 1rem 0;
+
+    .logos-row {
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    img {
+      max-width: 100px;
+      height: auto;
+    }
   }
 
-  .hero-main-image {
-    min-height: 220px;
-    max-height: 280px;
+  .collab-card {
+    padding: 1.5rem;
+    gap: 1.25rem;
+    border-radius: 24px;
+
+    .collab-content {
+      h3 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 0.875rem;
+      }
+    }
   }
-  
-  .hero-panel {
-    min-height: 280px;
-    max-height: 350px;
+
+  .difference {
+    padding: 1rem 0;
+
+    .difference-copy {
+      h2 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+      }
+
+      p {
+        font-size: 0.9375rem;
+      }
+    }
+
+    .difference-stats {
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+
+      .value {
+        font-size: 2.5rem;
+      }
+
+      .label {
+        font-size: 0.875rem;
+      }
+    }
   }
-  
-  .hero-panel--image {
-    min-height: 280px;
-    max-height: 350px;
-    
-    .hero-main-image {
-      min-height: 280px;
-      max-height: 350px;
+
+  .commitments-card {
+    padding: 1.25rem;
+    gap: 0.875rem;
+    margin: 1rem 0;
+
+    .commitment {
+      padding: 1.25rem;
+      gap: 0.875rem;
+      flex-direction: column;
+      text-align: center;
+
+      .icon {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto;
+      }
+
+      h4 {
+        font-size: 1.125rem;
+      }
+
+      p {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .workflow {
+    padding: 2rem 0;
+
+    .workflow-copy {
+      h2 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+      }
+
+      p {
+        font-size: 0.9375rem;
+      }
+    }
+
+    .workflow-placeholder {
+      height: 250px;
+      margin-top: 1.25rem;
+    }
+
+    .workflow-steps {
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .workflow-step {
+      padding: 1.25rem;
+      gap: 0.875rem;
+      flex-direction: column;
+
+      .workflow-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto;
+
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      h5 {
+        font-size: 1.125rem;
+        text-align: center;
+      }
+
+      p {
+        font-size: 0.875rem;
+        text-align: center;
+      }
     }
   }
 
   .testimonials {
-    .testimonial-header h2 {
-      font-size: 2rem;
+    padding: 2rem 0;
+
+    .testimonial-header {
+      h2 {
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
+        margin-bottom: 0.75rem;
+      }
+
+      .testimonial-controls {
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      .nav-circle {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+      }
     }
 
     .testimonial-content-row {
@@ -628,6 +944,7 @@ h1, h2, h3, h4, h5, h6 {
 
     .testimonial-card {
       padding: 2rem 1.5rem;
+      border-radius: 24px;
 
       .quote-icon {
         width: 48px;
@@ -640,65 +957,184 @@ h1, h2, h3, h4, h5, h6 {
       }
 
       .testimonial-quote {
-        font-size: 1.2rem;
+        font-size: 1.125rem;
         line-height: 1.5;
       }
 
       .testimonial-author {
         margin: 1.5rem 0;
+        gap: 0.875rem;
 
         img {
           width: 48px;
           height: 48px;
+        }
+
+        .name {
+          font-size: 0.9375rem;
+        }
+
+        .role {
+          font-size: 0.875rem;
         }
       }
     }
 
     .testimonial-pagination {
       padding: 0.75rem 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
 
       .pagination-arrow {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
 
         img {
-          width: 16px;
-          height: 16px;
+          width: 18px;
+          height: 18px;
         }
       }
 
       .pagination-track {
         gap: 0.5rem;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
       }
     }
   }
 }
 
-@media (max-width: 575px) {
+// Small mobile (max-width: 575.98px)
+@media (max-width: 575.98px) {
   .section-spacing {
-    padding: 3.5rem 0;
+    padding: 2rem 0;
+  }
+
+  .hero {
+    padding: 1.25rem 0;
+  }
+
+  .hero-heading {
+    margin-bottom: 1.25rem;
+    padding: 0;
+
+    h1 {
+      font-size: clamp(1.5rem, 6vw, 2.25rem);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+
+  .hero-actions {
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
   }
 
   .hero-btn {
     width: 100%;
+    font-size: 0.875rem;
+    padding: 0.875rem 1.25rem;
+  }
+
+  .hero-panels {
+    margin-top: 1.25rem;
+  }
+
+  .hero-panel {
+    min-height: 220px;
+    max-height: 280px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-panel--image {
+    min-height: 220px;
+    max-height: 280px;
+
+    .hero-main-image {
+      min-height: 220px;
+      max-height: 280px;
+    }
+  }
+
+  .hero-panel--rating {
+    .value {
+      font-size: 2.25rem;
+    }
+
+    .eyebrow,
+    .subline {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .virtual-gallery {
+    min-height: 100px;
+    max-height: 120px;
+    
+    .virtual-overlay {
+      width: 40%;
+      bottom: -5%;
+      right: -3%;
+    }
+  }
+
+  .sponsor-strip {
+    padding: 1.25rem 0;
+
+    .logos-row {
+      gap: 0.75rem;
+    }
+
+    img {
+      max-width: 80px;
+    }
+  }
+
+  .collab-card {
+    padding: 1.25rem;
+    gap: 1rem;
+    border-radius: 20px;
+
+    .collab-content {
+      .overline {
+        font-size: 0.8125rem;
+      }
+
+      h3 {
+        font-size: 1.375rem;
+      }
+
+      p {
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  .difference {
+    .difference-stats {
+      .value {
+        font-size: 2.25rem;
+      }
+    }
   }
 
   .testimonials {
+    padding: 1.5rem 0;
+
     .testimonial-header {
-      .testimonial-controls {
-        width: 100%;
-        justify-content: flex-end;
-      }
-
       .nav-circle {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
       }
-    }
-
-    .testimonial-content-row {
-      margin-top: 1.5rem;
     }
 
     .testimonial-card {
@@ -714,7 +1150,7 @@ h1, h2, h3, h4, h5, h6 {
       }
 
       .testimonial-quote {
-        font-size: 1.1rem;
+        font-size: 1rem;
         line-height: 1.4;
       }
 
@@ -722,7 +1158,7 @@ h1, h2, h3, h4, h5, h6 {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
-        margin: 1.5rem 0;
+        margin: 1.25rem 0;
 
         img {
           width: 44px;
@@ -733,7 +1169,7 @@ h1, h2, h3, h4, h5, h6 {
 
     .testimonial-pagination {
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.875rem;
       padding: 1rem;
 
       .pagination-arrow {
@@ -745,25 +1181,8 @@ h1, h2, h3, h4, h5, h6 {
         order: -1;
         justify-content: center;
         flex-wrap: wrap;
+        font-size: 0.8125rem;
       }
     }
-  }
-
-  .virtual-gallery {
-    min-height: 120px;
-    
-    .virtual-overlay {
-      width: 40%;
-      bottom: -5%;
-      right: -3%;
-    }
-  }
-
-  .sponsor-strip img {
-    max-width: 80px;
-  }
-
-  .hero-main-image {
-    min-height: 200px;
   }
 }

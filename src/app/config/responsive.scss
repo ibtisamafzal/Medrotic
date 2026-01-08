@@ -1,0 +1,245 @@
+// ============================================
+// RESPONSIVE DESIGN SYSTEM
+// World-class professional responsive utilities
+// ============================================
+
+// Bootstrap 5 Breakpoints (for reference)
+// xs: < 576px (extra small devices - phones)
+// sm: >= 576px (small devices - large phones)
+// md: >= 768px (medium devices - tablets)
+// lg: >= 992px (large devices - desktops)
+// xl: >= 1200px (extra large devices - large desktops)
+// xxl: >= 1400px (extra extra large devices)
+
+// Custom Breakpoints for better control
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+// Container max-widths (aligned with Bootstrap but optimized)
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+);
+
+// Spacing scale for responsive design
+$spacing-scale: (
+  xs: 0.5rem,    // 8px
+  sm: 0.75rem,   // 12px
+  md: 1rem,      // 16px
+  lg: 1.5rem,    // 24px
+  xl: 2rem,      // 32px
+  xxl: 3rem,     // 48px
+  xxxl: 4rem     // 64px
+);
+
+// Typography scale for responsive design
+$font-sizes: (
+  xs: 0.75rem,   // 12px
+  sm: 0.875rem,  // 14px
+  base: 1rem,    // 16px
+  lg: 1.125rem,  // 18px
+  xl: 1.25rem,   // 20px
+  '2xl': 1.5rem, // 24px
+  '3xl': 1.875rem, // 30px
+  '4xl': 2.25rem,  // 36px
+  '5xl': 3rem,     // 48px
+  '6xl': 3.75rem   // 60px
+);
+
+// Touch target minimum size (WCAG 2.1 Level AAA)
+$touch-target-min: 44px;
+
+// ============================================
+// MIXINS
+// ============================================
+
+// Responsive breakpoint mixin
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @if $value == 0 {
+      @content;
+    } @else {
+      @media (min-width: $value) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Max-width breakpoint mixin
+@mixin respond-to-max($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @if $value > 0 {
+      @media (max-width: $value - 1px) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+// Between breakpoints
+@mixin respond-between($min, $max) {
+  $min-value: map-get($breakpoints, $min);
+  $max-value: map-get($breakpoints, $max);
+  
+  @if $min-value and $max-value {
+    @media (min-width: $min-value) and (max-width: $max-value - 1px) {
+      @content;
+    }
+  }
+}
+
+// Touch-friendly button/input sizing
+@mixin touch-target {
+  min-height: $touch-target-min;
+  min-width: $touch-target-min;
+  padding: 0.75rem 1.5rem;
+  
+  @include respond-to-max(md) {
+    min-height: 48px;
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+// Fluid typography (clamp)
+@mixin fluid-type($min-size, $max-size, $min-width: 320px, $max-width: 1920px) {
+  font-size: clamp(#{$min-size}, #{$min-size} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-width}) / (#{$max-width} - #{$min-width})), #{$max-size});
+}
+
+// Container padding responsive
+@mixin container-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  
+  @include respond-to(sm) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  @include respond-to(lg) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+// Safe area insets for mobile devices (notches, etc.)
+@mixin safe-area-insets {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+
+// Hide on specific breakpoints
+.hide-xs {
+  @include respond-to-max(sm) {
+    display: none !important;
+  }
+}
+
+.hide-sm {
+  @include respond-between(sm, md) {
+    display: none !important;
+  }
+}
+
+.hide-md {
+  @include respond-between(md, lg) {
+    display: none !important;
+  }
+}
+
+.hide-lg {
+  @include respond-to(lg) {
+    display: none !important;
+  }
+}
+
+// Show only on specific breakpoints
+.show-xs-only {
+  display: block !important;
+  
+  @include respond-to(sm) {
+    display: none !important;
+  }
+}
+
+.show-sm-only {
+  display: none !important;
+  
+  @include respond-between(sm, md) {
+    display: block !important;
+  }
+}
+
+.show-md-only {
+  display: none !important;
+  
+  @include respond-between(md, lg) {
+    display: block !important;
+  }
+}
+
+// Touch-friendly spacing
+.touch-spacing {
+  @include respond-to-max(md) {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+// Responsive text alignment
+.text-responsive {
+  text-align: center;
+  
+  @include respond-to(md) {
+    text-align: left;
+  }
+}
+
+// Responsive container
+.container-responsive {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  @include container-padding;
+  
+  @include respond-to(sm) {
+    max-width: map-get($container-max-widths, sm);
+  }
+  
+  @include respond-to(md) {
+    max-width: map-get($container-max-widths, md);
+  }
+  
+  @include respond-to(lg) {
+    max-width: map-get($container-max-widths, lg);
+  }
+  
+  @include respond-to(xl) {
+    max-width: map-get($container-max-widths, xl);
+  }
+  
+  @include respond-to(xxl) {
+    max-width: map-get($container-max-widths, xxl);
+  }
+}
