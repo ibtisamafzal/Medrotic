@@ -91,102 +91,395 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+// ============================================
+// HERO PANELS - Reference Design (Light Mode)
+// ============================================
+
 .hero-panels {
-  margin-top: 3rem;
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1.5rem;
+  align-items: stretch;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
 }
 
-.hero-panel {
-  border-radius: 24px;
-  padding: 2rem;
-  background: #f5f6f9;
-  min-height: 320px;
-  max-height: 400px;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
+.hero-cards-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: stretch;
+  height: 100%;
 
-  &--rating {
-    background: #3461ff;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: left;
-    justify-content: space-between;
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+  }
+}
 
-    .value {
-      font-size: 3.5rem;
-      font-weight: 700;
-      line-height: 1;
-    }
+.hero-card {
+  position: relative;
+  border-radius: 20px;
+  background: #ffffff;
+  padding: 1.75rem;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 
-    .hero-panel-cta {
-      border-color: rgba(255, 255, 255, 0.6);
-      color: #fff;
-      margin-top: auto;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(147, 51, 234, 0.03) 50%, rgba(251, 191, 36, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+
+    &::before {
+      opacity: 1;
     }
   }
 
+  .card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  // Hero Image Card - Left Side
   &--image {
     padding: 0;
-    background: #f5f6f9;
-    min-height: 320px;
-    max-height: 400px;
+    height: 100%;
+    min-height: 480px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: none;
 
-    .hero-main-image {
-      display: block;
+    @media (max-width: 991.98px) {
+      min-height: 400px;
+    }
+
+    .image-wrapper {
+      position: relative;
       width: 100%;
       height: 100%;
-      min-height: 320px;
-      max-height: 400px;
+      min-height: 480px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      @media (max-width: 991.98px) {
+        min-height: 400px;
+      }
+    }
+
+    .hero-main-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border-radius: 24px;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(15, 23, 42, 0) 0%,
+        rgba(15, 23, 42, 0.4) 50%,
+        rgba(15, 23, 42, 0.85) 100%
+      );
+      z-index: 1;
+    }
+
+    .image-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      color: #ffffff;
+
+      @media (max-width: 767.98px) {
+        padding: 1.5rem;
+      }
+    }
+
+    .image-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 0.5rem 0;
+      line-height: 1.3;
+    }
+
+    .image-subtitle {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 0.75rem 0;
+    }
+
+    .image-description {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .image-stats {
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+      @media (max-width: 575.98px) {
+        gap: 1rem;
+      }
+    }
+
+    .image-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .stat-number {
+        font-family: 'Rubik', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1;
+      }
+
+      .stat-label {
+        font-size: 0.8125rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    &:hover .hero-main-image {
+      transform: scale(1.05);
     }
   }
 
-  &--virtual {
+  // Healthcare Statistics Report Card
+  &--stats-report {
+    grid-column: span 2;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    justify-content: space-between;
 
-    h3 {
+    @media (max-width: 991.98px) {
+      grid-column: span 1;
+    }
+
+    .stat-badge-positive {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 0.375rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .stat-amount {
       font-family: 'Rubik', sans-serif;
-      font-size: 1.4rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0.75rem 0 0.25rem 0;
+    }
+
+    .stat-subtitle {
+      font-size: 0.9375rem;
+      color: #64748b;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .chart-container {
+      margin-top: 1.5rem;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      height: 120px;
       margin-bottom: 0.5rem;
     }
 
-    p {
-      color: #676c80;
-      font-size: 0.95rem;
-    }
-
-    .hero-panel-copy {
+    .chart-bar {
       flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      position: relative;
+    }
+
+    .bar-fill {
+      width: 100%;
+      background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
+      border-radius: 6px 6px 0 0;
+      transition: all 0.3s ease;
+    }
+
+    .chart-bar--1 .bar-fill { height: 45%; }
+    .chart-bar--2 .bar-fill { height: 65%; }
+    .chart-bar--3 .bar-fill { height: 55%; }
+    .chart-bar--4 .bar-fill { height: 80%; }
+    .chart-bar--5 .bar-fill { height: 70%; }
+    .chart-bar--6 .bar-fill { height: 90%; }
+    .chart-bar--7 .bar-fill { height: 75%; }
+
+    .chart-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-weight: 500;
     }
   }
-}
 
-.virtual-gallery {
-  position: relative;
-  min-height: 140px;
-  max-height: 160px;
-  margin-top: 1rem;
-  flex-shrink: 0;
+  // Patient Satisfaction Card
+  &--satisfaction {
+    height: 100%;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-  .virtual-main {
-    width: 100%;
-    border-radius: 20px;
-    display: block;
+    .satisfaction-header {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .satisfaction-avatars {
+      display: flex;
+      align-items: center;
+      gap: -8px;
+    }
+
+    .avatar-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+      margin-left: -8px;
+
+      &:nth-child(1) {
+        background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        margin-left: 0;
+      }
+
+      &:nth-child(2) {
+        background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+      }
+
+      &:nth-child(3) {
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      }
+    }
+
+    .avatar-more {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      margin-left: -8px;
+    }
+
+    .satisfaction-content {
+      margin-top: auto;
+    }
+
+    .satisfaction-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .satisfaction-description {
+      font-size: 0.9375rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0;
+    }
   }
 
-  .virtual-overlay {
-    position: absolute;
-    bottom: -10%;
-    right: -6%;
-    width: 55%;
-    border-radius: 18px;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+  // Services Connected Card
+  &--services {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .services-info {
+      margin-bottom: 1.25rem;
+    }
+
+    .services-count {
+      font-size: 0.9375rem;
+      color: #64748b;
+      margin: 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3461ff;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+      }
+
+      &--more {
+        background: #f1f5f9;
+        color: #64748b;
+        border-color: rgba(148, 163, 184, 0.3);
+      }
+    }
   }
 }
 

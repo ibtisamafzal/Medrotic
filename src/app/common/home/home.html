@@ -21,43 +21,142 @@
         <a class="btn btn-primary hero-btn" [routerLink]="['/auth/login']">
           Get Started
         </a>
-        <button class="btn btn-outline-primary hero-btn">
-          Book An Appointment
-        </button>
       </div>
 
-      <div class="hero-panels row g-4 justify-content-center">
-        <div class="col-md-4 col-lg-3">
-          <article class="hero-panel hero-panel--rating h-100">
-            <p class="eyebrow">Top-Rated By</p>
-            <p class="value">99%</p>
-            <p class="subline">Of Clients</p>
-            <button class="btn btn-outline-light w-100 hero-panel-cta">
-              Our Services
-            </button>
-          </article>
+      <!-- Hero Panels -->
+      <div class="hero-panels">
+        <!-- Hero Image Card - Left -->
+        <div class="hero-card hero-card--image">
+          <div class="image-wrapper">
+            <img [src]="heroAssets.heroDoctor" alt="Healthcare professional providing care" class="hero-main-image">
+            <div class="image-overlay"></div>
+            <div class="image-content">
+              <h3 class="image-title">Expert Healthcare Provider</h3>
+              <p class="image-subtitle">Dr. Sarah Johnson</p>
+              <p class="image-description">Senior Medical Director with 15+ years of experience in providing exceptional healthcare services</p>
+              <div class="image-stats">
+                <div class="image-stat-item">
+                  <span class="stat-number">2.5k+</span>
+                  <span class="stat-label">Patients</span>
+                </div>
+                <div class="image-stat-item">
+                  <span class="stat-number">4.9</span>
+                  <span class="stat-label">Rating</span>
+                </div>
+                <div class="image-stat-item">
+                  <span class="stat-number">99%</span>
+                  <span class="stat-label">Satisfaction</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-4 col-lg-5">
-          <article class="hero-panel hero-panel--image h-100">
-            <img [src]="heroAssets.heroDoctor" alt="Doctor providing care" class="hero-main-image">
-          </article>
-        </div>
+        <!-- Right Side Cards Container -->
+        <div class="hero-cards-right">
+          <!-- Healthcare Statistics Card -->
+          <div class="hero-card hero-card--stats-report">
+            <div class="card-header-row">
+              <h3 class="card-title">Healthcare Statistics</h3>
+              <div class="stat-badge-positive">
+                <span>+24%</span>
+              </div>
+            </div>
+            <div class="stat-amount">12,450</div>
+            <p class="stat-subtitle">Active Patients This Month</p>
+            <div class="chart-container">
+              <div class="chart-bars">
+                <div class="chart-bar chart-bar--1">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--2">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--3">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--4">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--5">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--6">
+                  <div class="bar-fill"></div>
+                </div>
+                <div class="chart-bar chart-bar--7">
+                  <div class="bar-fill"></div>
+                </div>
+              </div>
+              <div class="chart-labels">
+                <span>S</span>
+                <span>M</span>
+                <span>T</span>
+                <span>W</span>
+                <span>T</span>
+                <span>F</span>
+                <span>S</span>
+              </div>
+            </div>
+          </div>
 
-        <div class="col-md-4 col-lg-4">
-          <article class="hero-panel hero-panel--virtual h-100">
-            <div class="hero-panel-copy">
-              <h3>Virtual Consultation</h3>
-              <p>Timely care with virtual consultation typically being scheduled.</p>
+          <!-- Patient Satisfaction Card -->
+          <div class="hero-card hero-card--satisfaction">
+            <div class="satisfaction-header">
+              <div class="satisfaction-avatars">
+                <div class="avatar-circle"></div>
+                <div class="avatar-circle"></div>
+                <div class="avatar-circle"></div>
+                <div class="avatar-more">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 12L12 8L8 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div class="virtual-gallery">
-              <img [src]="heroAssets.virtualMain" alt="Virtual consultation session" class="virtual-main">
-              <img [src]="heroAssets.virtualOverlay" alt="" class="virtual-overlay" aria-hidden="true">
+            <div class="satisfaction-content">
+              <h3 class="satisfaction-title">50k+ Patient Satisfaction</h3>
+              <p class="satisfaction-description">Join thousands of satisfied patients who trust Medrotic for their healthcare needs</p>
             </div>
-            <button class="btn btn-outline-primary w-100 hero-panel-cta">
-              Contact Us
-            </button>
-          </article>
+          </div>
+
+          <!-- Services Connected Card -->
+          <div class="hero-card hero-card--services">
+            <div class="card-header-row">
+              <h3 class="card-title">Services Connected</h3>
+            </div>
+            <div class="services-info">
+              <p class="services-count">8 Active Services</p>
+            </div>
+            <div class="services-grid">
+              <div class="service-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
+                  <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="service-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="service-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="service-icon service-icon--more">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="5" r="2" fill="currentColor"/>
+                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                  <circle cx="12" cy="19" r="2" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
