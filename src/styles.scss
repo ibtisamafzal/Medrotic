@@ -166,6 +166,7 @@ img {
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  text-decoration: none !important;
   
   @media (max-width: 767.98px) {
     min-height: 48px;
@@ -177,10 +178,12 @@ img {
   &:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
+    text-decoration: none !important;
   }
   
   &:active:not(:disabled) {
     transform: translateY(0);
+    text-decoration: none !important;
   }
   
   &:disabled {
@@ -300,13 +303,25 @@ a {
   
   &:hover {
     color: #2851e6;
-    text-decoration: underline;
+    text-decoration: none;
   }
   
   &:focus {
     outline: 2px solid #3461ff;
     outline-offset: 2px;
     border-radius: 4px;
+  }
+  
+  // Remove underline on buttons
+  &.btn,
+  &.btn-primary,
+  &.btn-secondary,
+  &.btn-outline-primary,
+  &.btn-outline-secondary,
+  &.btn-outline-light {
+    &:hover {
+      text-decoration: none !important;
+    }
   }
 }
 
