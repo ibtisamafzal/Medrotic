@@ -470,8 +470,8 @@ h1, h2, h3, h4, h5, h6 {
       transition: all 0.2s ease;
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
       }
 
       &--more {

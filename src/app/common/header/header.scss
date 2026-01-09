@@ -443,8 +443,8 @@
   .btn-primary {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    &:hover {
-      transform: translateY(-2px);
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
     }
   }

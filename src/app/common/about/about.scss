@@ -131,9 +131,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Public Sans', sans-serif;
   font-weight: 500;
   
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #2851e6;
     border-color: #2851e6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 }
 
