@@ -5,10 +5,11 @@ import { Alert } from './common/alert/alert';
 import { AlertService, AlertMessage } from './services/alert.service';
 import { CommonModule } from '@angular/common';
 import { VercelAnalyticsComponent } from './common/vercel-analytics/vercel-analytics';
+import { VercelSpeedInsightsComponent } from './common/vercel-speed-insights/vercel-speed-insights';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Alert, CommonModule, VercelAnalyticsComponent],
+  imports: [RouterOutlet, Alert, CommonModule, VercelAnalyticsComponent, VercelSpeedInsightsComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
