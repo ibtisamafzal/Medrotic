@@ -1,6 +1,7 @@
 {
     "version": 2,
-    "public": true,
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist/frontend/browser",
     "headers": [
       {
         "source": "/og-image.png",
@@ -22,7 +23,7 @@
     ],
     "rewrites": [
       {
-        "source": "/((?!.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|eot|json|xml|txt|pdf|zip)).*)",
+        "source": "/(.*)",
         "destination": "/api/index"
       }
     ],
