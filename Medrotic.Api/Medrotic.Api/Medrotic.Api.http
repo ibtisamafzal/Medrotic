@@ -1,0 +1,6 @@
+@Medrotic.Api_HostAddress = http://localhost:5198
+
+GET {{Medrotic.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
