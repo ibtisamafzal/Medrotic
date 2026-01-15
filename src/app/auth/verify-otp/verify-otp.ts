@@ -16,7 +16,7 @@ import { Footer } from '../../common/footer/footer';
 export class VerifyOTP implements OnInit {
   otp: string = '';
   email: string = '';
-  phone: string = '';
+  phone: string = ''; // For display purposes only
   type: 'password_reset' | 'registration' | 'login' = 'password_reset';
   
   loading: boolean = false;
@@ -24,6 +24,7 @@ export class VerifyOTP implements OnInit {
   resending: boolean = false;
   countdown: number = 0;
   canResend: boolean = false;
+  message: string = '';
 
   constructor(
     private authService: AuthService,
@@ -34,8 +35,11 @@ export class VerifyOTP implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.email = params['email'] || '';
-      this.phone = params['phone'] || '';
       this.type = params['type'] || 'password_reset';
+      
+      if (!this.email) {
+        this.error = 'Email is required for OTP verification';
+      }
     });
 
     this.startCountdown();
@@ -126,29 +130,31 @@ export class VerifyOTP implements OnInit {
       return;
     }
 
+    if (!this.email) {
+      this.error = 'Email is required';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
     const request: VerifyOTPRequest = {
-      otp: this.otp,
-      type: this.type
+      email: this.email,
+      otp: this.otp
     };
-
-    if (this.email) {
-      request.email = this.email;
-    }
-    if (this.phone) {
-      request.phone = this.phone;
-    }
 
     this.authService.verifyOTP(request).subscribe({
       next: (response) => {
         this.loading = false;
         
-        if (response.verified) {
+        // API returns { message: string, token: string }
+        if (response.token) {
           if (this.type === 'password_reset') {
             this.router.navigate(['/auth/reset-password'], {
-              queryParams: { token: response.token }
+              queryParams: { 
+                token: response.token,
+                email: this.email
+              }
             });
           } else if (this.type === 'registration') {
             this.router.navigate(['/auth/login'], {
@@ -163,7 +169,7 @@ export class VerifyOTP implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'OTP verification failed. Please try again.';
+        this.error = err.error?.message || err.error?.Message || 'OTP verification failed. Please try again.';
         console.error('OTP verification error:', err);
         this.otp = '';
         const inputs = document.querySelectorAll('.otp-input');
@@ -181,19 +187,23 @@ export class VerifyOTP implements OnInit {
       return;
     }
 
+    if (!this.email) {
+      this.error = 'Email is required';
+      return;
+    }
+
     this.resending = true;
     this.error = '';
 
-    this.authService.resendOTP(this.email || undefined, this.phone || undefined).subscribe({
+    this.authService.resendOTP(this.email).subscribe({
       next: (response) => {
         this.resending = false;
-        if (response.otpSent) {
-          this.startCountdown();
-        }
+        this.startCountdown();
+        this.message = response.message || 'OTP has been resent to your email.';
       },
       error: (err) => {
         this.resending = false;
-        this.error = err.error?.message || 'Failed to resend OTP. Please try again.';
+        this.error = err.error?.message || err.error?.Message || 'Failed to resend OTP. Please try again.';
         console.error('Resend OTP error:', err);
       }
     });

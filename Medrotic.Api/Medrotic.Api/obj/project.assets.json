@@ -4466,11 +4466,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+      "projectUniqueName": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
       "projectName": "Medrotic.Api",
-      "projectPath": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+      "projectPath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
       "packagesPath": "C:\\Users\\Laptop Solutions\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\obj\\",
+      "outputPath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4567,7 +4567,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

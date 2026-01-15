@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService, RegisterRequest } from '../auth.service';
+import { AuthService, RegisterPatientRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
 
@@ -101,17 +101,24 @@ export class Register {
       return false;
     }
 
-    if (!this.email.trim() && !this.phone.trim()) {
-      this.error = 'Either email or phone number is required';
+    // API requires email
+    if (!this.email.trim()) {
+      this.error = 'Email is required';
       return false;
     }
 
-    if (this.email.trim() && !this.authService.validateEmail(this.email)) {
+    if (!this.authService.validateEmail(this.email)) {
       this.error = 'Please enter a valid email address';
       return false;
     }
 
-    if (this.phone.trim() && !this.authService.validatePhone(this.phone)) {
+    // API requires phoneNumber
+    if (!this.phone.trim()) {
+      this.error = 'Phone number is required';
+      return false;
+    }
+
+    if (!this.authService.validatePhone(this.phone)) {
       this.error = 'Please enter a valid phone number';
       return false;
     }
@@ -169,6 +176,12 @@ export class Register {
       return false;
     }
 
+    // Validate gender value
+    if (!['Male', 'Female', 'Other'].includes(this.gender)) {
+      this.error = 'Gender must be Male, Female, or Other';
+      return false;
+    }
+
     return true;
   }
 
@@ -181,48 +194,48 @@ export class Register {
     this.error = '';
     this.success = false;
 
-    const registerRequest: RegisterRequest = {
-      name: this.name.trim(),
-      cnic: this.cnic.trim(),
+    // Format phone number (remove spaces and ensure proper format)
+    const phoneNumber = this.phone.replace(/\s/g, '');
+
+    // Format CNIC to 13 digits (remove dashes)
+    const cnicDigits = this.cnic.replace(/\D/g, '');
+    if (cnicDigits.length !== 13) {
+      this.error = 'CNIC must be exactly 13 digits';
+      this.loading = false;
+      return;
+    }
+
+    // Format date of birth to ISO string
+    const dateOfBirthISO = new Date(this.dateOfBirth).toISOString();
+
+    const registerRequest: RegisterPatientRequest = {
+      fullName: this.name.trim(),
+      email: this.email.trim(),
       password: this.password,
-      role: 'patient',
-      dateOfBirth: this.dateOfBirth,
-      gender: this.gender,
+      confirmPassword: this.confirmPassword,
+      cnic: cnicDigits,
+      phoneNumber: phoneNumber,
+      dateOfBirth: dateOfBirthISO,
+      gender: this.gender as 'Male' | 'Female' | 'Other',
       city: this.city.trim(),
       province: this.province.trim()
     };
-
-    if (this.email.trim()) {
-      registerRequest.email = this.email.trim();
-    }
-    if (this.phone.trim()) {
-      registerRequest.phone = this.phone.trim();
-    }
 
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
         this.loading = false;
         this.success = true;
         
-        if (response.requiresOTP) {
-          this.router.navigate(['/auth/verify-otp'], {
-            queryParams: {
-              email: this.email || undefined,
-              phone: this.phone || undefined,
-              type: 'registration'
-            }
+        // API returns success message, navigate to login
+        setTimeout(() => {
+          this.router.navigate(['/auth/login'], {
+            queryParams: { registered: 'true' }
           });
-        } else {
-          setTimeout(() => {
-            this.router.navigate(['/auth/login'], {
-              queryParams: { registered: 'true' }
-            });
-          }, 2000);
-        }
+        }, 2000);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Registration failed. Please try again.';
+        this.error = err.error?.message || err.error?.Message || 'Registration failed. Please try again.';
         console.error('Registration error:', err);
       }
     });

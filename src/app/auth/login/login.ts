@@ -146,19 +146,38 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
+    // API only accepts email, so convert phone/cnic to email format
+    // For now, require email login - phone/cnic would need backend support
+    let emailForLogin = '';
+    
+    if (this.loginMethod === 'email') {
+      emailForLogin = this.email.trim();
+    } else if (this.loginMethod === 'phone') {
+      // Convert phone to email format (would need backend support)
+      // For now, show error
+      this.error = 'Phone login is not yet supported. Please use email.';
+      this.loading = false;
+      return;
+    } else if (this.loginMethod === 'cnic') {
+      // Convert CNIC to email format (would need backend support)
+      // For now, show error
+      this.error = 'CNIC login is not yet supported. Please use email.';
+      this.loading = false;
+      return;
+    }
+
+    if (!emailForLogin) {
+      this.error = 'Email is required';
+      this.loading = false;
+      return;
+    }
+
     const loginRequest: LoginRequest = {
+      email: emailForLogin,
       password: this.password,
       role: this.selectedRole,
       rememberMe: this.rememberMe
     };
-
-    if (this.loginMethod === 'email') {
-      loginRequest.email = this.email.trim();
-    } else if (this.loginMethod === 'phone') {
-      loginRequest.phone = this.phone.trim();
-    } else if (this.loginMethod === 'cnic') {
-      loginRequest.cnic = this.cnic.trim();
-    }
 
     this.authService.login(loginRequest).subscribe({
       next: (user) => {

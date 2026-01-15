@@ -37,12 +37,17 @@ export class ResetPassword implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'] || '';
+      this.email = params['email'] || '';
       
       if (!this.token) {
         this.error = 'Invalid or missing reset token. Please request a new password reset.';
         setTimeout(() => {
           this.router.navigate(['/auth/forgot-password']);
         }, 3000);
+      }
+      
+      if (!this.email) {
+        this.error = 'Email is required for password reset.';
       }
     });
   }
@@ -92,14 +97,19 @@ export class ResetPassword implements OnInit {
       return;
     }
 
+    if (!this.email) {
+      this.error = 'Email is required for password reset.';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
     this.success = false;
 
     const request: ResetPasswordRequest = {
+      email: this.email,
       token: this.token,
-      newPassword: this.newPassword,
-      confirmPassword: this.confirmPassword
+      newPassword: this.newPassword
     };
 
     this.authService.resetPassword(request).subscribe({
@@ -115,7 +125,7 @@ export class ResetPassword implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Failed to reset password. The token may have expired. Please request a new password reset.';
+        this.error = err.error?.message || err.error?.Message || 'Failed to reset password. The token may have expired. Please request a new password reset.';
         console.error('Reset password error:', err);
       }
     });

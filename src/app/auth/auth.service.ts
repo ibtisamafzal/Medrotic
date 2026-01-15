@@ -3,7 +3,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import { isDefaultAdminCredentials, createDefaultAdminUser, isDefaultDoctorCredentials, createDefaultDoctorUser, isDefaultPatientCredentials, createDefaultPatientUser } from '../config/default-admin';
 
 export interface User {
@@ -17,44 +18,61 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email?: string;
-  phone?: string;
-  cnic?: string;
+  email?: string; // Optional - can use phone/cnic for UI, but API requires email
   password: string;
-  role: 'admin' | 'doctor' | 'patient';
+  role?: 'admin' | 'doctor' | 'patient'; // Optional for API, but kept for fallback
   rememberMe?: boolean;
+  phone?: string; // For UI purposes
+  cnic?: string; // For UI purposes
 }
 
-export interface RegisterRequest {
-  email?: string;
-  phone?: string;
-  cnic: string; // Required for patients
+export interface RegisterPatientRequest {
+  fullName: string; // API uses FullName
+  email: string;
   password: string;
-  name: string;
-  role: 'patient'; // Only patients can self-register
-  dateOfBirth?: string;
-  gender: string;
-  city?: string;
-  province?: string;
+  confirmPassword: string;
+  cnic: string; // 13 digits without dashes
+  phoneNumber: string; // API uses PhoneNumber
+  dateOfBirth: string; // ISO date string
+  gender: 'Male' | 'Female' | 'Other';
+  city: string;
+  province: string;
 }
 
 export interface ForgotPasswordRequest {
-  email?: string;
-  phone?: string;
-  method: 'email' | 'sms';
+  email: string; // API only supports email
 }
 
 export interface VerifyOTPRequest {
-  email?: string;
-  phone?: string;
+  email: string; // API only supports email
   otp: string;
-  type: 'password_reset' | 'registration' | 'login';
 }
 
 export interface ResetPasswordRequest {
-  token: string;
+  email: string; // Required by API
+  token: string; // From verify-otp response
   newPassword: string;
+}
+
+export interface AddUserRequest {
+  fullName: string;
+  email: string;
+  password: string;
   confirmPassword: string;
+  role: 'Admin' | 'Doctor';
+  specialty?: string; // Required for Doctor
+  experienceYears?: number; // Required for Doctor
+  city?: string;
+  province?: string;
+  phoneNumber?: string;
+  dateOfBirth?: string; // ISO date string
+  gender?: 'Male' | 'Female' | 'Other';
+}
+
+export interface LoginResponse {
+  token: string;
+  role: string;
+  fullName: string;
 }
 
 @Injectable({
@@ -64,7 +82,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private isBrowser: boolean;
-  private readonly API_BASE = 'https://localhost:7124/api/auth'; // Full URL for backend
+  private readonly API_BASE = `${environment.apiUrl}/api/Auth`; // Use environment and capital A
 
   constructor(
     private http: HttpClient,
@@ -121,7 +139,15 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<User> {
-    if (credentials.email && isDefaultAdminCredentials(credentials.email, credentials.password, credentials.role)) {
+    // Convert phone/cnic to email if needed (API only accepts email)
+    // For now, we'll require email - phone/cnic login would need backend support
+    if (!credentials.email) {
+      return throwError(() => new Error('Email is required for login'));
+    }
+
+    // Check for default credentials first (fallback)
+    const role = credentials.role || 'patient';
+    if (credentials.email && isDefaultAdminCredentials(credentials.email, credentials.password, role)) {
       const defaultAdmin = createDefaultAdminUser();
       if (this.isBrowser) {
         localStorage.setItem('currentUser', JSON.stringify(defaultAdmin));
@@ -136,7 +162,7 @@ export class AuthService {
       });
     }
 
-    if (credentials.email && isDefaultDoctorCredentials(credentials.email, credentials.password, credentials.role)) {
+    if (credentials.email && isDefaultDoctorCredentials(credentials.email, credentials.password, role)) {
       const defaultDoctor = createDefaultDoctorUser();
       if (this.isBrowser) {
         localStorage.setItem('currentUser', JSON.stringify(defaultDoctor));
@@ -151,7 +177,7 @@ export class AuthService {
       });
     }
 
-    if (credentials.email && isDefaultPatientCredentials(credentials.email, credentials.password, credentials.role)) {
+    if (credentials.email && isDefaultPatientCredentials(credentials.email, credentials.password, role)) {
       const defaultPatient = createDefaultPatientUser();
       if (this.isBrowser) {
         localStorage.setItem('currentUser', JSON.stringify(defaultPatient));
@@ -166,8 +192,22 @@ export class AuthService {
       });
     }
 
-    return this.http.post<User>(`${this.API_BASE}/login`, credentials).pipe(
-      tap(user => {
+    // API call - API only accepts email and password
+    const apiRequest = {
+      email: credentials.email,
+      password: credentials.password
+    };
+
+    return this.http.post<LoginResponse>(`${this.API_BASE}/login`, apiRequest).pipe(
+      map(response => {
+        // Convert API response to User format
+        const user: User = {
+          id: '', // API doesn't return id
+          email: credentials.email,
+          role: response.role.toLowerCase() as 'admin' | 'doctor' | 'patient',
+          name: response.fullName,
+          token: response.token
+        };
         if (this.isBrowser && user) {
           localStorage.setItem('currentUser', JSON.stringify(user));
           if (credentials.rememberMe) {
@@ -175,6 +215,7 @@ export class AuthService {
           }
         }
         this.currentUserSubject.next(user);
+        return user;
       }),
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);
@@ -182,33 +223,38 @@ export class AuthService {
     );
   }
 
-  register(userData: RegisterRequest): Observable<any> {
-    return this.http.post<any>(`${this.API_BASE}/register-patient`, userData);
+  register(userData: RegisterPatientRequest): Observable<{ message: string }> {
+    // Format CNIC to 13 digits without dashes
+    const formattedData = {
+      ...userData,
+      cnic: userData.cnic.replace(/\D/g, '') // Remove all non-digits
+    };
+    return this.http.post<{ message: string }>(`${this.API_BASE}/register-patient`, formattedData);
   }
 
-  forgotPassword(request: ForgotPasswordRequest): Observable<{ message: string; otpSent: boolean }> {
-    return this.http.post<{ message: string; otpSent: boolean }>(
+  forgotPassword(request: ForgotPasswordRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
       `${this.API_BASE}/forget-password`,
       request
     );
   }
 
-  verifyOTP(request: VerifyOTPRequest): Observable<{ verified: boolean; token?: string }> {
-    return this.http.post<{ verified: boolean; token?: string }>(
+  verifyOTP(request: VerifyOTPRequest): Observable<{ message: string; token: string }> {
+    return this.http.post<{ message: string; token: string }>(
       `${this.API_BASE}/verify-otp`,
       request
     );
   }
 
-  resendOTP(email?: string, phone?: string): Observable<{ message: string; otpSent: boolean }> {
-    return this.http.post<{ message: string; otpSent: boolean }>(
-      `${this.API_BASE}/resend-otp`, // Add this endpoint in backend if needed
-      { email, phone }
+  resendOTP(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.API_BASE}/resend-otp`,
+      { email }
     );
   }
 
-  resetPassword(request: ResetPasswordRequest): Observable<{ message: string; success: boolean }> {
-    return this.http.post<{ message: string; success: boolean }>(
+  resetPassword(request: ResetPasswordRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
       `${this.API_BASE}/reset-password`,
       request
     );
@@ -230,6 +276,38 @@ export class AuthService {
       `${this.API_BASE}/change-password`,
       { oldPassword, newPassword }
     );
+  }
+
+  /**
+   * Add new user (admin only)
+   * Used for adding doctors or other admins
+   */
+  addUser(userData: AddUserRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.API_BASE}/add-user`,
+      userData
+    );
+  }
+
+  /**
+   * Test admin endpoint (for testing authentication)
+   */
+  testAdmin(): Observable<{ message: string }> {
+    return this.http.get<{ message: string }>(`${this.API_BASE}/test-admin`);
+  }
+
+  /**
+   * Test doctor endpoint (for testing authentication)
+   */
+  testDoctor(): Observable<{ message: string }> {
+    return this.http.get<{ message: string }>(`${this.API_BASE}/test-doctor`);
+  }
+
+  /**
+   * Test patient endpoint (for testing authentication)
+   */
+  testPatient(): Observable<{ message: string }> {
+    return this.http.get<{ message: string }>(`${this.API_BASE}/test-patient`);
   }
 
   validateCNIC(cnic: string): boolean {

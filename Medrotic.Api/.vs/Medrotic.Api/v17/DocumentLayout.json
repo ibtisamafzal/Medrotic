@@ -1,88 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|c:\\users\\laptop solutions\\downloads\\medrotic.api\\medrotic.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|solutionrelative:medrotic.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Migrations\\20251207050120_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Medrotic.Api\\Migrations\\20251207050120_Initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|c:\\users\\laptop solutions\\downloads\\medrotic.api\\medrotic.api\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|solutionrelative:medrotic.api\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|c:\\users\\laptop solutions\\downloads\\medrotic.api\\medrotic.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1C6849AF-0E66-4415-AEC7-E49422D41B6D}|Medrotic.Api\\Medrotic.Api.csproj|solutionrelative:medrotic.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "WorkspaceRootPath": "D:\\Medrotic\\Medrotic.Api\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "20251207050120_Initial.cs",
-              "DocumentMoniker": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Migrations\\20251207050120_Initial.cs",
-              "RelativeDocumentMoniker": "Medrotic.Api\\Migrations\\20251207050120_Initial.cs",
-              "ToolTip": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Migrations\\20251207050120_Initial.cs",
-              "RelativeToolTip": "Medrotic.Api\\Migrations\\20251207050120_Initial.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T05:01:20.613Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\appsettings.json",
-              "RelativeDocumentMoniker": "Medrotic.Api\\appsettings.json",
-              "ToolTip": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\appsettings.json",
-              "RelativeToolTip": "Medrotic.Api\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-07T04:53:03.558Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Medrotic.Api\\Data\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Medrotic.Api\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAowFgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T04:52:25.136Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Program.cs",
-              "RelativeDocumentMoniker": "Medrotic.Api\\Program.cs",
-              "ToolTip": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Program.cs",
-              "RelativeToolTip": "Medrotic.Api\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T12:14:07.522Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

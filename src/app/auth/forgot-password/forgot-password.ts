@@ -28,13 +28,12 @@ export class ForgotPassword {
   ) {}
 
   /**
-   * Format phone input
+   * Handle phone input formatting
    */
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     
-    // Format as +92 XXX XXXXXXX
     if (value.startsWith('92')) {
       value = '+92' + value.substring(2);
     } else if (value.startsWith('0')) {
@@ -43,7 +42,6 @@ export class ForgotPassword {
       value = '+92' + value;
     }
     
-    // Format with spaces
     if (value.length > 4) {
       value = value.slice(0, 4) + ' ' + value.slice(4);
     }
@@ -70,7 +68,7 @@ export class ForgotPassword {
         this.error = 'Please enter a valid email address';
         return false;
       }
-    } else {
+    } else if (this.method === 'sms') {
       if (!this.phone.trim()) {
         this.error = 'Phone number is required';
         return false;
@@ -79,6 +77,10 @@ export class ForgotPassword {
         this.error = 'Please enter a valid phone number';
         return false;
       }
+      // Convert phone to email for API (API only supports email)
+      // In a real scenario, you'd need backend support for SMS-based password reset
+      this.error = 'SMS password reset is not yet supported. Please use email.';
+      return false;
     }
 
     return true;
@@ -97,47 +99,30 @@ export class ForgotPassword {
     this.success = false;
     this.message = '';
 
+    // API only supports email, so use email regardless of method selected
     const request: ForgotPasswordRequest = {
-      method: this.method
+      email: this.email.trim()
     };
-
-    if (this.method === 'email') {
-      request.email = this.email.trim();
-    } else {
-      request.phone = this.phone.trim();
-    }
 
     this.authService.forgotPassword(request).subscribe({
       next: (response) => {
         this.loading = false;
         this.success = true;
-        this.message = response.message || 
-          (this.method === 'email' 
-            ? 'Password reset instructions have been sent to your email.' 
-            : 'An OTP has been sent to your phone number.');
+        this.message = response.message || 'OTP has been sent to your email. Please check your inbox.';
 
-        // Redirect to OTP verification if SMS method
-        if (this.method === 'sms' && response.otpSent) {
-          setTimeout(() => {
-            this.router.navigate(['/auth/verify-otp'], {
-              queryParams: {
-                phone: this.phone,
-                type: 'password_reset'
-              }
-            });
-          }, 2000);
-        } else if (this.method === 'email') {
-          // For email, show success message and option to go back to login
-          setTimeout(() => {
-            this.router.navigate(['/auth/login'], {
-              queryParams: { resetSent: 'true' }
-            });
-          }, 3000);
-        }
+        // Navigate to OTP verification
+        setTimeout(() => {
+          this.router.navigate(['/auth/verify-otp'], {
+            queryParams: {
+              email: this.email,
+              type: 'password_reset'
+            }
+          });
+        }, 2000);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Failed to send reset instructions. Please try again.';
+        this.error = err.error?.message || err.error?.Message || 'Failed to send reset instructions. Please try again.';
         console.error('Forgot password error:', err);
       }
     });

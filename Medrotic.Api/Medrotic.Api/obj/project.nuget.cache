@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2TEd5CY3h2U=",
+  "dgSpecHash": "LX+TJlN3wds=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Laptop Solutions\\Downloads\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+  "projectFilePath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
