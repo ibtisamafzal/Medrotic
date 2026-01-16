@@ -43,6 +43,10 @@ export class Services implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    // Only run in browser environment (not during SSR)
+    if (typeof window === 'undefined') {
+      return;
+    }
     // Use setTimeout to ensure the view is fully initialized
     setTimeout(() => {
       this.setupIntersectionObserver();
@@ -63,18 +67,23 @@ export class Services implements AfterViewInit, OnDestroy {
   }
 
   private setupIntersectionObserver() {
+    // Guard against SSR - only run in browser
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
     // Check if element exists
     if (!this.statisticsSection?.nativeElement) {
       // Retry after a short delay if element not found yet
       setTimeout(() => {
-        if (!this.hasAnimated && this.statisticsSection?.nativeElement) {
+        if (typeof window !== 'undefined' && !this.hasAnimated && this.statisticsSection?.nativeElement) {
           this.setupIntersectionObserver();
         }
       }, 200);
       return;
     }
 
-    if (typeof window === 'undefined' || !window || !('IntersectionObserver' in window)) {
+    if (!window || !('IntersectionObserver' in window)) {
       // For browsers without IntersectionObserver, check if element is in viewport manually
       this.checkIfInViewport();
       // Also listen to scroll events to check when user scrolls
