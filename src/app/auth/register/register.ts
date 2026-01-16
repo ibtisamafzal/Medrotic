@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService, RegisterPatientRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +37,8 @@ export class Register {
 
   constructor(
     private authService: AuthService,
-    public router: Router
+    public router: Router,
+    private alertService: AlertService
   ) {}
 
   getMaxDate(): string {
@@ -226,16 +228,45 @@ export class Register {
         this.loading = false;
         this.success = true;
         
-        // API returns success message, navigate to login
+        this.alertService.success('Registration successful! Redirecting to login...');
+        
+        // After successful registration, redirect to login with email pre-filled
+        // User can login immediately with their credentials
         setTimeout(() => {
           this.router.navigate(['/auth/login'], {
-            queryParams: { registered: 'true' }
+            queryParams: { 
+              registered: 'true',
+              email: this.email
+            }
           });
         }, 2000);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || err.error?.Message || 'Registration failed. Please try again.';
+        
+        // Improved error handling
+        let errorMessage = 'Registration failed. Please check your information and try again.';
+        
+        if (err.status === 400) {
+          if (err.error?.message) {
+            errorMessage = err.error.message;
+          } else if (err.error?.Message) {
+            errorMessage = err.error.Message;
+          } else {
+            errorMessage = 'Invalid registration data. Please check all fields and try again.';
+          }
+        } else if (err.status === 409 || err.error?.message?.toLowerCase().includes('already')) {
+          errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+        } else if (err.status === 0 || err.status >= 500) {
+          errorMessage = 'Server error. Please try again later or contact support if the problem persists.';
+        } else if (err.error?.message) {
+          errorMessage = err.error.message;
+        } else if (err.error?.Message) {
+          errorMessage = err.error.Message;
+        }
+        
+        this.error = errorMessage;
+        this.alertService.error(errorMessage);
         console.error('Registration error:', err);
       }
     });

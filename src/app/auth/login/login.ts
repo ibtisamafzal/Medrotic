@@ -5,6 +5,8 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
+import { AlertService } from '../../services/alert.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -38,15 +40,34 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alertService: AlertService,
+    private sessionService: SessionService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'] || '';
-      console.log('Return URL:', this.returnUrl);
+      
+      // Handle query params for registration success
+      if (params['registered'] === 'true') {
+        this.alertService.success('Registration successful! Please log in to continue.');
+      }
+      
+      if (params['verified'] === 'true') {
+        this.alertService.success('Email verified successfully! Please log in to continue.');
+      }
+      
+      if (params['email']) {
+        this.email = params['email'];
+      }
+      
+      if (params['reason'] === 'expired') {
+        this.alertService.warning('Your session has expired. Please log in again.');
+      }
     });
     
+    // Restore Remember Me state
     if (typeof localStorage !== 'undefined') {
       const remembered = localStorage.getItem('rememberMe');
       if (remembered === 'true') {
@@ -55,6 +76,14 @@ export class LoginComponent implements OnInit {
         if (storedEmail) {
           this.email = storedEmail;
         }
+      }
+    }
+    
+    // If already logged in, redirect to dashboard
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.currentUserValue;
+      if (user) {
+        this.redirectByRole(user.role);
       }
     }
   }
@@ -98,11 +127,11 @@ export class LoginComponent implements OnInit {
 
     if (this.loginMethod === 'email') {
       if (!this.email.trim()) {
-        this.error = 'Email is required';
+        this.error = 'Email address is required';
         return false;
       }
       if (!this.authService.validateEmail(this.email)) {
-        this.error = 'Please enter a valid email address';
+        this.error = 'Please enter a valid email address (e.g., user@example.com)';
         return false;
       }
     } else if (this.loginMethod === 'phone') {
@@ -111,7 +140,7 @@ export class LoginComponent implements OnInit {
         return false;
       }
       if (!this.authService.validatePhone(this.phone)) {
-        this.error = 'Please enter a valid phone number';
+        this.error = 'Please enter a valid Pakistani phone number (e.g., +92 300 1234567)';
         return false;
       }
     } else if (this.loginMethod === 'cnic') {
@@ -120,7 +149,7 @@ export class LoginComponent implements OnInit {
         return false;
       }
       if (!this.authService.validateCNIC(this.cnic)) {
-        this.error = 'Please enter a valid CNIC (format: 12345-1234567-1)';
+        this.error = 'Please enter a valid CNIC in format: 12345-1234567-1';
         return false;
       }
     }
@@ -131,7 +160,7 @@ export class LoginComponent implements OnInit {
     }
 
     if (this.password.length < 8) {
-      this.error = 'Password must be at least 8 characters';
+      this.error = 'Password must be at least 8 characters long';
       return false;
     }
 
@@ -182,19 +211,31 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginRequest).subscribe({
       next: (user) => {
         this.loading = false;
-        console.log('Login successful, user:', user);
-        console.log('Return URL:', this.returnUrl);
         
+        // Handle Remember Me
         if (this.rememberMe && this.loginMethod === 'email') {
-          localStorage.setItem('rememberedEmail', this.email);
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('rememberMe', 'true');
+            localStorage.setItem('rememberedEmail', this.email);
+          }
+        } else {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('rememberedEmail');
+          }
         }
-
+        
+        // Start session monitoring
+        this.sessionService.startSessionMonitoring();
+        
+        // Show success message
+        this.alertService.success(`Welcome back, ${user.name || 'User'}!`);
+        
+        // Navigate to dashboard or return URL
         if (this.returnUrl) {
-          console.log('Navigating to return URL:', this.returnUrl);
           this.router.navigateByUrl(this.returnUrl).then(
             (success) => {
               if (!success) {
-                console.error('Navigation failed, redirecting by role');
                 this.redirectByRole(user.role);
               }
             }
@@ -203,13 +244,29 @@ export class LoginComponent implements OnInit {
             this.redirectByRole(user.role);
           });
         } else {
-          console.log('No return URL, redirecting by role');
           this.redirectByRole(user.role);
         }
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Login failed. Please check your credentials.';
+        
+        // Improved error handling
+        let errorMessage = 'Login failed. Please check your credentials and try again.';
+        
+        if (err.status === 401 || err.status === 403) {
+          errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+        } else if (err.status === 0 || err.status >= 500) {
+          errorMessage = 'Server error. Please try again later or contact support if the problem persists.';
+        } else if (err.status === 404) {
+          errorMessage = 'Service not found. Please check your connection and try again.';
+        } else if (err.error?.message) {
+          errorMessage = err.error.message;
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+        
+        this.error = errorMessage;
+        this.alertService.error(errorMessage);
         console.error('Login error:', err);
       }
     });
@@ -222,6 +279,12 @@ export class LoginComponent implements OnInit {
     this.authService.loginWithGoogle(this.selectedRole).subscribe({
       next: (user) => {
         this.loading = false;
+        
+        // Start session monitoring
+        this.sessionService.startSessionMonitoring();
+        
+        this.alertService.success(`Welcome, ${user.name || 'User'}!`);
+        
         if (this.returnUrl) {
           this.router.navigateByUrl(this.returnUrl);
         } else {
@@ -230,7 +293,9 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Google sign-in failed. Please try again.';
+        const errorMessage = err.error?.message || 'Google sign-in failed. Please try again or use email/password login.';
+        this.error = errorMessage;
+        this.alertService.error(errorMessage);
         console.error('Google login error:', err);
       }
     });

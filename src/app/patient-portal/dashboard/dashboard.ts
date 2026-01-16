@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
+import { AuthService, User } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +11,7 @@ import { PatientService } from '../../services/patient.service';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
+  currentUser: User | null = null;
   loading = true;
   healthSummary = {
     lastCheckup: null as string | null,
@@ -28,9 +30,15 @@ export class Dashboard implements OnInit {
   recentPrescriptions: any[] = [];
   recentXrays: any[] = [];
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    // Get current user
+    this.currentUser = this.authService.currentUserValue;
     this.loadDashboardData();
   }
 
@@ -122,5 +130,9 @@ export class Dashboard implements OnInit {
         checkComplete();
       }
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

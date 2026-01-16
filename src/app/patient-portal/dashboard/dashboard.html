@@ -1,7 +1,19 @@
 <div class="dashboard-page">
   <div class="page-header mb-4 fade-in-down">
-    <h2 class="page-title">Patient Dashboard</h2>
-    <p class="page-subtitle">Overview of your health summary and recent activity</p>
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="page-title">Welcome, {{ currentUser?.name || 'Patient' }}!</h2>
+        <p class="page-subtitle">Overview of your health summary and recent activity</p>
+      </div>
+      <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Logout
+      </button>
+    </div>
   </div>
 
   <!-- Health Summary Cards -->

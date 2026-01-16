@@ -181,13 +181,13 @@
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
-  left: 0;
-  min-width: 200px;
+  right: 0;
+  min-width: 240px;
   background-color: #ffffff;
   border: 1.5px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  padding: 8px 0;
+  padding: 0;
   margin: 0;
   opacity: 0;
   visibility: hidden;
@@ -216,7 +216,9 @@
 }
 
 .dropdown-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 12px 20px;
   font-family: 'Public Sans', 'Inter', sans-serif;
   font-size: 0.9375rem;
@@ -229,6 +231,12 @@
   background: transparent;
   width: 100%;
   text-align: left;
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
+    stroke: currentColor;
+  }
 
   &:hover {
     background-color: rgba(52, 97, 255, 0.05);
@@ -243,6 +251,95 @@
     outline: none !important;
     box-shadow: none !important;
   }
+
+  &.logout-item {
+    color: #ef4444;
+    
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.05);
+      color: #dc2626;
+    }
+  }
+}
+
+// User Menu Styles
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    border-color: #3461FF;
+    background-color: rgba(52, 97, 255, 0.05);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.1);
+  }
+
+  .dropdown-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #6b7280;
+  }
+
+  &[aria-expanded="true"] .dropdown-icon {
+    transform: rotate(180deg);
+    color: #3461FF;
+  }
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3461FF 0%, #8b5cf6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Public Sans', 'Inter', sans-serif;
+  flex-shrink: 0;
+}
+
+.dropdown-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  
+  .user-info {
+    .user-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: #001047;
+      margin-bottom: 4px;
+    }
+    
+    .user-email {
+      font-size: 0.8125rem;
+      color: #6b7280;
+    }
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 8px 0;
 }
 
 // ============================================

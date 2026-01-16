@@ -157,8 +157,17 @@ export class VerifyOTP implements OnInit {
               }
             });
           } else if (this.type === 'registration') {
+            // After registration OTP verification, we need to log the user in
+            // The token from verify-otp is a password reset token, not a JWT
+            // So we'll redirect to login with a success message, or try to auto-login
+            // For now, redirect to login with verified flag - user can login immediately
+            // In a production system, you might want to auto-login here if backend supports it
             this.router.navigate(['/auth/login'], {
-              queryParams: { verified: 'true' }
+              queryParams: { 
+                verified: 'true',
+                email: this.email,
+                registered: 'true'
+              }
             });
           } else {
             this.router.navigate(['/home']);

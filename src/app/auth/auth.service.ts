@@ -337,12 +337,92 @@ export class AuthService {
     return emailRegex.test(email);
   }
 
+  /**
+   * Auto-login user after registration/OTP verification
+   * This method logs in the user using their email and stores the token
+   */
+  autoLoginAfterRegistration(email: string, token: string): void {
+    // Decode token to get user info
+    const decoded = this.decodeToken(token);
+    if (decoded) {
+      // Extract user information from token
+      const role = decoded.role || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || 'patient';
+      const name = decoded.name || decoded.fullName || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || 'User';
+      
+      const user: User = {
+        id: decoded.sub || decoded.id || '',
+        email: email,
+        role: role.toLowerCase() as 'admin' | 'doctor' | 'patient',
+        name: name,
+        token: token
+      };
+      
+      if (this.isBrowser && user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      }
+      this.currentUserSubject.next(user);
+    }
+  }
+
   logout(): void {
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');
       localStorage.removeItem('rememberMe');
+      localStorage.removeItem('rememberedEmail');
     }
     this.currentUserSubject.next(null);
+    // Note: SessionService will be stopped by app component monitoring auth state
     this.router.navigate(['/auth/login']);
+  }
+
+  /**
+   * Get time until token expiration in minutes
+   */
+  getTokenExpirationMinutes(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decoded = this.decodeToken(token);
+    if (!decoded || !decoded.exp) return null;
+
+    const expirationDate = new Date(decoded.exp * 1000);
+    const now = new Date();
+    return (expirationDate.getTime() - now.getTime()) / (1000 * 60);
+  }
+
+  /**
+   * Check if user should be remembered based on rememberMe setting
+   */
+  shouldRememberUser(): boolean {
+    if (!this.isBrowser) return false;
+    return localStorage.getItem('rememberMe') === 'true';
+  }
+
+  /**
+   * Restore user session if rememberMe is enabled
+   */
+  restoreSessionIfRemembered(): void {
+    if (!this.isBrowser) return;
+    
+    if (this.shouldRememberUser()) {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          // Check if token is still valid
+          if (user.token && !this.isTokenExpired()) {
+            this.currentUserSubject.next(user);
+          } else {
+            // Token expired, clear rememberMe
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('currentUser');
+          }
+        } catch (error) {
+          console.error('Error restoring session:', error);
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('currentUser');
+        }
+      }
+    }
   }
 }

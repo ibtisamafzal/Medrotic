@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
+import { AuthService, User } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +11,7 @@ import { AdminService } from '../../services/admin.service';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
+  currentUser: User | null = null;
   loading = true;
   metrics = {
     totalPatients: 0,
@@ -35,9 +37,15 @@ export class Dashboard implements OnInit {
 
   recentActivity: any[] = [];
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    // Get current user
+    this.currentUser = this.authService.currentUserValue;
     this.loadMetrics();
   }
 
@@ -112,5 +120,9 @@ export class Dashboard implements OnInit {
         this.quickLinks[5].count = 128;
       }
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
