@@ -19,6 +19,10 @@
 .navbar-brand {
   text-decoration: none !important;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  line-height: 1;
   
   &:hover,
   &:active,
@@ -33,30 +37,25 @@
   }
 }
 
-.logo-text {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 700;
-  font-size: 28.235px;
-  color: #000;
-  letter-spacing: -2px;
-  text-transform: capitalize;
-  transition: none;
+.navbar-logo {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
   
-  .text-primary {
-    color: #3461ff;
+  &:hover {
+    opacity: 0.9;
   }
 }
 
-.logo-icon {
-  width: 19px;
-  height: 19px;
-  margin-left: 18px;
-  transition: none;
-  pointer-events: none; // Prevent any interaction on the icon itself
-}
-
-.logo-icon-inner {
-  transform: translate(-50%, -50%) rotate(90deg);
+// Desktop logo sizing
+@media (min-width: 992px) {
+  .navbar-logo {
+    height: 44px;
+    max-width: 220px;
+  }
 }
 
 .nav-link {
@@ -588,15 +587,9 @@
     padding: 0.75rem 0;
   }
 
-  .logo-text {
-    font-size: 22px;
-    letter-spacing: -1.5px;
-  }
-
-  .logo-icon {
-    width: 17px;
-    height: 17px;
-    margin-left: 10px;
+  .navbar-logo {
+    height: 36px;
+    max-width: 180px;
   }
 
   .nav-link {
@@ -626,15 +619,9 @@
     padding-right: 1rem;
   }
 
-  .logo-text {
-    font-size: 20px;
-    letter-spacing: -1px;
-  }
-
-  .logo-icon {
-    width: 16px;
-    height: 16px;
-    margin-left: 8px;
+  .navbar-logo {
+    height: 32px;
+    max-width: 160px;
   }
 
   .nav-link {

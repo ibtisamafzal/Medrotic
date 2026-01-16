@@ -27,8 +27,12 @@
   &.collapsed {
     width: 80px;
 
-    .logo-text {
+    .sidebar-logo {
       display: none;
+    }
+    
+    .sidebar-logo-icon {
+      display: block;
     }
 
     .nav-item span {
@@ -51,24 +55,28 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      width: 100%;
+      overflow: hidden;
 
-      .logo-text {
-        font-family: 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 24px;
-        color: #001047;
-        letter-spacing: -2px;
-        text-transform: capitalize;
+      .sidebar-logo {
+        height: 36px;
+        width: auto;
+        max-width: 180px;
+        object-fit: contain;
+        display: block;
         transition: opacity 0.3s ease;
-
-        .text-primary {
-          color: #3461ff;
+        flex-shrink: 0;
+        
+        &:hover {
+          opacity: 0.9;
         }
       }
-
-      .logo-icon {
-        width: 19px;
-        height: 19px;
+      
+      .sidebar-logo-icon {
+        height: 32px;
+        width: 32px;
+        object-fit: contain;
+        display: none;
         flex-shrink: 0;
       }
     }
@@ -226,8 +234,14 @@
     .sidebar-header {
       padding: 1.25rem 1.5rem;
 
-      .logo-text {
-        font-size: 22px;
+      .sidebar-logo {
+        height: 32px;
+        max-width: 160px;
+      }
+      
+      .sidebar-logo-icon {
+        height: 28px;
+        width: 28px;
       }
 
       .sidebar-toggle {
@@ -297,13 +311,14 @@
     .sidebar-header {
       padding: 1rem 1.25rem;
 
-      .logo-text {
-        font-size: 20px;
+      .sidebar-logo {
+        height: 30px;
+        max-width: 150px;
       }
-
-      .logo-icon {
-        width: 17px;
-        height: 17px;
+      
+      .sidebar-logo-icon {
+        height: 26px;
+        width: 26px;
       }
     }
 
@@ -351,14 +366,14 @@
     .sidebar-header {
       padding: 0.875rem 1rem;
 
-      .logo-text {
-        font-size: 18px;
-        letter-spacing: -1px;
+      .sidebar-logo {
+        height: 28px;
+        max-width: 140px;
       }
-
-      .logo-icon {
-        width: 16px;
-        height: 16px;
+      
+      .sidebar-logo-icon {
+        height: 24px;
+        width: 24px;
       }
     }
 
