@@ -3,6 +3,7 @@ import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,12 @@ import { RouterModule } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
+  constructor(private navigationService: NavigationService) {}
+
+  navigateToAuthOrDashboard(): void {
+    this.navigationService.navigateToAuthOrDashboard();
+  }
+
   heroAssets = {
     leftShape: '/images/hero/hero-left-shape.png',
     rightShape: '/images/hero/hero-right-shape.png',

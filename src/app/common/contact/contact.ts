@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { ContactService, ContactFormData } from '../../services/contact.service';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,8 +22,13 @@ export class Contact implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private navigationService: NavigationService
   ) {}
+
+  navigateToAuthOrDashboard(): void {
+    this.navigationService.navigateToAuthOrDashboard();
+  }
 
   ngOnInit(): void {
     this.contactForm = this.fb.group({

@@ -2,6 +2,7 @@ import { Component, OnDestroy, ViewChild, ElementRef, AfterViewInit, ChangeDetec
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { CommonModule } from '@angular/common';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-services',
@@ -32,7 +33,14 @@ export class Services implements AfterViewInit, OnDestroy {
   private animationFrameId?: number;
   private hasAnimated = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private navigationService: NavigationService
+  ) {}
+
+  navigateToAuthOrDashboard(): void {
+    this.navigationService.navigateToAuthOrDashboard();
+  }
 
   ngAfterViewInit() {
     // Use setTimeout to ensure the view is fully initialized

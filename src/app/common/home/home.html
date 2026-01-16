@@ -17,10 +17,10 @@
         </p>
       </div>
 
-      <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3">
-        <a class="btn btn-primary hero-btn" [routerLink]="['/auth/login']">
+          <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3">
+        <button class="btn btn-primary hero-btn" (click)="navigateToAuthOrDashboard()">
           Get Started
-        </a>
+        </button>
       </div>
 
       <!-- Hero Panels -->
@@ -183,7 +183,7 @@
           <h3>{{ collaboration.title }}</h3>
           <p>{{ collaboration.copy }}</p>
           <div class="d-flex justify-content-end">
-            <button class="btn btn-primary rounded-pill px-4">
+            <button class="btn btn-primary rounded-pill px-4" (click)="navigateToAuthOrDashboard()">
               {{ collaboration.cta }}
             </button>
           </div>
