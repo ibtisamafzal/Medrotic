@@ -248,6 +248,59 @@
     padding: 48px 0 24px;
   }
 
+  // Two-column layout for mobile
+  .row.g-5 {
+    --bs-gutter-y: 2rem;
+    --bs-gutter-x: 1.5rem;
+  }
+
+  .row.g-5 > [class*="col-"] {
+    margin-bottom: 2rem;
+  }
+
+  // Brand column - full width on mobile
+  .col-lg-4.col-md-6 {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  // Two-column grid for link sections
+  .col-lg-2.col-md-6.col-sm-6 {
+    flex: 0 0 auto;
+    width: 50%;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-logo-link {
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .footer-description {
+    text-align: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .footer-heading {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    li {
+      margin-bottom: 10px;
+    }
+
+    a,
+    span {
+      font-size: 14px;
+    }
+  }
+
   .footer-bottom {
     text-align: center;
     padding-top: 24px;
@@ -276,23 +329,58 @@
     padding: 40px 0 20px;
   }
 
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .footer-logo-text {
     font-size: 22px;
   }
 
+  // Two-column layout for small mobile
+  .col-lg-2.col-md-6.col-sm-6 {
+    width: 50%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
   .footer-heading {
-    font-size: 15px;
-    margin-bottom: 16px;
+    font-size: 14px;
+    margin-bottom: 12px;
   }
 
   .footer-links {
     li {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     a,
     span {
-      font-size: 14px;
+      font-size: 13px;
+    }
+  }
+
+  .social-pill {
+    width: 40px;
+    height: 40px;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .footer-contact {
+    a {
+      font-size: 13px;
+      gap: 8px;
+      
+      svg {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 }

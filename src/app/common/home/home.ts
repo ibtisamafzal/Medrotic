@@ -112,18 +112,6 @@ export class Home {
       role: 'Business Analyst',
       avatar: '/images/testimonials/testimonial-avatar.svg',
     },
-    {
-      quote: '"The seamless integration of health records and the ability to track my medical history in one place has made managing my health so much easier. Thank you, Medrotic!"',
-      author: 'David Thompson',
-      role: 'Project Manager',
-      avatar: '/images/testimonials/testimonial-avatar.svg',
-    },
-    {
-      quote: '"As someone with a busy schedule, Medrotic\'s flexible appointment system and virtual consultations have been a lifesaver. The care quality never compromises."',
-      author: 'Lisa Anderson',
-      role: 'HR Director',
-      avatar: '/images/testimonials/testimonial-avatar.svg',
-    },
   ];
 
   currentTestimonialIndex = 0;
