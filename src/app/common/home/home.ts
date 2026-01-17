@@ -27,11 +27,11 @@ export class Home {
   };
 
   sponsorLogos = [
-    { src: '/images/sponsors/sponsor-spotify.svg', alt: 'Spotify' },
-    { src: '/images/sponsors/sponsor-google.svg', alt: 'Google' },
-    { src: '/images/sponsors/sponsor-uber.svg', alt: 'Uber' },
-    { src: '/images/sponsors/sponsor-microsoft.svg', alt: 'Microsoft' },
-    { src: '/images/sponsors/sponsor-shopify.svg', alt: 'Shopify' },
+    { src: '/images/sponsors/client-logo-1.svg', alt: 'Client 1' },
+    { src: '/images/sponsors/client-logo-2.svg', alt: 'Client 2' },
+    { src: '/images/sponsors/client-logo-3.svg', alt: 'Client 3' },
+    { src: '/images/sponsors/client-logo-4.svg', alt: 'Client 4' },
+    { src: '/images/sponsors/client-logo-5.svg', alt: 'Client 5' },
   ];
 
   collaboration = {
