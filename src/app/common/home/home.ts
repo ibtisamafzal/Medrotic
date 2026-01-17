@@ -64,6 +64,8 @@ export class Home {
     },
   ];
 
+  workflowImage = '/images/workflow/workflow-visual.png';
+
   workflowSteps = [
     {
       title: 'Discovery',
@@ -93,24 +95,28 @@ export class Home {
       author: 'Adnan Tariq',
       role: 'Product Designer',
       avatar: '/images/testimonials/testimonial-avatar.svg',
+      sideImage: '/images/testimonials/testimonial-side-1.png',
     },
     {
       quote: '"Medrotic has transformed how I manage my health. The platform is intuitive, and the medical team is always available when I need them. Highly recommended!"',
       author: 'Sarah Johnson',
       role: 'Marketing Manager',
       avatar: '/images/testimonials/testimonial-avatar.svg',
+      sideImage: '/images/testimonials/testimonial-side-2.png',
     },
     {
       quote: '"As someone with a busy schedule, Medrotic\'s flexible appointment system and virtual consultations have been a lifesaver. The care quality never compromises."',
       author: 'Michael Chen',
       role: 'Software Engineer',
       avatar: '/images/testimonials/testimonial-avatar.svg',
+      sideImage: '/images/testimonials/testimonial-side-3.png',
     },
     {
       quote: '"I\'ve been using Medrotic for over a year now, and the experience has been outstanding. The doctors are knowledgeable, caring, and always take time to listen."',
       author: 'Emily Rodriguez',
       role: 'Business Analyst',
       avatar: '/images/testimonials/testimonial-avatar.svg',
+      sideImage: '/images/testimonials/testimonial-side-4.png',
     },
   ];
 

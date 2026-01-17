@@ -149,12 +149,30 @@ h1, h2, h3, h4, h5, h6 {
   color: #636977;
 }
 
+.trusted-care-section {
+  .row {
+    align-items: stretch;
+    display: flex;
+  }
+
+  .col-lg-6 {
+    display: flex;
+    flex-direction: column;
+    
+    > * {
+      width: 100%;
+    }
+  }
+}
+
 .trusted-care-image {
   background: #d9d9d9;
-  height: 400px;
+  height: 100%;
+  min-height: 400px;
   width: 100%;
   overflow: hidden;
   position: relative;
+  flex: 1 1 auto;
 
   img {
     width: 100%;

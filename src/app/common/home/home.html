@@ -195,7 +195,7 @@
   <!-- DIFFERENTIATORS -->
   <section class="difference section-spacing">
     <div class="container">
-      <div class="row g-5 align-items-center">
+      <div class="row g-5 align-items-stretch">
         <div class="col-lg-5">
           <div class="difference-copy">
             <h2>Here's What Makes Us Different From Conventional Clinics</h2>
@@ -230,16 +230,18 @@
   <!-- HOW IT WORKS -->
   <section class="workflow section-spacing">
     <div class="container">
-      <div class="row g-5 align-items-start">
+      <div class="row g-5 align-items-stretch">
         <div class="col-lg-5">
-          <div class="workflow-copy">
-            <h2>How It Works</h2>
-            <p>
-              We believe that the best way to create successful marketing campaigns is to work closely with our clients to understand their goals and challenges.
-            </p>
-          </div>
-          <div class="workflow-visual">
-            <div class="workflow-placeholder"></div>
+          <div class="workflow-left-content">
+            <div class="workflow-copy">
+              <h2>How It Works</h2>
+              <p>
+                We believe that the best way to create successful marketing campaigns is to work closely with our clients to understand their goals and challenges.
+              </p>
+            </div>
+            <div class="workflow-visual">
+              <img [src]="workflowImage" alt="How it works illustration" class="workflow-image">
+            </div>
           </div>
         </div>
         <div class="col-lg-7">
@@ -314,7 +316,9 @@
           </article>
         </div>
         <div class="col-lg-4 d-none d-lg-block">
-          <div class="testimonial-side-panel h-100"></div>
+          <div class="testimonial-side-panel h-100">
+            <img [src]="currentTestimonial.sideImage" [alt]="currentTestimonial.author + ' testimonial image'" class="testimonial-side-image">
+          </div>
         </div>
       </div>
     </div>

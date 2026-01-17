@@ -47,6 +47,34 @@ h1, h2, h3, h4, h5, h6 {
 .mission-card,
 .vision-card {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mission-card {
+  .mission-icon,
+  .section-heading,
+  .section-description {
+    flex-shrink: 0;
+  }
+  
+  .mission-image {
+    flex: 1 1 auto;
+    margin-top: auto;
+    min-height: 0;
+  }
+}
+
+.vision-card {
+  .vision-image {
+    flex-shrink: 0;
+  }
+  
+  .vision-icon,
+  .section-heading,
+  .section-description {
+    flex-shrink: 0;
+  }
 }
 
 .icon-circle {
