@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // ============================================
 // RESPONSIVE DESIGN SYSTEM
 // World-class professional responsive utilities
@@ -64,8 +66,8 @@ $touch-target-min: 44px;
 
 // Responsive breakpoint mixin
 @mixin respond-to($breakpoint) {
-  @if map-has-key($breakpoints, $breakpoint) {
-    $value: map-get($breakpoints, $breakpoint);
+  @if map.has-key($breakpoints, $breakpoint) {
+    $value: map.get($breakpoints, $breakpoint);
     @if $value == 0 {
       @content;
     } @else {
@@ -80,8 +82,8 @@ $touch-target-min: 44px;
 
 // Max-width breakpoint mixin
 @mixin respond-to-max($breakpoint) {
-  @if map-has-key($breakpoints, $breakpoint) {
-    $value: map-get($breakpoints, $breakpoint);
+  @if map.has-key($breakpoints, $breakpoint) {
+    $value: map.get($breakpoints, $breakpoint);
     @if $value > 0 {
       @media (max-width: $value - 1px) {
         @content;
@@ -94,8 +96,8 @@ $touch-target-min: 44px;
 
 // Between breakpoints
 @mixin respond-between($min, $max) {
-  $min-value: map-get($breakpoints, $min);
-  $max-value: map-get($breakpoints, $max);
+  $min-value: map.get($breakpoints, $min);
+  $max-value: map.get($breakpoints, $max);
   
   @if $min-value and $max-value {
     @media (min-width: $min-value) and (max-width: $max-value - 1px) {
@@ -224,22 +226,22 @@ $touch-target-min: 44px;
   @include container-padding;
   
   @include respond-to(sm) {
-    max-width: map-get($container-max-widths, sm);
+    max-width: map.get($container-max-widths, sm);
   }
   
   @include respond-to(md) {
-    max-width: map-get($container-max-widths, md);
+    max-width: map.get($container-max-widths, md);
   }
   
   @include respond-to(lg) {
-    max-width: map-get($container-max-widths, lg);
+    max-width: map.get($container-max-widths, lg);
   }
   
   @include respond-to(xl) {
-    max-width: map-get($container-max-widths, xl);
+    max-width: map.get($container-max-widths, xl);
   }
   
   @include respond-to(xxl) {
-    max-width: map-get($container-max-widths, xxl);
+    max-width: map.get($container-max-widths, xxl);
   }
 }

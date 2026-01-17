@@ -1,4 +1,4 @@
-@import '../shared/admin-styles.scss';
+@use '../shared/admin-styles.scss' as *;
 
 :host {
   display: block;
