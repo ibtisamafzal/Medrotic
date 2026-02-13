@@ -8,6 +8,9 @@ import { Contact } from './common/contact/contact';
 import { Faq } from './common/faq/faq';
 import { Terms } from './common/terms/terms';
 import { Privacy } from './common/privacy/privacy';
+import { RefundPolicy } from './common/refund-policy/refund-policy';
+import { GdprCompliance } from './common/gdpr-compliance/gdpr-compliance';
+import { AffiliatePolicy } from './common/affiliate-policy/affiliate-policy';
 
 export const routes: Routes = [
   // Public routes - Common pages
@@ -43,6 +46,18 @@ export const routes: Routes = [
   {
     path: 'privacy',
     component: Privacy
+  },
+  {
+    path: 'refund-policy',
+    component: RefundPolicy
+  },
+  {
+    path: 'gdpr-compliance',
+    component: GdprCompliance
+  },
+  {
+    path: 'affiliate-policy',
+    component: AffiliatePolicy
   },
   
   // Auth routes (public)

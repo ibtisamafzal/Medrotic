@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+pnpm-debug.log*
 
 # IDEs and editors
 .idea/
@@ -38,6 +39,29 @@ testem.log
 /typings
 __screenshots__/
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # System files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# .NET / C# Backend
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.csproj.user
+
+# Vercel
+.vercel
+
+# Logs
+logs/
+*.log
