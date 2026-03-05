@@ -3,17 +3,51 @@
 This document contains all AI/ML-related endpoints, data structures, and requirements for AI implementation.
 
 ## Table of Contents
-1. [AI Endpoints](#ai-endpoints)
-2. [AI Data Structures](#ai-data-structures)
-3. [Chatbot Implementation](#chatbot-implementation)
-4. [OCR Implementation](#ocr-implementation)
-5. [X-Ray Analysis](#x-ray-analysis)
-6. [Test Report Analysis](#test-report-analysis)
-7. [AI Integration Requirements](#ai-integration-requirements)
-8. [Response Formats](#response-formats)
-9. [Error Handling](#error-handling)
+1. [Medrotic Project Overview](#medrotic-project-overview)
+2. [Environment & Base URLs](#environment--base-urls)
+3. [AI Endpoints](#ai-endpoints)
+4. [AI Data Structures](#ai-data-structures)
+5. [Chatbot Implementation](#chatbot-implementation)
+6. [OCR Implementation](#ocr-implementation)
+7. [X-Ray Analysis](#x-ray-analysis)
+8. [Test Report Analysis](#test-report-analysis)
+9. [AI Integration Requirements](#ai-integration-requirements)
+10. [Response Formats](#response-formats)
+11. [Error Handling](#error-handling)
+12. [Testing & Validation](#testing--validation)
 
 ---
+
+## Medrotic Project Overview
+
+Medrotic is a healthcare platform with:
+- An **Angular 20** frontend (`frontend` project in this repo).
+- A **.NET backend API** exposing REST endpoints under `/api`.
+
+This document describes the **AI-related backend contracts** (chatbot, OCR, X-ray, test report analysis) that are consumed by the Angular app through `PatientService`, `AuthService`, and related services.
+
+As of 05 March 2026, this document is aligned with the current Angular codebase in this repository.
+
+## Environment & Base URLs
+
+- **Local development backend**: `https://localhost:7124` (see `src/environments/environment.ts`).
+- **Production backend**: `https://your-production-api.com` (placeholder, set in `src/environments/environment.prod.ts`).
+- **Auth base URL**: `${apiUrl}/api/Auth` (used by `AuthService` for login, registration, and password flows).
+- **Patient AI base URL**: `${apiUrl}/api/patient` (for example, `https://localhost:7124/api/patient` in development).  
+  The Angular app calls these as relative paths (`/api/patient/...`); external clients should prefix them with `apiUrl`.
+
+## AI Endpoints
+
+The Angular frontend currently uses the following AI-related endpoints on the backend:
+
+- **POST `/api/patient/chatbot`**: AI-powered patient chatbot (see details below).
+- **POST `/api/patient/reports`**: Upload a lab/test report document for AI analysis.
+- **GET `/api/patient/reports`**: List previously analyzed test reports.
+- **GET `/api/patient/xrays`**: Fetch X-ray records with AI analysis summaries.
+- **GET `/api/patient/prescriptions`**: Fetch prescriptions, potentially enriched by AI/OCR.
+- **POST `/api/patient/documents`**: Upload general health documents (may be processed by AI depending on type).
+
+Doctor-facing upload endpoints (for prescription OCR and X-ray upload) are implemented on the backend (for example, under `/api/doctor/...`) and feed into these patient-facing views.
 
 ## AI Endpoints
 
@@ -88,25 +122,29 @@ interface ChatbotMessage {
   context?: {
     timestamp?: string;             // ISO date
     patientId?: string;             // Patient identifier
-    medicalHistory?: any[];        // Patient's medical history
+    medicalHistory?: any[];         // Patient's medical history
     recentMetrics?: HealthMetric[]; // Recent health metrics
     currentSymptoms?: string[];     // Current symptoms
   };
 }
 ```
 
+In the Angular code (`ChatbotMessage` in `src/app/services/patient.service.ts`), the `context` field is currently typed as `any` to allow flexible payloads. The structure above is the expected shape that the backend AI implementation should support while remaining backward-compatible with the existing frontend.
+
 ### ChatbotResponse
 ```typescript
 interface ChatbotResponse {
-  response: string;                 // AI-generated response
-  suggestions?: string[];          // Suggested follow-up questions
-  confidence?: number;             // Confidence score (0-1)
-  sources?: string[];              // Medical sources/references
-  relatedTopics?: string[];        // Related medical topics
+  response: string;                 // AI-generated response (used by the UI)
+  suggestions?: string[];           // Suggested follow-up questions (used by the UI)
+  confidence?: number;              // Confidence score (0-1)
+  sources?: string[];               // Medical sources/references
+  relatedTopics?: string[];         // Related medical topics
   urgency?: 'low' | 'medium' | 'high'; // Urgency level
-  requiresDoctor?: boolean;        // Whether doctor consultation is recommended
+  requiresDoctor?: boolean;         // Whether doctor consultation is recommended
 }
 ```
+
+In the Angular frontend (`ChatbotResponse` in `src/app/services/patient.service.ts`), only the `response` and `suggestions` fields are currently used. The additional fields above are safe to include in backend responses and can be wired into the UI later without breaking existing behaviour.
 
 ### OCRResult
 ```typescript
@@ -616,6 +654,6 @@ Test report analysis is integrated into:
 
 ---
 
-**Last Updated:** 2024
-**Version:** 1.0
+**Last Updated:** 2026-03-05
+**Version:** 1.1
 
