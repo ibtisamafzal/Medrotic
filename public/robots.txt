@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Block authenticated application areas from indexing
+Disallow: /admin/
+Disallow: /doctor-portal/
+Disallow: /patient-portal/
+Disallow: /auth/
+
+# Sitemap location for Medrotic
+Sitemap: https://medrotic.vercel.app/sitemap.xml
+
