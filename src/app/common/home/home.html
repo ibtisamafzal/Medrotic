@@ -357,7 +357,11 @@
                   *ngFor="let indicator of paginationNumbers; let i = index"
                   [class.is-active]="indicator === activePaginationIndex"
                   (click)="goToTestimonial(i)"
-                  class="pagination-indicator">
+                  (keydown.enter)="goToTestimonial(i)"
+                  (keydown.space)="goToTestimonial(i)"
+                  class="pagination-indicator"
+                  role="button"
+                  tabindex="0">
                   {{ indicator }}
                 </span>
               </div>

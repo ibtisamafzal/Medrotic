@@ -5,14 +5,6 @@
   background-color: white;
   border: none;
   box-shadow: none;
-  
-  // Global override to remove all focus/active borders and outlines
-  *:focus,
-  *:focus-visible,
-  *:active {
-    outline: none !important;
-    box-shadow: none !important;
-  }
 }
 
 // Logo brand - no hover/click effects, just clickable
@@ -71,13 +63,19 @@
   align-items: center;
   gap: 6px;
   
-  // Remove all focus/active borders and outlines
-  &:focus,
-  &:focus-visible,
-  &:active {
+  // Mouse focus: keep clean appearance
+  &:focus {
     outline: none !important;
     box-shadow: none !important;
     border: none !important;
+  }
+
+  // Keyboard focus: show a clear focus ring
+  &:focus-visible {
+    outline: 2px solid #3461ff;
+    outline-offset: 2px;
+    box-shadow: none;
+    border: none;
   }
   
   &:hover {
