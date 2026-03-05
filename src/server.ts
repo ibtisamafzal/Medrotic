@@ -13,6 +13,28 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
+ * robots.txt - SEO and crawler directives.
+ * Served as a simple static text response to avoid SSR overhead and 500s.
+ */
+app.get('/robots.txt', (_req, res) => {
+  res
+    .status(200)
+    .type('text/plain')
+    .send(
+      [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin/',
+        'Disallow: /doctor-portal/',
+        'Disallow: /patient-portal/',
+        'Disallow: /auth/',
+        '',
+        'Sitemap: https://medrotic.vercel.app/sitemap.xml',
+      ].join('\n'),
+    );
+});
+
+/**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.
  *
