@@ -7,7 +7,23 @@
 @import '@fontsource/rubik/500.css';
 @import '@fontsource/rubik/600.css';
 @import '@fontsource/rubik/700.css';
-@import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Import only the Bootstrap pieces we actually use
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/utilities';
 
 // ============================================
 // GLOBAL RESPONSIVE STYLES

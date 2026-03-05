@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, Footer, CommonModule, RouterModule],
+  imports: [Header, Footer, CommonModule, RouterModule, NgOptimizedImage],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

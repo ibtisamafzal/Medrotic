@@ -28,7 +28,15 @@
         <!-- Hero Image Card - Left -->
         <div class="hero-card hero-card--image">
           <div class="image-wrapper">
-            <img [src]="heroAssets.heroDoctor" alt="Healthcare professional providing care" class="hero-main-image">
+            <img
+              class="hero-main-image"
+              [ngSrc]="heroAssets.heroDoctor"
+              alt="Healthcare professional providing care"
+              width="960"
+              height="640"
+              fetchpriority="high"
+              decoding="async"
+            >
             <div class="image-overlay"></div>
             <div class="image-content">
               <h3 class="image-title">Expert Healthcare Provider</h3>
@@ -166,7 +174,15 @@
   <section class="sponsor-strip">
     <div class="container">
       <div class="logos-row">
-        <img *ngFor="let logo of sponsorLogos" [src]="logo.src" [alt]="logo.alt">
+        <img
+          *ngFor="let logo of sponsorLogos"
+          [ngSrc]="logo.src"
+          [alt]="logo.alt"
+          width="140"
+          height="48"
+          loading="lazy"
+          decoding="async"
+        >
       </div>
     </div>
   </section>
@@ -176,7 +192,14 @@
     <div class="container">
       <div class="collab-card">
         <div class="collab-visual">
-          <img [src]="collaboration.image" alt="Enhanced collaboration illustration">
+          <img
+            [ngSrc]="collaboration.image"
+            alt="Enhanced collaboration illustration"
+            width="640"
+            height="480"
+            loading="lazy"
+            decoding="async"
+          >
         </div>
         <div class="collab-content">
           <p class="overline">Enhanced Collaboration</p>
@@ -214,7 +237,14 @@
           <div class="commitments-card">
             <article class="commitment" *ngFor="let commitment of commitments">
               <div class="icon">
-                <img [src]="commitment.icon" [alt]="commitment.title">
+                <img
+                  [ngSrc]="commitment.icon"
+                  [alt]="commitment.title"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                  decoding="async"
+                >
               </div>
               <div>
                 <h4>{{ commitment.title }}</h4>
@@ -240,7 +270,15 @@
               </p>
             </div>
             <div class="workflow-visual">
-              <img [src]="workflowImage" alt="How it works illustration" class="workflow-image">
+              <img
+                [ngSrc]="workflowImage"
+                alt="How it works illustration"
+                class="workflow-image"
+                width="640"
+                height="480"
+                loading="lazy"
+                decoding="async"
+              >
             </div>
           </div>
         </div>
@@ -290,7 +328,14 @@
               </p>
             </div>
             <div class="testimonial-author" [attr.data-index]="currentTestimonialIndex">
-              <img [src]="currentTestimonial.avatar" [alt]="currentTestimonial.author">
+              <img
+                [ngSrc]="currentTestimonial.avatar"
+                [alt]="currentTestimonial.author"
+                width="56"
+                height="56"
+                loading="lazy"
+                decoding="async"
+              >
               <div>
                 <p class="name">{{ currentTestimonial.author }}</p>
                 <p class="role">{{ currentTestimonial.role }}</p>
@@ -298,7 +343,14 @@
             </div>
             <div class="testimonial-pagination">
               <button class="btn pagination-arrow" (click)="previousTestimonial()" aria-label="Go to previous slide">
-                <img [src]="testimonialAssets.prevArrow" alt="">
+                <img
+                  [ngSrc]="testimonialAssets.prevArrow"
+                  alt=""
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                  decoding="async"
+                >
               </button>
               <div class="pagination-track">
                 <span
@@ -310,14 +362,29 @@
                 </span>
               </div>
               <button class="btn pagination-arrow" (click)="nextTestimonial()" aria-label="Go to next slide">
-                <img [src]="testimonialAssets.nextArrow" alt="">
+                <img
+                  [ngSrc]="testimonialAssets.nextArrow"
+                  alt=""
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                  decoding="async"
+                >
               </button>
             </div>
           </article>
         </div>
         <div class="col-lg-4 d-none d-lg-block">
           <div class="testimonial-side-panel h-100">
-            <img [src]="currentTestimonial.sideImage" [alt]="currentTestimonial.author + ' testimonial image'" class="testimonial-side-image">
+            <img
+              [ngSrc]="currentTestimonial.sideImage"
+              [alt]="currentTestimonial.author + ' testimonial image'"
+              class="testimonial-side-image"
+              width="480"
+              height="640"
+              loading="lazy"
+              decoding="async"
+            >
           </div>
         </div>
       </div>
