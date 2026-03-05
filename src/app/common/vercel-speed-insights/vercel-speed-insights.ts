@@ -11,12 +11,22 @@ export class VercelSpeedInsightsComponent implements OnInit {
 
   async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      try {
-        const { injectSpeedInsights } = await import('@vercel/speed-insights');
-        injectSpeedInsights();
-      } catch (error) {
-        console.error('Failed to initialize Vercel Speed Insights:', error);
-      }
+      const runWhenIdle = (cb: () => void) => {
+        const w = window as unknown as {
+          requestIdleCallback?: (fn: () => void, opts?: { timeout: number }) => void;
+        };
+        if (w.requestIdleCallback) return w.requestIdleCallback(cb, { timeout: 2500 });
+        return window.setTimeout(cb, 1500);
+      };
+
+      runWhenIdle(async () => {
+        try {
+          const { injectSpeedInsights } = await import('@vercel/speed-insights');
+          injectSpeedInsights();
+        } catch (error) {
+          console.error('Failed to initialize Vercel Speed Insights:', error);
+        }
+      });
     }
   }
 }

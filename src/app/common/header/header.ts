@@ -14,6 +14,7 @@ export class Header implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isLoggedIn: boolean = false;
   dropdownOpen: boolean = false;
+  navOpen: boolean = false;
   private userSubscription?: Subscription;
 
   constructor(
@@ -41,6 +42,14 @@ export class Header implements OnInit, OnDestroy {
 
   closeDropdown(): void {
     this.dropdownOpen = false;
+  }
+
+  toggleNav(): void {
+    this.navOpen = !this.navOpen;
+  }
+
+  closeNav(): void {
+    this.navOpen = false;
   }
 
   getDashboardRoute(): string {

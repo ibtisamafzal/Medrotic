@@ -1,31 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" routerLink="/home">
-      <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="navbar-logo" onerror="this.onerror=null; this.src='/images/logo/logo.png';">
+      <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="navbar-logo">
     </a>
     
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      aria-controls="navbarNav"
+      [attr.aria-expanded]="navOpen"
+      aria-label="Toggle navigation"
+      (click)="toggleNav()"
+    >
       <span class="navbar-toggler-icon">
         <span class="hamburger-line"></span>
       </span>
     </button>
     
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarNav" [class.show]="navOpen">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeNav()">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/about" routerLinkActive="active">About Us</a>
+          <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeNav()">About Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/services" routerLinkActive="active">Services</a>
+          <a class="nav-link" routerLink="/services" routerLinkActive="active" (click)="closeNav()">Services</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact us</a>
+          <a class="nav-link" routerLink="/contact" routerLinkActive="active" (click)="closeNav()">Contact us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/faq" routerLinkActive="active">FAQ</a>
+          <a class="nav-link" routerLink="/faq" routerLinkActive="active" (click)="closeNav()">FAQ</a>
         </li>
       </ul>
       
@@ -87,7 +94,7 @@
       </div>
       
       <!-- Get Started Button (when not logged in) -->
-      <a *ngIf="!isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2" [routerLink]="['/auth/login']">
+      <a *ngIf="!isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2" [routerLink]="['/auth/login']" (click)="closeNav()">
         Get Started
       </a>
     </div>

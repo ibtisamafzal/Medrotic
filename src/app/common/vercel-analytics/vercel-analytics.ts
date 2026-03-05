@@ -11,15 +11,22 @@ export class VercelAnalyticsComponent implements OnInit {
 
   async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Import and initialize Vercel Analytics
-      // Using @vercel/analytics/react package as requested (equivalent to <Analytics /> component)
-      // The React component uses inject() internally, so we call it directly
-      try {
-        const { inject } = await import('@vercel/analytics');
-        inject();
-      } catch (error) {
-        console.error('Failed to initialize Vercel Analytics:', error);
-      }
+      const runWhenIdle = (cb: () => void) => {
+        const w = window as unknown as {
+          requestIdleCallback?: (fn: () => void, opts?: { timeout: number }) => void;
+        };
+        if (w.requestIdleCallback) return w.requestIdleCallback(cb, { timeout: 2500 });
+        return window.setTimeout(cb, 1500);
+      };
+
+      runWhenIdle(async () => {
+        try {
+          const { inject } = await import('@vercel/analytics');
+          inject();
+        } catch (error) {
+          console.error('Failed to initialize Vercel Analytics:', error);
+        }
+      });
     }
   }
 }
