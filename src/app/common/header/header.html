@@ -1,108 +1,111 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" routerLink="/home">
-      <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="navbar-logo" width="160" height="40">
-    </a>
-    
-    <button
-      class="navbar-toggler"
-      type="button"
-      aria-controls="navbarNav"
-      [attr.aria-expanded]="navOpen"
-      aria-label="Toggle navigation"
-      (click)="toggleNav()"
-    >
-      <span class="navbar-toggler-icon">
-        <span class="hamburger-line"></span>
-      </span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarNav" [class.show]="navOpen">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeNav()">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeNav()">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/services" routerLinkActive="active" (click)="closeNav()">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/contact" routerLinkActive="active" (click)="closeNav()">Contact us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/faq" routerLinkActive="active" (click)="closeNav()">FAQ</a>
-        </li>
-      </ul>
-      
-      <!-- User Menu (when logged in) -->
-      <div class="user-menu" *ngIf="isLoggedIn && currentUser">
-        <div class="dropdown">
-          <button 
-            class="user-avatar-btn"
-            (click)="toggleDropdown()"
-            [attr.aria-expanded]="dropdownOpen"
-            aria-label="User menu"
-            aria-haspopup="menu"
-          >
-            <div class="user-avatar">
-              {{ getUserInitials() }}
-            </div>
-            <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div
-            class="dropdown-menu"
-            [class.show]="dropdownOpen"
-            role="menu"
-            [attr.aria-hidden]="!dropdownOpen"
-          >
-            <div class="dropdown-header">
-              <div class="user-info">
-                <div class="user-name">{{ currentUser.name }}</div>
-                <div class="user-email">{{ currentUser.email }}</div>
+<nav class="navbar navbar-expand-lg navbar-light header-element" [class.is-scrolled]="isScrolled"
+  [class.transitions-enabled]="isTransitionEnabled">
+  <div class="header-background-pill">
+    <div class="container header-container">
+      <a class="navbar-brand d-flex align-items-center" routerLink="/home">
+        <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="navbar-logo" width="160" height="40">
+      </a>
+
+      <button class="navbar-toggler" type="button" aria-controls="navbarNav" [attr.aria-expanded]="navOpen"
+        aria-label="Toggle navigation" (click)="toggleNav()">
+        <span class="navbar-toggler-icon">
+          <span class="hamburger-line"></span>
+        </span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav" [class.show]="navOpen">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeNav()">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="closeNav()">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/services" routerLinkActive="active" (click)="closeNav()">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contact" routerLinkActive="active" (click)="closeNav()">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/faq" routerLinkActive="active" (click)="closeNav()">FAQ</a>
+          </li>
+        </ul>
+
+        <!-- User Menu (when logged in) -->
+        <div class="user-menu" *ngIf="isLoggedIn && currentUser">
+          <div class="dropdown">
+            <button class="user-avatar-btn" (click)="toggleDropdown()" [attr.aria-expanded]="dropdownOpen"
+              aria-label="User menu" aria-haspopup="menu">
+              <div class="user-avatar">
+                {{ getUserInitials() }}
               </div>
-            </div>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" role="menuitem" [routerLink]="getDashboardRoute()" (click)="closeDropdown()">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.5 8L8 2.5L13.5 8M8 13.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
               </svg>
-              Dashboard
-            </a>
-            <a class="dropdown-item" role="menuitem" [routerLink]="getProfileRoute()" (click)="closeDropdown()">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M2 14.6667C2 11.7778 4.44444 9.33333 7.33333 9.33333H8.66667C11.5556 9.33333 14 11.7778 14 14.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              Profile
-            </a>
-            <a class="dropdown-item" role="menuitem" [routerLink]="getAccountSettingsRoute()" (click)="closeDropdown()">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 9.33333C9.47276 9.33333 10.6667 8.13943 10.6667 6.66667C10.6667 5.19391 9.47276 4 8 4C6.52724 4 5.33333 5.19391 5.33333 6.66667C5.33333 8.13943 6.52724 9.33333 8 9.33333Z" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M2.66667 13.3333C2.66667 11.1242 4.45762 9.33333 6.66667 9.33333H9.33333C11.5424 9.33333 13.3333 11.1242 13.3333 13.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              Account Settings
-            </a>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item logout-item" role="menuitem" (click)="logout()">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Logout
             </button>
+            <div class="dropdown-menu" [class.show]="dropdownOpen" role="menu" [attr.aria-hidden]="!dropdownOpen">
+              <div class="dropdown-header">
+                <div class="user-info">
+                  <div class="user-name">{{ currentUser.name }}</div>
+                  <div class="user-email">{{ currentUser.email }}</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" role="menuitem" [routerLink]="getDashboardRoute()" (click)="closeDropdown()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.5 8L8 2.5L13.5 8M8 13.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Dashboard
+              </a>
+              <a class="dropdown-item" role="menuitem" [routerLink]="getProfileRoute()" (click)="closeDropdown()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z"
+                    stroke="currentColor" stroke-width="1.5" />
+                  <path
+                    d="M2 14.6667C2 11.7778 4.44444 9.33333 7.33333 9.33333H8.66667C11.5556 9.33333 14 11.7778 14 14.6667"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                Profile
+              </a>
+              <a class="dropdown-item" role="menuitem" [routerLink]="getAccountSettingsRoute()"
+                (click)="closeDropdown()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 9.33333C9.47276 9.33333 10.6667 8.13943 10.6667 6.66667C10.6667 5.19391 9.47276 4 8 4C6.52724 4 5.33333 5.19391 5.33333 6.66667C5.33333 8.13943 6.52724 9.33333 8 9.33333Z"
+                    stroke="currentColor" stroke-width="1.5" />
+                  <path
+                    d="M2.66667 13.3333C2.66667 11.1242 4.45762 9.33333 6.66667 9.33333H9.33333C11.5424 9.33333 13.3333 11.1242 13.3333 13.3333"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                Account Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item logout-item" role="menuitem" (click)="logout()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
+
+        <!-- Get Started Button (when not logged in) -->
+        <a *ngIf="!isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2" [routerLink]="['/auth/login']"
+          (click)="closeNav()">
+          Get Started
+        </a>
       </div>
-      
-      <!-- Get Started Button (when not logged in) -->
-      <a *ngIf="!isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2" [routerLink]="['/auth/login']" (click)="closeNav()">
-        Get Started
-      </a>
     </div>
   </div>
 </nav>

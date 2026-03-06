@@ -15,14 +15,23 @@ export class Header implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   dropdownOpen: boolean = false;
   navOpen: boolean = false;
+  isScrolled: boolean = false;
+  isTransitionEnabled: boolean = false;
   private userSubscription?: Subscription;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.isScrolled = window.scrollY > 20;
+      setTimeout(() => {
+        this.isTransitionEnabled = true;
+      }, 50);
+    }
+
     // Subscribe to user changes
     this.userSubscription = this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -114,5 +123,10 @@ export class Header implements OnInit, OnDestroy {
     if (!target.closest('.user-menu')) {
       this.closeDropdown();
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.isScrolled = window.scrollY > 20;
   }
 }
