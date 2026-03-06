@@ -48,7 +48,7 @@ export class App implements OnInit, OnDestroy {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         if (typeof window !== 'undefined') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo({ top: 0, behavior: 'auto' });
         }
       });
 
