@@ -18,6 +18,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 0;
+  -webkit-user-select: none;
   user-select: none;
   pointer-events: none;
   opacity: 1;
@@ -69,7 +70,7 @@
   object-fit: contain;
   transition: opacity 0.3s ease;
   display: block;
-  
+
   &:hover {
     opacity: 0.9;
   }
@@ -166,7 +167,8 @@
     color: rgba(0, 16, 71, 0.7);
     text-decoration: none;
     font-size: 15px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    // Use only compositor-friendly transitions (no 'color' which is non-composited)
+    transition: opacity 0.3s ease, transform 0.3s ease;
     display: inline-block;
     line-height: 1.5;
     font-family: 'Public Sans', 'Inter', sans-serif;
@@ -190,7 +192,8 @@
     }
 
     &:hover {
-      color: #3461ff;
+      // Use opacity instead of color change for GPU-composited animation
+      opacity: 0.75;
 
       &::after {
         width: 100%;
@@ -246,7 +249,8 @@
     text-decoration: none;
     font-size: 14px;
     font-family: 'Public Sans', 'Inter', sans-serif;
-    transition: all 0.3s ease;
+    // Only compositor-friendly transitions
+    transition: opacity 0.3s ease;
     position: relative;
     padding-bottom: 4px;
 
@@ -262,7 +266,7 @@
     }
 
     &:hover {
-      color: #3461ff;
+      opacity: 0.65;
 
       &::after {
         width: 100%;
@@ -304,7 +308,7 @@
     --bs-gutter-x: 1.5rem;
   }
 
-  .row.g-5 > [class*="col-"] {
+  .row.g-5>[class*="col-"] {
     margin-bottom: 2rem;
   }
 
@@ -416,7 +420,7 @@
   .social-pill {
     width: 40px;
     height: 40px;
-    
+
     svg {
       width: 18px;
       height: 18px;
@@ -427,7 +431,7 @@
     a {
       font-size: 13px;
       gap: 8px;
-      
+
       svg {
         width: 14px;
         height: 14px;

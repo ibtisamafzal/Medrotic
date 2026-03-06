@@ -23,175 +23,36 @@
       <div class="col-lg-10">
         <div class="faq-container bg-light rounded-4 p-4 p-md-5">
           <div class="accordion accordion-flush" id="faqAccordion">
-            <!-- FAQ Item 1 - Expanded by default -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq1">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+            <!-- FAQ Items rendered dynamically via Angular -->
+            <div class="accordion-item border-0 mb-3" *ngFor="let faq of faqs; let i = index">
+              <h2 class="accordion-header" [id]="'faq' + i">
+                <button class="accordion-button" [class.collapsed]="activeFaqIndex !== i" type="button"
+                  (click)="toggleFaq(i)" [attr.aria-expanded]="activeFaqIndex === i"
+                  [attr.aria-controls]="'collapse' + i">
                   <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/01</span>
-                    <span class="faq-question flex-grow-1 text-start">What Services Do You Currently Offer Patients?</span>
+                    <span class="faq-number me-4">{{ faq.number }}</span>
+                    <span class="faq-question flex-grow-1 text-start">{{ faq.question }}</span>
                     <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                      <div
+                        class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"
+                          class="faq-icon-minus" [class.d-none]="activeFaqIndex !== i">
+                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round" />
                         </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus d-none">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
+                          class="faq-icon-plus" [class.d-none]="activeFaqIndex === i">
+                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round" />
                         </svg>
                       </div>
                     </div>
                   </div>
                 </button>
               </h2>
-              <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+              <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="activeFaqIndex === i"
+                [attr.aria-labelledby]="'faq' + i" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
                   <p class="faq-answer">
-                    We offer a range of services tailored to your needs, including personalized treatment plans, wellness consultations, and ongoing support to ensure your health journey is as comfortable and effective as possible.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FAQ Item 2 -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq2">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/02</span>
-                    <span class="faq-question flex-grow-1 text-start">Can I Reschedule My Appointment After Booking?</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus d-none">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    Yes, you can reschedule your appointment. Please contact us at least 24 hours before your scheduled appointment time to make changes.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FAQ Item 3 -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq3">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/03</span>
-                    <span class="faq-question flex-grow-1 text-start">What Payment Methods Do You Currently Accept?</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus d-none">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    We accept various payment methods including cash, credit cards, debit cards, and digital payment options for your convenience.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FAQ Item 4 -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq4">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/04</span>
-                    <span class="faq-question flex-grow-1 text-start">Do You Offer Emergency Medical Services Too?</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus d-none">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    Yes, we provide emergency medical services. Our emergency department is available 24/7 to handle urgent medical situations.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FAQ Item 5 -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq5">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/05</span>
-                    <span class="faq-question flex-grow-1 text-start">Do You Accept All Major Health Insurances?</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus d-none">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    We accept most major health insurance plans. Please contact our billing department to verify if your specific insurance plan is accepted.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- FAQ Item 6 -->
-            <div class="accordion-item border-0 mb-3">
-              <h2 class="accordion-header" id="faq6">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">/06</span>
-                    <span class="faq-question flex-grow-1 text-start">How Long Does a Consultation Usually Take?</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-minus d-none">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="faq-icon-plus">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    A typical consultation usually takes between 30 to 60 minutes, depending on the complexity of your condition and the type of consultation required.
+                    {{ faq.answer }}
                   </p>
                 </div>
               </div>
@@ -211,11 +72,13 @@
         <div class="collaboration-banner border border-primary border-2 rounded-4 p-4 p-md-5">
           <div class="row align-items-center">
             <div class="col-md-4 mb-4 mb-md-0">
-              <img src="/images/collaboration/collaboration-image.png" alt="Collaboration" class="img-fluid rounded-3 collaboration-image">
+              <img src="/images/collaboration/collaboration-image.png" alt="Collaboration"
+                class="img-fluid rounded-3 collaboration-image">
             </div>
             <div class="col-md-5 mb-4 mb-md-0">
               <h3 class="fw-semibold mb-3">Enhanced Collaboration</h3>
-              <p class="text-muted mb-0">Our system makes it easy for healthcare professionals to share and collaborate on patient care.</p>
+              <p class="text-muted mb-0">Our system makes it easy for healthcare professionals to share and collaborate
+                on patient care.</p>
             </div>
             <div class="col-md-3 text-center text-md-end">
               <button class="btn btn-primary btn-lg rounded-pill px-4 py-3" (click)="navigateToAuthOrDashboard()">
