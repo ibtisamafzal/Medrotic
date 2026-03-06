@@ -1,59 +1,130 @@
-# Frontend
+# Medrotic Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+Angular frontend application generated with [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
 
-## Development server
+Use this project as the web interface for the Medrotic platform (patient/doctor dashboards, appointments, and other healthcare workflows).
 
-To start a local development server, run:
+---
+
+## Prerequisites
+
+- **Node.js**: v18+ (LTS recommended)
+- **Package manager**: `npm` (bundled with Node.js) or `pnpm`/`yarn`
+- **Angular CLI (global, optional)**:
+
+```bash
+npm install -g @angular/cli
+```
+
+---
+
+## Getting started
+
+1. **Install dependencies** (from the project root):
+
+```bash
+npm install
+```
+
+2. **Start the development server**:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+3. Open your browser at `http://localhost:4200/`. The app will automatically reload when you change any source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+If you prefer to use `npm` scripts, you can also run:
 
 ```bash
-ng generate component component-name
+npm run start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## Common commands
+
+- **Development server**:
+
+  ```bash
+  ng serve
+  ```
+
+- **Build (production)**:
+
+  ```bash
+  ng build --configuration production
+  ```
+
+  Build artifacts are output to the `dist/` directory. Production builds are optimized for performance and bundle size.
+
+- **Unit tests** (Karma):
+
+  ```bash
+  ng test
+  ```
+
+- **End-to-end tests**:
+
+  ```bash
+  ng e2e
+  ```
+
+  Angular CLI does not ship an e2e framework by default; configure the tool that best suits your project (e.g. Cypress, Playwright, WebdriverIO).
+
+- **Code scaffolding** (components, services, etc.):
+
+  ```bash
+  ng generate component component-name
+  ng generate service service-name
+  ```
+
+  For a full list of schematics:
+
+  ```bash
+  ng generate --help
+  ```
+
+---
+
+## Project structure (high level)
+
+- **`src/`**: Application source code
+  - **`app/`**: Root application module, components, routes, and services
+  - **`assets/`**: Static assets (images, icons, etc.)
+  - **`environments/`**: Environment-specific configuration files
+- **`angular.json`**: Workspace and build configuration
+- **`package.json`**: Scripts and dependencies
+
+---
+
+## Environment configuration
+
+Angular uses the `src/environments` folder to manage environment-specific settings (e.g. API base URLs).
+
+- **Development**: `src/environments/environment.ts`
+- **Production**: `src/environments/environment.prod.ts`
+
+Update these files with the correct Medrotic API endpoints and any other runtime configuration.
+
+---
+
+## Deployment
+
+1. Build a production bundle:
 
 ```bash
-ng generate --help
+ng build --configuration production
 ```
 
-## Building
+2. Serve the contents of the `dist/` folder using your preferred hosting solution (e.g. Nginx, Apache, static site host, or a Node.js server).
 
-To build the project run:
+Ensure that your server is configured to redirect all unmatched routes to `index.html` so Angular routing works correctly.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Additional resources
 
-## Running unit tests
+- **Angular CLI docs**: [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
+- **Angular docs**: [Official Angular documentation](https://angular.dev)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
