@@ -3,6 +3,7 @@ import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../services/navigation.service';
+import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
 
 interface FaqItem {
   number: string;
@@ -12,7 +13,7 @@ interface FaqItem {
 
 @Component({
   selector: 'app-faq',
-  imports: [Header, Footer, CommonModule],
+  imports: [Header, Footer, CommonModule, ScrollAnimateDirective],
   templateUrl: './faq.html',
   styleUrl: './faq.scss',
 })

@@ -5,11 +5,11 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-12 text-center">
-        <div class="about-badge mb-4">
+        <div class="about-badge mb-4" appScrollAnimate="fade-up">
           <span class="badge-text">about Us</span>
         </div>
-        <h1 class="about-main-title mb-5">
-          Caring for You with<br>Expertise & Compassion
+        <h1 class="about-main-title mb-5" appScrollAnimate="fade-up" [animDelay]="80">
+          Caring for You with<br>Expertise &amp; Compassion
         </h1>
       </div>
     </div>
@@ -21,7 +21,7 @@
   <div class="container">
     <div class="row g-5 align-items-stretch">
       <!-- Our Mission -->
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-6 col-md-12" appScrollAnimate="fade-left">
         <div class="mission-card">
           <div class="mission-icon mb-4">
             <div class="icon-circle bg-primary rounded-3 d-flex align-items-center justify-content-center">
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Our Vision -->
-      <div class="col-lg-6 col-md-12">
+      <div class="col-lg-6 col-md-12" appScrollAnimate="fade-right">
         <div class="vision-card">
           <div class="vision-image bg-secondary rounded-4 mb-4">
             <img src="/images/about/about-vision.webp" alt="Our Vision" class="img-fluid" loading="lazy"
@@ -60,7 +60,7 @@
           <h2 class="section-heading mb-4">Our Vision</h2>
           <p class="section-description">
             Our Clinic Aims For A Future Of Personalized Healthcare That Empowers Everyone. We Offer Compassionate
-            Support & Innovative Solutions, Ensuring Each Patient Feels Valued. Together, We Can Foster A Healthier
+            Support &amp; Innovative Solutions, Ensuring Each Patient Feels Valued. Together, We Can Foster A Healthier
             Tomorrow, Emphasizing Holistic Recovery And Well-Being.
           </p>
         </div>
@@ -85,7 +85,8 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="collaboration-banner border border-primary border-2 rounded-4 p-4 p-md-5">
+        <div class="collaboration-banner border border-primary border-2 rounded-4 p-4 p-md-5"
+          appScrollAnimate="scale-up">
           <div class="row align-items-center">
             <div class="col-md-4 mb-4 mb-md-0">
               <img src="/images/collaboration/collaboration-image.webp" alt="Collaboration"

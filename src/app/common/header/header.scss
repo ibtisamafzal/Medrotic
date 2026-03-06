@@ -372,8 +372,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3461FF 0%, #8b5cf6 100%);
-  color: white;
+  background: var(--avatar-bg, linear-gradient(135deg, #3461FF 0%, #4facfe 100%));
+  color: var(--avatar-color, white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -790,5 +790,139 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
     }
+  }
+}
+
+// ── Dark Mode Toggle Button ────────────────────────────────────────────────
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 16, 71, 0.18);
+  background: transparent;
+  color: #001047;
+  cursor: pointer;
+  transition: background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+
+  svg {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: rgba(52, 97, 255, 0.08);
+      border-color: #3461ff;
+      color: #3461ff;
+      transform: scale(1.08);
+
+      svg {
+        transform: rotate(20deg);
+      }
+    }
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+}
+
+// ── Global Dark Mode styles (applied via [data-theme="dark"] on <html>) ───
+:root[data-theme="dark"] {
+  --bg-primary: #0e1117;
+  --bg-secondary: #161b25;
+  --bg-card: #1a2030;
+  --text-primary: #e8eaf6;
+  --text-muted: rgba(232, 234, 246, 0.6);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --avatar-bg: linear-gradient(135deg, #a5bdff 0%, #8de4ff 100%);
+  --avatar-color: #0e1117;
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  // Sections and page backgrounds
+  section,
+  .faq-banner-section,
+  .about-banner-section,
+  .services-banner-section,
+  .mission-vision-section,
+  .collaboration-section,
+  .faq-accordion-section,
+  .divider-section {
+    background: var(--bg-primary) !important;
+  }
+
+  // Cards
+  .service-card:not(.bg-primary),
+  .mission-card,
+  .vision-card,
+  .metric-card,
+  .section-card,
+  .accordion-button,
+  .accordion-body,
+  .contact-card,
+  .faq-container {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+  }
+
+  // Text overrides
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .about-main-title,
+  .faq-main-title,
+  .services-main-title,
+  .faq-question,
+  .service-title,
+  .section-heading {
+    color: var(--text-primary) !important;
+  }
+
+  .text-muted,
+  .faq-number,
+  .section-description,
+  .faq-answer,
+  .service-description,
+  .stat-label {
+    color: var(--text-muted) !important;
+  }
+
+  // Header pill in dark mode
+  .header-background-pill {
+    background: rgba(14, 17, 23, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  .dark-mode-toggle {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #e8eaf6;
+  }
+
+  // Divider line
+  .divider-line {
+    background: var(--border-color);
+  }
+
+  // Collaboration banner
+  .collaboration-banner {
+    background: var(--bg-card) !important;
+    border-color: rgba(52, 97, 255, 0.4) !important;
   }
 }

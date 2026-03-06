@@ -5,10 +5,11 @@ import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { ContactService, ContactFormData } from '../../services/contact.service';
 import { NavigationService } from '../../services/navigation.service';
+import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, ReactiveFormsModule, Header, Footer],
+  imports: [CommonModule, ReactiveFormsModule, Header, Footer, ScrollAnimateDirective],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })
@@ -24,7 +25,7 @@ export class Contact implements OnInit {
     private fb: FormBuilder,
     private contactService: ContactService,
     private navigationService: NavigationService
-  ) {}
+  ) { }
 
   navigateToAuthOrDashboard(): void {
     this.navigationService.navigateToAuthOrDashboard();

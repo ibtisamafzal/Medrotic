@@ -3,10 +3,11 @@ import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../services/navigation.service';
+import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
 
 @Component({
   selector: 'app-services',
-  imports: [Header, Footer, CommonModule],
+  imports: [Header, Footer, CommonModule, ScrollAnimateDirective],
   templateUrl: './services.html',
   styleUrl: './services.scss',
 })
@@ -36,7 +37,7 @@ export class Services implements AfterViewInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private navigationService: NavigationService
-  ) {}
+  ) { }
 
   navigateToAuthOrDashboard(): void {
     this.navigationService.navigateToAuthOrDashboard();
@@ -121,7 +122,7 @@ export class Services implements AfterViewInit, OnDestroy {
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       return;
     }
-    
+
     const element = this.statisticsSection?.nativeElement;
     if (!element || this.hasAnimated || !element.getBoundingClientRect) return;
 

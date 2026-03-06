@@ -4,10 +4,11 @@ import { Footer } from '../footer/footer';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
+import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, Footer, CommonModule, RouterModule, NgOptimizedImage],
+  imports: [Header, Footer, CommonModule, RouterModule, NgOptimizedImage, ScrollAnimateDirective],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

@@ -4,7 +4,12 @@
   background: #fff;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Rubik', sans-serif;
 }
 
@@ -14,7 +19,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 30px;
   padding: 8px 20px;
   background: #fff;
-  
+
   .badge-text {
     font-family: 'Public Sans', sans-serif;
     font-weight: 400;
@@ -53,6 +58,19 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   padding: 40px 20px !important;
   margin-bottom: 2rem;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0px 16px 48px rgba(0, 134, 255, 0.18);
+
+      .service-icon-wrapper {
+        transform: scale(1.08);
+      }
+    }
+  }
 }
 
 .service-icon-wrapper {
@@ -62,7 +80,9 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   margin-bottom: 25px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 
 .bg-light-blue {
   background: #f6f9fe;
@@ -98,11 +118,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .service-card.bg-primary {
   box-shadow: 0px 6.478px 56.678px 0px rgba(0, 134, 255, 0.1);
-  
+
   .service-title {
     color: #fff;
   }
-  
+
   .service-description {
     color: #fff;
   }
@@ -158,8 +178,8 @@ h1, h2, h3, h4, h5, h6 {
   .col-lg-6 {
     display: flex;
     flex-direction: column;
-    
-    > * {
+
+    >* {
       width: 100%;
     }
   }
@@ -219,14 +239,14 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #3461ff;
   font-family: 'Public Sans', sans-serif;
   font-weight: 500;
-  
+
   &:hover:not(:disabled) {
     background-color: #2851e6;
     border-color: #2851e6;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
@@ -238,12 +258,12 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 48px;
     line-height: 60px;
   }
-  
+
   .trusted-care-title {
     font-size: 48px;
     line-height: 60px;
   }
-  
+
   .stat-number {
     font-size: 56px;
   }
@@ -253,26 +273,26 @@ h1, h2, h3, h4, h5, h6 {
   .services-banner-section {
     padding: 60px 0 30px;
   }
-  
+
   .services-main-title {
     font-size: 40px;
     line-height: 50px;
   }
-  
+
   .trusted-care-title {
     font-size: 40px;
     line-height: 50px;
   }
-  
+
   .services-grid-section {
     padding: 60px 0;
   }
-  
+
   .service-card {
     min-height: 260px;
     padding: 30px 20px !important;
   }
-  
+
   .stat-number {
     font-size: 48px;
   }
@@ -283,46 +303,46 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 32px;
     line-height: 42px;
   }
-  
+
   .trusted-care-title {
     font-size: 32px;
     line-height: 42px;
   }
-  
+
   .service-title {
     font-size: 22px;
   }
-  
+
   .service-description {
     font-size: 16px;
   }
-  
+
   .service-icon-wrapper {
     width: 90px;
     height: 90px;
   }
-  
+
   .service-icon {
     width: 40px;
     height: 40px;
   }
-  
+
   .stat-number {
     font-size: 40px;
   }
-  
+
   .stat-label {
     font-size: 15px;
   }
-  
+
   .services-badge {
     padding: 6px 16px;
-    
+
     .badge-text {
       font-size: 14px;
     }
   }
-  
+
   .trusted-care-image {
     height: 300px;
   }
@@ -333,34 +353,34 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 28px;
     line-height: 36px;
   }
-  
+
   .trusted-care-title {
     font-size: 28px;
     line-height: 36px;
   }
-  
+
   .service-card {
     min-height: 240px;
     padding: 25px 15px !important;
   }
-  
+
   .service-icon-wrapper {
     width: 80px;
     height: 80px;
     margin-bottom: 20px;
   }
-  
+
   .stat-number {
     font-size: 36px;
   }
-  
+
   .trusted-care-image {
     height: 250px;
   }
-  
+
   .services-badge {
     padding: 5px 12px;
-    
+
     .badge-text {
       font-size: 12px;
     }

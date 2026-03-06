@@ -38,6 +38,26 @@ body {
   }
 }
 
+// ============================================
+// GLOBAL THEME VARIABLES
+// ============================================
+:root {
+  --progress-bg: linear-gradient(90deg, #3461ff 0%, #6b8eff 60%, #a5bdff 100%);
+  --progress-shadow: 0 0 8px rgba(52, 97, 255, 0.6);
+}
+
+// ── Global Dark Mode styles (applied via [data-theme="dark"] on <html>) ───
+:root[data-theme="dark"] {
+  --bg-primary: #0e1117;
+  --bg-secondary: #161b25;
+  --bg-card: #1a2030;
+  --text-primary: #e8eaf6;
+  --text-muted: rgba(232, 234, 246, 0.6);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --progress-bg: linear-gradient(90deg, #4f7aff 0%, #87a7ff 60%, #c1d6ff 100%);
+  --progress-shadow: 0 0 8px rgba(79, 122, 255, 0.6);
+}
+
 /* Global heading styles - Rubik for all headings */
 h1,
 h2,
@@ -585,4 +605,289 @@ table {
   .mt-5 {
     margin-top: 2rem !important;
   }
+}
+
+// ============================================
+// GLOBAL ANIMATION SYSTEM
+// Scroll-triggered entrance animations via ScrollAnimateDirective
+// ============================================
+
+// Keyframe definitions
+@keyframes animFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes animFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes animFadeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes animFadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes animFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes animScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.93);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Base hidden state — applied by directive before element is visible
+.anim-hidden {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+// Per-type pre-animation transform (applied via directive class)
+.anim-fade-up.anim-hidden {
+  transform: translateY(28px);
+}
+
+.anim-fade-down.anim-hidden {
+  transform: translateY(-20px);
+}
+
+.anim-fade-left.anim-hidden {
+  transform: translateX(-28px);
+}
+
+.anim-fade-right.anim-hidden {
+  transform: translateX(28px);
+}
+
+.anim-scale-up.anim-hidden {
+  transform: scale(0.93);
+}
+
+.anim-fade-in.anim-hidden {
+  transform: none;
+}
+
+// Visible state — added by directive when element enters viewport
+.anim-visible {
+  opacity: 1 !important;
+  transform: none !important;
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+// Stagger utility classes for child elements (used with :nth-child delay combos)
+.anim-stagger-children>* {
+  &:nth-child(1) {
+    transition-delay: 0ms;
+  }
+
+  &:nth-child(2) {
+    transition-delay: 80ms;
+  }
+
+  &:nth-child(3) {
+    transition-delay: 160ms;
+  }
+
+  &:nth-child(4) {
+    transition-delay: 240ms;
+  }
+
+  &:nth-child(5) {
+    transition-delay: 320ms;
+  }
+
+  &:nth-child(6) {
+    transition-delay: 400ms;
+  }
+}
+
+// Page-level router entrance
+router-outlet+* {
+  animation: animFadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+// ============================================
+// ENHANCED MICRO-INTERACTIONS (global)
+// ============================================
+
+// Card universal hover lift — lightweight, composited
+.card,
+.hero-card,
+.commitment,
+.service-card,
+.mission-card,
+.vision-card,
+.metric-card,
+.section-card {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 16, 71, 0.1);
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(0.995);
+  }
+}
+
+// Icon hover pulse — subtle scale on icon containers
+.icon-circle,
+.service-icon-wrapper,
+.workflow-icon,
+.action-icon,
+.metric-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  @media (hover: hover) {
+
+    .card:hover &,
+    .hero-card:hover &,
+    .commitment:hover &,
+    .service-card:hover & {
+      transform: scale(1.08);
+    }
+  }
+}
+
+// Smooth image zoom on container hover
+.mission-image img,
+.vision-image img,
+.trusted-care-image img,
+.collab-visual img {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (hover: hover) {
+    *:hover>& {
+      transform: scale(1.04);
+    }
+  }
+}
+
+// Sponsor logos fade-in-up on load
+.logos-row img {
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  filter: grayscale(20%);
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 1 !important;
+      filter: grayscale(0%);
+    }
+  }
+}
+
+// Form input focus lift
+.form-control,
+.form-select {
+  transition: border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+
+  &:focus {
+    transform: translateY(-1px);
+  }
+}
+
+// Smooth scroll for the whole page
+html {
+  scroll-behavior: smooth;
+}
+
+// Respect prefers-reduced-motion — disable all custom animations
+@media (prefers-reduced-motion: reduce) {
+
+  .anim-hidden,
+  .anim-visible {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  router-outlet+* {
+    animation: none;
+  }
+
+  .card,
+  .hero-card,
+  .commitment,
+  .service-card,
+  .mission-card,
+  .vision-card,
+  .metric-card,
+  .section-card {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// ============================================
+// SCROLL PROGRESS BAR
+// ============================================
+.scroll-progress-global {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--progress-bg);
+  z-index: 10001;
+  pointer-events: none;
+  transition: width 0.1s ease-out;
+  box-shadow: var(--progress-shadow);
 }

@@ -7,7 +7,7 @@
     <img class="hero-shape hero-shape-right" [src]="heroAssets.rightShape" alt="" aria-hidden="true">
 
     <div class="container">
-      <div class="hero-heading text-center mx-auto mb-5 mt-5">
+      <div class="hero-heading text-center mx-auto mb-5 mt-5" appScrollAnimate="fade-up">
         <h1>
           We Take Care Of <span>Your Health</span><br>
           With Medrotic
@@ -17,7 +17,8 @@
         </p>
       </div>
 
-      <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3">
+      <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3" appScrollAnimate="fade-up"
+        [animDelay]="120">
         <button class="btn btn-primary hero-btn" (click)="navigateToAuthOrDashboard()">
           Get Started
         </button>
@@ -26,7 +27,7 @@
       <!-- Hero Panels -->
       <div class="hero-panels">
         <!-- Hero Image Card - Left -->
-        <div class="hero-card hero-card--image">
+        <div class="hero-card hero-card--image" appScrollAnimate="fade-right" [animDelay]="80">
           <div class="image-wrapper">
             <img class="hero-main-image" [ngSrc]="heroAssets.heroDoctor" alt="Healthcare professional providing care"
               width="960" height="640" priority decoding="async">
@@ -34,8 +35,8 @@
             <div class="image-content">
               <h2 class="image-title">Expert Healthcare Provider</h2>
               <p class="image-subtitle">Dr. Sarah Johnson</p>
-              <p class="image-description">Senior Medical Director with 15+ years of experience in providing exceptional
-                healthcare services</p>
+              <p class="image-description">Senior Medical Director with 15+ years of experience in providing
+                exceptional healthcare services</p>
               <div class="image-stats">
                 <div class="image-stat-item">
                   <span class="stat-number">2.5k+</span>
@@ -57,7 +58,7 @@
         <!-- Right Side Cards Container -->
         <div class="hero-cards-right">
           <!-- Healthcare Statistics Card -->
-          <div class="hero-card hero-card--stats-report">
+          <div class="hero-card hero-card--stats-report" appScrollAnimate="fade-up" [animDelay]="160">
             <div class="card-header-row">
               <h3 class="card-title">Healthcare Statistics</h3>
               <div class="stat-badge-positive">
@@ -91,19 +92,14 @@
                 </div>
               </div>
               <div class="chart-labels">
-                <span>S</span>
-                <span>M</span>
-                <span>T</span>
-                <span>W</span>
-                <span>T</span>
-                <span>F</span>
-                <span>S</span>
+                <span>S</span><span>M</span><span>T</span><span>W</span>
+                <span>T</span><span>F</span><span>S</span>
               </div>
             </div>
           </div>
 
           <!-- Patient Satisfaction Card -->
-          <div class="hero-card hero-card--satisfaction">
+          <div class="hero-card hero-card--satisfaction" appScrollAnimate="fade-up" [animDelay]="240">
             <div class="satisfaction-header">
               <div class="satisfaction-avatars">
                 <div class="avatar-circle"></div>
@@ -119,13 +115,13 @@
             </div>
             <div class="satisfaction-content">
               <h2 class="satisfaction-title">50k+ Patient Satisfaction</h2>
-              <p class="satisfaction-description">Join thousands of satisfied patients who trust Medrotic for their
-                healthcare needs</p>
+              <p class="satisfaction-description">Join thousands of satisfied patients who trust Medrotic for
+                their healthcare needs</p>
             </div>
           </div>
 
           <!-- Services Connected Card -->
-          <div class="hero-card hero-card--services">
+          <div class="hero-card hero-card--services" appScrollAnimate="fade-up" [animDelay]="320">
             <div class="card-header-row">
               <h2 class="card-title">Services Connected</h2>
             </div>
@@ -173,7 +169,7 @@
   </section>
 
   <!-- LOGOS -->
-  <section class="sponsor-strip">
+  <section class="sponsor-strip" appScrollAnimate="fade-in">
     <div class="container">
       <div class="logos-row">
         <img *ngFor="let logo of sponsorLogos" [ngSrc]="logo.src" [alt]="logo.alt" width="140" height="48"
@@ -185,7 +181,7 @@
   <!-- COLLABORATION CTA -->
   <section class="collaboration section-spacing">
     <div class="container">
-      <div class="collab-card">
+      <div class="collab-card" appScrollAnimate="scale-up">
         <div class="collab-visual">
           <img [ngSrc]="collaboration.image" alt="Enhanced collaboration illustration" width="640" height="480"
             loading="lazy" decoding="async">
@@ -209,13 +205,13 @@
     <div class="container">
       <div class="row g-5 align-items-stretch">
         <div class="col-lg-5">
-          <div class="difference-copy">
+          <div class="difference-copy" appScrollAnimate="fade-left">
             <h2>Here's What Makes Us Different From Conventional Clinics</h2>
             <p>
               At Medrotic, we are passionate about improving lives through knowledge and empowerment.
             </p>
           </div>
-          <div class="difference-stats">
+          <div class="difference-stats" appScrollAnimate="fade-up" [animDelay]="120">
             <div class="stat" *ngFor="let stat of differenceStats">
               <p class="value">{{ stat.value }}</p>
               <p class="label">{{ stat.label }}</p>
@@ -223,7 +219,7 @@
           </div>
         </div>
         <div class="col-lg-7">
-          <div class="commitments-card">
+          <div class="commitments-card" appScrollAnimate="fade-right">
             <article class="commitment" *ngFor="let commitment of commitments">
               <div class="icon">
                 <img [ngSrc]="commitment.icon" [alt]="commitment.title" width="56" height="56" loading="lazy"
@@ -246,14 +242,14 @@
       <div class="row g-5 align-items-stretch">
         <div class="col-lg-5">
           <div class="workflow-left-content">
-            <div class="workflow-copy">
+            <div class="workflow-copy" appScrollAnimate="fade-left">
               <h2>How It Works</h2>
               <p>
                 We believe that the best way to create successful marketing campaigns is to work closely with our
                 clients to understand their goals and challenges.
               </p>
             </div>
-            <div class="workflow-visual">
+            <div class="workflow-visual" appScrollAnimate="fade-up" [animDelay]="100">
               <img [ngSrc]="workflowImage" alt="How it works illustration" class="workflow-image" width="640"
                 height="480" loading="lazy" decoding="async">
             </div>
@@ -261,7 +257,8 @@
         </div>
         <div class="col-lg-7">
           <div class="workflow-steps">
-            <article class="workflow-step" *ngFor="let step of workflowSteps">
+            <article class="workflow-step" *ngFor="let step of workflowSteps; let i = index"
+              appScrollAnimate="fade-right" [animDelay]="i * 100">
               <div class="workflow-icon">
                 <img [src]="step.icon" [alt]="step.title">
               </div>
@@ -279,7 +276,8 @@
   <!-- TESTIMONIALS -->
   <section class="testimonials section-spacing">
     <div class="container">
-      <div class="testimonial-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div class="testimonial-header d-flex flex-wrap justify-content-between align-items-center gap-3"
+        appScrollAnimate="fade-up">
         <h2>What Our Client Said About Us</h2>
         <div class="testimonial-controls d-flex gap-2">
           <button class="btn nav-circle" (click)="previousTestimonial()" aria-label="Previous testimonial">
@@ -297,7 +295,7 @@
         </div>
       </div>
 
-      <div class="row g-4 align-items-stretch testimonial-content-row">
+      <div class="row g-4 align-items-stretch testimonial-content-row" appScrollAnimate="fade-up" [animDelay]="80">
         <div class="col-12 col-lg-8">
           <article class="testimonial-card h-100">
             <img class="quote-icon" [src]="testimonialAssets.quoteIcon" alt="" aria-hidden="true" width="64"

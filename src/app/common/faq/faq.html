@@ -5,10 +5,10 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-12 text-center">
-        <div class="faq-badge mb-4">
+        <div class="faq-badge mb-4" appScrollAnimate="fade-up">
           <span class="badge-text">FAQ's</span>
         </div>
-        <h1 class="faq-main-title mb-3">
+        <h1 class="faq-main-title mb-3" appScrollAnimate="fade-up" [animDelay]="80">
           All Questions Answered <br>Right Here
         </h1>
       </div>
@@ -21,10 +21,11 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-10">
-        <div class="faq-container bg-light rounded-4 p-4 p-md-5">
+        <div class="faq-container bg-light rounded-4 p-4 p-md-5" appScrollAnimate="scale-up">
           <div class="accordion accordion-flush" id="faqAccordion">
             <!-- FAQ Items rendered dynamically via Angular -->
-            <div class="accordion-item border-0 mb-3" *ngFor="let faq of faqs; let i = index">
+            <div class="accordion-item border-0 mb-3" *ngFor="let faq of faqs; let i = index" appScrollAnimate="fade-up"
+              [animDelay]="i * 60">
               <h2 class="accordion-header" [id]="'faq' + i">
                 <button class="accordion-button" [class.collapsed]="activeFaqIndex !== i" type="button"
                   (click)="toggleFaq(i)" [attr.aria-expanded]="activeFaqIndex === i"
@@ -69,7 +70,8 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="collaboration-banner border border-primary border-2 rounded-4 p-4 p-md-5">
+        <div class="collaboration-banner border border-primary border-2 rounded-4 p-4 p-md-5"
+          appScrollAnimate="scale-up">
           <div class="row align-items-center">
             <div class="col-md-4 mb-4 mb-md-0">
               <img src="/images/collaboration/collaboration-image.png" alt="Collaboration"

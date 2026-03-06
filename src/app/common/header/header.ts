@@ -17,6 +17,7 @@ export class Header implements OnInit, OnDestroy {
   navOpen: boolean = false;
   isScrolled: boolean = false;
   isTransitionEnabled: boolean = false;
+  isDarkMode: boolean = false;
   private userSubscription?: Subscription;
 
   constructor(
@@ -30,6 +31,7 @@ export class Header implements OnInit, OnDestroy {
       setTimeout(() => {
         this.isTransitionEnabled = true;
       }, 50);
+      this.initDarkMode();
     }
 
     // Subscribe to user changes
@@ -42,6 +44,24 @@ export class Header implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+  }
+
+  toggleDarkMode(): void {
+    this.isDarkMode = !this.isDarkMode;
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+    }
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('medrotic-theme', this.isDarkMode ? 'dark' : 'light');
+    }
+  }
+
+  private initDarkMode(): void {
+    const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('medrotic-theme') : null;
+    this.isDarkMode = saved === 'dark'; // Only activate if user previously clicked it
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
     }
   }
 

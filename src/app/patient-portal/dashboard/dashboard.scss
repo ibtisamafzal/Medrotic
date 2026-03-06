@@ -7,6 +7,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -18,16 +19,70 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -300px 0;
+  }
+
+  100% {
+    background-position: 300px 0;
+  }
+}
+
+// ── Skeleton loader styles ─────────────────────────────────
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-icon,
+.skeleton-line {
+  background: linear-gradient(90deg,
+      #e8ecf0 25%,
+      #f4f6f8 50%,
+      #e8ecf0 75%);
+  background-size: 600px 100%;
+  animation: skeletonShimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+.skeleton-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-line {
+  height: 14px;
+
+  &--wide {
+    width: 70%;
+  }
+
+  &--narrow {
+    width: 45%;
+  }
+}
+
+
 .dashboard-page {
   .page-header {
     animation: fadeInDown 0.6s ease-out;
-    
+
     .page-title {
       font-size: 2rem;
       font-weight: 700;
@@ -339,4 +394,3 @@
 .fade-in-down {
   animation: fadeInDown 0.6s ease-out both;
 }
-
