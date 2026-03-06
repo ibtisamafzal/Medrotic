@@ -1,19 +1,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard';
 import { RoleGuard } from './guards/role-guard';
-import { Home } from './common/home/home';
-import { About } from './common/about/about';
-import { Services } from './common/services/services';
-import { Contact } from './common/contact/contact';
-import { Faq } from './common/faq/faq';
-import { Terms } from './common/terms/terms';
-import { Privacy } from './common/privacy/privacy';
-import { RefundPolicy } from './common/refund-policy/refund-policy';
-import { GdprCompliance } from './common/gdpr-compliance/gdpr-compliance';
-import { AffiliatePolicy } from './common/affiliate-policy/affiliate-policy';
 
 export const routes: Routes = [
-  // Public routes - Common pages
+  // Public routes - Common pages (lazy loaded for smaller initial bundle)
   {
     path: '',
     redirectTo: '/home',
@@ -21,51 +11,51 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: Home
+    loadComponent: () => import('./common/home/home').then(m => m.Home)
   },
   {
     path: 'about',
-    component: About
+    loadComponent: () => import('./common/about/about').then(m => m.About)
   },
   {
     path: 'services',
-    component: Services
+    loadComponent: () => import('./common/services/services').then(m => m.Services)
   },
   {
     path: 'contact',
-    component: Contact
+    loadComponent: () => import('./common/contact/contact').then(m => m.Contact)
   },
   {
     path: 'faq',
-    component: Faq
+    loadComponent: () => import('./common/faq/faq').then(m => m.Faq)
   },
   {
     path: 'terms',
-    component: Terms
+    loadComponent: () => import('./common/terms/terms').then(m => m.Terms)
   },
   {
     path: 'privacy',
-    component: Privacy
+    loadComponent: () => import('./common/privacy/privacy').then(m => m.Privacy)
   },
   {
     path: 'refund-policy',
-    component: RefundPolicy
+    loadComponent: () => import('./common/refund-policy/refund-policy').then(m => m.RefundPolicy)
   },
   {
     path: 'gdpr-compliance',
-    component: GdprCompliance
+    loadComponent: () => import('./common/gdpr-compliance/gdpr-compliance').then(m => m.GdprCompliance)
   },
   {
     path: 'affiliate-policy',
-    component: AffiliatePolicy
+    loadComponent: () => import('./common/affiliate-policy/affiliate-policy').then(m => m.AffiliatePolicy)
   },
-  
+
   // Auth routes (public)
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule)
   },
-  
+
   // Admin routes - protected by role guard
   {
     path: 'admin',
@@ -73,7 +63,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['admin'] }
   },
-  
+
   // Doctor portal routes - protected by role guard
   {
     path: 'doctor-portal',
@@ -81,7 +71,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['doctor'] }
   },
-  
+
   // Patient portal routes - protected by role guard
   {
     path: 'patient-portal',
@@ -89,7 +79,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['patient'] }
   },
-  
+
   // Wildcard route
   {
     path: '**',

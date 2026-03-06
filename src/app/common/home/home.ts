@@ -12,16 +12,16 @@ import { NavigationService } from '../../services/navigation.service';
   styleUrl: './home.scss',
 })
 export class Home {
-  constructor(private navigationService: NavigationService) {}
+  constructor(private navigationService: NavigationService) { }
 
   navigateToAuthOrDashboard(): void {
     this.navigationService.navigateToAuthOrDashboard();
   }
 
   heroAssets = {
-    leftShape: '/images/hero/hero-left-shape.png',
-    rightShape: '/images/hero/hero-right-shape.png',
-    heroDoctor: '/images/hero/hero-doctor.png',
+    leftShape: '/images/hero/hero-left-shape.webp',
+    rightShape: '/images/hero/hero-right-shape.webp',
+    heroDoctor: '/images/hero/hero-doctor.webp',
     virtualMain: '/images/hero/virtual-consultation-main.svg',
     virtualOverlay: '/images/hero/virtual-consultation-overlay.svg',
   };
@@ -35,7 +35,7 @@ export class Home {
   ];
 
   collaboration = {
-    image: '/images/collaboration/collaboration-image.png',
+    image: '/images/collaboration/collaboration-image.webp',
     title: 'Our system makes it easy for healthcare professionals to share and collaborate on patient care.',
     copy: 'Care teams stay synced inside a single workspace with real-time updates, transparent notes, and context-rich threads.',
     cta: 'Try It Now',
@@ -64,7 +64,8 @@ export class Home {
     },
   ];
 
-  workflowImage = '/images/workflow/workflow-visual.png';
+  workflowImage = '/images/workflow/workflow-visual.webp';
+
 
   workflowSteps = [
     {
@@ -95,28 +96,28 @@ export class Home {
       author: 'Adnan Tariq',
       role: 'Product Designer',
       avatar: '/images/testimonials/testimonial-avatar.svg',
-      sideImage: '/images/testimonials/testimonial-side-1.png',
+      sideImage: '/images/testimonials/testimonial-side-1.webp',
     },
     {
       quote: '"Medrotic has transformed how I manage my health. The platform is intuitive, and the medical team is always available when I need them. Highly recommended!"',
       author: 'Sarah Johnson',
       role: 'Marketing Manager',
       avatar: '/images/testimonials/testimonial-avatar.svg',
-      sideImage: '/images/testimonials/testimonial-side-2.png',
+      sideImage: '/images/testimonials/testimonial-side-2.webp',
     },
     {
       quote: '"As someone with a busy schedule, Medrotic\'s flexible appointment system and virtual consultations have been a lifesaver. The care quality never compromises."',
       author: 'Michael Chen',
       role: 'Software Engineer',
       avatar: '/images/testimonials/testimonial-avatar.svg',
-      sideImage: '/images/testimonials/testimonial-side-3.png',
+      sideImage: '/images/testimonials/testimonial-side-3.webp',
     },
     {
       quote: '"I\'ve been using Medrotic for over a year now, and the experience has been outstanding. The doctors are knowledgeable, caring, and always take time to listen."',
       author: 'Emily Rodriguez',
       role: 'Business Analyst',
       avatar: '/images/testimonials/testimonial-avatar.svg',
-      sideImage: '/images/testimonials/testimonial-side-4.png',
+      sideImage: '/images/testimonials/testimonial-side-4.webp',
     },
   ];
 
@@ -133,7 +134,7 @@ export class Home {
   }
 
   get paginationNumbers() {
-    return this.testimonials.map((_, index) => 
+    return this.testimonials.map((_, index) =>
       String(index + 1).padStart(2, '0')
     );
   }
@@ -143,16 +144,16 @@ export class Home {
   }
 
   previousTestimonial() {
-    this.currentTestimonialIndex = 
-      this.currentTestimonialIndex === 0 
-        ? this.testimonials.length - 1 
+    this.currentTestimonialIndex =
+      this.currentTestimonialIndex === 0
+        ? this.testimonials.length - 1
         : this.currentTestimonialIndex - 1;
   }
 
   nextTestimonial() {
-    this.currentTestimonialIndex = 
-      this.currentTestimonialIndex === this.testimonials.length - 1 
-        ? 0 
+    this.currentTestimonialIndex =
+      this.currentTestimonialIndex === this.testimonials.length - 1
+        ? 0
         : this.currentTestimonialIndex + 1;
   }
 

@@ -39,7 +39,12 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="preload" as="image" href="/images/hero/hero-doctor.png" imagesrcset="/images/hero/hero-doctor.png 1x">
+
+  <!-- LCP hero image preload: WebP (59KB vs 1.7MB PNG) for critical path -->
+  <link rel="preload" as="image" href="/images/hero/hero-doctor.webp" type="image/webp" fetchpriority="high">
+  
+  <!-- DNS prefetch for analytics -->
+  <link rel="dns-prefetch" href="//va.vercel-scripts.com">
 </head>
 <body>
   <app-root></app-root>
