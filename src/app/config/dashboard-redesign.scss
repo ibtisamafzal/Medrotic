@@ -1,0 +1,789 @@
+// ============================================
+// DASHBOARD REDESIGN - Shared design system
+// Aligned with New-Dashboards (Figma) visual language
+// ============================================
+
+// Design tokens
+$dash-primary: #3461ff;
+$dash-primary-dark: #2850db;
+$dash-text: #001047;
+$dash-text-muted: #6b7280;
+$dash-success: #10b981;
+$dash-warning: #f59e0b;
+$dash-danger: #ef4444;
+$dash-purple: #8b5cf6;
+$dash-border: rgba(0, 0, 0, 0.06);
+$dash-bg-subtle: #f5f6f9;
+$dash-bg-card: #ffffff;
+$dash-radius: 1rem;      // 16px
+$dash-radius-lg: 1.25rem; // 20px
+$dash-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+$dash-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+
+// Content wrapper (max-width, consistent padding - fit viewport at 100% zoom)
+.dashboard-content {
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding: 0 1rem;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// Page wrapper (gradient backgrounds per portal) - viewport-friendly, no unnecessary scroll
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  padding-bottom: 1.5rem;
+  animation: dashFadeIn 0.5s ease-out;
+  overflow-x: hidden;
+
+  &.dashboard-page--admin {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(52, 97, 255, 0.06) 100%);
+  }
+  &.dashboard-page--doctor {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(16, 185, 129, 0.06) 100%);
+  }
+  &.dashboard-page--patient {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(139, 92, 246, 0.06) 100%);
+  }
+  &.dashboard-page--analytics {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(99, 102, 241, 0.06) 100%);
+  }
+}
+
+@keyframes dashFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Page header (compact for viewport fit)
+.dashboard-page .page-header {
+  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  flex-shrink: 0;
+
+  .page-title {
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+    font-weight: 700;
+    color: $dash-text;
+    margin-bottom: 0.15rem;
+    letter-spacing: -0.02em;
+  }
+  .page-subtitle {
+    color: $dash-text-muted;
+    margin: 0;
+    font-size: clamp(0.8125rem, 1.5vw, 0.9375rem);
+  }
+  // Logout button - minimal outline, rounded, smooth transition
+  .btn-logout {
+    padding: 0.45rem 0.875rem;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #dc2626;
+    background: transparent;
+    cursor: pointer;
+    &:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: #dc2626;
+      transform: translateY(-1px);
+    }
+    &:active { transform: translateY(0); }
+    &:focus-visible {
+      outline: 2px solid $dash-primary;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Enhanced metric card (New-Dashboards: rounded-2xl, gradient icon, trend, sparkline)
+.dashboard-page .metric-card {
+  background: $dash-bg-card;
+  border-radius: $dash-radius-lg;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  height: 100%;
+  min-height: 140px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  animation: dashFadeIn 0.45s ease-out both;
+
+  // Colored shadow on hover (New-Dashboards)
+  &.metric-card--blue { box-shadow: 0 10px 25px -5px rgba(52, 97, 255, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  &.metric-card--green { box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  &.metric-card--amber { box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  &.metric-card--red { box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  &.metric-card--purple { box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+
+  .metric-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    &.metric-icon--blue {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    }
+    &.metric-icon--green {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+    &.metric-icon--amber {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    &.metric-icon--red {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+    &.metric-icon--purple {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    }
+    svg {
+      stroke: #fff;
+    }
+  }
+  .metric-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    &.metric-trend--up {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+    }
+    &.metric-trend--down {
+      background: rgba(239, 68, 68, 0.12);
+      color: #dc2626;
+    }
+  }
+  .metric-content {
+    flex: 1;
+    min-width: 0;
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $dash-text;
+      margin: 0 0 0.2rem 0;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      .metric-unit {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: $dash-text-muted;
+      }
+    }
+    .metric-label {
+      color: $dash-text-muted;
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  .metric-sparkline {
+    min-height: 48px;
+  }
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    &.metric-card--blue { box-shadow: 0 20px 30px -5px rgba(52, 97, 255, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+    &.metric-card--green { box-shadow: 0 20px 30px -5px rgba(16, 185, 129, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+    &.metric-card--amber { box-shadow: 0 20px 30px -5px rgba(245, 158, 11, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+    &.metric-card--red { box-shadow: 0 20px 30px -5px rgba(239, 68, 68, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+    &.metric-card--purple { box-shadow: 0 20px 30px -5px rgba(139, 92, 246, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+  }
+}
+
+// Dashboard chart container (section card with chart)
+.dashboard-page .dashboard-chart-section {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .section-card {
+    flex: 1;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    .chart-placeholder {
+      min-height: 200px;
+      flex: 1;
+    }
+  }
+}
+
+// Skeleton for metric cards (OPTIMIZATION_GUIDE: skeleton loading)
+.dashboard-page .metric-card.skeleton-card {
+  pointer-events: none;
+  .skeleton-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 600px 100%;
+    animation: skeletonShimmer 1.5s infinite linear;
+  }
+  .skeleton-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .skeleton-line {
+    height: 14px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 600px 100%;
+    animation: skeletonShimmer 1.5s infinite linear;
+    &--wide { width: 70%; }
+    &--narrow { width: 45%; }
+  }
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -300px 0; }
+  100% { background-position: 300px 0; }
+}
+
+// Section / Stat card (compact)
+.dashboard-page .section-card {
+  background: $dash-bg-card;
+  border-radius: $dash-radius;
+  padding: clamp(1rem, 2vw, 1.25rem);
+  box-shadow: $dash-shadow;
+  border: 1px solid $dash-border;
+  transition: box-shadow 0.25s ease;
+
+  &:hover {
+    box-shadow: $dash-shadow-hover;
+  }
+  .section-title {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 600;
+    color: $dash-text;
+    margin: 0;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    .section-title { margin: 0; }
+  }
+}
+
+// System Performance (horizontal progress bars, New-Dashboards style)
+.dashboard-page .section-card--system-perf {
+  .system-perf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .system-perf-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .system-perf-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .system-perf-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $dash-text-muted;
+  }
+  .system-perf-value {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: $dash-text;
+  }
+  .system-perf-bar-wrap {
+    height: 12px;
+    background: #f3f4f6;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .system-perf-bar {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 1s ease-out;
+  }
+  .system-perf-overall {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .system-perf-overall-label {
+    font-size: 0.875rem;
+    color: $dash-text-muted;
+  }
+  .system-perf-overall-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $dash-success;
+  }
+}
+
+// Department / doughnut legend (New-Dashboards style)
+.dashboard-page .department-legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.dashboard-page .department-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dashboard-page .department-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dashboard-page .department-legend-label {
+  font-size: 0.75rem;
+  color: $dash-text-muted;
+}
+.dashboard-page .chart-placeholder--doughnut {
+  max-height: 220px;
+}
+
+// Key metrics (circular progress grid, New-Dashboards style)
+.dashboard-page .key-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  justify-items: center;
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.dashboard-page .key-metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Quick link cards (grid items, smooth transitions)
+.dashboard-page .quick-link-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $dash-bg-subtle;
+  border-radius: 12px;
+  padding: clamp(0.75rem, 1.5vw, 1rem);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+  border: 2px solid transparent;
+  min-height: 88px;
+
+  &:hover {
+    background: $dash-bg-card;
+    border-color: $dash-primary;
+    transform: translateY(-3px);
+    box-shadow: $dash-shadow;
+    color: inherit;
+  }
+  &:active { transform: translateY(-1px); }
+  .quick-link-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .quick-link-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: $dash-text;
+    margin: 0 0 0.25rem 0;
+  }
+  .quick-link-count {
+    color: $dash-text-muted;
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+}
+
+// Action cards as gradient buttons (smooth transitions)
+.dashboard-page .action-btn-block {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: clamp(1rem, 2vw, 1.25rem);
+  border: none;
+  border-radius: $dash-radius;
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  text-decoration: none;
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 20px -5px rgba(0, 0, 0, 0.14);
+    color: #fff;
+  }
+  &:active { transform: translateY(-1px); }
+  &:focus-visible {
+    outline: 2px solid $dash-primary;
+    outline-offset: 2px;
+  }
+  .action-btn-icon {
+    margin-bottom: 0.5rem;
+    opacity: 0.95;
+    transition: transform 0.2s ease;
+  }
+  &:hover .action-btn-icon { transform: scale(1.05); }
+  .action-btn-value {
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+  }
+  .action-btn-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
+    opacity: 0.9;
+  }
+  &.action-btn--blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  }
+  &.action-btn--green {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  }
+  &.action-btn--purple {
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  }
+  &.action-btn--amber {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+}
+
+// Legacy action card (when not using button block)
+.dashboard-page .action-card {
+  .action-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $dash-border;
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .section-title { margin: 0; font-size: 1.125rem; }
+  }
+  .action-content {
+    .action-value { font-size: 2rem; font-weight: 700; color: $dash-text; }
+    .action-label { color: $dash-text-muted; font-size: 0.875rem; margin: 0; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      &.healthy {
+        background: rgba(16, 185, 129, 0.12);
+        color: $dash-success;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 2s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+// Tables (clean minimal style)
+.dashboard-page .table-modern {
+  thead tr {
+    border-bottom: 1px solid $dash-border;
+    th {
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: $dash-text-muted;
+    }
+  }
+  tbody tr {
+    transition: background 0.2s ease;
+    &:hover { background: $dash-bg-subtle; }
+    td {
+      padding: 1rem;
+      font-size: 0.875rem;
+      color: $dash-text;
+    }
+  }
+}
+
+// List items (recent uploads, activity)
+.dashboard-page .list-item-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  background: $dash-bg-subtle;
+  transition: background 0.2s ease;
+  &:hover { background: #e8eaf0; }
+}
+
+// Quick link list (sidebar style)
+.dashboard-page .quick-link-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: $dash-bg-subtle;
+  border-radius: 10px;
+  text-decoration: none;
+  color: $dash-text;
+  transition: all 0.3s ease;
+  font-weight: 500;
+
+  &:hover {
+    background: rgba(52, 97, 255, 0.1);
+    color: $dash-primary;
+    transform: translateX(4px);
+  }
+  &:focus-visible {
+    outline: 2px solid $dash-primary;
+    outline-offset: 2px;
+  }
+}
+
+// Chart placeholder (analytics)
+.dashboard-page .chart-placeholder {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $dash-bg-subtle;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.dashboard-page .chart-data-preview {
+  width: 100%;
+  .data-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    margin-bottom: 0.5rem;
+    background: $dash-bg-card;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: $dash-text;
+    border: 1px solid $dash-border;
+  }
+}
+
+// Empty state (OPTIMIZATION_GUIDE: empty states)
+.dashboard-page .empty-state {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  color: $dash-text-muted;
+  font-size: 0.9375rem;
+}
+
+// Accessibility: focus visible (OPTIMIZATION_GUIDE)
+.dashboard-page button:focus-visible,
+.dashboard-page a:focus-visible {
+  outline: 2px solid $dash-primary;
+  outline-offset: 2px;
+}
+
+// Animation delays for staggered reveal
+.fade-in-up { animation: dashFadeIn 0.45s ease-out both; }
+.fade-in-down { animation: dashFadeIn 0.45s ease-out both; }
+
+// Global button improvements (dashboard + portal)
+.dashboard-page .btn-primary,
+.portal-page .btn-primary {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  border-radius: 10px;
+  font-weight: 500;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(52, 97, 255, 0.35);
+  }
+  &:active { transform: translateY(0); }
+}
+.dashboard-page .btn-outline-primary,
+.portal-page .btn-outline-primary {
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  border-radius: 10px;
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+}
+.dashboard-page .form-check-input,
+.portal-page .form-check-input {
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+.dashboard-page .form-select,
+.portal-page .form-select,
+.dashboard-page .form-control,
+.portal-page .form-control {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 8px;
+  &:focus {
+    border-color: $dash-primary;
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.12);
+  }
+}
+
+// ========== Portal page (for non-dashboard screens: list, detail, forms) ==========
+.portal-page {
+  min-height: 100%;
+  padding: 0;
+  animation: dashFadeIn 0.5s ease-out;
+  &.portal-page--admin {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(52, 97, 255, 0.06) 100%);
+  }
+  &.portal-page--doctor {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(16, 185, 129, 0.06) 100%);
+  }
+  &.portal-page--patient {
+    background: linear-gradient(to bottom right, #f9fafb 0%, rgba(139, 92, 246, 0.06) 100%);
+  }
+  .portal-content {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+  .page-header {
+    margin-bottom: 1.5rem;
+    .page-title {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 700;
+      color: $dash-text;
+      margin: 0 0 0.25rem 0;
+    }
+    .page-subtitle {
+      color: $dash-text-muted;
+      margin: 0;
+      font-size: 0.9375rem;
+    }
+  }
+  .section-card {
+    background: $dash-bg-card;
+    border-radius: $dash-radius-lg;
+    padding: 1.5rem;
+    box-shadow: $dash-shadow;
+    border: 1px solid $dash-border;
+    margin-bottom: 1.5rem;
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $dash-text;
+      margin: 0 0 1rem 0;
+    }
+  }
+  .table-modern {
+    thead tr {
+      border-bottom: 1px solid $dash-border;
+      th {
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $dash-text-muted;
+      }
+    }
+    tbody tr {
+      transition: background 0.2s ease;
+      &:hover { background: $dash-bg-subtle; }
+      td {
+        padding: 1rem;
+        font-size: 0.875rem;
+        color: $dash-text;
+      }
+    }
+  }
+  .empty-state {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    color: $dash-text-muted;
+    font-size: 0.9375rem;
+  }
+  .filters-card {
+    background: $dash-bg-card;
+    border-radius: $dash-radius-lg;
+    padding: 1.5rem;
+    box-shadow: $dash-shadow;
+    border: 1px solid $dash-border;
+    margin-bottom: 1.5rem;
+  }
+  .table-card {
+    background: $dash-bg-card;
+    border-radius: $dash-radius-lg;
+    padding: 1.5rem;
+    box-shadow: $dash-shadow;
+    border: 1px solid $dash-border;
+    margin-bottom: 1.5rem;
+  }
+}
