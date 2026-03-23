@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DoctorService, Patient, Prescription, Xray } from '../../services/doctor.service';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-patient-details',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './patient-details.html',
   styleUrl: './patient-details.scss',
 })

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface AnalyticsData {
   totalPatients?: number;
@@ -18,29 +19,34 @@ export interface AnalyticsData {
   providedIn: 'root'
 })
 export class AnalyticsService {
+  private adminBaseUrl = '/api/admin/analytics';
+  private doctorBaseUrl = '/api/doctor/analytics';
+  private patientBaseUrl = '/api/patient/analytics';
+
   constructor(private http: HttpClient) {}
 
-  // Get dashboard analytics
+  // Dashboard analytics from admin analytics endpoint.
   getDashboardAnalytics(): Observable<AnalyticsData> {
-    return this.http.get<AnalyticsData>('/api/analytics/dashboard');
+    return this.http.get<{ message?: string; data: AnalyticsData }>(this.adminBaseUrl).pipe(
+      map((response) => response?.data || {})
+    );
   }
 
-  // Get patient analytics
+  // Current backend patient analytics endpoint returns current patient analytics.
   getPatientAnalytics(patientId: string): Observable<any> {
-    return this.http.get<any>(`/api/analytics/patient/${patientId}`);
+    return this.http.get<any>(this.patientBaseUrl).pipe(
+      map((response) => response?.data || response)
+    );
   }
 
-  // Get system health metrics
+  // Use admin analytics as system-level metrics source.
   getSystemHealth(): Observable<any> {
-    return this.http.get<any>('/api/analytics/system-health');
+    return this.http.get<any>(this.adminBaseUrl);
   }
 
-  // Get usage statistics
+  // Use doctor analytics for usage trend proxy.
   getUsageStatistics(startDate?: string, endDate?: string): Observable<any> {
-    const params: any = {};
-    if (startDate) params.startDate = startDate;
-    if (endDate) params.endDate = endDate;
-    return this.http.get<any>('/api/analytics/usage', { params });
+    return this.http.get<any>(this.doctorBaseUrl);
   }
 }
 

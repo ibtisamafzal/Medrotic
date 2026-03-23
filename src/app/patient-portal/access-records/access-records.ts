@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService, MedicalHistory } from '../../services/patient.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-access-records',
@@ -9,17 +11,23 @@ import { PatientService, MedicalHistory } from '../../services/patient.service';
   templateUrl: './access-records.html',
   styleUrl: './access-records.scss',
 })
-export class AccessRecords implements OnInit {
+export class AccessRecords implements OnInit, OnDestroy {
   loading = false;
   exporting = false;
   searchQuery = '';
   records: MedicalHistory[] = [];
   filteredRecords: MedicalHistory[] = [];
+  private sub?: Subscription;
 
   constructor(private patientService: PatientService) {}
 
   ngOnInit() {
     this.loadRecords();
+    this.sub = portalUpdated$.subscribe(() => this.loadRecords());
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   loadRecords() {

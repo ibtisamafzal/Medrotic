@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, forkJoin, Subject } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface Patient {
   id: string;
-  name: string;
+  name?: string;
+  fullName?: string;
   email: string;
   phone?: string;
+  phoneNumber?: string;
   dateOfBirth?: string;
   address?: string;
   medicalHistory?: string;
   cnic?: string;
+  city?: string;
+  province?: string;
+  gender?: string;
   cnicVerified?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -19,6 +26,7 @@ export interface Patient {
 export interface MedicalHistory {
   id: string;
   date: string;
+  recordDate?: string;
   type: 'prescription' | 'xray' | 'test' | 'visit' | 'metric';
   title: string;
   description?: string;
@@ -63,11 +71,24 @@ export interface Doctor {
   rating?: number;
 }
 
+// Emits whenever patient-visible portal data changes (e.g., new metrics, profile update).
+// Components can subscribe to keep UI real-time without full page reload.
+const portalUpdatedSubject = new Subject<void>();
+
+export const portalUpdated$ = portalUpdatedSubject.asObservable();
+
+export function notifyPortalUpdated(): void {
+  portalUpdatedSubject.next();
+}
+
 export interface TestReport {
   id?: string;
   file: File | string;
   fileName?: string;
   analysis?: string;
+  filePath?: string;
+  documentType?: string;
+  currentState?: string;
   uploadedAt?: string;
 }
 
@@ -109,22 +130,113 @@ export interface Notification {
   link?: string;
 }
 
+interface ApiEnvelope<T> {
+  message?: string;
+  data: T;
+  total?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private baseUrl = '/api/patient';
+  // Important: use absolute backend URL.
+  // Relative `/api/...` hits the Angular dev server (localhost:4200) which redirects,
+  // so patient portal pages appear "static" instead of loading real backend data.
+  private baseUrl = `${environment.apiUrl}/api/patient`;
 
   constructor(private http: HttpClient) {}
 
+  private extractData<T>() {
+    // Backend responses are typically of form `{ message, data, total }`
+    // but some implementations might return PascalCase. Support both.
+    return (source: Observable<any>): Observable<T> =>
+      source.pipe(map((response) => response?.data ?? response?.Data));
+  }
+
+  private extractFileName(filePath?: string): string {
+    if (!filePath) return '';
+    const parts = filePath.split(/[\\/]/);
+    return parts[parts.length - 1] || '';
+  }
+
+  private mapRecordToMedicalHistory(item: any): MedicalHistory {
+    const reportFilePath: string =
+      item.reportFilePath ?? item.ReportFilePath ?? item.filePath ?? '';
+
+    const lower = (reportFilePath || '').toLowerCase();
+    const type: MedicalHistory['type'] =
+      lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png') || lower.endsWith('.webp')
+        ? 'xray'
+        : lower.endsWith('.pdf')
+          ? 'prescription'
+          : 'test';
+
+    const title: string =
+      item.title ??
+      item.disease ??
+      item.Disease ??
+      item.diagnosis ??
+      item.Diagnosis ??
+      item.description ??
+      item.Description ??
+      '';
+
+    return {
+      id: item.id ?? item.Id ?? '',
+      date: item.date ?? item.recordDate ?? item.createdAt ?? new Date().toISOString(),
+      recordDate: item.recordDate ?? item.RecordDate,
+      type,
+      title,
+      description: item.description ?? item.Description,
+      doctorName: item.doctorName ?? item.DoctorName,
+      attachments: [],
+      createdAt: item.createdAt ?? item.CreatedAt ?? item.recordDate ?? item.RecordDate ?? new Date().toISOString()
+    };
+  }
+
   // Get all patients (admin/doctor use)
   getPatients(): Observable<Patient[]> {
-    return this.http.get<Patient[]>('/api/patients');
+    return this.http.get<Patient[]>(`${environment.apiUrl}/api/patients`);
   }
 
   // Get patient by ID
   getPatientById(id: string): Observable<Patient> {
-    return this.http.get<Patient>(`/api/patients/${id}`);
+    if (id === 'current') {
+      return this.http.get<any>(`${this.baseUrl}/profile`).pipe(
+        this.extractData<any>(),
+        map((data) => {
+          const dobRaw = data?.dateOfBirth ?? data?.DateOfBirth ?? '';
+          const dob =
+            typeof dobRaw === 'string' ? dobRaw.split('T')[0] : (dobRaw as any);
+
+          const fullName = data?.fullName ?? data?.FullName ?? '';
+          const phoneNumber = data?.phoneNumber ?? data?.PhoneNumber ?? '';
+          const cnic = data?.cnic ?? data?.CNIC ?? '';
+          const city = data?.city ?? data?.City ?? '';
+          const province = data?.province ?? data?.Province ?? '';
+
+          return {
+            id: 'current',
+            name: fullName,
+            fullName,
+            email: data?.email ?? data?.Email ?? '',
+            phone: phoneNumber,
+            phoneNumber,
+            cnic,
+            city,
+            province,
+            address: [city, province].filter((x: string) => !!x).join(', '),
+            dateOfBirth: dob,
+            gender: data?.gender ?? data?.Gender
+          } as Patient;
+        }),
+        catchError(() => of({ id: 'current', name: '', email: '' } as Patient))
+      );
+    }
+    return this.http.get<Patient>(`${environment.apiUrl}/api/patients/${id}`).pipe(
+      catchError(() => of({ id, name: '', email: '' } as Patient))
+    );
   }
 
   // Create new patient
@@ -144,14 +256,66 @@ export class PatientService {
 
   // Get patient medical history (old endpoint)
   getPatientMedicalHistory(patientId: string): Observable<any> {
-    return this.http.get<any>(`/api/patients/${patientId}/medical-history`);
+    return this.http.get<any>(`${environment.apiUrl}/api/patients/${patientId}/medical-history`);
   }
 
   // Patient Portal APIs
 
   // GET /api/patient/history → Medical records
   getHistory(): Observable<MedicalHistory[]> {
-    return this.http.get<MedicalHistory[]>(`${this.baseUrl}/history`);
+    const fromRecords$ = this.http
+      .get<any>(`${this.baseUrl}/records`)
+      .pipe(this.extractData<any[]>(), map((items) => (items || []).map((item) => this.mapRecordToMedicalHistory(item))), catchError(() => of([])));
+
+    const fromDocs$ = this.http
+      .get<any>(`${this.baseUrl}/documents`)
+      .pipe(
+        this.extractData<any[]>(),
+        map((docs) =>
+          (docs || []).map((d) => {
+            const docType = (d.type ?? d.documentType ?? '').toString().toLowerCase();
+            const type: MedicalHistory['type'] =
+              docType.includes('xray') || docType === 'xray' ? 'xray'
+              : docType.includes('pres') || docType === 'prescription' ? 'prescription'
+              : docType.includes('report') || docType.includes('lab') || docType === 'report' ? 'test'
+              : 'visit';
+
+            return {
+              id: d.id ?? d.Id ?? '',
+              date: d.uploadedAt ?? d.createdAt ?? new Date().toISOString(),
+              type,
+              title: d.name ?? d.fileName ?? d.DocumentType ?? d.documentType ?? 'Document',
+              description: d.currentState ?? d.currentState ?? d.CurrentState,
+              doctorName: '',
+              attachments: [],
+              createdAt: d.createdAt ?? d.uploadedAt ?? new Date().toISOString()
+            } as MedicalHistory;
+          })
+        ),
+        catchError(() => of([]))
+      );
+
+    // Include patient metrics in the timeline.
+    const fromMetrics$ = this.getMetrics().pipe(
+      map((metrics) =>
+        (metrics || []).map((m) => ({
+          id: m.id ?? '',
+          date: m.date ?? new Date().toISOString(),
+          recordDate: m.date,
+          type: 'metric' as MedicalHistory['type'],
+          title: 'Health Metrics',
+          description: m.symptoms ?? m.notes ?? '',
+          doctorName: '',
+          attachments: [],
+          createdAt: m.date ?? new Date().toISOString()
+        })) as MedicalHistory[]
+      ),
+      catchError(() => of([]))
+    );
+
+    return forkJoin({ fromRecords: fromRecords$, fromDocs: fromDocs$, fromMetrics: fromMetrics$ }).pipe(
+      map(({ fromRecords, fromDocs, fromMetrics }) => [...fromRecords, ...fromDocs, ...fromMetrics])
+    );
   }
 
   // POST /api/patient/metrics { vitals }
@@ -161,12 +325,32 @@ export class PatientService {
 
   // Get metrics history
   getMetrics(): Observable<HealthMetric[]> {
-    return this.http.get<HealthMetric[]>(`${this.baseUrl}/metrics`);
+    return this.http.get<any>(`${this.baseUrl}/metrics`).pipe(
+      this.extractData<any[]>(),
+      map((items) =>
+        (items || []).map((m) => ({
+          id: m.id ?? m.Id,
+          date: m.date ?? m.Date,
+          bloodPressure: m.bloodPressure ?? m.BloodPressure,
+          heartRate: m.heartRate ?? m.HeartRate,
+          temperature: m.temperature ?? m.Temperature,
+          weight: m.weight ?? m.Weight,
+          height: m.height ?? m.Height,
+          bloodSugar: m.bloodSugar ?? m.BloodSugar,
+          symptoms: m.symptoms ?? m.Symptoms,
+          notes: m.notes ?? m.Notes
+        }))
+      ),
+    );
   }
 
   // POST /api/patient/chatbot { query } → AI response
   sendChatbotQuery(message: ChatbotMessage): Observable<ChatbotResponse> {
-    return this.http.post<ChatbotResponse>(`${this.baseUrl}/chatbot`, message);
+    return this.http.post<ChatbotResponse>(`${this.baseUrl}/chatbot`, message).pipe(
+      catchError(() => of({
+        response: 'Chatbot API is not available yet. Please try again later.'
+      }))
+    );
   }
 
   // GET /api/patient/doctors?filters={city, specialty, disease, experience}
@@ -183,42 +367,145 @@ export class PatientService {
       if (filters.disease) params = params.set('disease', filters.disease);
       if (filters.experience) params = params.set('experience', filters.experience.toString());
     }
-    return this.http.get<Doctor[]>(`${this.baseUrl}/doctors`, { params });
+    return this.http.get<any>(`${this.baseUrl}/doctors`, { params }).pipe(
+      this.extractData<Doctor[]>(),
+      catchError(() => of([]))
+    );
   }
 
   // POST /api/patient/reports { document } → Upload/AI analysis
   uploadReport(file: File): Observable<TestReport> {
     const formData = new FormData();
-    formData.append('document', file);
-    return this.http.post<TestReport>(`${this.baseUrl}/reports`, formData);
+    formData.append('file', file);
+    formData.append('documentType', 'report');
+    return this.http.post<TestReport>(`${this.baseUrl}/upload-document`, formData);
   }
 
   // Get uploaded reports
   getReports(): Observable<TestReport[]> {
-    return this.http.get<TestReport[]>(`${this.baseUrl}/reports`);
+    return this.http.get<any>(`${this.baseUrl}/documents`).pipe(
+      this.extractData<any[]>(),
+      map((items) =>
+        (items || []).map((d) => {
+          const filePath = d.filePath ?? d.FilePath ?? '';
+          return {
+            id: d.id ?? d.Id,
+            file: filePath,
+            filePath,
+            fileName: this.extractFileName(filePath),
+            documentType: d.documentType ?? d.DocumentType,
+            currentState: d.currentState ?? d.CurrentState,
+            analysis: '',
+            uploadedAt: d.uploadedAt ?? d.UploadedAt
+          } as TestReport;
+        })
+      ),
+      catchError(() => of([]))
+    );
   }
 
   // GET /api/patient/prescriptions
   getPrescriptions(): Observable<Prescription[]> {
-    return this.http.get<Prescription[]>(`${this.baseUrl}/prescriptions`);
+    const fromRecords$ = this.http
+      .get<any>(`${this.baseUrl}/prescriptions`)
+      .pipe(this.extractData<any[]>(), catchError(() => of([])));
+
+    const fromDocs$ = this.http
+      .get<any>(`${this.baseUrl}/documents`)
+      .pipe(
+        this.extractData<any[]>(),
+        map((docs) =>
+          (docs || [])
+            .filter((d) => {
+              const docType = (d.type ?? d.documentType ?? '').toString().toLowerCase();
+              return docType === 'prescription' || docType.includes('pres');
+            })
+            .map((d) => ({
+              id: d.id ?? d.Id ?? '',
+              patientId: d.patientId ?? d.PatientId ?? '',
+              doctorId: '',
+              doctorName: d.currentState ? 'Doctor' : 'Uploaded by patient',
+              date: d.uploadedAt ?? d.createdAt ?? new Date().toISOString(),
+              medications: [],
+              instructions: undefined,
+              createdAt: d.createdAt ?? d.uploadedAt ?? new Date().toISOString()
+            })) as Prescription[]
+        ),
+        catchError(() => of([]))
+      );
+
+    return forkJoin({ fromRecords: fromRecords$, fromDocs: fromDocs$ }).pipe(
+      map(({ fromRecords, fromDocs }) => ([...(fromRecords || []), ...(fromDocs || [])]) as Prescription[])
+    );
   }
 
   // GET /api/patient/xrays
   getXrays(): Observable<Xray[]> {
-    return this.http.get<Xray[]>(`${this.baseUrl}/xrays`);
+    const fromRecords$ = this.http
+      .get<any>(`${this.baseUrl}/xrays`)
+      .pipe(this.extractData<any[]>(), catchError(() => of([])));
+
+    const fromDocs$ = this.http
+      .get<any>(`${this.baseUrl}/documents`)
+      .pipe(
+        this.extractData<any[]>(),
+        map((docs) =>
+          (docs || [])
+            .filter((d) => {
+              const docType = (d.type ?? d.documentType ?? '').toString().toLowerCase();
+              if (docType === 'xray' || docType.includes('xray')) return true;
+              // Also infer from file extension when type isn't perfect.
+              const fileName: string = d.fileName ?? d.filePath ?? d.FilePath ?? '';
+              const lower = (fileName || '').toLowerCase();
+              return lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png') || lower.endsWith('.webp');
+            })
+            .map((d) => ({
+              id: d.id ?? d.Id ?? '',
+              patientId: d.patientId ?? d.PatientId ?? '',
+              doctorId: '',
+              doctorName: '',
+              fileName: d.fileName ?? d.name ?? '',
+              fileUrl: d.fileUrl ?? d.filePath ?? d.FilePath ?? '',
+              analysis: undefined,
+              uploadedAt: d.uploadedAt ?? d.createdAt ?? new Date().toISOString(),
+              createdAt: d.createdAt ?? d.uploadedAt ?? new Date().toISOString()
+            })) as Xray[]
+        ),
+        catchError(() => of([]))
+      );
+
+    return forkJoin({ fromRecords: fromRecords$, fromDocs: fromDocs$ }).pipe(
+      map(({ fromRecords, fromDocs }) => ([...(fromRecords || []), ...(fromDocs || [])]) as Xray[])
+    );
   }
 
   // Upload documents (general)
   uploadDocument(file: File, type?: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    if (type) formData.append('type', type);
-    return this.http.post<any>(`${this.baseUrl}/documents`, formData);
+    if (type) formData.append('documentType', type);
+    return this.http.post<any>(`${this.baseUrl}/upload-document`, formData);
   }
 
   // Get notifications
   getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(`${this.baseUrl}/notifications`);
+    return this.http.get<any>(`${this.baseUrl}/notifications`).pipe(
+      this.extractData<any[]>(),
+      map((items) =>
+        (items || []).map((n) => {
+          const channel: string = n.channel ?? n.Channel ?? '';
+          return {
+            id: n.id ?? n.Id ?? '',
+            type: 'update',
+            title: channel || 'Notification',
+            message: n.message ?? n.Message ?? '',
+            read: n.isRead ?? n.IsRead ?? false,
+            createdAt: n.sentAt ?? n.SentAt ?? new Date().toISOString()
+          } as Notification;
+        })
+      ),
+      catchError(() => of([]))
+    );
   }
 
   // Mark notification as read
@@ -228,11 +515,8 @@ export class PatientService {
 
   // Get access records with search
   getAccessRecords(search?: string): Observable<MedicalHistory[]> {
-    let params = new HttpParams();
-    if (search) {
-      params = params.set('search', search);
-    }
-    return this.http.get<MedicalHistory[]>(`${this.baseUrl}/records`, { params });
+    // Component does client-side search; return the full dataset here.
+    return this.getHistory();
   }
 
   // Export records
@@ -250,6 +534,21 @@ export class PatientService {
   // Update profile
   updateProfile(profile: Partial<Patient>): Observable<Patient> {
     return this.http.put<Patient>(`${this.baseUrl}/profile`, profile);
+  }
+
+  // Explicit profile getter for available backend API.
+  getProfile(): Observable<Patient> {
+    return this.http.get<ApiEnvelope<Patient>>(`${this.baseUrl}/profile`).pipe(this.extractData<Patient>());
+  }
+
+  // Connects to POST /api/patient/upload-history.
+  uploadMedicalHistory(data: FormData): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/upload-history`, data);
+  }
+
+  // Connects to GET /api/patient/analytics.
+  getPersonalAnalytics(): Observable<any> {
+    return this.http.get<ApiEnvelope<any>>(`${this.baseUrl}/analytics`).pipe(this.extractData<any>());
   }
 }
 

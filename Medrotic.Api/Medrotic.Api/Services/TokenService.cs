@@ -1,11 +1,10 @@
-﻿// TokenService.cs
-using Medrotic.API.Models;
+﻿using Medrotic.Api.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Medrotic.API.Services
+namespace Medrotic.Api.Services
 {
     public interface ITokenService
     {
@@ -24,16 +23,19 @@ namespace Medrotic.API.Services
         public string CreateToken(ApplicationUser user, string role)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim("role", role)
-            };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty),
+        new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+        new Claim(ClaimTypes.Name, user.FullName ?? string.Empty),
+        new Claim(ClaimTypes.Role, role ?? "Unknown")
+    };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var keyString = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration.");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpiryInMinutes"]));
+
+            var expiryMinutes = _configuration.GetValue<int>("Jwt:ExpiryInMinutes", 60);
+            var expires = DateTime.UtcNow.AddMinutes(expiryMinutes);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
@@ -43,7 +45,10 @@ namespace Medrotic.API.Services
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            Console.WriteLine("[TOKEN GENERATED] " + jwt.Substring(0, 20) + "..."); // partial log for debug
+
+            return jwt;
         }
     }
 }

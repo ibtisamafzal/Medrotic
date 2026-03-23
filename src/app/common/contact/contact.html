@@ -111,7 +111,7 @@
                   <label for="phoneNumber" class="form-label fw-medium">Phone Number <span
                       class="text-danger">*</span></label>
                   <input type="tel" id="phoneNumber" formControlName="phoneNumber"
-                    class="form-control bg-light border-0 rounded-3" placeholder="(+92) 3000000000"
+                    class="form-control bg-light border-0 rounded-3" placeholder="+92-300-0000000" pkInputFormat="phone"
                     aria-describedby="phoneNumber-error" aria-required="true"
                     [class.is-invalid]="isFieldInvalid('phoneNumber')">
                   <div *ngIf="isFieldInvalid('phoneNumber')" id="phoneNumber-error" class="invalid-feedback d-block">

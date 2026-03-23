@@ -1,4 +1,4 @@
-﻿namespace Medrotic.API.DTOs
+﻿namespace Medrotic.Api.DTOs
 {
     public class UserResponseDto
     {

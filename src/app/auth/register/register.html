@@ -42,9 +42,9 @@
                 placeholder="12345-1234567-1"
                 [(ngModel)]="cnic"
                 name="cnic"
+                pkInputFormat="cnic"
                 required
                 maxlength="15"
-                (input)="onCNICInput($event)"
               />
               <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Format: 12345-1234567-1</small>
             </div>
@@ -70,10 +70,10 @@
                 id="phone"
                 type="text"
                 class="custom-input-simple"
-                placeholder="+92 XXX XXXXXXX"
+                placeholder="+92-300-1234567"
                 [(ngModel)]="phone"
                 name="phone"
-                (input)="onPhoneInput($event)"
+                pkInputFormat="phone"
               />
               <small class="form-text text-muted" style="font-size: 0.75rem; color: rgba(0, 16, 71, 0.6); margin-top: 0.25rem; display: block;">Either email or phone is required</small>
             </div>

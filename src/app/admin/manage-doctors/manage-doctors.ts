@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService, Doctor } from '../../services/admin.service';
 import { AlertService } from '../../services/alert.service';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-manage-doctors',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PakInputFormatDirective],
   templateUrl: './manage-doctors.html',
   styleUrl: './manage-doctors.scss',
 })

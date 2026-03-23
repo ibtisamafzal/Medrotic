@@ -97,25 +97,20 @@ export class LoginComponent implements OnInit {
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    
-    if (value.startsWith('92')) {
-      value = '+92' + value.substring(2);
-    } else if (value.startsWith('0')) {
-      value = '+92' + value.substring(1);
-    } else if (!value.startsWith('+92')) {
-      value = '+92' + value;
+    let digits = input.value.replace(/\D/g, '');
+
+    if (digits.startsWith('92')) {
+      digits = digits.slice(2, 12);
+      this.phone = digits.length <= 3 ? `+92-${digits}` : `+92-${digits.slice(0, 3)}-${digits.slice(3)}`;
+    } else {
+      if (digits.startsWith('3')) {
+        digits = `0${digits}`;
+      }
+      digits = digits.slice(0, 11);
+      this.phone = digits.length <= 4 ? digits : `${digits.slice(0, 4)}-${digits.slice(4)}`;
     }
-    
-    if (value.length > 4) {
-      value = value.slice(0, 4) + ' ' + value.slice(4);
-    }
-    if (value.length > 8) {
-      value = value.slice(0, 8) + ' ' + value.slice(8);
-    }
-    
-    this.phone = value;
-    input.value = value;
+
+    input.value = this.phone;
   }
 
   togglePasswordVisibility(): void {
@@ -175,38 +170,36 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    // API only accepts email, so convert phone/cnic to email format
-    // For now, require email login - phone/cnic would need backend support
-    let emailForLogin = '';
+    let loginRequest: LoginRequest | null = null;
     
     if (this.loginMethod === 'email') {
-      emailForLogin = this.email.trim();
+      loginRequest = {
+        email: this.email.trim(),
+        password: this.password,
+        role: this.selectedRole,
+        rememberMe: this.rememberMe
+      };
     } else if (this.loginMethod === 'phone') {
-      // Convert phone to email format (would need backend support)
-      // For now, show error
-      this.error = 'Phone login is not yet supported. Please use email.';
-      this.loading = false;
-      return;
+      loginRequest = {
+        phone: this.phone.trim(),
+        password: this.password,
+        role: this.selectedRole,
+        rememberMe: this.rememberMe
+      };
     } else if (this.loginMethod === 'cnic') {
-      // Convert CNIC to email format (would need backend support)
-      // For now, show error
-      this.error = 'CNIC login is not yet supported. Please use email.';
+      loginRequest = {
+        cnic: this.cnic.trim(),
+        password: this.password,
+        role: this.selectedRole,
+        rememberMe: this.rememberMe
+      };
+    }
+
+    if (!loginRequest) {
+      this.error = 'Please select a valid login method.';
       this.loading = false;
       return;
     }
-
-    if (!emailForLogin) {
-      this.error = 'Email is required';
-      this.loading = false;
-      return;
-    }
-
-    const loginRequest: LoginRequest = {
-      email: emailForLogin,
-      password: this.password,
-      role: this.selectedRole,
-      rememberMe: this.rememberMe
-    };
 
     this.authService.login(loginRequest).subscribe({
       next: (user) => {

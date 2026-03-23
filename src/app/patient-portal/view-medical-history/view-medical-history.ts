@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PatientService, MedicalHistory } from '../../services/patient.service';
+import { notifyPortalUpdated, portalUpdated$ } from '../../services/patient.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-view-medical-history',
@@ -11,11 +13,19 @@ import { PatientService, MedicalHistory } from '../../services/patient.service';
 export class ViewMedicalHistory implements OnInit {
   loading = false;
   history: MedicalHistory[] = [];
+  private sub?: Subscription;
 
   constructor(private patientService: PatientService) {}
 
   ngOnInit() {
     this.loadHistory();
+    this.sub = portalUpdated$.subscribe(() => {
+      this.loadHistory();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   loadHistory() {

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { NavigationEnd, RouterModule, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { AuthService, User } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +15,10 @@ import { AuthService, User } from '../../auth/auth.service';
 export class Dashboard implements OnInit {
   currentUser: User | null = null;
   loading = true;
+  private authSub?: Subscription;
+  private portalSub?: Subscription;
+  private navSub?: Subscription;
+  private refreshInFlight = false;
   healthSummary = {
     lastCheckup: null as string | null,
     recentMetrics: {
@@ -33,13 +39,68 @@ export class Dashboard implements OnInit {
   constructor(
     private patientService: PatientService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // Get current user
+    // Keep the welcome header in real-time sync with auth/user name updates.
     this.currentUser = this.authService.currentUserValue;
-    this.loadDashboardData();
+    this.authSub = this.authService.currentUser.subscribe((u) => {
+      this.currentUser = u;
+      // With zoneless change detection, ensure UI refreshes immediately.
+      this.cdr.markForCheck();
+    });
+
+    // Keep dashboard cards in real-time sync after metrics updates.
+    this.portalSub = portalUpdated$.subscribe(() => {
+      this.loadDashboardData();
+      this.cdr.markForCheck();
+    });
+
+    // Ensure we re-sync welcome name and dashboard data any time the user navigates
+    // to this route (covers both router link navigation and browser back/forward).
+    this.navSub = this.router.events.subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+
+      const url = event.urlAfterRedirects || event.url || '';
+      if (url.includes('/patient-portal/dashboard')) {
+        this.syncWelcomeFromBackendAndLoad();
+      }
+    });
+
+    // Initial load
+    this.syncWelcomeFromBackendAndLoad();
+  }
+
+  ngOnDestroy(): void {
+    this.authSub?.unsubscribe();
+    this.portalSub?.unsubscribe();
+    this.navSub?.unsubscribe();
+  }
+
+  private syncWelcomeFromBackendAndLoad(): void {
+    if (this.refreshInFlight) return;
+    this.refreshInFlight = true;
+
+    this.patientService
+      .getPatientById('current')
+      .subscribe({
+        next: (patient) => {
+          const displayName = (patient?.name ?? patient?.fullName ?? '').toString().trim();
+          if (displayName) this.authService.updateCurrentUserName(displayName);
+          this.loadDashboardData();
+          this.cdr.markForCheck();
+          this.refreshInFlight = false;
+        },
+        error: (err) => {
+          console.error('Error syncing dashboard welcome:', err);
+          // Fall back to whatever auth state currently has.
+          this.loadDashboardData();
+          this.cdr.markForCheck();
+          this.refreshInFlight = false;
+        }
+      });
   }
 
   getRgbFromHex(hex: string): string {
@@ -83,7 +144,10 @@ export class Dashboard implements OnInit {
     // Load history
     this.patientService.getHistory().subscribe({
       next: (history) => {
-        this.recentActivity = history.slice(0, 5);
+        // Ensure "recent" list is truly chronological (metrics + docs + records can be merged out of order).
+        this.recentActivity = (history || [])
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 5);
         checkComplete();
       },
       error: (err) => {

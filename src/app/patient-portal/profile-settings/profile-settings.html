@@ -15,23 +15,29 @@
             <div class="row g-3">
               <div class="col-12 col-md-6">
                 <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" [(ngModel)]="profile.name" name="name" required>
+                <input type="text" class="form-control" [(ngModel)]="profile.name" name="name" required
+                  title="Full Name" placeholder="Enter your full name">
               </div>
               <div class="col-12 col-md-6">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" required>
+                <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" disabled
+                  title="Email" placeholder="Email is read-only">
               </div>
               <div class="col-12 col-md-6">
                 <label class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" [(ngModel)]="profile.phone" name="phone">
+                <input type="tel" class="form-control" [(ngModel)]="profile.phone" name="phone"
+                  pkInputFormat="phone"
+                  title="Phone Number" placeholder="+92 300 1234567">
               </div>
               <div class="col-12 col-md-6">
                 <label class="form-label">Date of Birth</label>
-                <input type="date" class="form-control" [(ngModel)]="profile.dateOfBirth" name="dateOfBirth">
+                <input type="date" class="form-control" [(ngModel)]="profile.dateOfBirth" name="dateOfBirth"
+                  title="Date of Birth">
               </div>
               <div class="col-12">
                 <label class="form-label">Address</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="profile.address" name="address"></textarea>
+                <textarea class="form-control" rows="3" [(ngModel)]="profile.address" name="address"
+                  title="Address" placeholder="City, Province (e.g., Sahiwal, Punjab)"></textarea>
               </div>
             </div>
             <div class="mt-4">
@@ -57,6 +63,7 @@
           <div class="mb-3">
             <label class="form-label">CNIC Number</label>
             <input type="text" class="form-control" [(ngModel)]="profile.cnic" name="cnic" 
+                   pkInputFormat="cnic"
                    placeholder="12345-1234567-1" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}">
             <small class="form-text text-muted">Format: 12345-1234567-1</small>
           </div>
@@ -92,15 +99,15 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">Current Password</label>
-            <input type="password" class="form-control">
+              <input type="password" class="form-control" title="Current Password" placeholder="Current password">
           </div>
           <div class="mb-3">
             <label class="form-label">New Password</label>
-            <input type="password" class="form-control">
+              <input type="password" class="form-control" title="New Password" placeholder="New password">
           </div>
           <div class="mb-3">
             <label class="form-label">Confirm New Password</label>
-            <input type="password" class="form-control">
+              <input type="password" class="form-control" title="Confirm New Password" placeholder="Confirm new password">
           </div>
           <button type="button" class="btn btn-outline-secondary w-100">Update Password</button>
         </div>

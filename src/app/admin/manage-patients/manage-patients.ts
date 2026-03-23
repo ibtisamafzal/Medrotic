@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AdminService, Patient } from '../../services/admin.service';
 import { AlertService } from '../../services/alert.service';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-manage-patients',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './manage-patients.html',
   styleUrl: './manage-patients.scss',
 })

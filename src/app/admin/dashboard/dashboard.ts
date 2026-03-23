@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { AuthService, User } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,9 +12,13 @@ import { AuthService, User } from '../../auth/auth.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   currentUser: User | null = null;
   loading = true;
+  private authSub?: Subscription;
+  private portalSub?: Subscription;
+  private navSub?: Subscription;
+  private refreshInFlight = false;
   metrics = {
     totalPatients: 0,
     totalDoctors: 0,
@@ -40,19 +46,71 @@ export class Dashboard implements OnInit {
   constructor(
     private adminService: AdminService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // Get current user
     this.currentUser = this.authService.currentUserValue;
-    this.loadMetrics();
+    this.authSub = this.authService.currentUser.subscribe((u) => {
+      this.currentUser = u;
+      this.cdr.markForCheck();
+    });
+
+    // Refresh when patient portal data/profile changes happen.
+    this.portalSub = portalUpdated$.subscribe(() => {
+      this.syncWelcomeFromBackendAndLoad();
+    });
+
+    // Ensure dashboards refresh after router back/forward navigation.
+    this.navSub = this.router.events.subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+      const url = event.urlAfterRedirects || event.url || '';
+      if (url.includes('/admin/dashboard')) {
+        this.syncWelcomeFromBackendAndLoad();
+      }
+    });
+
+    this.syncWelcomeFromBackendAndLoad();
+  }
+
+  ngOnDestroy(): void {
+    this.authSub?.unsubscribe();
+    this.portalSub?.unsubscribe();
+    this.navSub?.unsubscribe();
   }
 
   getRgbFromHex(hex: string): string {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return '52, 97, 255';
     return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
+  }
+
+  private reloadAll(): void {
+    this.loadMetrics();
+  }
+
+  private syncWelcomeFromBackendAndLoad(): void {
+    if (this.refreshInFlight) return;
+    this.refreshInFlight = true;
+
+    this.adminService.getProfile().subscribe({
+      next: (resp) => {
+        const data = resp?.data ?? resp?.Data ?? resp ?? {};
+        const name = data?.FullName ?? data?.fullName ?? data?.name ?? data?.Name ?? '';
+        if (name) this.authService.updateCurrentUserName(String(name).trim());
+
+        this.reloadAll();
+        this.cdr.markForCheck();
+        this.refreshInFlight = false;
+      },
+      error: (err) => {
+        console.error('Error syncing admin dashboard:', err);
+        this.reloadAll();
+        this.cdr.markForCheck();
+        this.refreshInFlight = false;
+      }
+    });
   }
 
   loadMetrics() {
@@ -71,13 +129,12 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading analytics:', err);
-        // Set default values for development
-        this.metrics.totalPatients = 1250;
-        this.metrics.totalDoctors = 45;
-        this.metrics.totalUsers = 1295;
-        this.metrics.activeAppointments = 23;
-        this.quickLinks[0].count = 45;
-        this.quickLinks[1].count = 1250;
+        this.metrics.totalPatients = 0;
+        this.metrics.totalDoctors = 0;
+        this.metrics.totalUsers = 0;
+        this.metrics.activeAppointments = 0;
+        this.quickLinks[0].count = 0;
+        this.quickLinks[1].count = 0;
         this.loading = false;
       }
     });
@@ -90,8 +147,8 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading users:', err);
-        this.metrics.pendingVerifications = 3;
-        this.quickLinks[2].count = 3;
+        this.metrics.pendingVerifications = 0;
+        this.quickLinks[2].count = 0;
       }
     });
 
@@ -103,8 +160,8 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading integrations:', err);
-        this.metrics.totalIntegrations = 5;
-        this.quickLinks[4].count = 5;
+        this.metrics.totalIntegrations = 0;
+        this.quickLinks[4].count = 0;
       }
     });
 
@@ -116,8 +173,8 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading repository:', err);
-        this.metrics.repositoryItems = 128;
-        this.quickLinks[5].count = 128;
+        this.metrics.repositoryItems = 0;
+        this.quickLinks[5].count = 0;
       }
     });
   }

@@ -2,6 +2,7 @@ import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core
 import { provideRouter, withPreloading, PreloadAllModules, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { withInterceptorsFromDi } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       // Restore scroll position on route changes
       withInMemoryScrolling({ scrollPositionRestoration: 'top' })
     ),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

@@ -1,15 +1,21 @@
-﻿using Medrotic.Api.DTOs;
-using Medrotic.API.Data; // Added for AppDbContext
-using Medrotic.API.DTOs;
-using Medrotic.API.Models;
-using Medrotic.API.Services;
+using Medrotic.Api.Data;
+using Medrotic.Api.DTOs;
+using Medrotic.Api.Models;
+using Medrotic.Api.Services;
+using Medrotic.Api.Data;
+using Medrotic.Api.DTOs;
+using Medrotic.Api.Models;
+using Medrotic.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // For DB queries
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace Medrotic.API.Controllers
+namespace Medrotic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,223 +24,390 @@ namespace Medrotic.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenService _tokenService;
-        private readonly AppDbContext _context; // Added
+        private readonly AppDbContext _context;
 
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService, AppDbContext context)
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            ITokenService tokenService,
+            AppDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
-            _context = context;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // Public: Patient self-signup
+        private static string NormalizeCnic(string? cnic)
+        {
+            if (string.IsNullOrWhiteSpace(cnic)) return string.Empty;
+            return Regex.Replace(cnic, @"\D", "");
+        }
+
+        private async Task<ApplicationUser?> FindUserByIdentifierAsync(string? identifier)
+        {
+            if (string.IsNullOrWhiteSpace(identifier)) return null;
+
+            var input = identifier.Trim();
+            var normalizedCnic = NormalizeCnic(input);
+
+            if (!string.IsNullOrWhiteSpace(normalizedCnic) && normalizedCnic.Length == 13)
+            {
+                var byCnic = await _context.Users.FirstOrDefaultAsync(u => u.CNIC == normalizedCnic);
+                if (byCnic != null) return byCnic;
+            }
+
+            if (input.Contains("@"))
+            {
+                var byEmail = await _userManager.FindByEmailAsync(input);
+                if (byEmail != null) return byEmail;
+            }
+
+            var normalizedPhone = Regex.Replace(input, @"\s", "");
+            return await _context.Users.FirstOrDefaultAsync(u =>
+                u.PhoneNumber != null &&
+                (
+                    u.PhoneNumber == normalizedPhone ||
+                    u.PhoneNumber.Replace(" ", "") == normalizedPhone
+                ));
+        }
+
+        // ────────────────────────────────────────────────
+        // Patient self-registration (public)
+        // ────────────────────────────────────────────────
         [HttpPost("register-patient")]
         public async Task<IActionResult> RegisterPatient([FromBody] RegisterPatientDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var normalizedCnic = NormalizeCnic(dto.CNIC);
+            if (normalizedCnic.Length != 13)
+            {
+                return BadRequest(new { Message = "CNIC must be exactly 13 digits." });
+            }
 
             if (await _userManager.FindByEmailAsync(dto.Email) != null)
-                return BadRequest(new { Message = "Email already registered." });
+            {
+                return BadRequest(new { Message = "Email is already registered." });
+            }
+            if (await _context.Users.AnyAsync(u => u.CNIC == normalizedCnic))
+            {
+                return BadRequest(new { Message = "CNIC is already registered." });
+            }
 
             var user = new ApplicationUser
             {
+                Id = normalizedCnic,
                 UserName = dto.Email,
                 Email = dto.Email,
-                FullName = dto.FullName,
-                CNIC = dto.CNIC,
+                FullName = dto.FullName ?? string.Empty,
+                CNIC = normalizedCnic,
                 Role = "Patient",
-                City = dto.City,
-                Province = dto.Province,
-                PhoneNumber = dto.PhoneNumber,
+                City = dto.City ?? string.Empty,
+                Province = dto.Province ?? string.Empty,
+                PhoneNumber = dto.PhoneNumber ?? string.Empty,
                 DateOfBirth = dto.DateOfBirth,
-                Gender = dto.Gender
+                Gender = dto.Gender ?? string.Empty
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                return BadRequest(new { Message = string.Join(", ", result.Errors.Select(e => e.Description)) });
+            {
+                return BadRequest(new
+                {
+                    Message = "Patient registration failed.",
+                    Errors = result.Errors.Select(e => e.Description)
+                });
+            }
 
             await _userManager.AddToRoleAsync(user, "Patient");
-            return Ok(new { Message = "Patient registered successfully." });
+
+            return Ok(new { Message = "Patient registered successfully. You can now log in." });
         }
 
-        // Protected: Admin adds doctor or admin
+        // ────────────────────────────────────────────────
+        // Admin adds user (doctor or admin) – protected
+        // ────────────────────────────────────────────────
         [Authorize(Roles = "Admin")]
         [HttpPost("add-user")]
         public async Task<IActionResult> AddUser([FromBody] RegisterUserDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            if (dto.Role == "Doctor" && (string.IsNullOrEmpty(dto.Specialty) || dto.ExperienceYears == null))
-                return BadRequest(new { Message = "Specialty and experience required for doctors." });
+            if (dto.Role == "Doctor" && (string.IsNullOrWhiteSpace(dto.Specialty) || !dto.ExperienceYears.HasValue))
+            {
+                return BadRequest(new { Message = "Specialty and experience years are required for doctors." });
+            }
 
             if (await _userManager.FindByEmailAsync(dto.Email) != null)
-                return BadRequest(new { Message = "Email already registered." });
+            {
+                return BadRequest(new { Message = "Email is already registered." });
+            }
+            var normalizedCnic = NormalizeCnic(dto.CNIC);
+            if (normalizedCnic.Length != 13)
+            {
+                return BadRequest(new { Message = "CNIC must be exactly 13 digits." });
+            }
+            if (await _context.Users.AnyAsync(u => u.CNIC == normalizedCnic))
+            {
+                return BadRequest(new { Message = "CNIC is already registered." });
+            }
 
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
                 Email = dto.Email,
-                FullName = dto.FullName,
+                FullName = dto.FullName ?? string.Empty,
+                CNIC = normalizedCnic,
                 Role = dto.Role,
                 Specialty = dto.Role == "Doctor" ? dto.Specialty : null,
                 ExperienceYears = dto.Role == "Doctor" ? dto.ExperienceYears : null,
-                City = dto.City,
-                Province = dto.Province,
-                PhoneNumber = dto.PhoneNumber,
-                DateOfBirth = (DateTime)dto.DateOfBirth,
-                Gender = dto.Gender
+                City = dto.City ?? string.Empty,
+                Province = dto.Province ?? string.Empty,
+                PhoneNumber = dto.PhoneNumber ?? string.Empty,
+                DateOfBirth = dto.DateOfBirth ?? DateTime.UtcNow.AddYears(-30),
+                Gender = dto.Gender ?? "Not Specified",
+                HospitalId = dto.HospitalId
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                return BadRequest(new { Message = string.Join(", ", result.Errors.Select(e => e.Description)) });
+            {
+                return BadRequest(new
+                {
+                    Message = $"{dto.Role} creation failed.",
+                    Errors = result.Errors.Select(e => e.Description)
+                });
+            }
 
             await _userManager.AddToRoleAsync(user, dto.Role);
-            return Ok(new { Message = $"{dto.Role} added successfully." });
+
+            return Ok(new { Message = $"{dto.Role} account created successfully." });
         }
 
-        // Public: Login for all roles
+        // ────────────────────────────────────────────────
+        // Login – returns token + role + name (public)
+        // ────────────────────────────────────────────────
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null) return Unauthorized(new { Message = "Invalid email or password." });
+            var user = await FindUserByIdentifierAsync(dto.Identifier);
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "Invalid identifier or password." });
+            }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
-            if (!result.Succeeded) return Unauthorized(new { Message = "Invalid email or password." });
+            // Enable lockout on failure
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
+
+            if (signInResult.IsLockedOut)
+            {
+                return Unauthorized(new { Message = "Account is locked out due to too many failed attempts. Try again later." });
+            }
+
+            if (!signInResult.Succeeded)
+            {
+                return Unauthorized(new { Message = "Invalid identifier or password." });
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault() ?? user.Role;
+            var role = roles.FirstOrDefault() ?? user.Role ?? "Unknown";
 
             var token = _tokenService.CreateToken(user, role);
 
-            return Ok(new UserResponseDto { Token = token, Role = role, FullName = user.FullName });
+            return Ok(new UserResponseDto
+            {
+                Token = token,
+                Role = role,
+                FullName = user.FullName ?? string.Empty
+            });
         }
 
-        // Public: Forget password (generates OTP and stores in DB)
+        // ────────────────────────────────────────────────
+        // Forget Password – generate OTP (public)
+        // ────────────────────────────────────────────────
         [HttpPost("forget-password")]
         public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null) return BadRequest(new { Message = "Email not found." });
+            if (user == null)
+            {
+                return BadRequest(new { Message = "No account found with this email." });
+            }
 
-            // Generate OTP
-            var otp = new Random().Next(100000, 999999).ToString();
+            // Invalidate old unused OTPs
+            var oldOtps = await _context.Otps
+                .Where(o => o.UserId == user.Id && !o.IsUsed)
+                .ToListAsync();
+            _context.Otps.RemoveRange(oldOtps);
+
+            // Generate new OTP
+            var otpCode = new Random().Next(100000, 999999).ToString();
             var expiry = DateTime.UtcNow.AddMinutes(10);
 
-            var otpEntity = new Otp
+            var otp = new Otp
             {
                 UserId = user.Id,
-                Code = otp,
+                Code = otpCode,
                 Expiry = expiry
             };
 
-            _context.Otps.Add(otpEntity);
+            _context.Otps.Add(otp);
             await _context.SaveChangesAsync();
 
-            // Stub "send" OTP (console log; replace with email service)
-            Console.WriteLine($"OTP for {dto.Email}: {otp} (expires in 10 min)");
+            // TODO: Replace console with real email/SMS service (SendGrid, Twilio, etc.)
+            Console.WriteLine($"[OTP] To {dto.Email}: {otpCode} (expires at {expiry:yyyy-MM-dd HH:mm:ss})");
 
-            return Ok(new { Message = "OTP sent to your email." });
+            return Ok(new { Message = "OTP has been sent to your email." });
         }
 
-        // Public: Verify OTP (checks DB, marks as used, generates Identity reset token)
+        // ────────────────────────────────────────────────
+        // Verify OTP (public)
+        // ────────────────────────────────────────────────
         [HttpPost("verify-otp")]
         public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpDto dto)
         {
-            var otp = await _context.Otps
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var otpRecord = await _context.Otps
                 .Include(o => o.User)
-                .FirstOrDefaultAsync(o => o.User.Email == dto.Email && o.Code == dto.Otp && !o.IsUsed && o.Expiry > DateTime.UtcNow);
+                .FirstOrDefaultAsync(o => o.User.Email == dto.Email &&
+                                         o.Code == dto.Otp &&
+                                         !o.IsUsed &&
+                                         o.Expiry > DateTime.UtcNow);
 
-            if (otp == null) return BadRequest(new { Message = "Invalid or expired OTP." });
+            if (otpRecord == null)
+            {
+                return BadRequest(new { Message = "Invalid or expired OTP." });
+            }
 
-            otp.IsUsed = true;
+            otpRecord.IsUsed = true;
             await _context.SaveChangesAsync();
 
-            // Generate Identity reset token
-            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(otp.User);
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(otpRecord.User);
 
-            return Ok(new { Message = "OTP verified.", Token = resetToken });
+            return Ok(new
+            {
+                Message = "OTP verified successfully. Use this token to reset your password.",
+                ResetToken = resetToken
+            });
         }
 
-        // Public: Reset password (validates Identity token)
+        // ────────────────────────────────────────────────
+        // Reset Password (public)
+        // ────────────────────────────────────────────────
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null) return BadRequest(new { Message = "Email not found." });
+            if (user == null)
+            {
+                return BadRequest(new { Message = "No account found with this email." });
+            }
 
             var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
             if (!result.Succeeded)
-                return BadRequest(new { Message = string.Join(", ", result.Errors.Select(e => e.Description)) });
+            {
+                return BadRequest(new
+                {
+                    Message = "Password reset failed.",
+                    Errors = result.Errors.Select(e => e.Description)
+                });
+            }
 
-            // Clean up used OTPs for this user
-            var usedOtps = await _context.Otps.Where(o => o.UserId == user.Id && o.IsUsed).ToListAsync();
+            // Clean up used OTPs
+            var usedOtps = await _context.Otps
+                .Where(o => o.UserId == user.Id && o.IsUsed)
+                .ToListAsync();
+
             _context.Otps.RemoveRange(usedOtps);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Password reset successfully." });
+            return Ok(new { Message = "Password has been reset successfully. You can now log in with the new password." });
         }
 
-        // Public: Resend OTP (invalidates old, generates new)
+        // ────────────────────────────────────────────────
+        // Resend OTP (public)
+        // ────────────────────────────────────────────────
         [HttpPost("resend-otp")]
         public async Task<IActionResult> ResendOtp([FromBody] ForgetPasswordDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user == null) return BadRequest(new { Message = "Email not found." });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            // Invalidate old unused OTPs
-            var oldOtps = await _context.Otps.Where(o => o.UserId == user.Id && !o.IsUsed).ToListAsync();
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+            {
+                return BadRequest(new { Message = "No account found with this email." });
+            }
+
+            // Remove old unused OTPs
+            var oldOtps = await _context.Otps
+                .Where(o => o.UserId == user.Id && !o.IsUsed)
+                .ToListAsync();
+
             _context.Otps.RemoveRange(oldOtps);
             await _context.SaveChangesAsync();
 
             // Generate new OTP
-            var otp = new Random().Next(100000, 999999).ToString();
+            var newOtpCode = new Random().Next(100000, 999999).ToString();
             var expiry = DateTime.UtcNow.AddMinutes(10);
 
-            var otpEntity = new Otp
+            var newOtp = new Otp
             {
                 UserId = user.Id,
-                Code = otp,
+                Code = newOtpCode,
                 Expiry = expiry
             };
 
-            _context.Otps.Add(otpEntity);
+            _context.Otps.Add(newOtp);
             await _context.SaveChangesAsync();
 
-            Console.WriteLine($"New OTP for {dto.Email}: {otp} (expires in 10 min)");
+            // TODO: Replace with real email/SMS
+            Console.WriteLine($"[RESEND OTP] To {dto.Email}: {newOtpCode} (expires at {expiry:yyyy-MM-dd HH:mm:ss})");
 
-            return Ok(new { Message = "New OTP sent to your email." });
+            return Ok(new { Message = "New OTP has been sent to your email." });
         }
 
-        // Test endpoints for roles (to verify in Swagger)
+        // ────────────────────────────────────────────────
+        // Role test endpoints (for debugging in Swagger)
+        // ────────────────────────────────────────────────
         [Authorize(Roles = "Admin")]
         [HttpGet("test-admin")]
-        public IActionResult TestAdmin()
-        {
-            return Ok(new { Message = "Admin access granted." });
-        }
+        public IActionResult TestAdmin() => Ok(new { Message = "Admin access granted successfully." });
 
         [Authorize(Roles = "Doctor")]
         [HttpGet("test-doctor")]
-        public IActionResult TestDoctor()
-        {
-            return Ok(new { Message = "Doctor access granted." });
-        }
+        public IActionResult TestDoctor() => Ok(new { Message = "Doctor access granted successfully." });
 
         [Authorize(Roles = "Patient")]
         [HttpGet("test-patient")]
-        public IActionResult TestPatient()
-        {
-            return Ok(new { Message = "Patient access granted." });
-        }
+        public IActionResult TestPatient() => Ok(new { Message = "Patient access granted successfully." });
     }
 }

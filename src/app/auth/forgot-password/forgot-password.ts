@@ -5,11 +5,12 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService, ForgotPasswordRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss'
 })
@@ -26,32 +27,6 @@ export class ForgotPassword {
     private authService: AuthService,
     public router: Router
   ) {}
-
-  /**
-   * Handle phone input formatting
-   */
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    
-    if (value.startsWith('92')) {
-      value = '+92' + value.substring(2);
-    } else if (value.startsWith('0')) {
-      value = '+92' + value.substring(1);
-    } else if (!value.startsWith('+92')) {
-      value = '+92' + value;
-    }
-    
-    if (value.length > 4) {
-      value = value.slice(0, 4) + ' ' + value.slice(4);
-    }
-    if (value.length > 8) {
-      value = value.slice(0, 8) + ' ' + value.slice(8);
-    }
-    
-    this.phone = value;
-    input.value = value;
-  }
 
   /**
    * Validate form before submission

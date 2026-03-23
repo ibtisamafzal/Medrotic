@@ -74,7 +74,7 @@
           <form *ngIf="isEditing" (ngSubmit)="savePatient()">
             <div class="mb-3">
               <label class="form-label">Phone</label>
-              <input type="tel" class="form-control" [(ngModel)]="editForm.phone" name="phone">
+              <input type="tel" class="form-control" [(ngModel)]="editForm.phone" name="phone" pkInputFormat="phone">
             </div>
             <div class="mb-3">
               <label class="form-label">Email</label>

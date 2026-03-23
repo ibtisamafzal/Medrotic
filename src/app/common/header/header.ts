@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../auth/auth.service';
@@ -22,7 +22,8 @@ export class Header implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +39,8 @@ export class Header implements OnInit, OnDestroy {
     this.userSubscription = this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
       this.isLoggedIn = !!user;
+      // With zoneless change detection, ensure header reflects updates immediately.
+      this.cdr.markForCheck();
     });
   }
 

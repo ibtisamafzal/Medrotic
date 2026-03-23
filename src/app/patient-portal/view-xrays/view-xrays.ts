@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PatientService, Xray } from '../../services/patient.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-view-xrays',
@@ -8,15 +10,21 @@ import { PatientService, Xray } from '../../services/patient.service';
   templateUrl: './view-xrays.html',
   styleUrl: './view-xrays.scss',
 })
-export class ViewXrays implements OnInit {
+export class ViewXrays implements OnInit, OnDestroy {
   loading = false;
   xrays: Xray[] = [];
   selectedXray: Xray | null = null;
+  private sub?: Subscription;
 
   constructor(private patientService: PatientService) {}
 
   ngOnInit() {
     this.loadXrays();
+    this.sub = portalUpdated$.subscribe(() => this.loadXrays());
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   loadXrays() {

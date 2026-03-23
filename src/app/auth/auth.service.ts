@@ -18,12 +18,12 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email?: string; // Optional - can use phone/cnic for UI, but API requires email
+  email?: string;
   password: string;
   role?: 'admin' | 'doctor' | 'patient'; // Optional for API, but kept for fallback
   rememberMe?: boolean;
-  phone?: string; // For UI purposes
-  cnic?: string; // For UI purposes
+  phone?: string;
+  cnic?: string;
 }
 
 export interface RegisterPatientRequest {
@@ -91,8 +91,20 @@ export class AuthService {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     const storedUser = this.isBrowser ? localStorage.getItem('currentUser') : null;
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    // If we restored an old mock token (no `iss` claim), the backend will reject it with 401.
+    // Only keep tokens that look like real backend JWTs.
+    if (parsedUser?.token) {
+      const decoded = this.decodeToken(parsedUser.token);
+      if (!decoded?.iss) {
+        if (this.isBrowser) {
+          localStorage.removeItem('currentUser');
+          localStorage.removeItem('rememberMe');
+        }
+      }
+    }
     this.currentUserSubject = new BehaviorSubject<User | null>(
-      storedUser ? JSON.parse(storedUser) : null
+      (parsedUser?.token && this.decodeToken(parsedUser.token)?.iss) ? parsedUser : null
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -117,10 +129,35 @@ export class AuthService {
     return this.currentUserValue?.token || null;
   }
 
+  /**
+   * Keeps UI real-time in sync after profile edits (without requiring logout/login).
+   * Updates only the user's display name; token/role stay unchanged.
+   */
+  public updateCurrentUserName(newName: string): void {
+    const current = this.currentUserSubject.value;
+    if (!current) return;
+
+    const trimmed = (newName ?? '').trim();
+    const updated: User = {
+      ...current,
+      name: trimmed || current.name
+    };
+
+    this.currentUserSubject.next(updated);
+
+    if (this.isBrowser) {
+      localStorage.setItem('currentUser', JSON.stringify(updated));
+    }
+  }
+
   decodeToken(token: string): any {
     try {
       const payload = token.split('.')[1];
-      return JSON.parse(atob(payload));
+      // JWT payload is base64url (uses '-' and '_' instead of '+' and '/').
+      // Convert to base64 so `atob` can decode it.
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+      return JSON.parse(atob(padded));
     } catch (error) {
       console.error('Error decoding token:', error);
       return null;
@@ -139,62 +176,16 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<User> {
-    // Convert phone/cnic to email if needed (API only accepts email)
-    // For now, we'll require email - phone/cnic login would need backend support
-    if (!credentials.email) {
-      return throwError(() => new Error('Email is required for login'));
+    const identifier = (credentials.email || credentials.phone || credentials.cnic || '').trim();
+    if (!identifier) {
+      return throwError(() => new Error('Email, phone, or CNIC is required for login'));
     }
 
-    // Check for default credentials first (fallback)
-    const role = credentials.role || 'patient';
-    if (credentials.email && isDefaultAdminCredentials(credentials.email, credentials.password, role)) {
-      const defaultAdmin = createDefaultAdminUser();
-      if (this.isBrowser) {
-        localStorage.setItem('currentUser', JSON.stringify(defaultAdmin));
-        if (credentials.rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-        }
-      }
-      this.currentUserSubject.next(defaultAdmin);
-      return new Observable(observer => {
-        observer.next(defaultAdmin);
-        observer.complete();
-      });
-    }
-
-    if (credentials.email && isDefaultDoctorCredentials(credentials.email, credentials.password, role)) {
-      const defaultDoctor = createDefaultDoctorUser();
-      if (this.isBrowser) {
-        localStorage.setItem('currentUser', JSON.stringify(defaultDoctor));
-        if (credentials.rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-        }
-      }
-      this.currentUserSubject.next(defaultDoctor);
-      return new Observable(observer => {
-        observer.next(defaultDoctor);
-        observer.complete();
-      });
-    }
-
-    if (credentials.email && isDefaultPatientCredentials(credentials.email, credentials.password, role)) {
-      const defaultPatient = createDefaultPatientUser();
-      if (this.isBrowser) {
-        localStorage.setItem('currentUser', JSON.stringify(defaultPatient));
-        if (credentials.rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-        }
-      }
-      this.currentUserSubject.next(defaultPatient);
-      return new Observable(observer => {
-        observer.next(defaultPatient);
-        observer.complete();
-      });
-    }
-
-    // API call - API only accepts email and password
     const apiRequest = {
-      email: credentials.email,
+      identifier,
+      // Backward compatibility: old backend expects Email field.
+      // New backend ignores it and uses `identifier`.
+      email: credentials.email || identifier,
       password: credentials.password
     };
 
@@ -203,7 +194,7 @@ export class AuthService {
         // Convert API response to User format
         const user: User = {
           id: '', // API doesn't return id
-          email: credentials.email,
+          email: credentials.email || '',
           role: response.role.toLowerCase() as 'admin' | 'doctor' | 'patient',
           name: response.fullName,
           token: response.token
@@ -410,10 +401,24 @@ export class AuthService {
         try {
           const user = JSON.parse(storedUser);
           // Check if token is still valid
-          if (user.token && !this.isTokenExpired()) {
-            this.currentUserSubject.next(user);
+          if (user.token) {
+            const decoded = this.decodeToken(user.token);
+            // Reject old mock tokens (they don't include `iss` claim).
+            if (!decoded?.iss) {
+              localStorage.removeItem('rememberMe');
+              localStorage.removeItem('currentUser');
+              this.currentUserSubject.next(null);
+              return;
+            }
+
+            if (!this.isTokenExpired()) {
+              this.currentUserSubject.next(user);
+            } else {
+              // Token expired, clear rememberMe
+              localStorage.removeItem('rememberMe');
+              localStorage.removeItem('currentUser');
+            }
           } else {
-            // Token expired, clear rememberMe
             localStorage.removeItem('rememberMe');
             localStorage.removeItem('currentUser');
           }
@@ -421,6 +426,7 @@ export class AuthService {
           console.error('Error restoring session:', error);
           localStorage.removeItem('rememberMe');
           localStorage.removeItem('currentUser');
+          this.currentUserSubject.next(null);
         }
       }
     }

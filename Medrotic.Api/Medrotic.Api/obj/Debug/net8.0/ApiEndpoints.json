@@ -1,6 +1,771 @@
 [
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetAdmins",
+    "RelativePath": "api/admin/admins",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "AddAdmin",
+    "RelativePath": "api/admin/admins",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.RegisterUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateAdmin",
+    "RelativePath": "api/admin/admins/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.UpdateUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeleteAdmin",
+    "RelativePath": "api/admin/admins/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetAIResults",
+    "RelativePath": "api/admin/ai-results",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "ApproveAIResult",
+    "RelativePath": "api/admin/ai-results/{id}/approve",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ApproveAIResultDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetAnalytics",
+    "RelativePath": "api/admin/analytics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetKpis",
+    "RelativePath": "api/admin/analytics/kpis",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetDoctors",
+    "RelativePath": "api/admin/doctors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "city",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "specialty",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "disease",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "experience",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "AddDoctor",
+    "RelativePath": "api/admin/doctors",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.RegisterUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateDoctor",
+    "RelativePath": "api/admin/doctors/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.UpdateUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeleteDoctor",
+    "RelativePath": "api/admin/doctors/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "VerifyDoctor",
+    "RelativePath": "api/admin/doctors/{id}/verify",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Medrotic.Api.Controllers.AdminController\u002BVerifyDoctorRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetDocumentsOverview",
+    "RelativePath": "api/admin/documents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetHospitals",
+    "RelativePath": "api/admin/hospitals",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "AddHospital",
+    "RelativePath": "api/admin/hospitals",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.HospitalDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetHospital",
+    "RelativePath": "api/admin/hospitals/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateHospital",
+    "RelativePath": "api/admin/hospitals/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.HospitalDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeleteHospital",
+    "RelativePath": "api/admin/hospitals/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetIntegrations",
+    "RelativePath": "api/admin/integrations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "CreateIntegration",
+    "RelativePath": "api/admin/integrations",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.Controllers.AdminController\u002BIntegrationItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateIntegration",
+    "RelativePath": "api/admin/integrations/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.Controllers.AdminController\u002BIntegrationItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeleteIntegration",
+    "RelativePath": "api/admin/integrations/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetLogs",
+    "RelativePath": "api/admin/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetErrorLogs",
+    "RelativePath": "api/admin/logs/errors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetMedicalRecordsOverview",
+    "RelativePath": "api/admin/medical-records",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetNotifications",
+    "RelativePath": "api/admin/notifications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "SendNotification",
+    "RelativePath": "api/admin/notifications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.SendNotificationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "MarkNotificationAsRead",
+    "RelativePath": "api/admin/notifications/{id}/read",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetPatients",
+    "RelativePath": "api/admin/patients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdatePatient",
+    "RelativePath": "api/admin/patients/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.UpdateUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeletePatient",
+    "RelativePath": "api/admin/patients/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetPerformance",
+    "RelativePath": "api/admin/performance",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetProfile",
+    "RelativePath": "api/admin/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/admin/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ProfileUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetRepository",
+    "RelativePath": "api/admin/repository",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "DeleteRepositoryItem",
+    "RelativePath": "api/admin/repository/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UploadRepositoryItem",
+    "RelativePath": "api/admin/repository/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "type",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "GetUsers",
+    "RelativePath": "api/admin/users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "ApproveUser",
+    "RelativePath": "api/admin/users/{id}/approve",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "RejectUser",
+    "RelativePath": "api/admin/users/{id}/reject",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateUserRole",
+    "RelativePath": "api/admin/users/{id}/role",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Medrotic.Api.Controllers.AdminController\u002BUpdateUserRoleRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "AddUser",
     "RelativePath": "api/Auth/add-user",
     "HttpMethod": "POST",
@@ -9,14 +774,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.RegisterUserDto",
+        "Type": "Medrotic.Api.DTOs.RegisterUserDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "ForgetPassword",
     "RelativePath": "api/Auth/forget-password",
     "HttpMethod": "POST",
@@ -25,14 +790,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.ForgetPasswordDto",
+        "Type": "Medrotic.Api.DTOs.ForgetPasswordDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",
@@ -41,14 +806,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.LoginDto",
+        "Type": "Medrotic.Api.DTOs.LoginDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "RegisterPatient",
     "RelativePath": "api/Auth/register-patient",
     "HttpMethod": "POST",
@@ -57,14 +822,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.RegisterPatientDto",
+        "Type": "Medrotic.Api.DTOs.RegisterPatientDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "ResendOtp",
     "RelativePath": "api/Auth/resend-otp",
     "HttpMethod": "POST",
@@ -73,14 +838,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.ForgetPasswordDto",
+        "Type": "Medrotic.Api.DTOs.ForgetPasswordDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "ResetPassword",
     "RelativePath": "api/Auth/reset-password",
     "HttpMethod": "POST",
@@ -89,14 +854,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Medrotic.API.DTOs.ResetPasswordDto",
+        "Type": "Medrotic.Api.DTOs.ResetPasswordDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "TestAdmin",
     "RelativePath": "api/Auth/test-admin",
     "HttpMethod": "GET",
@@ -106,7 +871,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "TestDoctor",
     "RelativePath": "api/Auth/test-doctor",
     "HttpMethod": "GET",
@@ -116,7 +881,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "TestPatient",
     "RelativePath": "api/Auth/test-patient",
     "HttpMethod": "GET",
@@ -126,7 +891,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Medrotic.API.Controllers.AuthController",
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "VerifyOtp",
     "RelativePath": "api/Auth/verify-otp",
     "HttpMethod": "POST",
@@ -136,6 +901,722 @@
       {
         "Name": "dto",
         "Type": "Medrotic.Api.DTOs.VerifyOtpDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "ApproveAIResult",
+    "RelativePath": "api/doctor/ai-results/{id}/approve",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetAnalytics",
+    "RelativePath": "api/doctor/analytics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "AddAppointment",
+    "RelativePath": "api/doctor/appointments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.AddAppointmentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetAppointments",
+    "RelativePath": "api/doctor/appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "UpdateAppointment",
+    "RelativePath": "api/doctor/appointments/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.AddAppointmentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "DeleteAppointment",
+    "RelativePath": "api/doctor/appointments/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetDocuments",
+    "RelativePath": "api/doctor/documents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "DeleteDocument",
+    "RelativePath": "api/doctor/documents/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetMessages",
+    "RelativePath": "api/doctor/messages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "SendNotification",
+    "RelativePath": "api/doctor/patients/{patientId}/notifications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.SendNotificationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "AddPatientRecord",
+    "RelativePath": "api/doctor/patients/{patientId}/records",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "Diagnosis",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Treatment",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Disease",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RecordDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "ReportFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetPatientRecords",
+    "RelativePath": "api/doctor/patients/{patientId}/records",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "UpdatePatientRecord",
+    "RelativePath": "api/doctor/patients/{patientId}/records/{recordId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "recordId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.AddPatientRecordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "DeletePatientRecord",
+    "RelativePath": "api/doctor/patients/{patientId}/records/{recordId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "recordId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetPrescriptions",
+    "RelativePath": "api/doctor/prescriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetProfile",
+    "RelativePath": "api/doctor/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/doctor/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ProfileUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetXrays",
+    "RelativePath": "api/doctor/xrays",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetPersonalAnalytics",
+    "RelativePath": "api/patient/analytics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "Chatbot",
+    "RelativePath": "api/patient/chatbot",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ChatbotMessageDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "SearchDoctors",
+    "RelativePath": "api/patient/doctors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "city",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "specialty",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "disease",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "experience",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetMyDocuments",
+    "RelativePath": "api/patient/documents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetMetrics",
+    "RelativePath": "api/patient/metrics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "AddMetrics",
+    "RelativePath": "api/patient/metrics",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.HealthMetricDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetMyNotifications",
+    "RelativePath": "api/patient/notifications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "MarkAsRead",
+    "RelativePath": "api/patient/notifications/{id}/read",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetPrescriptions",
+    "RelativePath": "api/patient/prescriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetProfile",
+    "RelativePath": "api/patient/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/patient/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ProfileUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetMyRecords",
+    "RelativePath": "api/patient/records",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "ExportRecords",
+    "RelativePath": "api/patient/records/export",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "format",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "UploadDocument",
+    "RelativePath": "api/patient/upload-document",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DocumentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "UploadMedicalHistory",
+    "RelativePath": "api/patient/upload-history",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DoctorName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "HospitalName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Disease",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RecordDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "ReportFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "VerifyCnic",
+    "RelativePath": "api/patient/verify-cnic",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.VerifyCnicDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetXrays",
+    "RelativePath": "api/patient/xrays",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.UsersController",
+    "Method": "GetUserById",
+    "RelativePath": "api/users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

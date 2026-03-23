@@ -25,18 +25,26 @@
                   class="form-control" 
                   [(ngModel)]="patient.name"
                   name="name"
+                  placeholder="Enter full name"
+                  title="Full Name"
                   required>
               </div>
 
               <div class="col-12 col-md-6">
                 <label class="form-label">CNIC <span class="text-danger">*</span></label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  [(ngModel)]="patient.cnic"
-                  name="cnic"
-                  placeholder="12345-1234567-1"
-                  required>
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    [(ngModel)]="patient.cnic"
+                    name="cnic"
+                  pkInputFormat="cnic"
+                    placeholder="12345-1234567-1"
+                    required>
+                  <button type="button" class="btn btn-outline-primary" (click)="searchByCnic()" [disabled]="loading">
+                    Search
+                  </button>
+                </div>
               </div>
 
               <div class="col-12 col-md-6">
@@ -45,7 +53,9 @@
                   type="email" 
                   class="form-control" 
                   [(ngModel)]="patient.email"
-                  name="email">
+                  name="email"
+                  placeholder="name@example.com"
+                  title="Email">
               </div>
 
               <div class="col-12 col-md-6">
@@ -54,7 +64,10 @@
                   type="tel" 
                   class="form-control" 
                   [(ngModel)]="patient.phone"
-                  name="phone">
+                  name="phone"
+                  pkInputFormat="phone"
+                  placeholder="03xx-xxxxxxx"
+                  title="Phone">
               </div>
 
               <div class="col-12 col-md-6">
@@ -63,12 +76,13 @@
                   type="date" 
                   class="form-control" 
                   [(ngModel)]="patient.dateOfBirth"
-                  name="dateOfBirth">
+                  name="dateOfBirth"
+                  title="Date of Birth">
               </div>
 
               <div class="col-12 col-md-6">
                 <label class="form-label">Gender</label>
-                <select class="form-select" [(ngModel)]="patient.gender" name="gender">
+                <select class="form-select" [(ngModel)]="patient.gender" name="gender" title="Gender">
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -81,7 +95,9 @@
                   class="form-control" 
                   rows="3"
                   [(ngModel)]="patient.address"
-                  name="address"></textarea>
+                  name="address"
+                  placeholder="City, area, street"
+                  title="Address"></textarea>
               </div>
 
               <div class="col-12">
@@ -91,10 +107,18 @@
                   rows="4"
                   [(ngModel)]="patient.medicalHistory"
                   name="medicalHistory"
+                  title="Medical History"
                   placeholder="Previous conditions, allergies, medications, etc."></textarea>
               </div>
 
               <div class="col-12">
+                <div *ngIf="existingPatientFound" class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
+                  <span>Patient already exists for this CNIC.</span>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="continueWithExistingPatient()">
+                    Continue With Existing
+                  </button>
+                </div>
+
                 <div class="d-flex gap-2 justify-content-end">
                   <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/patient-management">
                     Cancel

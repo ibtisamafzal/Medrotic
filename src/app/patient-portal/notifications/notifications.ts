@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PatientService, Notification } from '../../services/patient.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-notifications',
@@ -9,14 +11,20 @@ import { PatientService, Notification } from '../../services/patient.service';
   templateUrl: './notifications.html',
   styleUrl: './notifications.scss',
 })
-export class Notifications implements OnInit {
+export class Notifications implements OnInit, OnDestroy {
   loading = false;
   notifications: Notification[] = [];
+  private sub?: Subscription;
 
   constructor(private patientService: PatientService) {}
 
   ngOnInit() {
     this.loadNotifications();
+    this.sub = portalUpdated$.subscribe(() => this.loadNotifications());
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   loadNotifications() {

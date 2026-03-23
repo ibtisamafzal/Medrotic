@@ -26,30 +26,27 @@ Medrotic is a healthcare platform with:
 
 This document describes the **AI-related backend contracts** (chatbot, OCR, X-ray, test report analysis) that are consumed by the Angular app through `PatientService`, `AuthService`, and related services.
 
-As of 05 March 2026, this document is aligned with the current Angular codebase in this repository.
+As of 23 March 2026, this document is aligned with the current Angular + backend integration in this repository.
 
 ## Environment & Base URLs
 
-- **Local development backend**: `https://localhost:7124` (see `src/environments/environment.ts`).
+- **Local development backend**: `http://localhost:7124` (see `src/environments/environment.ts`).
 - **Production backend**: `https://your-production-api.com` (placeholder, set in `src/environments/environment.prod.ts`).
 - **Auth base URL**: `${apiUrl}/api/Auth` (used by `AuthService` for login, registration, and password flows).
-- **Patient AI base URL**: `${apiUrl}/api/patient` (for example, `https://localhost:7124/api/patient` in development).  
-  The Angular app calls these as relative paths (`/api/patient/...`); external clients should prefix them with `apiUrl`.
+- **Patient AI base URL**: `${apiUrl}/api/patient` (for example, `http://localhost:7124/api/patient` in development).
 
 ## AI Endpoints
 
 The Angular frontend currently uses the following AI-related endpoints on the backend:
 
-- **POST `/api/patient/chatbot`**: AI-powered patient chatbot (see details below).
-- **POST `/api/patient/reports`**: Upload a lab/test report document for AI analysis.
-- **GET `/api/patient/reports`**: List previously analyzed test reports.
-- **GET `/api/patient/xrays`**: Fetch X-ray records with AI analysis summaries.
-- **GET `/api/patient/prescriptions`**: Fetch prescriptions, potentially enriched by AI/OCR.
-- **POST `/api/patient/documents`**: Upload general health documents (may be processed by AI depending on type).
+- **POST `/api/patient/chatbot`**: AI-powered patient chatbot.
+- **POST `/api/patient/upload-document`**: Upload report/document for AI workflow.
+- **GET `/api/patient/documents`**: List uploaded documents and states.
+- **GET `/api/patient/xrays`**: Fetch X-ray records with analysis summaries.
+- **GET `/api/patient/prescriptions`**: Fetch prescription records (including OCR-derived structures where available).
+- **POST `/api/doctor/patients/{patientId}/records`**: Doctor uploads prescription/X-ray records that feed patient-facing views.
 
-Doctor-facing upload endpoints (for prescription OCR and X-ray upload) are implemented on the backend (for example, under `/api/doctor/...`) and feed into these patient-facing views.
-
-## AI Endpoints
+Note: Legacy aliases like `/api/patient/reports` and `/api/patient/documents` (POST) are not the current integrated paths.
 
 ### POST /api/patient/chatbot
 AI-powered chatbot for patient queries.
@@ -280,7 +277,7 @@ Extract text and structured data from prescription images.
 
 ### Endpoint Integration
 OCR is integrated into:
-- `POST /api/doctor/prescriptions` (when image is uploaded)
+- `POST /api/doctor/patients/{patientId}/records` (when prescription image/PDF is uploaded)
 - Prescription upload process
 
 ### Input
@@ -351,7 +348,7 @@ Analyze X-ray images to detect abnormalities and provide findings.
 
 ### Endpoint Integration
 X-Ray analysis is integrated into:
-- `POST /api/doctor/xrays` (when X-ray is uploaded)
+- `POST /api/doctor/patients/{patientId}/records` (when X-ray image is uploaded)
 
 ### Input
 - X-ray image file (DICOM, JPG, PNG)
@@ -430,7 +427,7 @@ Analyze lab test reports and extract key findings.
 
 ### Endpoint Integration
 Test report analysis is integrated into:
-- `POST /api/patient/reports` (when test report is uploaded)
+- `POST /api/patient/upload-document` (when test report is uploaded)
 
 ### Input
 - Test report file (PDF, JPG, PNG)
@@ -561,7 +558,7 @@ Test report analysis is integrated into:
 
 ## Response Formats
 
-### Standard AI Response
+### Standard AI Response (Recommended)
 ```json
 {
   "success": true,
@@ -574,7 +571,7 @@ Test report analysis is integrated into:
 }
 ```
 
-### Error Response
+### Error Response (Recommended)
 ```json
 {
   "success": false,
@@ -654,6 +651,6 @@ Test report analysis is integrated into:
 
 ---
 
-**Last Updated:** 2026-03-05
-**Version:** 1.1
+**Last Updated:** 2026-03-23
+**Version:** 1.2
 

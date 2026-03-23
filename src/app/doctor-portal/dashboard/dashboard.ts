@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { DoctorService } from '../../services/doctor.service';
 import { AuthService, User } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,9 +12,13 @@ import { AuthService, User } from '../../auth/auth.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
   currentUser: User | null = null;
   loading = true;
+  private authSub?: Subscription;
+  private portalSub?: Subscription;
+  private navSub?: Subscription;
+  private refreshInFlight = false;
   metrics = {
     totalPatients: 0,
     activePatients: 0,
@@ -30,22 +36,76 @@ export class Dashboard implements OnInit {
   constructor(
     private doctorService: DoctorService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // Get current user
+    // Keep welcome header real-time (zoneless mode needs explicit CD).
     this.currentUser = this.authService.currentUserValue;
-    this.loadMetrics();
-    this.loadRecentPatients();
-    this.loadAssignedPatients();
-    this.loadRecentUploads();
+    this.authSub = this.authService.currentUser.subscribe((u) => {
+      this.currentUser = u;
+      this.cdr.markForCheck();
+    });
+
+    // Refresh doctor dashboard when portal-visible patient changes happen
+    // (e.g., doctor profile edit may trigger a portal update too).
+    this.portalSub = portalUpdated$.subscribe(() => {
+      this.syncWelcomeFromBackendAndLoad();
+    });
+
+    // Also refresh when navigating back/forward to this dashboard.
+    this.navSub = this.router.events.subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+      const url = event.urlAfterRedirects || event.url || '';
+      if (url.includes('/doctor-portal/dashboard')) {
+        this.syncWelcomeFromBackendAndLoad();
+      }
+    });
+
+    this.syncWelcomeFromBackendAndLoad();
+  }
+
+  ngOnDestroy(): void {
+    this.authSub?.unsubscribe();
+    this.portalSub?.unsubscribe();
+    this.navSub?.unsubscribe();
   }
 
   getRgbFromHex(hex: string): string {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return '52, 97, 255';
     return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
+  }
+
+  private reloadAll(): void {
+    this.loadMetrics();
+    this.loadRecentPatients();
+    this.loadAssignedPatients();
+    this.loadRecentUploads();
+  }
+
+  private syncWelcomeFromBackendAndLoad(): void {
+    if (this.refreshInFlight) return;
+    this.refreshInFlight = true;
+
+    this.doctorService.getProfile().subscribe({
+      next: (resp) => {
+        const data = resp?.data ?? resp?.Data ?? resp ?? {};
+        const name = data?.FullName ?? data?.fullName ?? data?.name ?? data?.Name ?? '';
+        if (name) this.authService.updateCurrentUserName(String(name).trim());
+
+        this.reloadAll();
+        this.cdr.markForCheck();
+        this.refreshInFlight = false;
+      },
+      error: (err) => {
+        console.error('Error syncing doctor dashboard:', err);
+        this.reloadAll();
+        this.cdr.markForCheck();
+        this.refreshInFlight = false;
+      }
+    });
   }
 
   loadMetrics() {
@@ -68,8 +128,8 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        this.metrics.totalPatients = 45;
-        this.metrics.activePatients = 38;
+        this.metrics.totalPatients = 0;
+        this.metrics.activePatients = 0;
         checkComplete();
       }
     });
@@ -81,7 +141,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading prescriptions:', err);
-        this.metrics.totalPrescriptions = 120;
+        this.metrics.totalPrescriptions = 0;
         checkComplete();
       }
     });
@@ -93,7 +153,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading xrays:', err);
-        this.metrics.totalXrays = 67;
+        this.metrics.totalXrays = 0;
         checkComplete();
       }
     });
@@ -105,7 +165,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading messages:', err);
-        this.metrics.pendingMessages = 5;
+        this.metrics.pendingMessages = 0;
         checkComplete();
       }
     });
@@ -124,12 +184,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading recent patients:', err);
-        // Mock data for development
-        this.recentPatients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', updatedAt: new Date().toISOString() },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', updatedAt: new Date(Date.now() - 86400000).toISOString() },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', updatedAt: new Date(Date.now() - 172800000).toISOString() }
-        ];
+        this.recentPatients = [];
       }
     });
   }
@@ -144,14 +199,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading assigned patients:', err);
-        // Mock data for development
-        this.assignedPatients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', status: 'active' },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', status: 'active' },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', status: 'active' },
-          { id: '4', name: 'Sarah Williams', cnic: '12345-1234567-4', phone: '+923001234570', status: 'active' },
-          { id: '5', name: 'David Brown', cnic: '12345-1234567-5', phone: '+923001234571', status: 'active' }
-        ];
+        this.assignedPatients = [];
       }
     });
   }
@@ -196,12 +244,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading prescriptions:', err);
-        // Mock data for development
-        this.recentUploads = [
-          { type: 'prescription', id: '1', patientId: '1', date: new Date().toISOString(), title: 'Prescription #1' },
-          { type: 'xray', id: '1', patientId: '2', date: new Date(Date.now() - 3600000).toISOString(), title: 'X-Ray #1' },
-          { type: 'prescription', id: '2', patientId: '3', date: new Date(Date.now() - 7200000).toISOString(), title: 'Prescription #2' }
-        ];
+        this.recentUploads = [];
       }
     });
   }

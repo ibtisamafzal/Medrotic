@@ -142,150 +142,162 @@ D:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.pdb
 D:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.genruntimeconfig.cache
 D:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\ref\Medrotic.Api.dll
 D:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.staticwebassets.endpoints.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.exe
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.deps.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.runtimeconfig.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.pdb
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Azure.Core.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Azure.Identity.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Humanizer.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Identity.Client.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.OpenApi.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Mono.TextTemplating.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.CodeDom.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.AttributedModel.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Convention.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Hosting.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Runtime.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.TypedParts.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Drawing.Common.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Memory.Data.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Runtime.Caching.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Security.Permissions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Windows.Extensions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.AssemblyReference.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfoInputs.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfo.cs
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.CoreCompileInputs.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\scopedcss\bundle\Medrotic.Api.styles.css
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.development.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.DAF09AF7.Up2Date
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\refint\Medrotic.Api.dll
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.pdb
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.genruntimeconfig.cache
-C:\Users\Laptop Solutions\Downloads\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\ref\Medrotic.Api.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.Development.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.staticwebassets.endpoints.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.exe
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.deps.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.runtimeconfig.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.pdb
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Azure.Core.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Azure.Identity.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Humanizer.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.CodeDom.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Memory.Data.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.AssemblyReference.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfoInputs.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfo.cs
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.CoreCompileInputs.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\scopedcss\bundle\Medrotic.Api.styles.css
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.development.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\swae.build.ex.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.DAF09AF7.Up2Date
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\refint\Medrotic.Api.dll
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.pdb
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.genruntimeconfig.cache
+C:\FinalYearProject\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\ref\Medrotic.Api.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.AssemblyReference.cache
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.GeneratedMSBuildEditorConfig.editorconfig
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfoInputs.cache
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfo.cs
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.CoreCompileInputs.cache
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cs
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cache
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\refint\Medrotic.Api.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.pdb
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.Development.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\appsettings.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.staticwebassets.endpoints.json
@@ -407,14 +419,6 @@ D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\S
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.AssemblyReference.cache
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.GeneratedMSBuildEditorConfig.editorconfig
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfoInputs.cache
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.AssemblyInfo.cs
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.csproj.CoreCompileInputs.cache
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cs
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.MvcApplicationPartsAssemblyInfo.cache
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -423,10 +427,429 @@ D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.jso
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.development.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.DAF09AF7.Up2Date
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.dll
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\refint\Medrotic.Api.dll
-D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.pdb
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\Medrotic.Api.genruntimeconfig.cache
 D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\ref\Medrotic.Api.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.exe
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Medrotic.Api.pdb
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Azure.Core.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Azure.Identity.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\FluentValidation.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\FluentValidation.AspNetCore.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\FluentValidation.DependencyInjectionExtensions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Humanizer.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.CodeAnalysis.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.CodeAnalysis.CSharp.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.CodeAnalysis.Workspaces.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Data.SqlClient.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.EntityFrameworkCore.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.EntityFrameworkCore.Design.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Extensions.DependencyModel.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Identity.Client.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.Abstractions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.Logging.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.Protocols.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.IdentityModel.Tokens.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.OpenApi.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.SqlServer.Server.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Microsoft.Win32.SystemEvents.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Mono.TextTemplating.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Swashbuckle.AspNetCore.Swagger.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.CodeDom.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Composition.AttributedModel.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Composition.Convention.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Composition.Hosting.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Composition.Runtime.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Composition.TypedParts.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Configuration.ConfigurationManager.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Drawing.Common.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.IdentityModel.Tokens.Jwt.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Memory.Data.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Runtime.Caching.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Security.Cryptography.ProtectedData.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Security.Permissions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\System.Windows.Extensions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\cs\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\de\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\es\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\fr\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\it\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ja\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ko\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pl\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pt-BR\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ru\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\tr\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin-temp\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\bin-temp\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\bin-temp\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\bin-temp\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\bin-temp\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\metrics_store.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\bin-temp\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\bin-temp\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\bin-temp\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\bin-temp\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\metrics_store.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Medrotic.Api.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Medrotic.Api.pdb
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Azure.Core.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Azure.Identity.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\FluentValidation.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\FluentValidation.AspNetCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\FluentValidation.DependencyInjectionExtensions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Humanizer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Bcl.AsyncInterfaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.CodeAnalysis.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.CodeAnalysis.CSharp.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.CodeAnalysis.Workspaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.EntityFrameworkCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.EntityFrameworkCore.Abstractions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.EntityFrameworkCore.Design.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.EntityFrameworkCore.Relational.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.EntityFrameworkCore.SqlServer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Extensions.DependencyModel.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Identity.Client.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Identity.Client.Extensions.Msal.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.Abstractions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.JsonWebTokens.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.Logging.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.Protocols.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.IdentityModel.Tokens.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.OpenApi.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.SqlServer.Server.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Microsoft.Win32.SystemEvents.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Mono.TextTemplating.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Swashbuckle.AspNetCore.Swagger.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Swashbuckle.AspNetCore.SwaggerGen.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\Swashbuckle.AspNetCore.SwaggerUI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.CodeDom.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Composition.AttributedModel.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Composition.Convention.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Composition.Hosting.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Composition.Runtime.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Composition.TypedParts.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Configuration.ConfigurationManager.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.IdentityModel.Tokens.Jwt.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Memory.Data.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Runtime.Caching.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Security.Cryptography.ProtectedData.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Security.Permissions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\System.Windows.Extensions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\cs\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\de\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\es\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\fr\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\it\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ja\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ko\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pl\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pt-BR\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ru\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\tr\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\bin-temp\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\bin-temp\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\bin-temp\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\bin-temp\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build\metrics_store.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\bin-temp\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\bin-temp\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\bin-temp\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\bin-temp\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\metrics_store.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\bin-temp\appsettings.Development.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\bin-temp\appsettings.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\bin-temp\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\bin-temp\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\_build\metrics_store.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Medrotic.Api.staticwebassets.endpoints.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Medrotic.Api.deps.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Medrotic.Api.runtimeconfig.json
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Medrotic.Api.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Medrotic.Api.pdb
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Azure.Core.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Azure.Identity.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\FluentValidation.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\FluentValidation.AspNetCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\FluentValidation.DependencyInjectionExtensions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Humanizer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Bcl.AsyncInterfaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.CodeAnalysis.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.CodeAnalysis.CSharp.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.CodeAnalysis.Workspaces.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.EntityFrameworkCore.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.EntityFrameworkCore.Abstractions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.EntityFrameworkCore.Design.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.EntityFrameworkCore.Relational.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.EntityFrameworkCore.SqlServer.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Extensions.DependencyModel.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Identity.Client.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Identity.Client.Extensions.Msal.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.Abstractions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.JsonWebTokens.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.Logging.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.Protocols.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.IdentityModel.Tokens.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.OpenApi.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.SqlServer.Server.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Microsoft.Win32.SystemEvents.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Mono.TextTemplating.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Swashbuckle.AspNetCore.Swagger.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Swashbuckle.AspNetCore.SwaggerGen.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\Swashbuckle.AspNetCore.SwaggerUI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.CodeDom.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Composition.AttributedModel.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Composition.Convention.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Composition.Hosting.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Composition.Runtime.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Composition.TypedParts.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Configuration.ConfigurationManager.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.IdentityModel.Tokens.Jwt.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Memory.Data.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Runtime.Caching.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Security.Cryptography.ProtectedData.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Security.Permissions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\System.Windows.Extensions.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\cs\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\de\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\es\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\fr\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\it\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ja\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ko\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pl\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pt-BR\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ru\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\tr\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+d:\Medrotic\Medrotic.Api\Medrotic.Api\_build2\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\bin-temp\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\bin-temp\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\bin-temp\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\bin-temp\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\metrics_store.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\bin-temp\appsettings.Development.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\bin-temp\appsettings.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\bin-temp\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\bin-temp\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\bin-temp\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\Medrotic.Api.deps.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\Medrotic.Api.runtimeconfig.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\Medrotic.Api.staticwebassets.endpoints.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\metrics_store.json

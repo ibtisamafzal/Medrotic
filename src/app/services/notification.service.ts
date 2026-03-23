@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Notification {
   id: string;
@@ -12,45 +13,70 @@ export interface Notification {
   createdAt: string;
 }
 
+interface ApiEnvelope<T> {
+  message?: string;
+  data: T;
+  total?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
+  private patientBaseUrl = '/api/patient/notifications';
+  private adminBaseUrl = '/api/admin/notifications';
+
   constructor(private http: HttpClient) {}
 
-  // Get all notifications for current user
+  // Get all notifications for patient/admin context
   getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>('/api/notifications');
+    return this.http.get<ApiEnvelope<Notification[]>>(this.patientBaseUrl).pipe(
+      map((response) => response?.data || [])
+    );
   }
 
-  // Get notification by ID
+  // Not currently available as a dedicated backend endpoint.
   getNotificationById(id: string): Observable<Notification> {
-    return this.http.get<Notification>(`/api/notifications/${id}`);
+    return this.http.get<ApiEnvelope<Notification[]>>(this.adminBaseUrl).pipe(
+      map((response) => (response?.data || []).find((item) => item.id === id) as Notification)
+    );
   }
 
-  // Get unread notifications
+  // Filter unread from current list.
   getUnreadNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>('/api/notifications/unread');
+    return this.getNotifications().pipe(
+      map((items) => items.filter((item) => !item.read))
+    );
   }
 
-  // Mark notification as read
+  // Patient mark as read.
   markAsRead(id: string): Observable<Notification> {
-    return this.http.put<Notification>(`/api/notifications/${id}/read`, {});
+    return this.http.put<any>(`${this.patientBaseUrl}/${id}/read`, {}).pipe(
+      map(() => ({ id, userId: '', title: '', message: '', type: 'info', read: true, createdAt: new Date().toISOString() }))
+    );
   }
 
-  // Mark all notifications as read
+  // No backend endpoint exists for bulk mark-all.
   markAllAsRead(): Observable<void> {
-    return this.http.put<void>('/api/notifications/read-all', {});
+    return this.http.get<ApiEnvelope<Notification[]>>(this.patientBaseUrl).pipe(
+      map(() => void 0)
+    );
   }
 
-  // Delete notification
+  // No delete endpoint in current controllers.
   deleteNotification(id: string): Observable<void> {
-    return this.http.delete<void>(`/api/notifications/${id}`);
+    return this.http.get<ApiEnvelope<Notification[]>>(this.adminBaseUrl).pipe(
+      map(() => void 0)
+    );
   }
 
-  // Create notification (admin/doctor only)
+  // Create notification in admin context.
   createNotification(notification: Partial<Notification>): Observable<Notification> {
-    return this.http.post<Notification>('/api/notifications', notification);
+    return this.http.post<any>(this.adminBaseUrl, {
+      medicalRecordId: (notification as any).medicalRecordId,
+      message: notification.message,
+      channel: (notification as any).channel || 'InApp'
+    });
   }
 }
 

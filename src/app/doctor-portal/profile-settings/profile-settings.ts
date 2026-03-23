@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { DoctorService, Doctor } from '../../services/doctor.service';
 import { AuthService } from '../../auth/auth.service';
 import { firstValueFrom } from 'rxjs';
+import { notifyPortalUpdated } from '../../services/patient.service';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-profile-settings',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PakInputFormatDirective],
   templateUrl: './profile-settings.html',
   styleUrl: './profile-settings.scss',
 })
@@ -44,52 +46,58 @@ export class ProfileSettings implements OnInit {
 
   async loadProfile() {
     this.loading = true;
-    
-    // Try to get current user from auth service first
     const currentUser = this.authService.currentUserValue;
-    
-    if (currentUser && currentUser.email) {
-      // Try to load doctor profile by email
-      try {
-        const doctors = await firstValueFrom(this.doctorService.getDoctors());
-        const doctor = doctors.find(d => d.email === currentUser.email);
-        if (doctor) {
-          this.doctor = doctor;
-          this.loading = false;
-          return;
-        }
-      } catch (err) {
-        console.error('Error loading doctors:', err);
-      }
+    try {
+      const resp = await firstValueFrom(this.doctorService.getProfile());
+      const d = resp?.data ?? resp?.Data ?? resp ?? {};
+      this.doctor = {
+        id: d?.id ?? d?.Id,
+        name: d?.fullName ?? d?.FullName ?? currentUser?.name ?? '',
+        email: d?.email ?? d?.Email ?? currentUser?.email ?? '',
+        phone: d?.phoneNumber ?? d?.PhoneNumber ?? '',
+        specialization: d?.specialty ?? d?.Specialty ?? '',
+        licenseNumber: d?.cnic ?? d?.CNIC ?? '',
+        hospital: d?.hospitalName ?? ''
+      };
+    } catch (err) {
+      console.error('Error loading doctor profile:', err);
+      this.error = 'Unable to load profile from API.';
+      this.doctor = {
+        id: '',
+        name: currentUser?.name ?? '',
+        email: currentUser?.email ?? '',
+        phone: '',
+        specialization: '',
+        licenseNumber: '',
+        hospital: ''
+      };
+    } finally {
+      this.loading = false;
     }
-
-    // Fallback to mock data for development
-    this.doctor = {
-      name: currentUser?.name || 'Dr. John Smith',
-      email: currentUser?.email || 'doctor@medrotic.com',
-      phone: '+923001234567',
-      specialization: 'Cardiology',
-      licenseNumber: 'MD12345',
-      hospital: 'Medrotic Hospital'
-    };
-    this.loading = false;
   }
 
   onSubmit() {
-    if (!this.doctor.id) {
-      this.error = 'Doctor ID not found';
-      return;
-    }
-
     this.saving = true;
     this.error = '';
     this.success = false;
 
-    this.doctorService.updateDoctor(this.doctor.id, this.doctor).subscribe({
-      next: (updatedDoctor) => {
-        this.doctor = updatedDoctor;
+    this.doctorService.updateProfile({
+      fullName: this.doctor.name,
+      specialty: this.doctor.specialization,
+      phoneNumber: this.doctor.phone
+    }).subscribe({
+      next: () => {
         this.success = true;
         this.saving = false;
+
+        // Keep dashboard welcome header in real-time (do not wait for logout/login).
+        const current = this.authService.currentUserValue;
+        const nextName = (this.doctor.name ?? '').toString().trim();
+        if (nextName && current?.email && this.doctor.email && current.email === this.doctor.email) {
+          this.authService.updateCurrentUserName(nextName);
+        }
+        notifyPortalUpdated();
+
         setTimeout(() => {
           this.success = false;
         }, 3000);

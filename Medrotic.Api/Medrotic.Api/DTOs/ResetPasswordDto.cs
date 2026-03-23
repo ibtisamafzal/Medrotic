@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Medrotic.API.DTOs
+namespace Medrotic.Api.DTOs
 {
     public class ResetPasswordDto
     {
@@ -12,7 +12,12 @@ namespace Medrotic.API.DTOs
         public string Token { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "New password is required.")]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
+        [MinLength(6, ErrorMessage = "New password must be at least 6 characters.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$", ErrorMessage = "New password must contain uppercase, lowercase, digit, and special character.")]
         public string NewPassword { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Confirm new password is required.")]
+        [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmNewPassword { get; set; } = string.Empty;  // Added
     }
 }

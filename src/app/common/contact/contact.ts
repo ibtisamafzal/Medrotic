@@ -6,10 +6,11 @@ import { Footer } from '../footer/footer';
 import { ContactService, ContactFormData } from '../../services/contact.service';
 import { NavigationService } from '../../services/navigation.service';
 import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
+import { PakInputFormatDirective } from '../shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, ReactiveFormsModule, Header, Footer, ScrollAnimateDirective],
+  imports: [CommonModule, ReactiveFormsModule, Header, Footer, ScrollAnimateDirective, PakInputFormatDirective],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })
@@ -34,7 +35,7 @@ export class Contact implements OnInit {
   ngOnInit(): void {
     this.contactForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^[+]?[(]?[0-9]{1,4}[)]?[-\\s.]?[(]?[0-9]{1,4}[)]?[-\\s.]?[0-9]{1,9}$/)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^(?:\+92[-\s]?)?3\d{2}[-\s]?\d{7}$|^03\d{2}[-\s]?\d{7}$/)]],
       email: ['', [Validators.required, Validators.email]],
       queryType: ['', Validators.required],
       message: ['', [Validators.required, Validators.minLength(10)]],

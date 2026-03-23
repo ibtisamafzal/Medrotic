@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PatientService, HealthMetric } from '../../services/patient.service';
+import { PatientService, HealthMetric, notifyPortalUpdated } from '../../services/patient.service';
 
 @Component({
   selector: 'app-add-metrics',
@@ -58,6 +58,8 @@ export class AddMetrics implements OnInit {
         alert('Health metrics saved successfully');
         this.resetForm();
         this.loadRecentMetrics();
+        // Trigger real-time refresh across portal components (dashboard/history).
+        notifyPortalUpdated();
       },
       error: (err) => {
         console.error('Error saving metrics:', err);

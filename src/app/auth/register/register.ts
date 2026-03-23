@@ -6,11 +6,12 @@ import { AuthService, RegisterPatientRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
 import { AlertService } from '../../services/alert.service';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -45,36 +46,6 @@ export class Register {
     const today = new Date();
     const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
     return maxDate.toISOString().split('T')[0];
-  }
-
-  onCNICInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const formatted = this.authService.formatCNIC(input.value);
-    this.cnic = formatted;
-    input.value = formatted;
-  }
-
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    
-    if (value.startsWith('92')) {
-      value = '+92' + value.substring(2);
-    } else if (value.startsWith('0')) {
-      value = '+92' + value.substring(1);
-    } else if (!value.startsWith('+92')) {
-      value = '+92' + value;
-    }
-    
-    if (value.length > 4) {
-      value = value.slice(0, 4) + ' ' + value.slice(4);
-    }
-    if (value.length > 8) {
-      value = value.slice(0, 8) + ' ' + value.slice(8);
-    }
-    
-    this.phone = value;
-    input.value = value;
   }
 
   togglePasswordVisibility(field: 'password' | 'confirm'): void {
@@ -197,7 +168,7 @@ export class Register {
     this.success = false;
 
     // Format phone number (remove spaces and ensure proper format)
-    const phoneNumber = this.phone.replace(/\s/g, '');
+    const phoneNumber = this.phone.replace(/[\s-]/g, '');
 
     // Format CNIC to 13 digits (remove dashes)
     const cnicDigits = this.cnic.replace(/\D/g, '');
