@@ -68,7 +68,7 @@ namespace Medrotic.Api.Migrations
 
                     b.Property<string>("CNIC")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -151,6 +151,9 @@ namespace Medrotic.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CNIC")
+                        .IsUnique();
+
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
@@ -174,23 +177,23 @@ namespace Medrotic.Api.Migrations
                             AccessFailedCount = 0,
                             CNIC = "35202-1234567-1",
                             City = "Sahiwal",
-                            ConcurrencyStamp = "6f19cbd8-ba75-4346-8675-f5121aa45ff9",
+                            ConcurrencyStamp = "ad62deae-cab2-4444-ad99-91f35e3654c1",
                             DateOfBirth = new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@medrotic.com",
                             EmailConfirmed = false,
                             FullName = "System Administrator",
                             Gender = "Male",
                             HospitalId = "hospital-id-1",
-                            LastActivity = new DateTime(2026, 3, 4, 16, 45, 11, 430, DateTimeKind.Utc).AddTicks(847),
+                            LastActivity = new DateTime(2026, 3, 24, 16, 33, 14, 765, DateTimeKind.Utc).AddTicks(7096),
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MEDROTIC.COM",
                             NormalizedUserName = "ADMIN@MEDROTIC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEF1Y97PdMSfIDLzbemRx2IbW/s7VKYZPjiHZ9BV6+QQbUyBKqH1WmtcfkMMBCc2Z4w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJX5QNsuhk/lYswGHMYGVEZYKrdD1FvfxVg1ZQAlLc3nTr5i3ttmjeTv/wrMAvyUmQ==",
                             PhoneNumber = "03001234567",
                             PhoneNumberConfirmed = false,
                             Province = "Punjab",
                             Role = "Admin",
-                            SecurityStamp = "40af137f-bc98-49c7-a1d6-cd5210bdd669",
+                            SecurityStamp = "32b91f4b-4e27-4ddc-a86a-e6d6ac28be20",
                             TwoFactorEnabled = false,
                             UserName = "admin@medrotic.com"
                         },
@@ -200,7 +203,7 @@ namespace Medrotic.Api.Migrations
                             AccessFailedCount = 0,
                             CNIC = "35202-7654321-9",
                             City = "Sahiwal",
-                            ConcurrencyStamp = "14d59f99-df68-47e2-9d56-559b5651a8fb",
+                            ConcurrencyStamp = "4556dc1a-6890-4846-a6b3-09c881202fa4",
                             DateOfBirth = new DateTime(1992, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "doctor@medrotic.com",
                             EmailConfirmed = false,
@@ -208,16 +211,16 @@ namespace Medrotic.Api.Migrations
                             FullName = "Dr. Ahmed Khan",
                             Gender = "Male",
                             HospitalId = "hospital-id-1",
-                            LastActivity = new DateTime(2026, 3, 4, 16, 45, 11, 533, DateTimeKind.Utc).AddTicks(5045),
+                            LastActivity = new DateTime(2026, 3, 24, 16, 33, 14, 855, DateTimeKind.Utc).AddTicks(8270),
                             LockoutEnabled = false,
                             NormalizedEmail = "DOCTOR@MEDROTIC.COM",
                             NormalizedUserName = "DOCTOR@MEDROTIC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEICAykSi3qGA53IuJjHvfcXe94Hxa4aLBGEQSuLf7fnS9P6UdvvdBMoRw5FnsRXnAw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBRRTTbDQIp/U5AhPayfUUpodUGqDlxSlEGb4igX91IRx4naQ3yLPrTHFiC0g9yJPw==",
                             PhoneNumber = "03007654321",
                             PhoneNumberConfirmed = false,
                             Province = "Punjab",
                             Role = "Doctor",
-                            SecurityStamp = "b2733009-1af0-4ead-a4ac-543c0066b61e",
+                            SecurityStamp = "d7021498-f874-453e-866d-d4f7bdc4235b",
                             Specialty = "Cardiology",
                             TwoFactorEnabled = false,
                             UserName = "doctor@medrotic.com"
@@ -228,22 +231,22 @@ namespace Medrotic.Api.Migrations
                             AccessFailedCount = 0,
                             CNIC = "35202-9876543-2",
                             City = "Sahiwal",
-                            ConcurrencyStamp = "4462d498-cee4-4895-ac56-602a48259cf4",
+                            ConcurrencyStamp = "774c4e19-6d2e-4190-b5f8-079efc936387",
                             DateOfBirth = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "patient@medrotic.com",
                             EmailConfirmed = false,
                             FullName = "Test Patient",
                             Gender = "Female",
-                            LastActivity = new DateTime(2026, 3, 4, 16, 45, 11, 647, DateTimeKind.Utc).AddTicks(4687),
+                            LastActivity = new DateTime(2026, 3, 24, 16, 33, 14, 948, DateTimeKind.Utc).AddTicks(4608),
                             LockoutEnabled = false,
                             NormalizedEmail = "PATIENT@MEDROTIC.COM",
                             NormalizedUserName = "PATIENT@MEDROTIC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPJbMjzhRtkF5ngTjlRD6U7g84nJtVThI5uWfjVYTyUrLVzTvpF59wpYlvcS3dnReQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOVEORPXDeHUBc+Dj3gqUOZUiIoaqDbepx69uoPEx2yNrR5kA/sXmdwduPCyK7Kflg==",
                             PhoneNumber = "03009876543",
                             PhoneNumberConfirmed = false,
                             Province = "Punjab",
                             Role = "Patient",
-                            SecurityStamp = "6ef5c9a5-0134-4607-a55c-a40fb7bf9daf",
+                            SecurityStamp = "4d547b28-7b86-4d00-a4b5-30b68523da17",
                             TwoFactorEnabled = false,
                             UserName = "patient@medrotic.com"
                         });
@@ -484,6 +487,38 @@ namespace Medrotic.Api.Migrations
                     b.ToTable("Otps");
                 });
 
+            modelBuilder.Entity("Medrotic.Api.Models.RepositoryItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UploadedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RepositoryItems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -680,7 +715,7 @@ namespace Medrotic.Api.Migrations
                     b.HasOne("Medrotic.Api.Models.ApplicationUser", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Medrotic.Api.Models.ApplicationUser", "Patient")

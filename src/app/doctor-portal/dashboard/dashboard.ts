@@ -118,6 +118,7 @@ export class Dashboard implements OnInit, OnDestroy {
       if (completedCalls >= totalCalls) {
         this.loading = false;
       }
+      this.cdr.markForCheck();
     };
     
     this.doctorService.getPatients().subscribe({
@@ -181,10 +182,12 @@ export class Dashboard implements OnInit, OnDestroy {
             return dateB - dateA;
           })
           .slice(0, 5);
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading recent patients:', err);
         this.recentPatients = [];
+        this.cdr.markForCheck();
       }
     });
   }
@@ -196,10 +199,12 @@ export class Dashboard implements OnInit, OnDestroy {
         this.assignedPatients = patients
           .filter(p => p.status === 'active')
           .slice(0, 10);
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading assigned patients:', err);
         this.assignedPatients = [];
+        this.cdr.markForCheck();
       }
     });
   }
@@ -235,16 +240,19 @@ export class Dashboard implements OnInit, OnDestroy {
                 return dateB - dateA;
               })
               .slice(0, 10);
+            this.cdr.markForCheck();
           },
           error: (err) => {
             console.error('Error loading xrays:', err);
             this.recentUploads = prescriptionUploads.slice(0, 10);
+            this.cdr.markForCheck();
           }
         });
       },
       error: (err) => {
         console.error('Error loading prescriptions:', err);
         this.recentUploads = [];
+        this.cdr.markForCheck();
       }
     });
   }

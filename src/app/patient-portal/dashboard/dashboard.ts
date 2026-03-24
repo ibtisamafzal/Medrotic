@@ -119,6 +119,7 @@ export class Dashboard implements OnInit {
       if (completedCalls >= totalCalls) {
         this.loading = false;
       }
+      this.cdr.markForCheck();
     };
 
     // Load health metrics

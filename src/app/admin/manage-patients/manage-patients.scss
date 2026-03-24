@@ -11,77 +11,51 @@
 
   .filters-card {
     @extend .admin-card;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     animation-delay: 100ms;
+    padding: 1rem 1.25rem;
   }
 
   .table-card {
     @extend .admin-table-card;
     animation-delay: 200ms;
 
+    .table {
+      table-layout: fixed;
+
+      // Fixed column widths for 6 columns at 1280px (content = 1280 - 280px sidebar - 4rem padding)
+      th:nth-child(1), td:nth-child(1) { width: 18%; } // Name
+      th:nth-child(2), td:nth-child(2) { width: 26%; } // Email
+      th:nth-child(3), td:nth-child(3) { width: 14%; } // Phone
+      th:nth-child(4), td:nth-child(4) { width: 16%; } // DOB
+      th:nth-child(5), td:nth-child(5) { width: 11%; } // Status
+      th:nth-child(6), td:nth-child(6) { width: 15%; } // Actions
+    }
+
     .action-buttons {
       display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      gap: 0.25rem;
+      flex-wrap: nowrap; // Never wrap action buttons
 
       .btn {
-        padding: 0.375rem 0.5rem;
-        border-radius: 8px;
-        transition: all 0.3s ease;
+        padding: 0.25rem 0.375rem;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
 
         &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          transform: translateY(-1px);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
         }
       }
     }
   }
 
-  .modal {
-    &.show {
-      display: block;
-      animation: fadeInUp 0.3s ease-out;
-    }
-
-    .modal-content {
-      border-radius: 16px;
-      border: none;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-      animation: scaleIn 0.3s ease-out;
-
-      .modal-header {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        padding: 1.5rem;
-      }
-
-      .modal-body {
-        padding: 1.5rem;
-
-        .form-label {
-          font-weight: 500;
-          color: #001047;
-          margin-bottom: 0.5rem;
-        }
-
-        .form-control,
-        .form-select {
-          border-radius: 8px;
-          border: 1.5px solid #e5e7eb;
-          padding: 0.625rem 1rem;
-
-          &:focus {
-            border-color: #3461ff;
-            box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.1);
-          }
-        }
-      }
-
-      .modal-footer {
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
-        padding: 1.5rem;
-      }
-    }
-  }
+  // Local modal overrides removed — global admin-styles.scss .modal handles display.
+  // The global .modal.show sets display: flex which correctly positions modal
+  // above header. DO NOT override with display: block here.
 
   .modal-backdrop {
     background: rgba(0, 0, 0, 0.5);

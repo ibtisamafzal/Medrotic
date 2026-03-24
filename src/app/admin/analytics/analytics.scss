@@ -15,6 +15,7 @@
     align-items: center;
     gap: 1rem;
     min-height: 120px;
+    height: 100%;
 
     .kpi-icon {
       width: 56px;
@@ -55,6 +56,12 @@
       font-weight: 600;
       color: #001047;
       margin: 0 0 1rem 0;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 250px;
+      width: 100%;
     }
 
     .chart-placeholder {

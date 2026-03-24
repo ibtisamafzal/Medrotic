@@ -1,5 +1,5 @@
 <div class="user-verification-page">
-  <div class="page-header mb-4 fade-in-down">
+  <div class="page-header mb-3 fade-in-down">
     <div>
       <h2 class="page-title">User Verification</h2>
       <p class="page-subtitle">Approve or deny user registrations and manage role assignments</p>
@@ -7,18 +7,18 @@
   </div>
 
   <!-- Filters -->
-  <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
+  <div class="filters-card mb-3 fade-in-up" [style.animation-delay]="'100ms'">
     <div class="row g-3">
       <div class="col-md-6">
-        <input 
-          type="text" 
-          class="form-control" 
+        <input
+          type="text"
+          class="form-control"
           placeholder="Search by name or email..."
           [(ngModel)]="searchTerm"
           (input)="onSearchChange()">
       </div>
       <div class="col-md-6">
-        <select class="form-select" [(ngModel)]="roleFilter" (change)="onRoleFilterChange()">
+        <select class="form-select" [(ngModel)]="roleFilter" (change)="onRoleFilterChange()" title="Filter by role" aria-label="Filter by role">
           <option value="all">All Roles</option>
           <option value="admin">Admin</option>
           <option value="doctor">Doctor</option>
@@ -28,13 +28,75 @@
     </div>
   </div>
 
+  <!-- Bulk Action Bar — appears when items selected -->
+  <div class="bulk-action-bar fade-in-up" *ngIf="selectedIds.size > 0" [style.animation-delay]="'50ms'">
+    <span class="bulk-count">
+      <strong>{{ selectedIds.size }}</strong> user{{ selectedIds.size === 1 ? '' : 's' }} selected
+    </span>
+    <div class="bulk-buttons">
+      <button
+        class="btn btn-success btn-sm"
+        (click)="requestBulkApprove()"
+        [disabled]="bulkProcessing"
+        title="Approve all selected">
+        <svg *ngIf="!bulkProcessing" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span *ngIf="bulkProcessing" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Approve All
+      </button>
+      <button
+        class="btn btn-danger btn-sm"
+        (click)="requestBulkReject()"
+        [disabled]="bulkProcessing"
+        title="Reject all selected">
+        <svg *ngIf="!bulkProcessing" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span *ngIf="bulkProcessing" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Reject All
+      </button>
+      <button class="btn btn-outline-secondary btn-sm" (click)="selectedIds.clear()" title="Clear selection">
+        Clear
+      </button>
+    </div>
+  </div>
+
   <!-- Pending Users -->
   <div class="section-card fade-in-up" [style.animation-delay]="'200ms'">
-    <h3 class="section-title mb-4">Pending Verifications ({{ pendingUsers.length }})</h3>
-    
+    <!-- Header row with Select All -->
+    <div class="section-header" *ngIf="pendingUsers.length > 0">
+      <div class="d-flex align-items-center gap-3">
+        <label class="select-all-label" title="Select all visible users">
+          <input
+            type="checkbox"
+            class="form-check-input select-all-check"
+            [checked]="allSelected"
+            [indeterminate]="someSelected"
+            (change)="toggleSelectAll()">
+          <span>Select All</span>
+        </label>
+        <h3 class="section-title mb-0">Pending Verifications ({{ pendingUsers.length }})</h3>
+      </div>
+    </div>
+    <h3 class="section-title mb-4" *ngIf="pendingUsers.length === 0">Pending Verifications (0)</h3>
+
     <div class="row g-3" *ngIf="pendingUsers.length > 0">
       <div class="col-md-6 col-lg-4" *ngFor="let user of pendingUsers; let i = index">
-        <div class="user-card fade-in-up" [style.animation-delay]="(300 + i * 50) + 'ms'">
+        <div
+          class="user-card fade-in-up"
+          [class.selected]="selectedIds.has(user.id)"
+          [class.processing]="processingInfo?.id === user.id || (bulkProcessing && selectedIds.has(user.id))"
+          [style.animation-delay]="(300 + i * 50) + 'ms'">
+
+          <!-- Selection checkbox -->
+          <label class="card-select-checkbox" [title]="'Select ' + user.name" [attr.for]="'select-user-' + user.id">
+            <input
+              id="select-user-{{user.id}}"
+              type="checkbox"
+              class="form-check-input"
+              [checked]="selectedIds.has(user.id)"
+              (change)="toggleSelect(user)"
+              [attr.aria-label]="'Select ' + user.name">
+            <span class="visually-hidden">Select {{ user.name }}</span>
+          </label>
+
           <div class="user-header">
             <div class="user-avatar">
               {{ user.name.charAt(0).toUpperCase() }}
@@ -59,16 +121,20 @@
             </div>
           </div>
           <div class="user-actions">
-            <select class="form-select form-select-sm mb-2" [value]="user.role" (change)="updateUserRole(user, $any($event.target).value)">
+            <select class="form-select form-select-sm mb-2" [value]="user.role" (change)="updateUserRole(user, $any($event.target).value)" title="Change role for {{ user.name }}" [attr.aria-label]="'Role for ' + user.name">
               <option value="admin">Admin</option>
               <option value="doctor">Doctor</option>
               <option value="patient">Patient</option>
             </select>
             <div class="d-flex gap-2">
-              <button class="btn btn-success btn-sm flex-fill" (click)="approveUser(user)">
+              <button class="btn btn-success btn-sm flex-fill" (click)="requestApprove(user)" title="Approve user" [disabled]="processingInfo?.id === user.id">
+                <span *ngIf="processingInfo?.id === user.id && processingInfo?.action === 'approve'" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <svg *ngIf="!(processingInfo?.id === user.id && processingInfo?.action === 'approve')" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><polyline points="20 6 9 17 4 12"/></svg>
                 Approve
               </button>
-              <button class="btn btn-danger btn-sm flex-fill" (click)="rejectUser(user)">
+              <button class="btn btn-danger btn-sm flex-fill" (click)="requestReject(user)" title="Reject user" [disabled]="processingInfo?.id === user.id">
+                <span *ngIf="processingInfo?.id === user.id && processingInfo?.action === 'reject'" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <svg *ngIf="!(processingInfo?.id === user.id && processingInfo?.action === 'reject')" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 Reject
               </button>
             </div>
@@ -83,6 +149,36 @@
         <path d="M32 20V32L40 40" stroke="#3461ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <p>No pending verifications</p>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal" [class.show]="showConfirmModal" *ngIf="showConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered verification-confirm-dialog">
+      <div class="modal-content border-0">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title w-100 text-center">Confirm Action</h5>
+          <button type="button" class="btn-close m-0" (click)="closeConfirmModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <div class="mb-3 text-warning">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <p class="mb-0" *ngIf="confirmData?.type === 'approve'">Are you sure you want to <strong>approve</strong> {{ confirmData?.user?.name }}?</p>
+          <p class="mb-0" *ngIf="confirmData?.type === 'reject'">Are you sure you want to <strong>reject</strong> {{ confirmData?.user?.name }}?</p>
+          <p class="mb-0" *ngIf="confirmData?.type === 'bulk-approve'">Approve all <strong>{{ selectedIds.size }}</strong> selected users?</p>
+          <p class="mb-0" *ngIf="confirmData?.type === 'bulk-reject'">Reject all <strong>{{ selectedIds.size }}</strong> selected users?</p>
+        </div>
+        <div class="modal-footer border-0 pt-0 justify-content-center">
+          <button type="button" class="btn btn-outline-secondary px-4" (click)="closeConfirmModal()">Cancel</button>
+          <button type="button" class="btn px-4" 
+                  [class.btn-success]="confirmData?.type === 'approve' || confirmData?.type === 'bulk-approve'"
+                  [class.btn-danger]="confirmData?.type === 'reject' || confirmData?.type === 'bulk-reject'"
+                  (click)="confirmAction()">
+            Confirm
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

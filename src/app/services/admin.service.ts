@@ -288,8 +288,8 @@ export class AdminService {
           totalDoctors: summaryData?.totalDoctors ?? 0,
           totalUsers,
           activeAppointments: 0, // Not currently provided by backend
-          patientGrowth: [], // Not currently provided by backend
-          doctorGrowth: [], // Not currently provided by backend
+          patientGrowth: summaryData?.patientGrowth ?? [],
+          doctorGrowth: summaryData?.doctorGrowth ?? [],
           kpis: {
             avgResponseTime: kpisData?.avgResponseTime ?? 0,
             systemUptime: kpisData?.systemUptime ?? 0,

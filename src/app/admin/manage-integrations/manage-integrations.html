@@ -60,34 +60,34 @@
   </div>
 
   <!-- Add Integration Modal -->
-  <div class="modal fade" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1" (click)="closeAddModal()">
+  <div class="modal" [class.show]="showAddModal" *ngIf="showAddModal" tabindex="-1" (click)="closeAddModal()">
     <div class="modal-dialog" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Add Integration</h5>
-          <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+          <button type="button" class="btn-close" (click)="closeAddModal()" aria-label="Close dialog" title="Close">✕</button>
         </div>
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-control" [(ngModel)]="newIntegration.name" name="name" required>
+              <label class="form-label" for="add-integ-name">Name</label>
+              <input id="add-integ-name" type="text" class="form-control" [(ngModel)]="newIntegration.name" name="name" required title="Integration name">
             </div>
             <div class="mb-3">
-              <label class="form-label">Type</label>
-              <select class="form-select" [(ngModel)]="newIntegration.type" name="type">
+              <label class="form-label" for="add-integ-type">Type</label>
+              <select id="add-integ-type" class="form-select" [(ngModel)]="newIntegration.type" name="type" title="Select integration type" aria-label="Integration type">
                 <option value="ehr">EHR System</option>
                 <option value="api">API</option>
                 <option value="external">External Service</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label">Endpoint URL</label>
-              <input type="url" class="form-control" [(ngModel)]="newIntegration.endpoint" name="endpoint">
+              <label class="form-label" for="add-integ-url">Endpoint URL</label>
+              <input id="add-integ-url" type="url" class="form-control" [(ngModel)]="newIntegration.endpoint" name="endpoint" title="Integration endpoint URL">
             </div>
             <div class="mb-3">
-              <label class="form-label">Status</label>
-              <select class="form-select" [(ngModel)]="newIntegration.status" name="status">
+              <label class="form-label" for="add-integ-status">Status</label>
+              <select id="add-integ-status" class="form-select" [(ngModel)]="newIntegration.status" name="status" title="Integration status" aria-label="Integration status">
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
@@ -102,34 +102,34 @@
     </div>
   </div>
   <!-- Edit Integration Modal -->
-  <div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'" tabindex="-1" *ngIf="selectedIntegration" (click)="closeEditModal()">
+  <div class="modal" [class.show]="showEditModal" *ngIf="selectedIntegration && showEditModal" tabindex="-1" (click)="closeEditModal()">
     <div class="modal-dialog" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Edit Integration</h5>
-          <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+          <button type="button" class="btn-close" (click)="closeEditModal()" aria-label="Close dialog" title="Close">✕</button>
         </div>
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label class="form-label">Name</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedIntegration.name" name="name" required>
+              <label class="form-label" for="edit-integ-name">Name</label>
+              <input id="edit-integ-name" type="text" class="form-control" [(ngModel)]="selectedIntegration.name" name="name" required title="Integration name">
             </div>
             <div class="mb-3">
-              <label class="form-label">Type</label>
-              <select class="form-select" [(ngModel)]="selectedIntegration.type" name="type">
+              <label class="form-label" for="edit-integ-type">Type</label>
+              <select id="edit-integ-type" class="form-select" [(ngModel)]="selectedIntegration.type" name="type" title="Select integration type" aria-label="Integration type">
                 <option value="ehr">EHR System</option>
                 <option value="api">API</option>
                 <option value="external">External Service</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label">Endpoint URL</label>
-              <input type="url" class="form-control" [(ngModel)]="selectedIntegration.endpoint" name="endpoint">
+              <label class="form-label" for="edit-integ-url">Endpoint URL</label>
+              <input id="edit-integ-url" type="url" class="form-control" [(ngModel)]="selectedIntegration.endpoint" name="endpoint" title="Integration endpoint URL">
             </div>
             <div class="mb-3">
-              <label class="form-label">Status</label>
-              <select class="form-select" [(ngModel)]="selectedIntegration.status" name="status">
+              <label class="form-label" for="edit-integ-status">Status</label>
+              <select id="edit-integ-status" class="form-select" [(ngModel)]="selectedIntegration.status" name="status" title="Integration status" aria-label="Integration status">
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
                 <option value="error">Error</option>

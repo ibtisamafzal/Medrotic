@@ -14,12 +14,12 @@
         <div class="card-body">
           <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
             Profile updated successfully!
-            <button type="button" class="btn-close" (click)="success = false"></button>
+            <button type="button" class="btn-close" (click)="success = false" aria-label="Dismiss alert" title="Dismiss">✕</button>
           </div>
 
           <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ error }}
-            <button type="button" class="btn-close" (click)="error = ''"></button>
+            <button type="button" class="btn-close" (click)="error = ''" aria-label="Dismiss alert" title="Dismiss">✕</button>
           </div>
 
           <div *ngIf="loading" class="text-center py-5">
@@ -36,6 +36,8 @@
                 class="form-control" 
                 [(ngModel)]="doctor.name"
                 name="name"
+                placeholder="Your full name"
+                title="Full name"
                 required>
             </div>
 
@@ -46,6 +48,8 @@
                 class="form-control" 
                 [(ngModel)]="doctor.email"
                 name="email"
+                placeholder="your@email.com"
+                title="Email address"
                 required>
             </div>
 
@@ -56,7 +60,9 @@
                 class="form-control" 
                 [(ngModel)]="doctor.phone"
                 pkInputFormat="phone"
-                name="phone">
+                name="phone"
+                placeholder="+92XXXXXXXXX"
+                title="Phone number">
             </div>
 
             <div class="mb-3">
@@ -75,7 +81,10 @@
                 type="text" 
                 class="form-control" 
                 [(ngModel)]="doctor.licenseNumber"
-                name="licenseNumber">
+                name="licenseNumber"
+                placeholder="e.g. 35202-1234567-8"
+                title="Medical license number"
+                pkInputFormat="license">
             </div>
 
             <div class="mb-3">
@@ -84,7 +93,9 @@
                 type="text" 
                 class="form-control" 
                 [(ngModel)]="doctor.hospital"
-                name="hospital">
+                name="hospital"
+                placeholder="Hospital or clinic name"
+                title="Hospital or clinic">
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="saving">
@@ -105,12 +116,12 @@
         <div class="card-body">
           <div *ngIf="passwordSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
             Password changed successfully!
-            <button type="button" class="btn-close" (click)="passwordSuccess = false"></button>
+            <button type="button" class="btn-close" (click)="passwordSuccess = false" aria-label="Dismiss alert" title="Dismiss">✕</button>
           </div>
 
           <div *ngIf="passwordError" class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ passwordError }}
-            <button type="button" class="btn-close" (click)="passwordError = ''"></button>
+            <button type="button" class="btn-close" (click)="passwordError = ''" aria-label="Dismiss alert" title="Dismiss">✕</button>
           </div>
 
           <form (ngSubmit)="onChangePassword()">
@@ -121,6 +132,8 @@
                 class="form-control" 
                 [(ngModel)]="passwordForm.currentPassword"
                 name="currentPassword"
+                placeholder="Enter current password"
+                title="Current password"
                 required>
             </div>
 
@@ -131,6 +144,8 @@
                 class="form-control" 
                 [(ngModel)]="passwordForm.newPassword"
                 name="newPassword"
+                placeholder="Min. 8 characters"
+                title="New password"
                 required
                 minlength="8">
               <div class="form-text">Password must be at least 8 characters long</div>
@@ -143,6 +158,8 @@
                 class="form-control" 
                 [(ngModel)]="passwordForm.confirmPassword"
                 name="confirmPassword"
+                placeholder="Re-enter new password"
+                title="Confirm new password"
                 required>
             </div>
 

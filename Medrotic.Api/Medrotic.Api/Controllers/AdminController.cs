@@ -33,7 +33,6 @@ namespace Medrotic.Api.Controllers
         // Lightweight in-memory stores so "missing API" UI doesn't hard-fail.
         // These are not meant to be authoritative persistence.
         private static readonly ConcurrentDictionary<string, IntegrationItem> IntegrationsStore = new();
-        private static readonly ConcurrentDictionary<string, RepositoryItem> RepositoryStore = new();
         private static readonly ConcurrentDictionary<string, string> UserStatusStore = new();
 
         public sealed class IntegrationItem
@@ -46,15 +45,6 @@ namespace Medrotic.Api.Controllers
             public DateTime LastSync { get; set; } = DateTime.UtcNow;
         }
 
-        private sealed class RepositoryItem
-        {
-            public string Id { get; set; } = Guid.NewGuid().ToString();
-            public string Name { get; set; } = string.Empty;
-            public string Type { get; set; } = "document";
-            public long Size { get; set; }
-            public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
-            public string UploadedBy { get; set; } = string.Empty;
-        }
 
         public AdminController(UserManager<ApplicationUser> userManager, AppDbContext context)
         {
@@ -632,12 +622,46 @@ namespace Medrotic.Api.Controllers
                     TotalHospitals = await _context.Hospitals.CountAsync(),
                     TotalMedicalRecords = await _context.MedicalRecords.CountAsync(),
                     TotalDocuments = await _context.Documents.CountAsync(),
-                    // Added: More KPIs from Scope Analytics Module
                     TotalAIResults = await _context.AIResults.CountAsync(),
                     TotalNotifications = await _context.Notifications.CountAsync(),
-                    ActiveUsersLastMonth = await _context.Users.CountAsync(u => u.LastActivity > DateTime.UtcNow.AddMonths(-1)) // Assume add LastActivity field later
+                    ActiveUsersLastMonth = await _context.Users.CountAsync(u => u.LastActivity > DateTime.UtcNow.AddMonths(-1))
                 };
-                return Ok(new { Message = "Analytics data retrieved successfully.", Data = analytics, LastUpdated = DateTime.UtcNow });
+                
+                // Calculate monthly distribution arrays dynamically
+                var sixMonthsAgo = DateTime.UtcNow.AddMonths(-5);
+                var patientGrowth = new List<object>();
+                var doctorGrowth = new List<object>();
+
+                var allPatients = await _userManager.GetUsersInRoleAsync("Patient");
+                var allDoctors = await _userManager.GetUsersInRoleAsync("Doctor");
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var targetMonth = sixMonthsAgo.AddMonths(i);
+                    var monthName = targetMonth.ToString("MMM");
+
+                    // Using LastActivity as a proxy for CreatedAt/Registration time if needed
+                    patientGrowth.Add(new { month = monthName, count = allPatients.Count(p => p.LastActivity.Month <= targetMonth.Month && p.LastActivity.Year <= targetMonth.Year) });
+                    doctorGrowth.Add(new { month = monthName, count = allDoctors.Count(d => d.LastActivity.Month <= targetMonth.Month && d.LastActivity.Year <= targetMonth.Year) });
+                }
+
+                return Ok(new { 
+                    Message = "Analytics data retrieved successfully.", 
+                    Data = new {
+                        totalPatients = analytics.TotalPatients,
+                        totalDoctors = analytics.TotalDoctors,
+                        totalAdmins = 0,
+                        patientGrowth,
+                        doctorGrowth,
+                        kpis = new {
+                            avgResponseTime = 0,
+                            systemUptime = 100,
+                            activeUsers = analytics.ActiveUsersLastMonth,
+                            dataStorage = analytics.TotalDocuments
+                        }
+                    }, 
+                    LastUpdated = DateTime.UtcNow 
+                });
             }
             catch (Exception ex)
             {
@@ -1156,7 +1180,7 @@ namespace Medrotic.Api.Controllers
         [HttpGet("repository")]
         public async Task<IActionResult> GetRepository()
         {
-            var items = RepositoryStore.Values.OrderByDescending(i => i.UploadedAt).ToList();
+            var items = await _context.RepositoryItems.OrderByDescending(i => i.UploadedAt).ToListAsync();
             return Ok(new { Message = "Repository items retrieved successfully.", Data = items, Total = items.Count });
         }
 
@@ -1166,17 +1190,33 @@ namespace Medrotic.Api.Controllers
         {
             if (file == null || file.Length == 0) return BadRequest(new { Message = "File is required." });
 
-            var item = new RepositoryItem
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "repository");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var item = new Medrotic.Api.Models.RepositoryItem
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = string.IsNullOrWhiteSpace(name) ? file.FileName : name,
                 Type = string.IsNullOrWhiteSpace(type) ? "document" : type,
                 Size = file.Length,
                 UploadedAt = DateTime.UtcNow,
-                UploadedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
+                UploadedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                FilePath = $"/uploads/repository/{fileName}"
             };
 
-            RepositoryStore[item.Id] = item;
+            _context.RepositoryItems.Add(item);
+            await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Repository item uploaded successfully.", Data = item });
         }
@@ -1186,7 +1226,19 @@ namespace Medrotic.Api.Controllers
         public async Task<IActionResult> DeleteRepositoryItem(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "Repository item id is required." });
-            RepositoryStore.TryRemove(id, out _);
+            
+            var item = await _context.RepositoryItems.FindAsync(id);
+            if (item == null) return NotFound(new { Message = "Repository item not found." });
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.FilePath.TrimStart('/'));
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            _context.RepositoryItems.Remove(item);
+            await _context.SaveChangesAsync();
+
             return Ok(new { Message = "Repository item deleted successfully." });
         }
 

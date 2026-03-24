@@ -18,6 +18,8 @@ export class ManageDoctors implements OnInit {
   showAddModal = false;
   showEditModal = false;
   showVerifyModal = false;
+  verifying = false;
+  saving = false;
   searchTerm = '';
   statusFilter: 'all' | 'pending' | 'verified' | 'rejected' = 'all';
 
@@ -81,12 +83,16 @@ export class ManageDoctors implements OnInit {
   }
 
   addDoctor() {
+    this.saving = true;
     this.adminService.addDoctor(this.newDoctor).subscribe({
       next: () => {
-        this.loadDoctors();
         this.closeAddModal();
+        this.saving = false;
+        this.loadDoctors();
+        this.alertService.success('Doctor added successfully!');
       },
       error: (err) => {
+        this.saving = false;
         console.error('Error adding doctor:', err);
         this.alertService.error('Error adding doctor. Please try again.');
       }
@@ -105,13 +111,16 @@ export class ManageDoctors implements OnInit {
 
   updateDoctor() {
     if (!this.selectedDoctor) return;
-    
+    this.saving = true;
     this.adminService.updateDoctor(this.selectedDoctor.id, this.selectedDoctor).subscribe({
       next: () => {
-        this.loadDoctors();
         this.closeEditModal();
+        this.saving = false;
+        this.loadDoctors();
+        this.alertService.success('Doctor updated successfully!');
       },
       error: (err) => {
+        this.saving = false;
         console.error('Error updating doctor:', err);
         this.alertService.error('Error updating doctor. Please try again.');
       }
@@ -131,13 +140,17 @@ export class ManageDoctors implements OnInit {
   verifyDoctor(verified: boolean) {
     if (!this.selectedDoctor) return;
     
+    this.verifying = true;
     this.adminService.verifyDoctor(this.selectedDoctor.id, verified).subscribe({
       next: () => {
         this.loadDoctors();
+        this.verifying = false;
         this.closeVerifyModal();
+        this.alertService.success(verified ? 'Doctor verified successfully!' : 'Doctor rejected.');
       },
       error: (err) => {
         console.error('Error verifying doctor:', err);
+        this.verifying = false;
         this.alertService.error('Error verifying doctor. Please try again.');
       }
     });
@@ -148,6 +161,7 @@ export class ManageDoctors implements OnInit {
       this.adminService.deleteDoctor(id).subscribe({
         next: () => {
           this.loadDoctors();
+          this.alertService.success('Doctor deleted successfully.');
         },
         error: (err) => {
           console.error('Error deleting doctor:', err);

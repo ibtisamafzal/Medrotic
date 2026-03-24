@@ -45,28 +45,16 @@
     <div class="col-md-6">
       <div class="chart-card fade-in-up" [style.animation-delay]="'400ms'">
         <h3 class="chart-title">Patient Growth</h3>
-        <div class="chart-placeholder">
-          <p class="text-muted">Chart visualization would be rendered here using Chart.js</p>
-          <div class="chart-data-preview">
-            <div *ngFor="let data of analytics?.patientGrowth; let i = index" class="data-item fade-in-up" [style.animation-delay]="(500 + i * 50) + 'ms'">
-              <span>{{ data.month }}</span>
-              <span class="badge bg-primary">{{ data.count }}</span>
-            </div>
-          </div>
+        <div class="chart-container">
+          <canvas #chartCanvas></canvas>
         </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="chart-card fade-in-up" [style.animation-delay]="'450ms'">
         <h3 class="chart-title">Doctor Growth</h3>
-        <div class="chart-placeholder">
-          <p class="text-muted">Chart visualization would be rendered here using Chart.js</p>
-          <div class="chart-data-preview">
-            <div *ngFor="let data of analytics?.doctorGrowth; let i = index" class="data-item fade-in-up" [style.animation-delay]="(550 + i * 50) + 'ms'">
-              <span>{{ data.month }}</span>
-              <span class="badge bg-primary">{{ data.count }}</span>
-            </div>
-          </div>
+        <div class="chart-container">
+          <canvas #chartCanvas></canvas>
         </div>
       </div>
     </div>

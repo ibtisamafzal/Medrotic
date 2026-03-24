@@ -37,12 +37,12 @@
   </div>
 
   <!-- Compose Modal -->
-  <div class="modal fade" [class.show]="showComposeModal" [style.display]="showComposeModal ? 'block' : 'none'" tabindex="-1" (click)="closeComposeModal()">
+  <div class="modal" [class.show]="showComposeModal" *ngIf="showComposeModal" tabindex="-1" (click)="closeComposeModal()">
     <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Compose Notification</h5>
-          <button type="button" class="btn-close" (click)="closeComposeModal()"></button>
+          <button type="button" class="btn-close" (click)="closeComposeModal()" aria-label="Close dialog" title="Close">✕</button>
         </div>
         <div class="modal-body">
           <form>
@@ -57,8 +57,8 @@
                 required></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label">Notification Type</label>
-              <select class="form-select" [(ngModel)]="newNotification.type" name="type">
+              <label class="form-label" for="notif-type">Notification Type</label>
+              <select id="notif-type" class="form-select" [(ngModel)]="newNotification.type" name="type" title="Select notification type" aria-label="Notification type">
                 <option value="push">Push Notification</option>
                 <option value="email">Email</option>
                 <option value="sms">SMS</option>
@@ -73,7 +73,9 @@
                     type="checkbox" 
                     [id]="'target-' + option.value"
                     [checked]="newNotification.targets.includes(option.value)"
-                    (change)="toggleTarget(option.value)">
+                    (change)="toggleTarget(option.value)"
+                    [title]="'Select target: ' + option.label"
+                    [attr.aria-label]="'Target ' + option.label">
                   <label class="form-check-label" [for]="'target-' + option.value">
                     {{ option.label }}
                   </label>
@@ -81,12 +83,15 @@
               </div>
             </div>
             <div class="mb-3">
-              <label class="form-label">Schedule (Optional)</label>
+              <label class="form-label" for="scheduled-at">Schedule (Optional)</label>
               <input 
+                id="scheduled-at"
                 type="datetime-local" 
                 class="form-control" 
                 [(ngModel)]="newNotification.scheduledAt" 
-                name="scheduledAt">
+                name="scheduledAt"
+                title="Schedule notification date and time"
+                aria-label="Scheduled date">
             </div>
           </form>
         </div>

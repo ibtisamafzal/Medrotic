@@ -1,0 +1,27 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(5,7): warning CS0105: The using directive for 'Medrotic.Api.Data' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(6,7): warning CS0105: The using directive for 'Medrotic.Api.DTOs' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(7,7): warning CS0105: The using directive for 'Medrotic.Api.Models' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(8,7): warning CS0105: The using directive for 'Medrotic.Api.Services' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(4,7): warning CS0105: The using directive for 'Medrotic.Api.Data' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(5,7): warning CS0105: The using directive for 'Medrotic.Api.DTOs' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(6,7): warning CS0105: The using directive for 'Medrotic.Api.Models' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AdminController.cs(36,79): error CS0102: The type 'AdminController' already contains a definition for 'IntegrationsStore' [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\DTOs\RegisterUserDto.cs(68,49): warning CS8765: Nullability of type of parameter 'value' doesn't match overridden member (possibly because of nullability attributes). [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+
+Build FAILED.
+
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(5,7): warning CS0105: The using directive for 'Medrotic.Api.Data' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(6,7): warning CS0105: The using directive for 'Medrotic.Api.DTOs' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(7,7): warning CS0105: The using directive for 'Medrotic.Api.Models' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AuthController.cs(8,7): warning CS0105: The using directive for 'Medrotic.Api.Services' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(4,7): warning CS0105: The using directive for 'Medrotic.Api.Data' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(5,7): warning CS0105: The using directive for 'Medrotic.Api.DTOs' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\PatientController.cs(6,7): warning CS0105: The using directive for 'Medrotic.Api.Models' appeared previously in this namespace [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\DTOs\RegisterUserDto.cs(68,49): warning CS8765: Nullability of type of parameter 'value' doesn't match overridden member (possibly because of nullability attributes). [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+D:\Medrotic\Medrotic.Api\Medrotic.Api\Controllers\AdminController.cs(36,79): error CS0102: The type 'AdminController' already contains a definition for 'IntegrationsStore' [D:\Medrotic\Medrotic.Api\Medrotic.Api\Medrotic.Api.csproj]
+    8 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:04.88

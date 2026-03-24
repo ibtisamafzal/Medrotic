@@ -17,6 +17,7 @@ export class ManagePatients implements OnInit {
   filteredPatients: Patient[] = [];
   selectedPatient: Patient | null = null;
   showEditModal = false;
+  saving = false;
   searchTerm = '';
   statusFilter: 'all' | 'active' | 'inactive' = 'all';
 
@@ -73,13 +74,16 @@ export class ManagePatients implements OnInit {
 
   updatePatient() {
     if (!this.selectedPatient) return;
-    
+    this.saving = true;
     this.adminService.updatePatient(this.selectedPatient.id, this.selectedPatient).subscribe({
       next: () => {
-        this.loadPatients();
         this.closeEditModal();
+        this.saving = false;
+        this.loadPatients();
+        this.alertService.success('Patient updated successfully!');
       },
       error: (err) => {
+        this.saving = false;
         console.error('Error updating patient:', err);
         this.alertService.error('Error updating patient. Please try again.');
       }
@@ -91,6 +95,7 @@ export class ManagePatients implements OnInit {
       this.adminService.deletePatient(id).subscribe({
         next: () => {
           this.loadPatients();
+          this.alertService.success('Patient deleted successfully.');
         },
         error: (err) => {
           console.error('Error deleting patient:', err);

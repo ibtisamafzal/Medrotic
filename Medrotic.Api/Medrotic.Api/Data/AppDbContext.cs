@@ -15,6 +15,7 @@ namespace Medrotic.Api.Data
         public DbSet<AIResult> AIResults { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Appointment> Appointments { get; set; }  // New for doctor-patient appointments
+        public DbSet<RepositoryItem> RepositoryItems { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -168,7 +169,7 @@ namespace Medrotic.Api.Data
                 .HasOne(a => a.Doctor)
                 .WithMany()
                 .HasForeignKey(a => a.DoctorId)
-                .OnDelete(DeleteBehavior.Cascade);  // Added
+                .OnDelete(DeleteBehavior.Restrict);  // Added
         }
     }
 }

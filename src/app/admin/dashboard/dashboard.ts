@@ -126,6 +126,7 @@ export class Dashboard implements OnInit, OnDestroy {
         this.quickLinks[0].count = data.totalDoctors || 0;
         this.quickLinks[1].count = data.totalPatients || 0;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading analytics:', err);
@@ -136,6 +137,7 @@ export class Dashboard implements OnInit, OnDestroy {
         this.quickLinks[0].count = 0;
         this.quickLinks[1].count = 0;
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
 
@@ -144,11 +146,13 @@ export class Dashboard implements OnInit, OnDestroy {
       next: (users) => {
         this.metrics.pendingVerifications = users.filter(u => u.status === 'pending').length;
         this.quickLinks[2].count = this.metrics.pendingVerifications;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading users:', err);
         this.metrics.pendingVerifications = 0;
         this.quickLinks[2].count = 0;
+        this.cdr.markForCheck();
       }
     });
 
@@ -157,11 +161,13 @@ export class Dashboard implements OnInit, OnDestroy {
       next: (integrations) => {
         this.metrics.totalIntegrations = integrations.length;
         this.quickLinks[4].count = integrations.length;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading integrations:', err);
         this.metrics.totalIntegrations = 0;
         this.quickLinks[4].count = 0;
+        this.cdr.markForCheck();
       }
     });
 
@@ -170,11 +176,13 @@ export class Dashboard implements OnInit, OnDestroy {
       next: (items) => {
         this.metrics.repositoryItems = items.length;
         this.quickLinks[5].count = items.length;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading repository:', err);
         this.metrics.repositoryItems = 0;
         this.quickLinks[5].count = 0;
+        this.cdr.markForCheck();
       }
     });
   }

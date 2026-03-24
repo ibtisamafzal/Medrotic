@@ -1,130 +1,148 @@
-# Medrotic Frontend
+# <p align="center"><img src="public/images/logo/logo.svg" width="200" alt="Medrotic Logo"></p>
 
-Angular frontend application generated with [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+# 🏥 Medrotic - Advanced Healthcare Platform
 
-Use this project as the web interface for the Medrotic platform (patient/doctor dashboards, appointments, and other healthcare workflows).
+Medrotic is a state-of-the-art healthcare management system designed to provide a seamless experience for patients, doctors, and administrators. Built with a focus on modern aesthetics, security, and performance, it bridges the gap between healthcare providers and patients.
 
 ---
 
-## Prerequisites
+## 🏗️ Architecture Overview
+
+Medrotic follows a decoupled architecture with an **Angular** frontend and a **.NET Core** backend.
+
+```mermaid
+graph TD
+    User((User)) --> WebUI[Angular Frontend]
+    WebUI --> API[Medrotic .NET API]
+    API --> DB[(Database)]
+    WebUI --> Vercel[Vercel Serverless Functions]
+```
+
+---
+
+## ✨ Key Features
+
+### 👤 Patient Portal
+- **Intuitive Dashboard**: Overview of health metrics and upcoming appointments.
+- **CNIC-First Identity**: Secure identity management using region-specific identifiers.
+- **AI Health Assistant**: Integrated chatbot for preliminary health queries and guidance.
+- **Health Records**: Secure access to medical history, X-rays, and digital prescriptions.
+
+### 🩺 Doctor Portal
+- **Advanced Patient Management**: Specialized tools for patient history and record-linked lookups.
+- **AI-Powered Diagnostics**: Support for approving and managing AI-generated diagnostic results.
+- **Schedule Optimization**: Real-time tracking of appointments and surgical consultations.
+- **Document & Imaging**: Direct management of X-rays and medical documentation.
+
+### 🛡️ Admin Dashboard
+- **System-Wide Control**: Management of doctors, patients, hospitals, and sub-admins.
+- **Performance Analytics**: Real-time system health monitoring and user KPIs.
+- **Audit & Compliance**: Secure role-based access control and detailed activity logs.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend Framework** | [Angular 20.3.x](https://angular.dev) |
+| **Backend Framework** | [.NET Core API](https://dotnet.microsoft.com/) |
+| **Styling & UI** | Bootstrap 5, SCSS, Custom Premium Animations |
+| **Data Visualization** | Chart.js |
+| **Fonts** | Public Sans & Rubik (via FontSource) |
+| **Hosting** | Vercel (Edge Functions & SSR) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
 
 - **Node.js**: v18+ (LTS recommended)
-- **Package manager**: `npm` (bundled with Node.js) or `pnpm`/`yarn`
-- **Angular CLI (global, optional)**:
+- **.NET SDK**: v8.0+ (for API development)
+- **Angular CLI**: Optional, but recommended (`npm i -g @angular/cli`)
 
-```bash
-npm install -g @angular/cli
-```
+### Installation
 
----
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/YourRepo/Medrotic.git
+   ```
 
-## Getting started
+2. **Frontend Setup**:
+   ```bash
+   cd Medrotic
+   npm install
+   ```
 
-1. **Install dependencies** (from the project root):
+3. **Backend Setup**:
+   ```bash
+   cd Medrotic.Api
+   dotnet restore
+   ```
 
-```bash
-npm install
-```
+### Running Locally
 
-2. **Start the development server**:
+Wait, how do we run it? The standard `npm start` (which runs `ng serve`) is good for the frontend.
 
-```bash
-ng serve
-```
+For development, you can run the following:
 
-3. Open your browser at `http://localhost:4200/`. The app will automatically reload when you change any source files.
-
-If you prefer to use `npm` scripts, you can also run:
-
-```bash
-npm run start
-```
-
----
-
-## Common commands
-
-- **Development server**:
-
+- **Frontend**:
   ```bash
-  ng serve
+  npm start
   ```
-
-- **Build (production)**:
-
+- **Backend API**:
   ```bash
-  ng build --configuration production
-  ```
-
-  Build artifacts are output to the `dist/` directory. Production builds are optimized for performance and bundle size.
-
-- **Unit tests** (Karma):
-
-  ```bash
-  ng test
-  ```
-
-- **End-to-end tests**:
-
-  ```bash
-  ng e2e
-  ```
-
-  Angular CLI does not ship an e2e framework by default; configure the tool that best suits your project (e.g. Cypress, Playwright, WebdriverIO).
-
-- **Code scaffolding** (components, services, etc.):
-
-  ```bash
-  ng generate component component-name
-  ng generate service service-name
-  ```
-
-  For a full list of schematics:
-
-  ```bash
-  ng generate --help
+  cd Medrotic.Api/Medrotic.Api
+  dotnet run
   ```
 
 ---
 
-## Project structure (high level)
+## 📁 Project Structure
 
-- **`src/`**: Application source code
-  - **`app/`**: Root application module, components, routes, and services
-  - **`assets/`**: Static assets (images, icons, etc.)
-  - **`environments/`**: Environment-specific configuration files
-- **`angular.json`**: Workspace and build configuration
-- **`package.json`**: Scripts and dependencies
+```text
+Medrotic/
+├── src/                # Frontend Angular source
+│   ├── app/            # Main application logic
+│   │   ├── admin/      # Admin dashboard module
+│   │   ├── doctor/     # Doctor portal module
+│   │   ├── patient/    # Patient portal module
+│   │   └── common/     # Shared components (Home, FAQ, etc.)
+│   └── public/         # Static assets & images
+├── Medrotic.Api/       # Backend .NET Solution
+├── api/                # Vercel serverless functions
+└── vercel.json         # Deployment configuration
+```
 
 ---
 
-## Environment configuration
+## 🌐 Environment Configuration
 
-Angular uses the `src/environments` folder to manage environment-specific settings (e.g. API base URLs).
+Angular uses `src/environments` for configuration.
 
 - **Development**: `src/environments/environment.ts`
 - **Production**: `src/environments/environment.prod.ts`
 
-Update these files with the correct Medrotic API endpoints and any other runtime configuration.
+Make sure to update the `apiUrl` to point to your deployed Medrotic.Api instance.
 
 ---
 
-## Deployment
+## 📦 Scripts
 
-1. Build a production bundle:
-
-```bash
-ng build --configuration production
-```
-
-2. Serve the contents of the `dist/` folder using your preferred hosting solution (e.g. Nginx, Apache, static site host, or a Node.js server).
-
-Ensure that your server is configured to redirect all unmatched routes to `index.html` so Angular routing works correctly.
+| Command | Description |
+| :--- | :--- |
+| `npm start` | Runs `ng serve` for local frontend development. |
+| `npm run build` | Builds the production bundle in `dist/`. |
+| `npm test` | Executes unit tests via Karma. |
+| `npm run serve:ssr:frontend` | Serves the SSR version of the app locally. |
 
 ---
 
-## Additional resources
+## 📜 License
 
-- **Angular CLI docs**: [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
-- **Angular docs**: [Official Angular documentation](https://angular.dev)
+Distributed under the MIT License. See `LICENSE` for more information.
 
+---
+
+<p align="center">Made with ❤️ by the Medrotic Team</p>

@@ -10,7 +10,7 @@
       <div class="row g-3 align-items-end">
         <div class="col-12 col-md-4">
           <label class="form-label">Search By</label>
-          <select class="form-select" [(ngModel)]="searchBy">
+          <select class="form-select" [(ngModel)]="searchBy" title="Search filter criteria" aria-label="Search by">
             <option value="cnic">CNIC</option>
             <option value="name">Name</option>
             <option value="phone">Phone</option>
@@ -23,7 +23,9 @@
             class="form-control" 
             [(ngModel)]="searchTerm"
             (input)="onSearch()"
-            [placeholder]="'Enter ' + (searchBy === 'cnic' ? 'CNIC' : searchBy === 'name' ? 'patient name' : 'phone number')">
+            [placeholder]="'Enter ' + (searchBy === 'cnic' ? 'CNIC' : searchBy === 'name' ? 'patient name' : 'phone number')"
+            title="Search patients"
+            aria-label="Patient search term">
         </div>
         <div class="col-12 col-md-2">
           <button class="btn btn-outline-secondary w-100" (click)="clearSearch()">Clear</button>
@@ -64,10 +66,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let patient of filteredPatients">
-              <td>{{ patient.name }}</td>
-              <td>{{ patient.cnic || 'N/A' }}</td>
+              <td [title]="patient.name">{{ patient.name }}</td>
+              <td [title]="patient.cnic">{{ patient.cnic || 'N/A' }}</td>
               <td>{{ patient.phone || 'N/A' }}</td>
-              <td>{{ patient.email || 'N/A' }}</td>
+              <td [title]="patient.email">{{ patient.email || 'N/A' }}</td>
               <td>
                 <span class="badge" [class.bg-success]="patient.status === 'active'" [class.bg-secondary]="patient.status === 'inactive'">
                   {{ patient.status }}
