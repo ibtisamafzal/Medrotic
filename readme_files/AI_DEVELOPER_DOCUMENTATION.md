@@ -3,50 +3,19 @@
 This document contains all AI/ML-related endpoints, data structures, and requirements for AI implementation.
 
 ## Table of Contents
-1. [Medrotic Project Overview](#medrotic-project-overview)
-2. [Environment & Base URLs](#environment--base-urls)
-3. [AI Endpoints](#ai-endpoints)
-4. [AI Data Structures](#ai-data-structures)
-5. [Chatbot Implementation](#chatbot-implementation)
-6. [OCR Implementation](#ocr-implementation)
-7. [X-Ray Analysis](#x-ray-analysis)
-8. [Test Report Analysis](#test-report-analysis)
-9. [AI Integration Requirements](#ai-integration-requirements)
-10. [Response Formats](#response-formats)
-11. [Error Handling](#error-handling)
-12. [Testing & Validation](#testing--validation)
+1. [AI Endpoints](#ai-endpoints)
+2. [AI Data Structures](#ai-data-structures)
+3. [Chatbot Implementation](#chatbot-implementation)
+4. [OCR Implementation](#ocr-implementation)
+5. [X-Ray Analysis](#x-ray-analysis)
+6. [Test Report Analysis](#test-report-analysis)
+7. [AI Integration Requirements](#ai-integration-requirements)
+8. [Response Formats](#response-formats)
+9. [Error Handling](#error-handling)
 
 ---
 
-## Medrotic Project Overview
-
-Medrotic is a healthcare platform with:
-- An **Angular 20** frontend (`frontend` project in this repo).
-- A **.NET backend API** exposing REST endpoints under `/api`.
-
-This document describes the **AI-related backend contracts** (chatbot, OCR, X-ray, test report analysis) that are consumed by the Angular app through `PatientService`, `AuthService`, and related services.
-
-As of 23 March 2026, this document is aligned with the current Angular + backend integration in this repository.
-
-## Environment & Base URLs
-
-- **Local development backend**: `http://localhost:7124` (see `src/environments/environment.ts`).
-- **Production backend**: `https://your-production-api.com` (placeholder, set in `src/environments/environment.prod.ts`).
-- **Auth base URL**: `${apiUrl}/api/Auth` (used by `AuthService` for login, registration, and password flows).
-- **Patient AI base URL**: `${apiUrl}/api/patient` (for example, `http://localhost:7124/api/patient` in development).
-
 ## AI Endpoints
-
-The Angular frontend currently uses the following AI-related endpoints on the backend:
-
-- **POST `/api/patient/chatbot`**: AI-powered patient chatbot.
-- **POST `/api/patient/upload-document`**: Upload report/document for AI workflow.
-- **GET `/api/patient/documents`**: List uploaded documents and states.
-- **GET `/api/patient/xrays`**: Fetch X-ray records with analysis summaries.
-- **GET `/api/patient/prescriptions`**: Fetch prescription records (including OCR-derived structures where available).
-- **POST `/api/doctor/patients/{patientId}/records`**: Doctor uploads prescription/X-ray records that feed patient-facing views.
-
-Note: Legacy aliases like `/api/patient/reports` and `/api/patient/documents` (POST) are not the current integrated paths.
 
 ### POST /api/patient/chatbot
 AI-powered chatbot for patient queries.
@@ -119,29 +88,25 @@ interface ChatbotMessage {
   context?: {
     timestamp?: string;             // ISO date
     patientId?: string;             // Patient identifier
-    medicalHistory?: any[];         // Patient's medical history
+    medicalHistory?: any[];        // Patient's medical history
     recentMetrics?: HealthMetric[]; // Recent health metrics
     currentSymptoms?: string[];     // Current symptoms
   };
 }
 ```
 
-In the Angular code (`ChatbotMessage` in `src/app/services/patient.service.ts`), the `context` field is currently typed as `any` to allow flexible payloads. The structure above is the expected shape that the backend AI implementation should support while remaining backward-compatible with the existing frontend.
-
 ### ChatbotResponse
 ```typescript
 interface ChatbotResponse {
-  response: string;                 // AI-generated response (used by the UI)
-  suggestions?: string[];           // Suggested follow-up questions (used by the UI)
-  confidence?: number;              // Confidence score (0-1)
-  sources?: string[];               // Medical sources/references
-  relatedTopics?: string[];         // Related medical topics
+  response: string;                 // AI-generated response
+  suggestions?: string[];          // Suggested follow-up questions
+  confidence?: number;             // Confidence score (0-1)
+  sources?: string[];              // Medical sources/references
+  relatedTopics?: string[];        // Related medical topics
   urgency?: 'low' | 'medium' | 'high'; // Urgency level
-  requiresDoctor?: boolean;         // Whether doctor consultation is recommended
+  requiresDoctor?: boolean;        // Whether doctor consultation is recommended
 }
 ```
-
-In the Angular frontend (`ChatbotResponse` in `src/app/services/patient.service.ts`), only the `response` and `suggestions` fields are currently used. The additional fields above are safe to include in backend responses and can be wired into the UI later without breaking existing behaviour.
 
 ### OCRResult
 ```typescript
@@ -277,7 +242,7 @@ Extract text and structured data from prescription images.
 
 ### Endpoint Integration
 OCR is integrated into:
-- `POST /api/doctor/patients/{patientId}/records` (when prescription image/PDF is uploaded)
+- `POST /api/doctor/prescriptions` (when image is uploaded)
 - Prescription upload process
 
 ### Input
@@ -348,7 +313,7 @@ Analyze X-ray images to detect abnormalities and provide findings.
 
 ### Endpoint Integration
 X-Ray analysis is integrated into:
-- `POST /api/doctor/patients/{patientId}/records` (when X-ray image is uploaded)
+- `POST /api/doctor/xrays` (when X-ray is uploaded)
 
 ### Input
 - X-ray image file (DICOM, JPG, PNG)
@@ -427,7 +392,7 @@ Analyze lab test reports and extract key findings.
 
 ### Endpoint Integration
 Test report analysis is integrated into:
-- `POST /api/patient/upload-document` (when test report is uploaded)
+- `POST /api/patient/reports` (when test report is uploaded)
 
 ### Input
 - Test report file (PDF, JPG, PNG)
@@ -558,7 +523,7 @@ Test report analysis is integrated into:
 
 ## Response Formats
 
-### Standard AI Response (Recommended)
+### Standard AI Response
 ```json
 {
   "success": true,
@@ -571,7 +536,7 @@ Test report analysis is integrated into:
 }
 ```
 
-### Error Response (Recommended)
+### Error Response
 ```json
 {
   "success": false,
@@ -651,6 +616,6 @@ Test report analysis is integrated into:
 
 ---
 
-**Last Updated:** 2026-03-23
-**Version:** 1.2
+**Last Updated:** 2024
+**Version:** 1.0
 
