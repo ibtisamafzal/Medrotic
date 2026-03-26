@@ -1,4 +1,4 @@
-# <p align="center"><img src="public/images/logo/logo.svg" width="200" alt="Medrotic Logo"></p>
+# <p align="center"><img src="public/images/logo/logo-light.svg" width="200" alt="Medrotic Logo"></p>
 
 # 🏥 Medrotic - Advanced Healthcare Platform
 
@@ -23,18 +23,21 @@ graph TD
 ## ✨ Key Features
 
 ### 👤 Patient Portal
+
 - **Intuitive Dashboard**: Overview of health metrics and upcoming appointments.
 - **CNIC-First Identity**: Secure identity management using region-specific identifiers.
 - **AI Health Assistant**: Integrated chatbot for preliminary health queries and guidance.
 - **Health Records**: Secure access to medical history, X-rays, and digital prescriptions.
 
 ### 🩺 Doctor Portal
+
 - **Advanced Patient Management**: Specialized tools for patient history and record-linked lookups.
 - **AI-Powered Diagnostics**: Support for approving and managing AI-generated diagnostic results.
 - **Schedule Optimization**: Real-time tracking of appointments and surgical consultations.
 - **Document & Imaging**: Direct management of X-rays and medical documentation.
 
 ### 🛡️ Admin Dashboard
+
 - **System-Wide Control**: Management of doctors, patients, hospitals, and sub-admins.
 - **Performance Analytics**: Real-time system health monitoring and user KPIs.
 - **Audit & Compliance**: Secure role-based access control and detailed activity logs.
@@ -65,17 +68,20 @@ graph TD
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/YourRepo/Medrotic.git
    ```
 
 2. **Frontend Setup**:
+
    ```bash
    cd Medrotic
    npm install
    ```
 
 3. **Backend Setup**:
+
    ```bash
    cd Medrotic.Api
    dotnet restore
@@ -88,10 +94,13 @@ Wait, how do we run it? The standard `npm start` (which runs `ng serve`) is good
 For development, you can run the following:
 
 - **Frontend**:
+
   ```bash
   npm start
   ```
+
 - **Backend API**:
+
   ```bash
   cd Medrotic.Api/Medrotic.Api
   dotnet run
