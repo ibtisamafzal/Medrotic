@@ -3,24 +3,263 @@
 }
 
 .upload-prescription-page {
-  .page-header {
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-    }
+  --rx-accent: #0d6efd;
+  --rx-surface: #f8fafc;
+  --rx-border: rgba(0, 16, 71, 0.08);
+  --rx-text: #0f172a;
+  --rx-muted: rgba(15, 23, 42, 0.62);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.75rem) 3rem;
+}
 
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-    }
+.page-header {
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+
+  .page-title {
+    font-size: clamp(1.5rem, 4vw, 1.85rem);
+    font-weight: 700;
+    color: #001047;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
   }
 
-  .card {
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-radius: 12px;
+  .page-subtitle {
+    color: var(--rx-muted);
+    margin: 0;
+    max-width: 42rem;
+    line-height: 1.55;
   }
 }
 
+.layout-grid {
+  width: 100%;
+}
+
+.main-column {
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--rx-border);
+  border-radius: 14px;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  &--patient {
+    background: linear-gradient(180deg, #fff 0%, var(--rx-surface) 100%);
+  }
+
+  &--ocr {
+    border-left: 4px solid var(--rx-accent);
+  }
+
+  &--summary {
+    background: #f0f7ff;
+    border-color: rgba(13, 110, 253, 0.2);
+  }
+
+  &--record {
+    background: var(--rx-surface);
+  }
+}
+
+.panel-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--rx-text);
+  margin-bottom: 0.75rem;
+}
+
+.panel-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+
+  .panel-title {
+    margin-bottom: 0;
+  }
+}
+
+.form-hint {
+  font-size: 0.8125rem;
+  color: var(--rx-muted);
+  margin: 0.35rem 0 0;
+  line-height: 1.45;
+}
+
+.preview-wrap {
+  margin-top: 1.25rem;
+}
+
+.preview-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rx-muted);
+  margin-bottom: 0.5rem;
+}
+
+.preview-inner {
+  border-radius: 12px;
+  border: 1px solid var(--rx-border);
+  background: var(--rx-surface);
+  padding: 1rem;
+  text-align: center;
+}
+
+.preview-img {
+  max-height: min(420px, 55vh);
+  width: auto;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.preview-pdf {
+  padding: 2rem 1rem;
+}
+
+.preview-pdf-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.confidence-badge {
+  font-weight: 600;
+  text-transform: capitalize;
+  padding: 0.4em 0.75em;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #475569;
+
+  &--high {
+    background: #d1fae5;
+    color: #047857;
+  }
+}
+
+.ocr-body {
+  max-height: min(320px, 50vh);
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid var(--rx-border);
+  background: #fff;
+}
+
+.ocr-pre {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+  color: var(--rx-text);
+}
+
+.summary-text {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--rx-text);
+}
+
+.empty-meds {
+  padding: 0.75rem 0;
+}
+
+.med-table-wrap {
+  overflow-x: auto;
+  margin: 0 -0.25rem;
+  padding: 0 0.25rem;
+}
+
+.med-table {
+  margin-bottom: 0;
+  font-size: 0.875rem;
+
+  th {
+    font-weight: 600;
+    color: var(--rx-muted);
+    border-bottom-width: 1px;
+    white-space: nowrap;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+.col-actions {
+  width: 3rem;
+  text-align: end;
+}
+
+.desc-preview {
+  margin: 0.5rem 0 0;
+  padding: 1rem 1.1rem;
+  max-height: 280px;
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px dashed rgba(13, 110, 253, 0.35);
+  background: #fff;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
+  color: var(--rx-text);
+}
+
+.upload-alert {
+  border-radius: 10px;
+  margin-bottom: 0;
+}
+
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .footer-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

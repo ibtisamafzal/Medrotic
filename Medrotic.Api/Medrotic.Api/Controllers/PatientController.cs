@@ -1,9 +1,7 @@
 using Medrotic.Api.Data;
 using Medrotic.Api.DTOs;
 using Medrotic.Api.Models;
-using Medrotic.Api.Data;
-using Medrotic.Api.DTOs;
-using Medrotic.Api.Models;
+using Medrotic.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +11,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -84,11 +84,14 @@ namespace Medrotic.Api.Controllers
             }
         }
 
-        public PatientController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
+        private readonly IAIService _aiService;
+
+        public PatientController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment, IAIService aiService)
         {
             _context = context;
             _userManager = userManager;
             _environment = environment;
+            _aiService = aiService;
         }
 
         private string GetCurrentPatientId()
@@ -363,10 +366,14 @@ namespace Medrotic.Api.Controllers
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
-            // TODO: Call Python AI service here in production
-            Console.WriteLine($"[AI PROCESSING] Document uploaded by patient {patientId}: {filePath}");
+            // Fire and forget AI analysis (real implementation would use a background worker)
+            _ = Task.Run(async () => {
+                try {
+                    await _aiService.AnalyzeDocumentAsync(document.FilePath, document.DocumentType, patientId);
+                } catch { /* Silent log */ }
+            });
 
-            return Ok(new { Message = "Document uploaded successfully. AI analysis will be available soon.", DocumentId = document.Id });
+            return Ok(new { Message = "Document uploaded successfully. AI analysis has been initiated.", DocumentId = document.Id });
         }
 
         // 6. View My Documents

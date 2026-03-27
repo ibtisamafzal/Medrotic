@@ -1640,6 +1640,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Medrotic.Api.Controllers.PatientsController",
+    "Method": "GetPatientHistory",
+    "RelativePath": "api/patients/{patientId}/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Medrotic.Api.Controllers.UsersController",
     "Method": "GetUserById",
     "RelativePath": "api/users/{id}",

@@ -1,113 +1,172 @@
 <div class="upload-prescription-page">
-  <div class="page-header mb-4">
-    <h2 class="page-title">Upload Prescription</h2>
-    <p class="page-subtitle">Upload prescription image with OCR and AI analysis</p>
+  <div class="page-header">
+    <h1 class="page-title">Upload prescription</h1>
+    <p class="page-subtitle">Run OCR on the image, review structured medications, then save to the patient’s medical record.</p>
   </div>
 
-  <div class="row">
-    <div class="col-12 col-lg-8 mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <form (ngSubmit)="onSubmit()">
-            <div class="mb-4">
-              <label class="form-label">Select Patient <span class="text-danger">*</span></label>
-              <select class="form-select" [(ngModel)]="prescription.patientId" name="patientId" required>
-                <option value="">Select a patient</option>
-                <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} ({{ patient.cnic }})</option>
-              </select>
-            </div>
+  <div class="layout-grid">
+    <div class="main-column">
+      <form (ngSubmit)="onSubmit()" class="stack">
+        <section class="panel panel--patient">
+          <h2 class="panel-title">Patient</h2>
+          <label class="form-label" for="patientSelect">Patient <span class="text-danger">*</span></label>
+          <select
+            id="patientSelect"
+            class="form-select form-select-lg"
+            [(ngModel)]="prescription.patientId"
+            name="patientId"
+            required>
+            <option value="">Select a patient</option>
+            <option *ngFor="let patient of patients" [value]="patient.id">
+              {{ patient.name }} <span class="text-muted">({{ patient.cnic }})</span>
+            </option>
+          </select>
+        </section>
 
-            <div class="mb-4">
-              <label class="form-label">Upload Prescription Image <span class="text-danger">*</span></label>
-              <input 
-                type="file" 
-                class="form-control" 
-                accept="image/*"
-                (change)="onFileSelected($event)"
-                required>
-              <div class="form-text">Supported formats: JPG, PNG, PDF</div>
-            </div>
+        <section class="panel">
+          <h2 class="panel-title">File</h2>
+          <label class="form-label" for="rxFile">Prescription image or PDF <span class="text-danger">*</span></label>
+          <input
+            id="rxFile"
+            type="file"
+            class="form-control"
+            accept="image/jpeg,image/png,image/webp,application/pdf"
+            (change)="onFileSelected($event)"
+            required>
+          <p class="form-hint">JPG, PNG, WebP, or PDF — max 5 MB on the server.</p>
 
-            <div *ngIf="previewUrl" class="mb-4">
-              <label class="form-label">Preview</label>
-              <div class="border rounded p-3 text-center">
-                <img [src]="previewUrl" alt="Prescription preview" class="img-fluid" style="max-height: 400px;">
+          <div *ngIf="previewUrl" class="preview-wrap">
+            <span class="preview-label">Preview</span>
+            <div class="preview-inner">
+              <img *ngIf="selectedFile?.type?.startsWith('image/')" [src]="previewUrl" alt="Prescription preview" class="preview-img">
+              <div *ngIf="selectedFile?.type === 'application/pdf'" class="preview-pdf">
+                <span class="preview-pdf-icon" aria-hidden="true">PDF</span>
+                <p class="mb-0 small text-muted">{{ selectedFile?.name }}</p>
               </div>
             </div>
+          </div>
 
-            <div class="mb-4">
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-primary" (click)="processOCR()" [disabled]="!selectedFile || loading">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                  Process OCR
-                </button>
-                <button type="button" class="btn btn-outline-info" (click)="processAI()" [disabled]="!selectedFile || loading">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                  AI Analysis
-                </button>
-              </div>
-            </div>
+          <div class="action-row">
+            <button type="button" class="btn btn-primary" (click)="processOCR()" [disabled]="!selectedFile || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Run OCR
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="processAI()" [disabled]="!selectedFile || loading">
+              Build summary
+            </button>
+          </div>
+        </section>
 
-            <div *ngIf="ocrText" class="mb-4">
-              <label class="form-label">OCR Extracted Text</label>
-              <textarea class="form-control" rows="4" [(ngModel)]="ocrText" name="ocrText" readonly></textarea>
-            </div>
+        <section *ngIf="ocrText" class="panel panel--ocr">
+          <div class="panel-heading">
+            <h2 class="panel-title mb-0">OCR result</h2>
+            <span *ngIf="ocrConfidenceLabel" class="badge confidence-badge" [class.confidence-badge--high]="ocrConfidenceLabel === 'high'">
+              {{ ocrConfidenceLabel }} confidence
+            </span>
+          </div>
+          <div class="ocr-body">
+            <pre class="ocr-pre" aria-label="Extracted text">{{ ocrText }}</pre>
+          </div>
+        </section>
 
-            <div *ngIf="showAiAnalysis && aiAnalysis" class="mb-4">
-              <div class="alert alert-info">
-                <strong>AI Analysis:</strong>
-                <p class="mb-0 mt-2">{{ aiAnalysis }}</p>
-              </div>
-            </div>
+        <section *ngIf="showAiAnalysis && aiAnalysis" class="panel panel--summary">
+          <h2 class="panel-title">Summary</h2>
+          <p class="summary-text">{{ aiAnalysis }}</p>
+        </section>
 
-            <div class="mb-4">
-              <label class="form-label">Medications</label>
-              <button type="button" class="btn btn-sm btn-outline-primary mb-2" (click)="addMedication()">
-                Add Medication
-              </button>
-              <div *ngFor="let med of prescription.medications; let i = index" class="border rounded p-3 mb-2">
-                <div class="row g-2">
-                  <div class="col-12 col-md-6">
-                    <input type="text" class="form-control form-control-sm" placeholder="Medication Name" [(ngModel)]="med.name" [name]="'medName' + i">
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <input type="text" class="form-control form-control-sm" placeholder="Dosage" [(ngModel)]="med.dosage" [name]="'medDosage' + i">
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <input type="text" class="form-control form-control-sm" placeholder="Frequency" [(ngModel)]="med.frequency" [name]="'medFreq' + i">
-                  </div>
-                  <div class="col-12 col-md-5">
-                    <input type="text" class="form-control form-control-sm" placeholder="Duration" [(ngModel)]="med.duration" [name]="'medDuration' + i">
-                  </div>
-                  <div class="col-12 col-md-1">
-                    <button type="button" class="btn btn-sm btn-outline-danger w-100" (click)="removeMedication(i)">×</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <section class="panel">
+          <div class="panel-heading">
+            <h2 class="panel-title mb-0">Medications</h2>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addMedication()">+ Add row</button>
+          </div>
+          <p class="form-hint mb-3">Edit OCR rows before upload. These feed the <strong>Treatment</strong> field on the medical record.</p>
 
-            <div class="mb-4">
-              <label class="form-label">Notes</label>
-              <textarea 
-                class="form-control" 
-                rows="4"
-                [(ngModel)]="prescription.notes"
-                name="notes"
-                placeholder="Additional notes about this prescription"></textarea>
-            </div>
+          <div *ngIf="!prescription.medications?.length" class="empty-meds text-muted small">
+            No medications yet — run OCR or add rows manually.
+          </div>
 
-            <div class="d-flex gap-2 justify-content-end">
-              <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/dashboard">
-                Cancel
-              </button>
-              <button type="submit" class="btn btn-primary" [disabled]="uploading || !selectedFile || !prescription.patientId">
-                <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
-                Upload Prescription
-              </button>
+          <div class="med-table-wrap">
+            <table class="table table-sm med-table align-middle" *ngIf="prescription.medications?.length">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Dosage</th>
+                  <th scope="col">Frequency</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col" class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let med of prescription.medications; let i = index">
+                  <td>
+                    <input type="text" class="form-control form-control-sm" placeholder="Name" [(ngModel)]="med.name" [name]="'medName' + i">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control form-control-sm" placeholder="e.g. 100mg" [(ngModel)]="med.dosage" [name]="'medDosage' + i">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control form-control-sm" placeholder="BID" [(ngModel)]="med.frequency" [name]="'medFreq' + i">
+                  </td>
+                  <td>
+                    <input type="text" class="form-control form-control-sm" placeholder="Optional" [(ngModel)]="med.duration" [name]="'medDuration' + i">
+                  </td>
+                  <td class="col-actions">
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeMedication(i)" [attr.aria-label]="'Remove medication ' + (i + 1)">×</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title">Notes</h2>
+          <label class="form-label visually-hidden" for="notes">Additional notes</label>
+          <textarea
+            id="notes"
+            class="form-control"
+            rows="3"
+            [(ngModel)]="prescription.notes"
+            name="notes"
+            placeholder="Optional notes — included in the description sent to the server"></textarea>
+        </section>
+
+        <section class="panel panel--record">
+          <h2 class="panel-title">Medical record (API)</h2>
+          <p class="form-hint">These fields are required by the server when saving the prescription file to the patient record.</p>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="diag">Diagnosis</label>
+              <input id="diag" type="text" class="form-control" [(ngModel)]="recordDiagnosis" name="recordDiagnosis" maxlength="500">
             </div>
-          </form>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="dis">Disease / category</label>
+              <input id="dis" type="text" class="form-control" [(ngModel)]="recordDisease" name="recordDisease" maxlength="200">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="recDate">Record date</label>
+              <input id="recDate" type="date" class="form-control" [(ngModel)]="recordDateStr" name="recordDateStr" required>
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Description preview <span class="text-muted fw-normal">(10–1000 characters, sent to API)</span></label>
+            <p class="form-hint">Built from OCR text, notes above, and summary when you use &ldquo;Build summary&rdquo;.</p>
+            <pre class="desc-preview" aria-live="polite">{{ getDescriptionPreview() }}</pre>
+          </div>
+        </section>
+
+        <div *ngIf="uploadError" class="alert alert-danger upload-alert" role="alert">
+          {{ uploadError }}
         </div>
-      </div>
+
+        <div class="footer-actions">
+          <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/dashboard">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="uploading || !selectedFile || !prescription.patientId">
+            <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Save to patient record
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

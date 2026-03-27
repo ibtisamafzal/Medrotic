@@ -2653,6 +2653,28 @@
         }
       }
     },
+    "/api/patients/{patientId}/history": {
+      "get": {
+        "tags": [
+          "Patients"
+        ],
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/users/{id}": {
       "get": {
         "tags": [
@@ -3348,12 +3370,19 @@
         "description": "JWT Authorization header using the Bearer scheme.",
         "name": "Authorization",
         "in": "header"
+      },
+      "ApiKey": {
+        "type": "apiKey",
+        "description": "API Key needed to access the AI/RAG endpoints.",
+        "name": "X-API-KEY",
+        "in": "header"
       }
     }
   },
   "security": [
     {
-      "Bearer": [ ]
+      "Bearer": [ ],
+      "ApiKey": [ ]
     }
   ]
 }

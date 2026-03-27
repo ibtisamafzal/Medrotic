@@ -28,12 +28,26 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "API Key needed to access the AI/RAG endpoints.",
+        In = ParameterLocation.Header,
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey
+    });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        },
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "ApiKey" }
             },
             Array.Empty<string>()
         }
@@ -65,6 +79,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 // Register TokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Register AI Service
+builder.Services.AddHttpClient<IAIService, AIService>();
 
 // Add IWebHostEnvironment – FIXED: Correct place (before Build())
 builder.Services.AddSingleton<IWebHostEnvironment>(builder.Environment);

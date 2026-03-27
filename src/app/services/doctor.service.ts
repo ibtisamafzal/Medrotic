@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Doctor {
@@ -58,6 +58,27 @@ export interface Medication {
   duration: string;
 }
 
+/** Response from FastAPI POST /ocr/prescription */
+export interface PrescriptionOcrMedicine {
+  name: string;
+  dosage: string | null;
+  frequency: string | null;
+  duration: string | null;
+}
+
+export interface PrescriptionOcrData {
+  raw_text: string;
+  medicines: PrescriptionOcrMedicine[];
+  doctor_notes: string | null;
+  confidence: { value: number; label: string };
+}
+
+export interface PrescriptionOcrEnvelope {
+  success: boolean;
+  data: PrescriptionOcrData | null;
+  error: string | null;
+}
+
 export interface Xray {
   id?: string;
   patientId: string;
@@ -109,6 +130,20 @@ export interface Document {
   verifiedAt?: string;
 }
 
+/** Row from GET /api/doctor/patients/{patientId}/records */
+export interface PatientMedicalRecord {
+  id: string;
+  patientId?: string;
+  recordDate: string;
+  diagnosis: string;
+  treatment: string;
+  disease: string;
+  description: string;
+  reportFilePath?: string | null;
+  doctorName?: string;
+  hospitalName?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -118,6 +153,24 @@ export class DoctorService {
   private authBaseUrl = `${environment.apiUrl}/api/auth`;
 
   constructor(private http: HttpClient) {}
+
+  /** POST multipart `file` to AI service; requires X-API-Key when enabled on the service. */
+  prescriptionOcr(image: File): Observable<PrescriptionOcrEnvelope> {
+    const url = this.prescriptionOcrUrl();
+    const form = new FormData();
+    form.append('file', image);
+    let headers = new HttpHeaders();
+    if (environment.ocrApiKey) {
+      headers = headers.set('X-API-Key', environment.ocrApiKey);
+    }
+    return this.http.post<PrescriptionOcrEnvelope>(url, form, { headers });
+  }
+
+  private prescriptionOcrUrl(): string {
+    const path = '/ocr/prescription';
+    const base = (environment.ocrApiBaseUrl ?? '').replace(/\/$/, '');
+    return base ? `${base}${path}` : path;
+  }
 
   private extractData<T>() {
     return (source: Observable<any>): Observable<T> =>
@@ -231,6 +284,123 @@ export class DoctorService {
     return this.getPatients().pipe(
       map((patients) => patients.find((patient) => patient.id === id) as Patient)
     );
+  }
+
+  /**
+   * Resolves route param (user id or CNIC) to a patient from the API.
+   * Prefer this over getPatientById when the URL may contain a 13-digit CNIC.
+   */
+  resolvePatient(routeParam: string): Observable<Patient | null> {
+    const term = (routeParam || '').trim();
+    if (!term) return of(null);
+
+    const digits = this.normalizeCnic(term);
+    if (digits.length === 13) {
+      return this.lookupPatientByCnic(digits).pipe(
+        switchMap((res) => {
+          if (res.exists && res.data) {
+            return of(this.mapLookupPatient(res.data));
+          }
+          return this.findPatientInCachedLists(term);
+        })
+      );
+    }
+
+    return this.findPatientInCachedLists(term);
+  }
+
+  private mapLookupPatient(data: Patient & { city?: string; province?: string }): Patient {
+    const addr =
+      data.address ||
+      [data.city, data.province].filter((x) => !!x && String(x).trim()).join(', ') ||
+      undefined;
+    return {
+      id: data.id,
+      name: data.name ?? data.fullName ?? '',
+      fullName: data.fullName ?? data.name,
+      email: data.email ?? '',
+      phone: data.phone ?? '',
+      cnic: data.cnic ?? '',
+      dateOfBirth: data.dateOfBirth,
+      gender: this.normalizeGender(data.gender),
+      address: addr,
+      medicalHistory: data.medicalHistory,
+      status: data.status ?? 'active'
+    };
+  }
+
+  private normalizeGender(g: string | undefined): 'male' | 'female' | 'other' | undefined {
+    if (!g) return undefined;
+    const x = g.toLowerCase();
+    if (x === 'male' || x === 'female' || x === 'other') return x;
+    if (g === 'Male') return 'male';
+    if (g === 'Female') return 'female';
+    if (g === 'Other') return 'other';
+    return undefined;
+  }
+
+  private findPatientInCachedLists(term: string): Observable<Patient | null> {
+    return this.getPatients(term).pipe(
+      switchMap((fromSearch) => {
+        const found = this.pickPatient(fromSearch, term);
+        if (found) return of(found);
+        return this.getPatients().pipe(map((all) => this.pickPatient(all, term)));
+      })
+    );
+  }
+
+  private pickPatient(patients: Patient[], term: string): Patient | null {
+    if (!patients?.length) return null;
+    const byId = patients.find((p) => p.id === term);
+    if (byId) return byId;
+    const n = this.normalizeCnic(term);
+    if (n.length >= 11) {
+      const byCnic = patients.find((p) => this.normalizeCnic(p.cnic || '') === n);
+      if (byCnic) return byCnic;
+    }
+    return patients.find((p) => (p.cnic || '').replace(/\s/g, '') === term.replace(/\s/g, '')) || null;
+  }
+
+  getPatientRecordsList(patientId: string, page = 1, pageSize = 50): Observable<PatientMedicalRecord[]> {
+    const params = new HttpParams().set('page', String(page)).set('pageSize', String(pageSize));
+    return this.http
+      .get<any>(`${this.baseUrl}/patients/${encodeURIComponent(patientId)}/records`, { params })
+      .pipe(
+        map((res) => {
+          const rows = res?.data ?? res?.Data ?? [];
+          return (rows as any[]).map((r) => this.normalizeMedicalRecord(r));
+        }),
+        catchError(() => of([]))
+      );
+  }
+
+  private normalizeMedicalRecord(r: any): PatientMedicalRecord {
+    return {
+      id: String(r.id ?? r.Id ?? ''),
+      patientId: r.patientId ?? r.PatientId,
+      recordDate: this.normalizeRecordDate(r.recordDate ?? r.RecordDate),
+      diagnosis: String(r.diagnosis ?? r.Diagnosis ?? ''),
+      treatment: String(r.treatment ?? r.Treatment ?? ''),
+      disease: String(r.disease ?? r.Disease ?? ''),
+      description: String(r.description ?? r.Description ?? ''),
+      reportFilePath: r.reportFilePath ?? r.ReportFilePath ?? null,
+      doctorName: r.doctorName ?? r.DoctorName ?? '',
+      hospitalName: r.hospitalName ?? r.HospitalName ?? ''
+    };
+  }
+
+  private normalizeRecordDate(v: unknown): string {
+    if (v == null) return '';
+    if (typeof v === 'string') return v;
+    if (v instanceof Date) return v.toISOString();
+    if (typeof v === 'object' && v !== null) {
+      try {
+        return new Date(String(v)).toISOString();
+      } catch {
+        return String(v);
+      }
+    }
+    return String(v);
   }
 
   registerPatient(patient: Partial<Patient>): Observable<Patient> {
@@ -463,8 +633,21 @@ export class DoctorService {
   getDocuments(patientId?: string): Observable<Document[]> {
     const params: HttpParams | undefined = patientId ? new HttpParams().set('patientId', patientId) : undefined;
     return this.http.get<any>(`${this.baseUrl}/documents`, { params } as any).pipe(
-      this.extractData<Document[]>(),
-      map((docs) => docs || []),
+      this.extractData<any[]>(),
+      map((docs) =>
+        (docs || []).map((d: any) => ({
+          id: d.id,
+          patientId: d.patientId,
+          name: d.name ?? d.fileName ?? 'Document',
+          type: d.type ?? 'other',
+          file: d.fileUrl ?? d.filePath ?? d.file,
+          size: d.size,
+          uploadedAt: d.uploadedAt ?? d.createdAt,
+          verificationStatus: d.verificationStatus,
+          verifiedBy: d.verifiedBy,
+          verifiedAt: d.verifiedAt
+        })) as Document[]
+      ),
       catchError(() => of([]))
     );
   }

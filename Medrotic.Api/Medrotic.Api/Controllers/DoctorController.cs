@@ -395,8 +395,8 @@ namespace Medrotic.Api.Controllers
                     if (dto.ReportFile.Length > 5 * 1024 * 1024)
                         return BadRequest(new { Message = "File size exceeds 5MB limit." });
                     var ext = Path.GetExtension(dto.ReportFile.FileName).ToLower();
-                    if (!new[] { ".jpg", ".png", ".pdf" }.Contains(ext))
-                        return BadRequest(new { Message = "Invalid file type. Only JPG, PNG, PDF allowed." });
+                    if (!new[] { ".jpg", ".jpeg", ".png", ".webp", ".pdf" }.Contains(ext))
+                        return BadRequest(new { Message = "Invalid file type. Only JPG, PNG, WebP, PDF allowed." });
 
                     var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
                     Directory.CreateDirectory(uploadsFolder);
