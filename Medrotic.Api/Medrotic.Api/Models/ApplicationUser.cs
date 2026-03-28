@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +35,10 @@ namespace Medrotic.Api.Models
         public Hospital? Hospital { get; set; }
 
         public DateTime LastActivity { get; set; } = DateTime.UtcNow;  // Added for analytics
+
+        /// <summary>Admin onboarding: pending until approved in User Verification / Manage Doctors; verified or rejected.</summary>
+        [MaxLength(32)]
+        public string AccountVerificationStatus { get; set; } = "verified";
 
         public ICollection<Otp> Otps { get; set; } = new List<Otp>();
     }

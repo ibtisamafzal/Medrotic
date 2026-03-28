@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -12,13 +12,17 @@ import { DoctorService, Message, Patient } from '../../services/doctor.service';
 })
 export class SecureCommunication implements OnInit {
   patients: Patient[] = [];
+  patientSidebarFilter = '';
   selectedPatient: Patient | null = null;
   messages: Message[] = [];
   newMessage = '';
   loading = false;
   sending = false;
 
-  constructor(private doctorService: DoctorService) {}
+  constructor(
+    private doctorService: DoctorService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.loadPatients();
@@ -30,18 +34,30 @@ export class SecureCommunication implements OnInit {
       next: (patients) => {
         this.patients = patients;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        // Mock data for development
-        this.patients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', email: 'john@example.com', status: 'active' },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', email: 'jane@example.com', status: 'active' },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', email: 'mike@example.com', status: 'active' }
-        ];
+        this.patients = [];
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
+  }
+
+  get filteredSidebarPatients(): Patient[] {
+    const q = this.patientSidebarFilter.trim().toLowerCase();
+    if (!q) return this.patients;
+    return this.patients.filter(
+      (p) =>
+        (p.name ?? '').toLowerCase().includes(q) ||
+        (p.cnic ?? '').toLowerCase().includes(q) ||
+        (p.phone ?? '').toLowerCase().includes(q)
+    );
+  }
+
+  trackPatientId(_index: number, p: Patient): string {
+    return String(p.id);
   }
 
   selectPatient(patient: Patient) {
@@ -57,9 +73,12 @@ export class SecureCommunication implements OnInit {
           const dateB = new Date(b.timestamp || 0).getTime();
           return dateA - dateB;
         });
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading messages:', err);
+        this.messages = [];
+        this.cdr.markForCheck();
       }
     });
   }
@@ -78,10 +97,12 @@ export class SecureCommunication implements OnInit {
         this.messages.push(sentMessage);
         this.newMessage = '';
         this.sending = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error sending message:', err);
         this.sending = false;
+        this.cdr.markForCheck();
       }
     });
   }

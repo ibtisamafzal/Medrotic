@@ -46,8 +46,12 @@
           </div>
         </div>
         <div class="integration-actions">
-          <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(integration)">Edit</button>
-          <button class="btn btn-sm btn-outline-danger" (click)="deleteIntegration(integration.id)">Delete</button>
+          <app-dashboard-table-actions
+            [showEdit]="true"
+            [showDelete]="true"
+            (edit)="openEditModal(integration)"
+            (delete)="deleteIntegration(integration.id)"
+          />
         </div>
       </div>
     </div>

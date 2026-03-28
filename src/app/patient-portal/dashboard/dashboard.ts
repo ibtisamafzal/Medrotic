@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, RouterModule, Router } from '@angular/router';
-import { PatientService } from '../../services/patient.service';
+import { MedicalHistory, PatientService } from '../../services/patient.service';
 import { AuthService, User } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { portalUpdated$ } from '../../services/patient.service';
@@ -14,7 +14,9 @@ import { portalUpdated$ } from '../../services/patient.service';
 })
 export class Dashboard implements OnInit {
   currentUser: User | null = null;
+  /** Skeleton metric row only on the first successful load; later refreshes keep cards mounted. */
   loading = true;
+  private dashboardReady = false;
   private authSub?: Subscription;
   private portalSub?: Subscription;
   private navSub?: Subscription;
@@ -22,14 +24,15 @@ export class Dashboard implements OnInit {
   healthSummary = {
     lastCheckup: null as string | null,
     recentMetrics: {
-      bloodPressure: '120/80',
-      heartRate: 72,
-      temperature: 98.6,
-      weight: 70
+      bloodPressure: null as string | null,
+      heartRate: null as number | null,
+      temperature: null as number | null,
+      weight: null as number | null,
     },
-    upcomingAppointments: 0,
-    pendingReports: 0,
-    unreadNotifications: 0
+    /** `null` if the request failed — do not show as zero. */
+    upcomingAppointments: null as number | null,
+    pendingReports: null as number | null,
+    unreadNotifications: null as number | null
   };
 
   recentActivity: any[] = [];
@@ -103,21 +106,60 @@ export class Dashboard implements OnInit {
       });
   }
 
+  get welcomeDisplayName(): string {
+    const u = this.currentUser;
+    const n = (u?.name ?? '').trim();
+    if (n) return n;
+    const e = (u?.email ?? '').trim();
+    if (e) return e;
+    return 'Patient';
+  }
+
+  hasRecordedMetric(value: string | number | null | undefined): boolean {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'number') return !Number.isNaN(value);
+    return String(value).trim().length > 0;
+  }
+
   getRgbFromHex(hex: string): string {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return '52, 97, 255';
     return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
   }
 
+  formatOptionalCount(value: number | null | undefined): string {
+    if (value === null || value === undefined) return '—';
+    return String(value);
+  }
+
+  trackByMetricLabel(_index: number, metric: { label: string }): string {
+    return metric.label;
+  }
+
+  private applyLastCheckupFromHistory(history: MedicalHistory[]) {
+    const clinical = (history || []).filter((h) => h.type !== 'metric');
+    if (clinical.length === 0) {
+      this.healthSummary.lastCheckup = null;
+      return;
+    }
+    const sorted = [...clinical].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    this.healthSummary.lastCheckup = sorted[0].date;
+  }
+
   loadDashboardData() {
-    this.loading = true;
+    if (!this.dashboardReady) {
+      this.loading = true;
+    }
     let completedCalls = 0;
-    const totalCalls = 5;
+    const totalCalls = 7;
 
     const checkComplete = () => {
       completedCalls++;
       if (completedCalls >= totalCalls) {
         this.loading = false;
+        this.dashboardReady = true;
       }
       this.cdr.markForCheck();
     };
@@ -128,16 +170,29 @@ export class Dashboard implements OnInit {
         if (metrics && metrics.length > 0) {
           const latest = metrics[0];
           this.healthSummary.recentMetrics = {
-            bloodPressure: latest.bloodPressure || '120/80',
-            heartRate: latest.heartRate || 72,
-            temperature: latest.temperature || 98.6,
-            weight: latest.weight || 70
+            bloodPressure: latest.bloodPressure ?? null,
+            heartRate: latest.heartRate ?? null,
+            temperature: latest.temperature ?? null,
+            weight: latest.weight ?? null,
+          };
+        } else {
+          this.healthSummary.recentMetrics = {
+            bloodPressure: null,
+            heartRate: null,
+            temperature: null,
+            weight: null,
           };
         }
         checkComplete();
       },
       error: (err) => {
         console.error('Error loading metrics:', err);
+        this.healthSummary.recentMetrics = {
+          bloodPressure: null,
+          heartRate: null,
+          temperature: null,
+          weight: null,
+        };
         checkComplete();
       }
     });
@@ -149,11 +204,13 @@ export class Dashboard implements OnInit {
         this.recentActivity = (history || [])
           .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
           .slice(0, 5);
+        this.applyLastCheckupFromHistory(history || []);
         checkComplete();
       },
       error: (err) => {
         console.error('Error loading history:', err);
         this.recentActivity = [];
+        this.healthSummary.lastCheckup = null;
         checkComplete();
       }
     });
@@ -192,6 +249,44 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         console.error('Error loading notifications:', err);
+        this.healthSummary.unreadNotifications = null;
+        checkComplete();
+      }
+    });
+
+    this.patientService.getMyAppointments(1, 100).subscribe({
+      next: ({ data }) => {
+        const now = Date.now();
+        this.healthSummary.upcomingAppointments = data.filter((a) => {
+          const t = new Date(a.appointmentDate).getTime();
+          const st = (a.status ?? '').toString().toLowerCase();
+          return !Number.isNaN(t) && t >= now && st !== 'cancelled';
+        }).length;
+        checkComplete();
+      },
+      error: (err) => {
+        console.error('Error loading appointments:', err);
+        this.healthSummary.upcomingAppointments = null;
+        checkComplete();
+      }
+    });
+
+    this.patientService.getReports().subscribe({
+      next: (reports) => {
+        const pending = reports.filter((r) => {
+          const t = (r.documentType ?? '').toString().toLowerCase();
+          const isReportish = t.includes('lab') || t.includes('report') || t === 'labreport';
+          const st = (r.currentState ?? '').toString().toLowerCase();
+          const pendingState =
+            st === '' || st === 'uploaded' || st === 'pending' || st === 'processing';
+          return isReportish && pendingState;
+        }).length;
+        this.healthSummary.pendingReports = pending;
+        checkComplete();
+      },
+      error: (err) => {
+        console.error('Error loading reports for dashboard:', err);
+        this.healthSummary.pendingReports = null;
         checkComplete();
       }
     });

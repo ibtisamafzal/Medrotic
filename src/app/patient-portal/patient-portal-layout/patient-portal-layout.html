@@ -8,131 +8,101 @@
         <img src="/images/logo/logo-icon.svg" alt="Medrotic" class="sidebar-logo-icon"
           onerror="this.onerror=null; this.src='/images/logo/logo.png';">
       </div>
-      <button class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+      <button type="button" class="sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4 6L16 6M4 10L16 10M4 14L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
       </button>
     </div>
 
+    <div class="sidebar-body">
     <nav class="sidebar-nav">
       <a routerLink="/patient-portal/dashboard" routerLinkActive="active" class="nav-item" title="Dashboard">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2.5 10L10 2.5L17.5 10M10 17.5V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.25"/><rect x="14" y="3" width="7" height="7" rx="1.25"/><rect x="3" y="14" width="7" height="7" rx="1.25"/><rect x="14" y="14" width="7" height="7" rx="1.25"/>
         </svg>
         <span>Dashboard</span>
       </a>
       <a routerLink="/patient-portal/profile-settings" routerLinkActive="active" class="nav-item"
         title="Profile Settings">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z"
-            stroke="currentColor" stroke-width="1.5" />
-          <path d="M2.5 18.3333C2.5 15.1117 5.11167 12.5 8.33333 12.5H11.6667C14.8883 12.5 17.5 15.1117 17.5 18.3333"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.028-1.563.43L6 20.25a1.5 1.5 0 01-3 0v-3.614c0-.655-.092-1.318-.264-1.948M15.75 5.25a3 3 0 00-3-3H9.75a3 3 0 00-3 3v.75m12 0V9a3 3 0 00-3-3h-.75m-6 0H9a3 3 0 013 3v.75m-6 0V18a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0015 18v-1.5"/>
         </svg>
         <span>Profile Settings</span>
       </a>
       <a routerLink="/patient-portal/view-medical-history" routerLinkActive="active" class="nav-item"
         title="Medical History">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/>
         </svg>
         <span>Medical History</span>
       </a>
       <a routerLink="/patient-portal/add-metrics" routerLinkActive="active" class="nav-item" title="Add Metrics">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M10 1.66667V10M10 18.3333C14.6024 18.3333 18.3333 14.6024 18.3333 10C18.3333 5.39763 14.6024 1.66667 10 1.66667C5.39763 1.66667 1.66667 5.39763 1.66667 10C1.66667 14.6024 5.39763 18.3333 10 18.3333Z"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
         </svg>
         <span>Add Metrics</span>
       </a>
       <a routerLink="/patient-portal/ai-chatbot" routerLinkActive="active" class="nav-item" title="AI Chatbot">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
         </svg>
         <span>AI Chatbot</span>
       </a>
       <a routerLink="/patient-portal/doctor-search" routerLinkActive="active" class="nav-item" title="Doctor Search">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M17.5 17.5L13.875 13.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
         </svg>
         <span>Doctor Search</span>
       </a>
       <a routerLink="/patient-portal/test-report-analysis" routerLinkActive="active" class="nav-item"
         title="Test Report Analysis">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.33333 15L8.33333 10L11.6667 13.3333L16.6667 8.33333" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M13.3333 8.33333H16.6667V11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-            stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75a3.375 3.375 0 00-3.375 3.375V18a2.25 2.25 0 002.25 2.25h10.125A2.25 2.25 0 0021 18v-1.875a2.625 2.625 0 00-1.5-2.375zM4.5 9.75h3.375a1.875 1.875 0 011.875 1.875V15M9 12h1.5m-1.5 3h1.5m-1.5 3h1.5m3.75-9h3.375a1.875 1.875 0 011.875 1.875V18"/>
         </svg>
         <span>Test Report Analysis</span>
       </a>
       <a routerLink="/patient-portal/upload-documents" routerLinkActive="active" class="nav-item"
         title="Upload Documents">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M10 1.66667V10M10 1.66667L7.5 4.16667M10 1.66667L12.5 4.16667M3.33333 10V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V10"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
         </svg>
         <span>Upload Documents</span>
       </a>
       <a routerLink="/patient-portal/view-prescriptions" routerLinkActive="active" class="nav-item"
         title="Prescriptions">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192a48.424 48.424 0 011.123-.08m-5.801 0c-.065.21-.1.433-.1.664v.75h-4.5A2.25 2.25 0 00.75 6.108V18a2.25 2.25 0 002.25 2.25h6.75m13.5 0V9.75A2.25 2.25 0 0019.5 7.5h-6.75m0 0V4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V7.5m-9 6h3.75m-3.75 3h3.75m-3.75 3h3.75m3.75-9h.008v.008H16.5V10.5z"/>
         </svg>
         <span>Prescriptions</span>
       </a>
       <a routerLink="/patient-portal/view-xrays" routerLinkActive="active" class="nav-item" title="X-Rays">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M2.5 5.83333H17.5M2.5 5.83333C1.57953 5.83333 0.833333 6.57952 0.833333 7.5V15.8333C0.833333 16.7538 1.57953 17.5 2.5 17.5H17.5C18.4205 17.5 19.1667 16.7538 19.1667 15.8333V7.5C19.1667 6.57952 18.4205 5.83333 17.5 5.83333M2.5 5.83333V4.16667C2.5 3.24619 3.24619 2.5 4.16667 2.5H15.8333C16.7538 2.5 17.5 3.24619 17.5 4.16667V5.83333"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.558-.646 1.184-.646 1.86s.266 1.301.646 1.86c.38.558.866 1.054 1.641 1.054s1.261-.496 1.641-1.054c.38-.559.646-1.184.646-1.86s-.266-1.301-.646-1.86a2.31 2.31 0 00-1.641-1.054zM12 12.75V21m0-8.25H9.75m2.25 0h2.25M9.75 12.75H8.25m1.5 0h1.5m6.75-6.75v12a2.25 2.25 0 01-2.25 2.25H8.25A2.25 2.25 0 016 18V6.75A2.25 2.25 0 018.25 4.5h7.5A2.25 2.25 0 0118 6.75z"/>
         </svg>
         <span>X-Rays</span>
       </a>
       <a routerLink="/patient-portal/notifications" routerLinkActive="active" class="nav-item" title="Notifications">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M10 1.66667C8.15905 1.66667 6.66667 3.15905 6.66667 5V8.33333L4.16667 10.8333V12.5H15.8333V10.8333L13.3333 8.33333V5C13.3333 3.15905 11.8409 1.66667 10 1.66667Z"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M7.5 12.5V14.1667C7.5 15.0871 8.24619 15.8333 9.16667 15.8333H10.8333C11.7538 15.8333 12.5 15.0871 12.5 14.1667V12.5"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
         </svg>
         <span>Notifications</span>
       </a>
       <a routerLink="/patient-portal/access-records" routerLinkActive="active" class="nav-item" title="Access Records">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M8.33333 10H11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15.75 5.25a3 3 0 013 3m3 0a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h-6v1.125c0 1.243.9 2.25 2.006 2.25h3.988c1.105 0 2.006-1.007 2.006-2.25V9z"/>
         </svg>
         <span>Access Records</span>
       </a>
     </nav>
+    </div>
 
     <div class="sidebar-footer">
-      <button class="nav-item logout-btn" (click)="logout()" title="Logout" aria-label="Log out of portal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button type="button" class="sidebar-logout" (click)="logout()" title="Sign out of Patient Portal" aria-label="Sign out of Patient Portal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
-        <span>Logout</span>
+        <span class="sidebar-logout-text">Sign out</span>
       </button>
     </div>
   </aside>

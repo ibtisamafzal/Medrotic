@@ -2,7 +2,7 @@
   <div class="page-header mb-4 fade-in-down">
     <div class="d-flex justify-content-between align-items-center">
       <div>
-        <h2 class="page-title">Welcome, {{ currentUser?.name || 'Patient' }}!</h2>
+        <h2 class="page-title">Welcome, {{ welcomeDisplayName }}!</h2>
         <p class="page-subtitle">Overview of your health summary and recent activity</p>
       </div>
       <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
@@ -40,7 +40,7 @@
         { label: 'Heart Rate', value: healthSummary.recentMetrics.heartRate, icon: 'hr', color: '#ef4444', unit: 'bpm' },
         { label: 'Temperature', value: healthSummary.recentMetrics.temperature, icon: 'temp', color: '#f59e0b', unit: '°F' },
         { label: 'Weight', value: healthSummary.recentMetrics.weight, icon: 'weight', color: '#10b981', unit: 'kg' }
-      ]; let i = index">
+      ]; trackBy: trackByMetricLabel; let i = index">
         <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
           <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
             <svg *ngIf="metric.icon === 'bp'" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -74,12 +74,48 @@
             </svg>
           </div>
           <div class="metric-content">
-            <h3 class="metric-value">{{ metric.value }} <span class="metric-unit">{{ metric.unit }}</span></h3>
+            <h3 class="metric-value">
+              <ng-container *ngIf="hasRecordedMetric(metric.value); else noMetric">
+                {{ metric.value }} <span class="metric-unit">{{ metric.unit }}</span>
+              </ng-container>
+              <ng-template #noMetric><span class="text-muted fs-6 fw-normal">No data recorded</span></ng-template>
+            </h3>
             <p class="metric-label">{{ metric.label }}</p>
           </div>
         </div>
       </div>
     </ng-container>
+  </div>
+
+  <!-- Care overview: real counts from appointments, documents, notifications, and clinical timeline -->
+  <div class="row g-4 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="section-card p-3 h-100">
+        <p class="text-muted small mb-1">Last clinical activity</p>
+        <p class="mb-0 fw-semibold" *ngIf="healthSummary.lastCheckup; else noClinical">
+          {{ healthSummary.lastCheckup | date:'mediumDate' }}
+        </p>
+        <ng-template #noClinical><span class="text-muted">No visits or documents yet</span></ng-template>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="section-card p-3 h-100">
+        <p class="text-muted small mb-1">Upcoming appointments</p>
+        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.upcomingAppointments) }}</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="section-card p-3 h-100">
+        <p class="text-muted small mb-1">Lab reports awaiting review</p>
+        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.pendingReports) }}</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="section-card p-3 h-100">
+        <p class="text-muted small mb-1">Unread notifications</p>
+        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.unreadNotifications) }}</p>
+      </div>
+    </div>
   </div>
 
   <!-- Quick Actions -->
@@ -144,7 +180,7 @@
           <h3 class="section-title">Recent Activity</h3>
           <a routerLink="/patient-portal/view-medical-history" class="text-primary text-decoration-none">View All</a>
         </div>
-        <div class="activity-list" *ngIf="!loading && recentActivity.length > 0">
+        <div class="activity-list" *ngIf="recentActivity.length > 0">
           <div class="activity-item" *ngFor="let activity of recentActivity">
             <div class="activity-icon" [class]="'type-' + activity.type">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,7 +193,7 @@
             </div>
           </div>
         </div>
-        <div class="empty-state" *ngIf="!loading && recentActivity.length === 0">
+        <div class="empty-state" *ngIf="recentActivity.length === 0">
           <p class="text-muted">No recent activity</p>
         </div>
       </div>
@@ -168,7 +204,7 @@
           <h3 class="section-title">Recent Prescriptions</h3>
           <a routerLink="/patient-portal/view-prescriptions" class="text-primary text-decoration-none">View All</a>
         </div>
-        <div class="prescription-list" *ngIf="!loading && recentPrescriptions.length > 0">
+        <div class="prescription-list" *ngIf="recentPrescriptions.length > 0">
           <div class="prescription-item" *ngFor="let prescription of recentPrescriptions">
             <div class="prescription-header">
               <h5 class="prescription-doctor">{{ prescription.doctorName }}</h5>
@@ -177,7 +213,7 @@
             <p class="prescription-medications">{{ prescription.medications?.length || 0 }} medications</p>
           </div>
         </div>
-        <div class="empty-state" *ngIf="!loading && recentPrescriptions.length === 0">
+        <div class="empty-state" *ngIf="recentPrescriptions.length === 0">
           <p class="text-muted">No prescriptions yet</p>
         </div>
       </div>

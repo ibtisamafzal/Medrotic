@@ -80,6 +80,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 // Register TokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+// In-memory system logs for admin dashboard (System Health)
+builder.Services.AddSingleton<ISystemLogStore, SystemLogStore>();
+
 // Register AI Service
 builder.Services.AddHttpClient<IAIService, AIService>();
 
@@ -169,6 +172,16 @@ app.UseAuthentication(); // This must come before UseAuthorization
 app.UseAuthorization();
 app.MapControllers();
 
+try
+{
+    app.Services.GetRequiredService<ISystemLogStore>()
+        .Add("info", "Medrotic API is running.", "System");
+}
+catch
+{
+    // ignore if DI not ready in edge test hosts
+}
+
 // Seed the database with roles and admin user
 using (var scope = app.Services.CreateScope())
 {
@@ -178,8 +191,7 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<AppDbContext>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        // Ensure database is created
-        context.Database.EnsureCreated();
+        await context.Database.MigrateAsync();
         // Seed roles if they don't exist
         string[] roleNames = { "Admin", "Doctor", "Patient" };
         foreach (var roleName in roleNames)
@@ -206,7 +218,8 @@ using (var scope = app.Services.CreateScope())
                 Province = "Punjab",
                 PhoneNumber = "03001234567",
                 DateOfBirth = new DateTime(1980, 1, 1),
-                Gender = "Male"
+                Gender = "Male",
+                AccountVerificationStatus = "verified"
             };
             var result = await userManager.CreateAsync(admin, "Admin@123");
             if (result.Succeeded)
@@ -234,7 +247,8 @@ using (var scope = app.Services.CreateScope())
                 PhoneNumber = "03001234568",
                 DateOfBirth = new DateTime(1985, 1, 1),
                 Gender = "Male",
-                HospitalId = null
+                HospitalId = null,
+                AccountVerificationStatus = "verified"
             };
 
             var result = await userManager.CreateAsync(doctor, "Doctor@123");
@@ -261,7 +275,8 @@ using (var scope = app.Services.CreateScope())
                 PhoneNumber = "03001234569",
                 DateOfBirth = new DateTime(1990, 1, 1),
                 Gender = "Male",
-                HospitalId = null
+                HospitalId = null,
+                AccountVerificationStatus = "verified"
             };
 
             var result = await userManager.CreateAsync(patient, "Patient@123");

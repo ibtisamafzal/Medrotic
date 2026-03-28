@@ -58,11 +58,7 @@ export class UploadPrescription implements OnInit {
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        this.patients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', email: 'john@example.com', status: 'active' },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', email: 'jane@example.com', status: 'active' },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', email: 'mike@example.com', status: 'active' }
-        ];
+        this.patients = [];
       }
     });
   }

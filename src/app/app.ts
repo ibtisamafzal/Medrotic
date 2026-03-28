@@ -9,10 +9,11 @@ import { CommonModule } from '@angular/common';
 import { VercelAnalyticsComponent } from './common/vercel-analytics/vercel-analytics';
 import { VercelSpeedInsightsComponent } from './common/vercel-speed-insights/vercel-speed-insights';
 import { RouteProgressComponent } from './common/shared/route-progress.component';
+import { ConfirmDialogComponent } from './common/shared/confirm-dialog.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Alert, CommonModule, VercelAnalyticsComponent, VercelSpeedInsightsComponent, RouteProgressComponent],
+  imports: [RouterOutlet, Alert, CommonModule, VercelAnalyticsComponent, VercelSpeedInsightsComponent, RouteProgressComponent, ConfirmDialogComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

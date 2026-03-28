@@ -11,13 +11,66 @@
 
   .filters-card {
     @extend .admin-card;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     animation-delay: 100ms;
+    padding: 1.25rem 1.5rem;
   }
 
   .table-card {
     @extend .admin-table-card;
     animation-delay: 200ms;
+    margin-bottom: 1.5rem;
+
+    .table-responsive {
+      padding: 0.25rem 0.5rem 0.75rem;
+      overflow-x: hidden;
+    }
+
+    .table {
+      table-layout: fixed;
+
+      thead th {
+        padding: 0.875rem 1rem;
+        font-size: 0.6875rem;
+      }
+
+      tbody td {
+        padding: 0.875rem 1rem;
+        font-size: 0.875rem;
+      }
+
+      th,
+      td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      th:nth-child(1),
+      td:nth-child(1) {
+        width: 28%;
+      }
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: 12%;
+      }
+      th:nth-child(3),
+      td:nth-child(3) {
+        width: 12%;
+      }
+      th:nth-child(4),
+      td:nth-child(4) {
+        width: 16%;
+      }
+      th:nth-child(5),
+      td:nth-child(5) {
+        width: 18%;
+      }
+      th:nth-child(6),
+      td:nth-child(6) {
+        width: 14%;
+      }
+    }
 
     .file-icon {
       font-size: 1.25rem;

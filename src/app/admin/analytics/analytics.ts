@@ -42,6 +42,16 @@ export class Analytics implements OnInit, AfterViewInit {
     });
   }
 
+  formatOptionalMs(value: number | null | undefined): string {
+    if (value === null || value === undefined) return '—';
+    return `${value} ms`;
+  }
+
+  formatOptionalPercent(value: number | null | undefined): string {
+    if (value === null || value === undefined) return '—';
+    return `${value}%`;
+  }
+
   renderCharts() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (!this.analytics || !this.chartCanvases || this.chartCanvases.length < 2) return;

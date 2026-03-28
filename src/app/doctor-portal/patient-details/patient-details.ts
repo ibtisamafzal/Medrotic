@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -42,7 +42,8 @@ export class PatientDetails implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public router: Router,
-    private doctorService: DoctorService
+    private doctorService: DoctorService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -68,6 +69,7 @@ export class PatientDetails implements OnInit {
         if (!patient?.id) {
           this.loadError =
             'Patient not found. Use a valid patient id from your list, or the full 13-digit CNIC.';
+          this.cdr.markForCheck();
           return;
         }
         this.patient = patient;
@@ -75,11 +77,13 @@ export class PatientDetails implements OnInit {
         this.editForm = { ...patient };
         this.loadMedicalRecords();
         this.loadDocuments();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading patient:', err);
         this.loading = false;
         this.loadError = 'Could not load patient. Check your connection and try again.';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -156,12 +160,14 @@ export class PatientDetails implements OnInit {
         this.isEditing = false;
         this.saving = false;
         this.loadPatientDetails();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error updating patient:', err);
         this.saving = false;
         this.saveError =
           (err.error && (err.error.message || err.error.Message)) || 'Update failed.';
+        this.cdr.markForCheck();
       }
     });
   }

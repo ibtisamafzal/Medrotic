@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PatientService, Notification } from '../../services/patient.service';
@@ -12,6 +12,8 @@ import { portalUpdated$ } from '../../services/patient.service';
   styleUrl: './notifications.scss',
 })
 export class Notifications implements OnInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   loading = false;
   notifications: Notification[] = [];
   private sub?: Subscription;
@@ -35,10 +37,12 @@ export class Notifications implements OnInit, OnDestroy {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading notifications:', err);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -49,9 +53,11 @@ export class Notifications implements OnInit, OnDestroy {
     this.patientService.markNotificationRead(notification.id).subscribe({
       next: () => {
         notification.read = true;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error marking notification as read:', err);
+        this.cdr.markForCheck();
       }
     });
   }

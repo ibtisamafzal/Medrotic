@@ -70,7 +70,8 @@ namespace Medrotic.Api.Data
                 DateOfBirth = new DateTime(1985, 5, 15),
                 Gender = "Male",
                 HospitalId = hospitalId,
-                LastActivity = DateTime.UtcNow // New field
+                LastActivity = DateTime.UtcNow,
+                AccountVerificationStatus = "verified"
             };
             var hasher = new PasswordHasher<ApplicationUser>();
             admin.PasswordHash = hasher.HashPassword(admin, "Admin@123");
@@ -94,7 +95,8 @@ namespace Medrotic.Api.Data
                 DateOfBirth = new DateTime(1992, 3, 10),
                 Gender = "Male",
                 HospitalId = hospitalId,
-                LastActivity = DateTime.UtcNow
+                LastActivity = DateTime.UtcNow,
+                AccountVerificationStatus = "verified"
             };
             doctor.PasswordHash = hasher.HashPassword(doctor, "Doctor@123");
             builder.Entity<ApplicationUser>().HasData(doctor);
@@ -115,7 +117,8 @@ namespace Medrotic.Api.Data
                 PhoneNumber = "03009876543",
                 DateOfBirth = new DateTime(2000, 1, 1),
                 Gender = "Female",
-                LastActivity = DateTime.UtcNow
+                LastActivity = DateTime.UtcNow,
+                AccountVerificationStatus = "verified"
             };
             patient.PasswordHash = hasher.HashPassword(patient, "Patient@123");
             builder.Entity<ApplicationUser>().HasData(patient);

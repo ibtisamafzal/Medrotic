@@ -39,6 +39,8 @@
                     [(ngModel)]="patient.cnic"
                     name="cnic"
                   pkInputFormat="cnic"
+                  maxlength="15"
+                  inputmode="numeric"
                     placeholder="12345-1234567-1"
                     required>
                   <button type="button" class="btn btn-outline-primary" (click)="searchByCnic()" [disabled]="loading">
@@ -59,7 +61,7 @@
               </div>
 
               <div class="col-12 col-md-6">
-                <label class="form-label">Phone</label>
+                <label class="form-label">Phone <span class="text-danger">*</span></label>
                 <input 
                   type="tel" 
                   class="form-control" 
@@ -67,7 +69,18 @@
                   name="phone"
                   pkInputFormat="phone"
                   placeholder="03xx-xxxxxxx"
+                  required
                   title="Phone">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="patient.city" name="city" required title="City">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Province <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="patient.province" name="province" required title="Province">
               </div>
 
               <div class="col-12 col-md-6">

@@ -42,8 +42,8 @@
                 [name]="loginMethod + 'Input'"
                 required
                 [attr.maxlength]="loginMethod === 'cnic' ? '15' : (loginMethod === 'phone' ? '16' : null)"
-                (input)="loginMethod === 'cnic' ? onCNICInput($event) : (loginMethod === 'phone' ? onPhoneInput($event) : null)"
-                [attr.inputmode]="loginMethod === 'phone' ? 'tel' : (loginMethod === 'email' ? 'email' : 'text')"
+                [pkInputFormat]="loginMethod === 'cnic' ? 'cnic' : loginMethod === 'phone' ? 'phone' : 'text'"
+                [attr.inputmode]="loginMethod === 'phone' ? 'tel' : (loginMethod === 'email' ? 'email' : 'numeric')"
                 [attr.autocomplete]="loginMethod === 'email' ? 'email' : (loginMethod === 'phone' ? 'tel' : 'off')"
               />
               <div *ngIf="loginMethod === 'cnic'" class="form-text small">

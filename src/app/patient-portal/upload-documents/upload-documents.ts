@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService } from '../../services/patient.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-upload-documents',
@@ -15,7 +16,11 @@ export class UploadDocuments implements OnInit {
   documentType = '';
   uploadedDocuments: any[] = [];
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private cdr: ChangeDetectorRef,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     // Load uploaded documents if needed
@@ -30,7 +35,7 @@ export class UploadDocuments implements OnInit {
 
   uploadDocument() {
     if (!this.selectedFile) {
-      alert('Please select a file first');
+      this.alertService.warning('Please select a file first.');
       return;
     }
 
@@ -38,14 +43,16 @@ export class UploadDocuments implements OnInit {
     this.patientService.uploadDocument(this.selectedFile, this.documentType).subscribe({
       next: (result) => {
         this.uploading = false;
-        alert('Document uploaded successfully');
+        this.alertService.success('Document uploaded successfully.');
         this.selectedFile = null;
         this.documentType = '';
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error uploading document:', err);
-        alert('Error uploading document. Please try again.');
+        this.alertService.error('Error uploading document. Please try again.');
         this.uploading = false;
+        this.cdr.markForCheck();
       }
     });
   }

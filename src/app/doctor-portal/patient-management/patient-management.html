@@ -1,95 +1,109 @@
 <div class="patient-management-page">
   <div class="page-header mb-4">
-    <h2 class="page-title">Patient Management</h2>
-    <p class="page-subtitle">Search and manage your patients</p>
-  </div>
-
-  <!-- Search Section -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <div class="row g-3 align-items-end">
-        <div class="col-12 col-md-4">
-          <label class="form-label">Search By</label>
-          <select class="form-select" [(ngModel)]="searchBy" title="Search filter criteria" aria-label="Search by">
-            <option value="cnic">CNIC</option>
-            <option value="name">Name</option>
-            <option value="phone">Phone</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-6">
-          <label class="form-label">Search Term</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            [(ngModel)]="searchTerm"
-            (input)="onSearch()"
-            [placeholder]="'Enter ' + (searchBy === 'cnic' ? 'CNIC' : searchBy === 'name' ? 'patient name' : 'phone number')"
-            title="Search patients"
-            aria-label="Patient search term">
-        </div>
-        <div class="col-12 col-md-2">
-          <button class="btn btn-outline-secondary w-100" (click)="clearSearch()">Clear</button>
-        </div>
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+      <div>
+        <h2 class="page-title">Patient management</h2>
+        <p class="page-subtitle mb-0">Search your roster by CNIC, name, or phone — then open details or analytics.</p>
       </div>
-    </div>
-  </div>
-
-  <!-- Patients Table -->
-  <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">Patients ({{ filteredPatients.length }})</h5>
-      <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 1.33333V14.6667M1.33333 8H14.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm pm-register-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
         </svg>
-        Register New Patient
+        Register patient
       </a>
     </div>
-    <div class="card-body">
-      <div *ngIf="loading" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <div class="pm-search-panel">
+    <div class="pm-search-panel__row">
+      <div class="pm-field pm-field--select">
+        <label class="pm-field__label" for="pm-search-by">Search by</label>
+        <select id="pm-search-by" class="form-select pm-field__control" [(ngModel)]="searchBy" title="Search filter criteria" aria-label="Search by">
+          <option value="cnic">CNIC</option>
+          <option value="name">Name</option>
+          <option value="phone">Phone</option>
+        </select>
+      </div>
+      <div class="pm-field pm-field--grow">
+        <label class="pm-field__label" for="pm-search-term">Search</label>
+        <div class="pm-search-input-wrap">
+          <svg class="pm-search-input-wrap__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+          </svg>
+          <input
+            id="pm-search-term"
+            type="search"
+            class="form-control pm-search-input-wrap__input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            [pkInputFormat]="searchBy === 'cnic' ? 'cnic' : searchBy === 'phone' ? 'phone' : 'text'"
+            [attr.maxlength]="searchBy === 'cnic' ? 15 : (searchBy === 'phone' ? 16 : null)"
+            [placeholder]="searchBy === 'cnic' ? '#####-#######-#' : searchBy === 'name' ? 'Type a name…' : 'Phone number'"
+            title="Search patients"
+            aria-label="Patient search term"
+          />
         </div>
       </div>
-
-      <div *ngIf="!loading" class="table-responsive">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>CNIC</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let patient of filteredPatients">
-              <td [title]="patient.name">{{ patient.name }}</td>
-              <td [title]="patient.cnic">{{ patient.cnic || 'N/A' }}</td>
-              <td>{{ patient.phone || 'N/A' }}</td>
-              <td [title]="patient.email">{{ patient.email || 'N/A' }}</td>
-              <td>
-                <span class="badge" [class.bg-success]="patient.status === 'active'" [class.bg-secondary]="patient.status === 'inactive'">
-                  {{ patient.status }}
-                </span>
-              </td>
-              <td>
-                <div class="btn-group btn-group-sm">
-                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-outline-primary">View</a>
-                  <a [routerLink]="['/doctor-portal/patient-analytics', patient.id]" class="btn btn-outline-info">Analytics</a>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="filteredPatients.length === 0">
-              <td colspan="6" class="text-center text-muted py-4">
-                No patients found
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="pm-field pm-field--action">
+        <span class="pm-field__label pm-field__label--phantom" aria-hidden="true">Clear</span>
+        <button type="button" class="btn btn-outline-secondary pm-clear-btn" (click)="clearSearch()">Clear</button>
       </div>
+    </div>
+    <p class="pm-search-panel__hint text-muted small mb-0">
+      Showing <strong>{{ filteredPatients.length }}</strong> of <strong>{{ patients.length }}</strong> patients
+    </p>
+  </div>
+
+  <div class="pm-table-card">
+    <div class="pm-table-card__head">
+      <h3 class="pm-table-card__title">Patients</h3>
+    </div>
+
+    <div *ngIf="loading" class="pm-table-card__loading text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading" class="table-responsive pm-table-scroll">
+      <table class="table pm-table mb-0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>CNIC</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th class="pm-table__actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of filteredPatients; trackBy: trackPatientId">
+            <td class="pm-table__name" [title]="patient.name">{{ patient.name }}</td>
+            <td [title]="patient.cnic">{{ patient.cnic || '—' }}</td>
+            <td>{{ patient.phone || '—' }}</td>
+            <td class="pm-table__email" [title]="patient.email">{{ patient.email || '—' }}</td>
+            <td>
+              <span
+                class="pm-status"
+                [class.pm-status--active]="patient.status === 'active'"
+                [class.pm-status--inactive]="patient.status !== 'active'"
+              >{{ patient.status || '—' }}</span>
+            </td>
+            <td class="pm-table__actions">
+              <app-dashboard-table-actions
+                [viewLink]="['/doctor-portal/patient-details', patient.id]"
+                [analyticsLink]="['/doctor-portal/patient-analytics', patient.id]"
+              />
+            </td>
+          </tr>
+          <tr *ngIf="filteredPatients.length === 0">
+            <td colspan="6" class="text-center text-muted py-5 pm-table__empty">
+              No patients match your search.
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

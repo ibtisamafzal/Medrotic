@@ -28,5 +28,15 @@
       border-radius: 12px 12px 0 0;
     }
   }
+
+  .table-responsive {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  .table {
+    table-layout: fixed;
+    width: 100%;
+  }
 }
 

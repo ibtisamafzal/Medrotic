@@ -76,15 +76,18 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">License Number</label>
+              <label class="form-label">CNIC (National ID)</label>
               <input 
                 type="text" 
                 class="form-control" 
-                [(ngModel)]="doctor.licenseNumber"
-                name="licenseNumber"
-                placeholder="e.g. 35202-1234567-8"
-                title="Medical license number"
-                pkInputFormat="license">
+                [(ngModel)]="doctor.cnic"
+                name="cnic"
+                placeholder="35202-1234567-8"
+                title="Pakistani CNIC — read-only; contact admin to change."
+                pkInputFormat="cnic"
+                maxlength="15"
+                readonly>
+              <small class="text-muted">Issued by NADRA. Shown for your records; updates go through support or admin.</small>
             </div>
 
             <div class="mb-3">

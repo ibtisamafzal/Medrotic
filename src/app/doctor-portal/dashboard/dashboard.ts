@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
 import { DoctorService } from '../../services/doctor.service';
 import { AuthService, User } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -8,30 +9,29 @@ import { portalUpdated$ } from '../../services/patient.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DashboardTableActionsComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit, OnDestroy {
   currentUser: User | null = null;
-  loading = true;
   private authSub?: Subscription;
   private portalSub?: Subscription;
   private navSub?: Subscription;
   private refreshInFlight = false;
   metrics = {
-    totalPatients: 0,
-    activePatients: 0,
-    totalPrescriptions: 0,
-    totalXrays: 0,
-    pendingMessages: 0,
-    recentVisits: 0
+    totalPatients: null as number | null,
+    activePatients: null as number | null,
+    totalPrescriptions: null as number | null,
+    totalXrays: null as number | null,
+    pendingMessages: null as number | null,
   };
 
   recentPatients: any[] = [];
   assignedPatients: any[] = [];
   recentUploads: any[] = [];
   upcomingAppointments: any[] = [];
+  appointmentsLoadError: string | null = null;
 
   constructor(
     private doctorService: DoctorService,
@@ -72,10 +72,88 @@ export class Dashboard implements OnInit, OnDestroy {
     this.navSub?.unsubscribe();
   }
 
+  formatMetricCount(value: number | null | undefined): string {
+    if (value === null || value === undefined) return '—';
+    return String(value);
+  }
+
+  get welcomeDisplayName(): string {
+    const u = this.currentUser;
+    const n = (u?.name ?? '').trim();
+    if (n) return n;
+    const e = (u?.email ?? '').trim();
+    if (e) return e;
+    return 'Doctor';
+  }
+
   getRgbFromHex(hex: string): string {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return '52, 97, 255';
     return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
+  }
+
+  trackByMetricLabel(_index: number, metric: { label: string }): string {
+    return metric.label;
+  }
+
+  /** Max of the four headline numbers — used for relative bar length. */
+  get metricScaleMax(): number {
+    const vals = [
+      this.metrics.totalPatients,
+      this.metrics.activePatients,
+      this.metrics.totalPrescriptions,
+      this.metrics.totalXrays,
+    ].filter((x): x is number => x != null && x >= 0);
+    return vals.length ? Math.max(...vals, 1) : 1;
+  }
+
+  /**
+   * Optional bar under each metric: "share" = active vs total; "relative" = vs max of the four stats.
+   */
+  metricBarInsight(metric: {
+    label: string;
+    value: number | null;
+    viz: string;
+  }): { pct: number; caption: string } | null {
+    if (metric.viz === 'share') {
+      const t = this.metrics.totalPatients;
+      const a = this.metrics.activePatients;
+      if (t == null || t <= 0 || a == null) return null;
+      const pct = Math.min(100, Math.round((a / t) * 100));
+      return { pct, caption: `${pct}% of roster active` };
+    }
+    if (metric.value == null) return null;
+    const pct = Math.min(100, Math.round((metric.value / this.metricScaleMax) * 100));
+    return { pct, caption: 'Volume vs busiest metric' };
+  }
+
+  /** Donut + mix strip for the snapshot row (light theme only). */
+  get practiceSnapshot():
+    | {
+        activePct: number;
+        rx: number;
+        xr: number;
+        totalPatients: number;
+        activePatients: number;
+      }
+    | null {
+    const t = this.metrics.totalPatients;
+    const a = this.metrics.activePatients;
+    const rx = this.metrics.totalPrescriptions;
+    const xr = this.metrics.totalXrays;
+    if (t == null && a == null && rx == null && xr == null) return null;
+    const activePct =
+      t != null && t > 0 && a != null ? Math.min(100, Math.round((a / t) * 100)) : 0;
+    const rv = Math.max(0, rx ?? 0);
+    const xv = Math.max(0, xr ?? 0);
+    const sum = rv + xv;
+    return {
+      activePct,
+      rx: sum > 0 ? rv : 0,
+      xr: sum > 0 ? xv : 0,
+      totalPatients: t ?? 0,
+      activePatients: a ?? 0,
+    };
   }
 
   private reloadAll(): void {
@@ -83,6 +161,7 @@ export class Dashboard implements OnInit, OnDestroy {
     this.loadRecentPatients();
     this.loadAssignedPatients();
     this.loadRecentUploads();
+    this.loadUpcomingAppointments();
   }
 
   private syncWelcomeFromBackendAndLoad(): void {
@@ -109,65 +188,53 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   loadMetrics() {
-    this.loading = true;
-    let completedCalls = 0;
-    const totalCalls = 4;
-    
-    const checkComplete = () => {
-      completedCalls++;
-      if (completedCalls >= totalCalls) {
-        this.loading = false;
-      }
-      this.cdr.markForCheck();
-    };
-    
     this.doctorService.getPatients().subscribe({
       next: (patients) => {
         this.metrics.totalPatients = patients.length;
         this.metrics.activePatients = patients.filter(p => p.status === 'active').length;
-        checkComplete();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        this.metrics.totalPatients = 0;
-        this.metrics.activePatients = 0;
-        checkComplete();
+        this.metrics.totalPatients = null;
+        this.metrics.activePatients = null;
+        this.cdr.markForCheck();
       }
     });
 
     this.doctorService.getPrescriptions().subscribe({
       next: (prescriptions) => {
         this.metrics.totalPrescriptions = prescriptions.length;
-        checkComplete();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading prescriptions:', err);
-        this.metrics.totalPrescriptions = 0;
-        checkComplete();
+        this.metrics.totalPrescriptions = null;
+        this.cdr.markForCheck();
       }
     });
 
     this.doctorService.getXrays().subscribe({
       next: (xrays) => {
         this.metrics.totalXrays = xrays.length;
-        checkComplete();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading xrays:', err);
-        this.metrics.totalXrays = 0;
-        checkComplete();
+        this.metrics.totalXrays = null;
+        this.cdr.markForCheck();
       }
     });
 
     this.doctorService.getMessages().subscribe({
       next: (messages) => {
         this.metrics.pendingMessages = messages.filter(m => !m.read).length;
-        checkComplete();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading messages:', err);
-        this.metrics.pendingMessages = 0;
-        checkComplete();
+        this.metrics.pendingMessages = null;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -204,6 +271,36 @@ export class Dashboard implements OnInit, OnDestroy {
       error: (err) => {
         console.error('Error loading assigned patients:', err);
         this.assignedPatients = [];
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  loadUpcomingAppointments() {
+    this.appointmentsLoadError = null;
+    this.doctorService.getAppointments(1, 50).subscribe({
+      next: (res) => {
+        const raw = (res?.data ?? res?.Data ?? []) as any[];
+        const now = Date.now();
+        this.upcomingAppointments = raw
+          .filter((a) => {
+            const dt = a.appointmentDate ?? a.AppointmentDate;
+            const t = new Date(dt).getTime();
+            const st = (a.status ?? a.Status ?? 'Scheduled').toString();
+            return !Number.isNaN(t) && t >= now && st !== 'Cancelled';
+          })
+          .sort((a, b) => {
+            const ta = new Date(a.appointmentDate ?? a.AppointmentDate).getTime();
+            const tb = new Date(b.appointmentDate ?? b.AppointmentDate).getTime();
+            return ta - tb;
+          })
+          .slice(0, 8);
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error loading appointments:', err);
+        this.upcomingAppointments = [];
+        this.appointmentsLoadError = 'Appointments could not be loaded. Try again later.';
         this.cdr.markForCheck();
       }
     });

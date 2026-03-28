@@ -1,24 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService, RepositoryItem } from '../../services/admin.service';
 import { AlertService } from '../../services/alert.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
 
 @Component({
   selector: 'app-manage-repository',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DashboardTableActionsComponent],
   templateUrl: './manage-repository.html',
   styleUrl: './manage-repository.scss',
 })
 export class ManageRepository implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   items: RepositoryItem[] = [];
   searchTerm = '';
   typeFilter: 'all' | 'document' | 'image' | 'data' = 'all';
 
   constructor(
     private adminService: AdminService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private confirmDialog: ConfirmDialogService
   ) {}
+
+  private syncView(): void {
+    this.cdr.markForCheck();
+  }
 
   ngOnInit() {
     this.loadItems();
@@ -29,9 +38,11 @@ export class ManageRepository implements OnInit {
       next: (items) => {
         this.items = items;
         this.applyFilters();
+        this.syncView();
       },
       error: (err) => {
         console.error('Error loading repository items:', err);
+        this.syncView();
       }
     });
   }
@@ -46,27 +57,45 @@ export class ManageRepository implements OnInit {
       this.adminService.uploadRepositoryItem(file).subscribe({
         next: () => {
           this.loadItems();
+          this.syncView();
         },
         error: (err) => {
           console.error('Error uploading file:', err);
           this.alertService.error('Error uploading file. Please try again.');
+          this.syncView();
         }
       });
     }
   }
 
-  deleteItem(id: string) {
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.adminService.deleteRepositoryItem(id).subscribe({
-        next: () => {
-          this.loadItems();
-        },
-        error: (err) => {
-          console.error('Error deleting item:', err);
-          this.alertService.error('Error deleting item. Please try again.');
-        }
-      });
+  async deleteItem(id: string) {
+    const ok = await this.confirmDialog.confirm({
+      title: 'Delete repository item',
+      message: 'Are you sure you want to delete this item? This cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      danger: true,
+    });
+    if (!ok) return;
+    const ix = this.items.findIndex((it) => it.id === id);
+    const removed = ix >= 0 ? this.items[ix] : null;
+    if (removed) {
+      this.items.splice(ix, 1);
+      this.syncView();
     }
+    this.adminService.deleteRepositoryItem(id).subscribe({
+      next: () => {
+        this.syncView();
+      },
+      error: (err) => {
+        if (removed) {
+          this.items.splice(ix, 0, removed);
+        }
+        console.error('Error deleting item:', err);
+        this.alertService.error('Error deleting item. Please try again.');
+        this.syncView();
+      }
+    });
   }
 
   formatFileSize(bytes: number): string {

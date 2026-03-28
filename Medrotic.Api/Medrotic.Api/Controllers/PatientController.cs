@@ -478,6 +478,48 @@ namespace Medrotic.Api.Controllers
             return Ok(new { Message = "Personal analytics retrieved successfully.", Data = analytics });
         }
 
+        [HttpGet("appointments")]
+        public async Task<IActionResult> GetMyAppointments(int page = 1, int pageSize = 20)
+        {
+            var patientId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(patientId)) return Unauthorized(new { Message = "Invalid token." });
+
+            page = Math.Max(1, page);
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
+            try
+            {
+                var query = _context.Appointments.Where(a => a.PatientId == patientId);
+                var total = await query.CountAsync();
+                var rows = await query
+                    .Include(a => a.Doctor)
+                    .OrderByDescending(a => a.AppointmentDate)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var data = rows.Select(a => new
+                {
+                    a.Id,
+                    a.PatientId,
+                    a.DoctorId,
+                    doctorName = a.Doctor != null ? a.Doctor.FullName : string.Empty,
+                    appointmentDate = a.AppointmentDate,
+                    a.Status,
+                    a.Notes
+                }).ToList();
+
+                if (data.Count == 0)
+                    return Ok(new { Message = "No appointments found.", Data = data, Total = total });
+
+                return Ok(new { Message = "Appointments retrieved successfully.", Data = data, Total = total });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving appointments.", Error = ex.Message });
+            }
+        }
+
         // ────────────────────────────────────────────────
         // Patient Portal - Health Metrics
         // ────────────────────────────────────────────────

@@ -1,85 +1,98 @@
 <div class="upload-xray-page">
   <div class="page-header mb-4">
-    <h2 class="page-title">Upload X-Ray</h2>
-    <p class="page-subtitle">Upload X-Ray image with AI-assisted analysis</p>
+    <h2 class="page-title">Upload X-ray</h2>
+    <p class="page-subtitle">Attach an image for a patient, optionally run AI-assisted review, then save findings to the record.</p>
   </div>
 
-  <div class="row">
-    <div class="col-12 col-lg-8 mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <form (ngSubmit)="onSubmit()">
-            <div class="mb-4">
-              <label class="form-label">Select Patient <span class="text-danger">*</span></label>
-              <select class="form-select" [(ngModel)]="xray.patientId" name="patientId" required>
-                <option value="">Select a patient</option>
-                <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} ({{ patient.cnic }})</option>
-              </select>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-9 col-xxl-8">
+      <div class="uxray-card">
+        <form (ngSubmit)="onSubmit()">
+          <div class="uxray-section">
+            <label class="uxray-label" for="uxray-patient">Patient <span class="text-danger">*</span></label>
+            <select id="uxray-patient" class="form-select uxray-control" [(ngModel)]="xray.patientId" name="patientId" required>
+              <option value="">Select a patient</option>
+              <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} ({{ patient.cnic || 'no CNIC' }})</option>
+            </select>
+          </div>
 
-            <div class="mb-4">
-              <label class="form-label">Upload X-Ray Image <span class="text-danger">*</span></label>
-              <input 
-                type="file" 
-                class="form-control" 
+          <div class="uxray-section">
+            <label class="uxray-label">X-ray image <span class="text-danger">*</span></label>
+            <label class="uxray-dropzone" [class.uxray-dropzone--has-file]="!!selectedFile">
+              <input
+                type="file"
+                class="visually-hidden"
                 accept="image/*"
                 (change)="onFileSelected($event)"
-                required>
-              <div class="form-text">Supported formats: JPG, PNG, DICOM</div>
-            </div>
+                required
+                aria-label="Choose X-ray image file"
+              />
+              <span class="uxray-dropzone__icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                </svg>
+              </span>
+              <span class="uxray-dropzone__text">
+                <strong>{{ selectedFile ? selectedFile.name : 'Click to browse' }}</strong>
+                <span class="text-muted d-block small">JPG, PNG, or other image formats. DICOM may require export to image first.</span>
+              </span>
+            </label>
+          </div>
 
-            <div *ngIf="previewUrl" class="mb-4">
-              <label class="form-label">Preview</label>
-              <div class="border rounded p-3 text-center bg-dark">
-                <img [src]="previewUrl" alt="X-Ray preview" class="img-fluid" style="max-height: 500px; filter: invert(1);">
-              </div>
+          <div class="uxray-section" *ngIf="previewUrl">
+            <span class="uxray-label">Preview</span>
+            <div class="uxray-preview">
+              <img [src]="previewUrl" alt="X-ray preview" class="uxray-preview__img" />
             </div>
+            <p class="text-muted small mb-0 mt-2">Preview uses a light background so films stay readable without inverting colors.</p>
+          </div>
 
-            <div class="mb-4">
-              <button type="button" class="btn btn-outline-info" (click)="processAI()" [disabled]="!selectedFile || loading">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                Run AI Analysis
-              </button>
-            </div>
+          <div class="uxray-section uxray-actions-row">
+            <button type="button" class="btn btn-outline-primary" (click)="processAI()" [disabled]="!selectedFile || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Run AI analysis
+            </button>
+          </div>
 
-            <div *ngIf="showAiAnalysis && aiAnalysis" class="mb-4">
-              <div class="alert alert-info">
-                <strong>AI Analysis:</strong>
-                <p class="mb-0 mt-2">{{ aiAnalysis }}</p>
-              </div>
+          <div class="uxray-section" *ngIf="showAiAnalysis && aiAnalysis">
+            <div class="uxray-ai-panel">
+              <span class="uxray-ai-panel__title">AI summary</span>
+              <p class="uxray-ai-panel__body mb-0">{{ aiAnalysis }}</p>
             </div>
+          </div>
 
-            <div class="mb-4">
-              <label class="form-label">Findings</label>
-              <textarea 
-                class="form-control" 
-                rows="4"
-                [(ngModel)]="xray.findings"
-                name="findings"
-                placeholder="Clinical findings from X-Ray"></textarea>
-            </div>
+          <div class="uxray-section">
+            <label class="uxray-label" for="uxray-findings">Findings</label>
+            <textarea
+              id="uxray-findings"
+              class="form-control uxray-control uxray-textarea"
+              rows="4"
+              [(ngModel)]="xray.findings"
+              name="findings"
+              placeholder="Clinical findings from the study"
+            ></textarea>
+          </div>
 
-            <div class="mb-4">
-              <label class="form-label">Recommendations</label>
-              <textarea 
-                class="form-control" 
-                rows="4"
-                [(ngModel)]="xray.recommendations"
-                name="recommendations"
-                placeholder="Recommendations based on X-Ray analysis"></textarea>
-            </div>
+          <div class="uxray-section">
+            <label class="uxray-label" for="uxray-rec">Recommendations</label>
+            <textarea
+              id="uxray-rec"
+              class="form-control uxray-control uxray-textarea"
+              rows="3"
+              [(ngModel)]="xray.recommendations"
+              name="recommendations"
+              placeholder="Follow-up or treatment notes"
+            ></textarea>
+          </div>
 
-            <div class="d-flex gap-2 justify-content-end">
-              <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/dashboard">
-                Cancel
-              </button>
-              <button type="submit" class="btn btn-primary" [disabled]="uploading || !selectedFile || !xray.patientId">
-                <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"></span>
-                Upload X-Ray
-              </button>
-            </div>
-          </form>
-        </div>
+          <div class="uxray-footer">
+            <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/dashboard">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="uploading || !selectedFile || !xray.patientId">
+              <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Upload X-ray
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

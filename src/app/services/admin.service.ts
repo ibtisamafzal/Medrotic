@@ -1,19 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
+const ADMIN_LIST_PAGE_SIZE = '500';
 import { Observable, forkJoin, throwError } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { formatPakistaniCnicDisplay } from '../common/shared/pak-input-format.directive';
 
 export interface Doctor {
   id: string;
   name: string;
   email: string;
-  license: string;
+  /** National ID (Pakistani CNIC), formatted #####-#######-# when 13 digits are available. */
+  cnic: string;
   specialization: string;
   phone?: string;
   status: 'pending' | 'verified' | 'rejected';
   createdAt?: string;
   updatedAt?: string;
+}
+
+/** Payload for admin "Add doctor" — all fields required by the API; no invented defaults. */
+export interface AdminAddDoctorPayload extends Partial<Doctor> {
+  /** 13-digit Pakistani CNIC (with or without dashes in UI). */
+  cnic: string;
+  password: string;
+  city: string;
+  province: string;
+  /** HTML date input value `yyyy-MM-dd` */
+  dateOfBirth: string;
+  gender: 'Male' | 'Female' | 'Other';
+  experienceYears: number;
 }
 
 export interface Patient {
@@ -23,6 +40,8 @@ export interface Patient {
   phone?: string;
   dateOfBirth?: string;
   status: 'active' | 'inactive';
+  /** Account verification gate (synced with User Verification). */
+  verificationStatus?: 'pending' | 'verified' | 'rejected';
   createdAt?: string;
   updatedAt?: string;
 }
@@ -32,7 +51,7 @@ export interface User {
   name: string;
   email: string;
   role: 'admin' | 'doctor' | 'patient';
-  status: 'pending' | 'approved' | 'rejected';
+  status: 'pending' | 'verified' | 'rejected';
   createdAt?: string;
 }
 
@@ -42,6 +61,11 @@ export interface SystemLog {
   message: string;
   timestamp: string;
   source?: string;
+  detail?: string;
+  category?: string;
+  actorUserId?: string;
+  resourceId?: string;
+  resourceType?: string;
 }
 
 export interface Integration {
@@ -70,8 +94,9 @@ export interface Analytics {
   patientGrowth: { month: string; count: number }[];
   doctorGrowth: { month: string; count: number }[];
   kpis: {
-    avgResponseTime: number;
-    systemUptime: number;
+    /** Null when the platform does not record this metric. */
+    avgResponseTime: number | null;
+    systemUptime: number | null;
     activeUsers: number;
     dataStorage: number;
   };
@@ -116,28 +141,111 @@ export class AdminService {
 
   // Doctors
   getDoctors(): Observable<Doctor[]> {
-    return this.http.get<ApiEnvelope<Doctor[]>>(`${this.baseUrl}/doctors`).pipe(this.extractData<Doctor[]>());
+    return this.http.get<ApiEnvelope<any[]>>(`${this.baseUrl}/doctors`).pipe(
+      this.extractData<any[]>(),
+      map((rows) => (rows ?? []).map((d) => this.normalizeAdminDoctorRow(d)))
+    );
+  }
+
+  private normalizeAdminDoctorRow(d: any): Doctor {
+    const rawCnic = d?.cnic ?? d?.CNIC ?? d?.license ?? '';
+    const digits = String(rawCnic).replace(/\D/g, '');
+    const cnic = digits.length === 13 ? formatPakistaniCnicDisplay(digits) : String(rawCnic ?? '').trim();
+    const st = (d?.status ?? 'verified') as string;
+    const status: Doctor['status'] =
+      st === 'pending' || st === 'rejected' || st === 'verified' ? st : 'verified';
+    return {
+      id: String(d?.id ?? d?.Id ?? ''),
+      name: String(d?.name ?? d?.FullName ?? ''),
+      email: String(d?.email ?? d?.Email ?? ''),
+      cnic,
+      specialization: String(d?.specialization ?? d?.specialty ?? d?.Specialty ?? ''),
+      phone: d?.phone ?? d?.PhoneNumber ?? undefined,
+      status,
+      createdAt: d?.createdAt ?? d?.CreatedAt,
+      updatedAt: d?.updatedAt ?? d?.UpdatedAt,
+    };
   }
 
   getDoctorById(id: string): Observable<Doctor> {
     return this.getDoctors().pipe(map((doctors) => doctors.find((doctor) => doctor.id === id) as Doctor));
   }
 
-  addDoctor(doctor: Partial<Doctor>): Observable<Doctor> {
-    const cnicDigits = (doctor.license ?? '').replace(/\D/g, '');
+  addDoctor(payloadIn: AdminAddDoctorPayload): Observable<Doctor> {
+    const cnicDigits = (payloadIn.cnic ?? '').replace(/\D/g, '');
+    if (cnicDigits.length !== 13) {
+      return throwError(() => ({
+        error: { message: 'CNIC must be exactly 13 digits.' }
+      }));
+    }
+
+    const rawPhone = (payloadIn.phone ?? '').replace(/\D/g, '');
+    if (rawPhone.length < 10) {
+      return throwError(() => ({
+        error: { message: 'A valid phone number (at least 10 digits) is required.' }
+      }));
+    }
+    let n = rawPhone;
+    if (n.startsWith('0')) {
+      n = '92' + n.slice(1);
+    } else if (!n.startsWith('92')) {
+      n = '92' + n;
+    }
+    const phoneNumber = '+' + n;
+
+    const fullName = (payloadIn.name ?? '').trim();
+    const email = (payloadIn.email ?? '').trim();
+    const city = (payloadIn.city ?? '').trim();
+    const province = (payloadIn.province ?? '').trim();
+    if (fullName.length < 3) {
+      return throwError(() => ({ error: { message: 'Full name must be at least 3 characters.' } }));
+    }
+    if (!email) {
+      return throwError(() => ({ error: { message: 'Email is required.' } }));
+    }
+    if (city.length < 2 || province.length < 2) {
+      return throwError(() => ({ error: { message: 'City and province are required.' } }));
+    }
+
+    const spec = (payloadIn.specialization ?? '').trim();
+    if (!spec) {
+      return throwError(() => ({ error: { message: 'Specialization is required.' } }));
+    }
+
+    const exp = payloadIn.experienceYears;
+    if (exp == null || exp < 0 || exp > 50) {
+      return throwError(() => ({ error: { message: 'Experience years must be between 0 and 50.' } }));
+    }
+
+    const dob = (payloadIn.dateOfBirth ?? '').trim();
+    if (!dob) {
+      return throwError(() => ({ error: { message: 'Date of birth is required.' } }));
+    }
+
+    const password = (payloadIn.password ?? '').trim();
+    const pwStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/;
+    if (!pwStrong.test(password)) {
+      return throwError(() => ({
+        error: {
+          message:
+            'Password must be at least 6 characters and include uppercase, lowercase, a digit, and a special character.'
+        }
+      }));
+    }
+
     const payload = {
-      fullName: doctor.name ?? '',
-      email: doctor.email ?? '',
-      password: 'Doctor@123',
-      cnic: cnicDigits.length === 13 ? cnicDigits : '3520212345672',
+      fullName,
+      email,
+      password,
+      cnic: cnicDigits,
       role: 'Doctor',
-      specialty: doctor.specialization ?? '',
-      experienceYears: 1,
-      phoneNumber: doctor.phone ?? '',
-      city: 'Sahiwal',
-      province: 'Punjab',
-      dateOfBirth: '1990-01-01T00:00:00.000Z',
-      gender: 'Male'
+      specialty: spec,
+      experienceYears: exp,
+      phoneNumber,
+      city,
+      province,
+      dateOfBirth: new Date(dob + 'T12:00:00.000Z').toISOString(),
+      gender: payloadIn.gender
     };
     return this.http.post<Doctor>(`${this.baseUrl}/doctors`, payload);
   }
@@ -146,7 +254,7 @@ export class AdminService {
     const payload = {
       fullName: doctor.name,
       email: doctor.email,
-      cnic: doctor.license,
+      cnic: doctor.cnic,
       specialty: doctor.specialization,
       phoneNumber: doctor.phone
     };
@@ -165,7 +273,10 @@ export class AdminService {
 
   // Patients
   getPatients(): Observable<Patient[]> {
-    return this.http.get<ApiEnvelope<Patient[]>>(`${this.baseUrl}/patients`).pipe(this.extractData<Patient[]>());
+    const params = new HttpParams().set('page', '1').set('pageSize', ADMIN_LIST_PAGE_SIZE);
+    return this.http
+      .get<ApiEnvelope<Patient[]>>(`${this.baseUrl}/patients`, { params })
+      .pipe(this.extractData<Patient[]>());
   }
 
   getPatientById(id: string): Observable<Patient> {
@@ -278,23 +389,24 @@ export class AdminService {
         const summaryData = summary?.data ?? summary?.Data ?? summary ?? {};
         const kpisData = kpis?.data ?? kpis?.Data ?? kpis ?? {};
 
+        const totalAdmins = summaryData?.totalAdmins ?? summaryData?.TotalAdmins ?? 0;
         const totalUsers =
           (summaryData?.totalPatients ?? 0) +
           (summaryData?.totalDoctors ?? 0) +
-          (summaryData?.totalAdmins ?? 0);
+          totalAdmins;
 
         return {
           totalPatients: summaryData?.totalPatients ?? 0,
           totalDoctors: summaryData?.totalDoctors ?? 0,
           totalUsers,
-          activeAppointments: 0, // Not currently provided by backend
+          activeAppointments: summaryData?.activeAppointments ?? summaryData?.ActiveAppointments ?? 0,
           patientGrowth: summaryData?.patientGrowth ?? [],
           doctorGrowth: summaryData?.doctorGrowth ?? [],
           kpis: {
-            avgResponseTime: kpisData?.avgResponseTime ?? 0,
-            systemUptime: kpisData?.systemUptime ?? 0,
-            activeUsers: kpisData?.activeUsers ?? 0,
-            dataStorage: kpisData?.dataStorage ?? 0
+            avgResponseTime: kpisData?.avgResponseTime ?? kpisData?.AvgResponseTime ?? null,
+            systemUptime: kpisData?.systemUptime ?? kpisData?.SystemUptime ?? null,
+            activeUsers: kpisData?.activeUsers ?? kpisData?.ActiveUsers ?? 0,
+            dataStorage: kpisData?.dataStorage ?? kpisData?.DataStorage ?? 0
           }
         } as Analytics;
       })

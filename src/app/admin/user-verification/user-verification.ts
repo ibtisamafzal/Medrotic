@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService, User } from '../../services/admin.service';
 import { AlertService } from '../../services/alert.service';
-import { forkJoin } from 'rxjs';
+import { VerificationSyncService } from '../../services/verification-sync.service';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-verification',
@@ -11,8 +12,9 @@ import { forkJoin } from 'rxjs';
   templateUrl: './user-verification.html',
   styleUrl: './user-verification.scss',
 })
-export class UserVerification implements OnInit {
+export class UserVerification implements OnInit, OnDestroy {
   users: User[] = [];
+  private verificationSub?: Subscription;
   pendingUsers: User[] = [];
   searchTerm = '';
   roleFilter: 'all' | 'admin' | 'doctor' | 'patient' = 'all';
@@ -28,11 +30,17 @@ export class UserVerification implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private verificationSync: VerificationSyncService
   ) {}
 
   ngOnInit() {
     this.loadUsers();
+    this.verificationSub = this.verificationSync.changed$.subscribe(() => this.loadUsers());
+  }
+
+  ngOnDestroy(): void {
+    this.verificationSub?.unsubscribe();
   }
 
   loadUsers() {
@@ -107,7 +115,7 @@ export class UserVerification implements OnInit {
       next: () => {
         this.bulkProcessing = false;
         this.alertService.success(`${ids.length} user(s) approved successfully!`);
-        this.loadUsers();
+        this.verificationSync.notify();
       },
       error: (err) => {
         this.bulkProcessing = false;
@@ -132,7 +140,7 @@ export class UserVerification implements OnInit {
       next: () => {
         this.bulkProcessing = false;
         this.alertService.success(`${ids.length} user(s) rejected.`);
-        this.loadUsers();
+        this.verificationSync.notify();
       },
       error: (err) => {
         this.bulkProcessing = false;
@@ -176,7 +184,7 @@ export class UserVerification implements OnInit {
       next: () => {
         this.processingInfo = null;
         this.alertService.success(`${user.name} approved successfully!`);
-        this.loadUsers();
+        this.verificationSync.notify();
       },
       error: (err) => {
         this.processingInfo = null;
@@ -194,7 +202,7 @@ export class UserVerification implements OnInit {
       next: () => {
         this.processingInfo = null;
         this.alertService.success(`${user.name} has been rejected.`);
-        this.loadUsers();
+        this.verificationSync.notify();
       },
       error: (err) => {
         this.processingInfo = null;
@@ -209,7 +217,7 @@ export class UserVerification implements OnInit {
     this.adminService.updateUserRole(user.id, role).subscribe({
       next: () => {
         this.alertService.success(`Role updated to ${role} for ${user.name}.`);
-        this.loadUsers();
+        this.verificationSync.notify();
       },
       error: (err) => {
         console.error('Error updating user role:', err);

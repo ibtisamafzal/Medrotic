@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <div>
         <h2 class="page-title">Manage Doctors</h2>
-        <p class="page-subtitle">List, add, edit, and verify doctor accounts</p>
+        <p class="page-subtitle">List, add, and edit doctor accounts. Use User verification to approve or reject accounts.</p>
       </div>
       <button class="btn btn-primary" (click)="openAddModal()">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,21 +17,13 @@
   <!-- Filters -->
   <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
     <div class="row g-3">
-      <div class="col-md-6">
+      <div class="col-12 col-md-8 col-lg-6">
         <input 
           type="text" 
           class="form-control" 
-          placeholder="Search by name, email, or license..."
+          placeholder="Search by name, email, or CNIC..."
           [(ngModel)]="searchTerm"
           (input)="onSearchChange()">
-      </div>
-      <div class="col-md-6">
-        <select class="form-select" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()" title="Filter by status" aria-label="Filter by status">
-          <option value="all">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="verified">Verified</option>
-          <option value="rejected">Rejected</option>
-        </select>
       </div>
     </div>
   </div>
@@ -44,7 +36,7 @@
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>License</th>
+            <th>CNIC</th>
             <th>Specialization</th>
             <th>Phone</th>
             <th>Status</th>
@@ -52,10 +44,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let doctor of filteredDoctors; let i = index" class="fade-in-up" [style.animation-delay]="(300 + i * 50) + 'ms'">
+          <tr *ngFor="let doctor of filteredDoctors; let i = index" class="fade-in-up doctor-row" [style.animation-delay]="(300 + i * 50) + 'ms'">
             <td>{{ doctor.name }}</td>
             <td>{{ doctor.email }}</td>
-            <td>{{ doctor.license }}</td>
+            <td>{{ doctor.cnic }}</td>
             <td>{{ doctor.specialization }}</td>
             <td>{{ doctor.phone || 'N/A' }}</td>
             <td>
@@ -64,23 +56,12 @@
               </span>
             </td>
             <td>
-              <div class="action-buttons">
-                <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(doctor)" title="Edit">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11.3333 2.00001C11.5084 1.8249 11.7163 1.68601 11.9447 1.5913C12.1731 1.49659 12.4173 1.44824 12.6633 1.44824C12.9094 1.44824 13.1536 1.49659 13.382 1.5913C13.6104 1.68601 13.8183 1.8249 13.9933 2.00001C14.1684 2.17512 14.3073 2.38301 14.402 2.61141C14.4967 2.83981 14.5451 3.08401 14.5451 3.33001C14.5451 3.57601 14.4967 3.82021 14.402 4.04861C14.3073 4.27701 14.1684 4.4849 13.9933 4.66001L5.33333 13.32L1.33333 14.6667L2.68 10.6667L11.3333 2.00001Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <button class="btn btn-sm btn-outline-success" (click)="openVerifyModal(doctor)" title="Verify">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.3333 4L6 11.3333L2.66667 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteDoctor(doctor.id)" title="Delete">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2 4H14M5.33333 4V2.66667C5.33333 2.31305 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31305 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31305 10.6667 2.66667V4M12.6667 4V13.3333C12.6667 13.687 12.5262 14.0261 12.2761 14.2761C12.0261 14.5262 11.687 14.6667 11.3333 14.6667H4.66667C4.31305 14.6667 3.97391 14.5262 3.72386 14.2761C3.47381 14.0261 3.33333 13.687 3.33333 13.3333V4H12.6667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              </div>
+              <app-dashboard-table-actions
+                [showEdit]="true"
+                [showDelete]="true"
+                (edit)="openEditModal(doctor)"
+                (delete)="deleteDoctor(doctor.id)"
+              />
             </td>
           </tr>
           <tr *ngIf="filteredDoctors.length === 0">
@@ -113,25 +94,59 @@
                 <input id="add-email" type="email" class="form-control" placeholder="email@example.com" [(ngModel)]="newDoctor.email" name="email" required title="Doctor email address">
               </div>
               <div class="mb-3">
-                <label class="form-label" for="add-license">License Number</label>
-                <input id="add-license" type="text" class="form-control" placeholder="e.g. 35202-1234567-8" [(ngModel)]="newDoctor.license" name="license" pkInputFormat="license" required title="Medical license number">
+                <label class="form-label" for="add-cnic">CNIC <span class="text-danger">*</span></label>
+                <input id="add-cnic" type="text" class="form-control" placeholder="35202-1234567-8" [(ngModel)]="newDoctor.cnic" name="cnic" pkInputFormat="cnic" maxlength="15" required inputmode="numeric" autocomplete="off" title="13-digit Pakistani CNIC">
+                <small class="text-muted d-block mt-1">Format #####-#######-# (13 digits).</small>
               </div>
               <div class="mb-3">
                 <label class="form-label" for="add-specialization">Specialization</label>
                 <input id="add-specialization" type="text" class="form-control" placeholder="e.g. Cardiology" [(ngModel)]="newDoctor.specialization" name="specialization" required title="Doctor specialization">
               </div>
               <div class="mb-3">
-                <label class="form-label" for="add-phone">Phone</label>
-                <input id="add-phone" type="tel" class="form-control" placeholder="+92XXXXXXXXX" [(ngModel)]="newDoctor.phone" name="phone" pkInputFormat="phone" title="Doctor phone number">
+                <label class="form-label" for="add-phone">Phone <span class="text-danger">*</span></label>
+                <input id="add-phone" type="tel" class="form-control" placeholder="+92XXXXXXXXX" [(ngModel)]="newDoctor.phone" name="phone" pkInputFormat="phone" required title="Doctor phone number">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-city">City <span class="text-danger">*</span></label>
+                <input id="add-city" type="text" class="form-control" [(ngModel)]="newDoctor.city" name="city" required title="City">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-province">Province <span class="text-danger">*</span></label>
+                <input id="add-province" type="text" class="form-control" [(ngModel)]="newDoctor.province" name="province" required title="Province">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-dob">Date of birth <span class="text-danger">*</span></label>
+                <input id="add-dob" type="date" class="form-control" [(ngModel)]="newDoctor.dateOfBirth" name="dateOfBirth" required title="Date of birth">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-gender">Gender <span class="text-danger">*</span></label>
+                <select id="add-gender" class="form-select" [(ngModel)]="newDoctor.gender" name="gender" title="Gender">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-exp">Experience (years) <span class="text-danger">*</span></label>
+                <input id="add-exp" type="number" class="form-control" min="0" max="50" [(ngModel)]="newDoctor.experienceYears" name="experienceYears" required title="Years of experience">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-pw">Initial password <span class="text-danger">*</span></label>
+                <input id="add-pw" type="password" class="form-control" [(ngModel)]="newDoctor.password" name="password" autocomplete="new-password" required title="Password for the new doctor account">
+                <small class="text-muted d-block mt-1">Uppercase, lowercase, digit, and special character; min. 6 characters.</small>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="add-pw2">Confirm password <span class="text-danger">*</span></label>
+                <input id="add-pw2" type="password" class="form-control" [(ngModel)]="newDoctor.confirmPassword" name="confirmPassword" autocomplete="new-password" required title="Confirm password">
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeAddModal()" [disabled]="saving">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="addDoctor()" [disabled]="saving">
-            <span *ngIf="saving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            {{ saving ? 'Saving...' : 'Add Doctor' }}
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()" [disabled]="addSaving">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="addDoctor()" [disabled]="addSaving">
+            <span *ngIf="addSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            {{ addSaving ? 'Saving...' : 'Add Doctor' }}
           </button>
         </div>
       </div>
@@ -157,8 +172,8 @@
                 <input id="edit-email" type="email" class="form-control" placeholder="email@example.com" [(ngModel)]="selectedDoctor.email" name="email" required title="Doctor email address">
               </div>
               <div class="mb-3">
-                <label class="form-label" for="edit-license">License Number</label>
-                <input id="edit-license" type="text" class="form-control" placeholder="e.g. 35202-1234567-8" [(ngModel)]="selectedDoctor.license" name="license" pkInputFormat="license" required title="Medical license number">
+                <label class="form-label" for="edit-cnic">CNIC <span class="text-danger">*</span></label>
+                <input id="edit-cnic" type="text" class="form-control" placeholder="35202-1234567-8" [(ngModel)]="selectedDoctor.cnic" name="cnic" pkInputFormat="cnic" maxlength="15" required inputmode="numeric" autocomplete="off" title="13-digit Pakistani CNIC">
               </div>
               <div class="mb-3">
                 <label class="form-label" for="edit-specialization">Specialization</label>
@@ -172,40 +187,10 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeEditModal()" [disabled]="saving">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="updateDoctor()" [disabled]="saving">
-            <span *ngIf="saving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            {{ saving ? 'Saving...' : 'Update Doctor' }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Verify Doctor Modal -->
-  <div class="modal" [class.show]="showVerifyModal" *ngIf="selectedDoctor && showVerifyModal" tabindex="-1" (click)="closeVerifyModal()">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Verify Doctor</h5>
-          <button type="button" class="btn-close" (click)="closeVerifyModal()" aria-label="Close dialog" title="Close">✕</button>
-        </div>
-        <div class="modal-body">
-          <p>Verify doctor details for <strong>{{ selectedDoctor.name }}</strong>?</p>
-          <div class="doctor-details">
-            <p><strong>License:</strong> {{ selectedDoctor.license }}</p>
-            <p><strong>Specialization:</strong> {{ selectedDoctor.specialization }}</p>
-            <p><strong>Email:</strong> {{ selectedDoctor.email }}</p>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeVerifyModal()" [disabled]="verifying">Cancel</button>
-          <button type="button" class="btn btn-danger" (click)="verifyDoctor(false)" [disabled]="verifying">
-            <span *ngIf="verifying" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            {{ verifying ? 'Processing...' : 'Reject' }}
-          </button>
-          <button type="button" class="btn btn-success" (click)="verifyDoctor(true)" [disabled]="verifying">
-            <span *ngIf="verifying" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            {{ verifying ? 'Processing...' : 'Verify' }}
+          <button type="button" class="btn btn-secondary" (click)="closeEditModal()" [disabled]="editSaving">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="updateDoctor()" [disabled]="editSaving">
+            <span *ngIf="editSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            {{ editSaving ? 'Saving...' : 'Update Doctor' }}
           </button>
         </div>
       </div>

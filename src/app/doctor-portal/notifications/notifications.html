@@ -20,6 +20,7 @@
       </div>
 
       <div *ngIf="!loading">
+        <div *ngIf="loadError" class="alert alert-warning m-3" role="status">{{ loadError }}</div>
         <div *ngFor="let notification of notifications" class="notification-item border-bottom p-3" [class.unread]="!notification.read" (click)="markAsRead(notification)">
           <div class="d-flex align-items-start gap-3">
             <div class="notification-icon" [class.bg-info]="notification.type === 'info'" [class.bg-success]="notification.type === 'success'" [class.bg-warning]="notification.type === 'warning'">
@@ -35,8 +36,8 @@
             <div *ngIf="!notification.read" class="unread-indicator"></div>
           </div>
         </div>
-        <div *ngIf="notifications.length === 0" class="text-center text-muted py-5">
-          No notifications
+        <div *ngIf="!loadError && notifications.length === 0" class="text-center text-muted py-5">
+          No notifications yet
         </div>
       </div>
     </div>

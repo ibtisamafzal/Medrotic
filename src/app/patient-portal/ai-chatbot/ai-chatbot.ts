@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService, ChatbotMessage, ChatbotResponse } from '../../services/patient.service';
@@ -10,6 +10,8 @@ import { PatientService, ChatbotMessage, ChatbotResponse } from '../../services/
   styleUrl: './ai-chatbot.scss',
 })
 export class AiChatbot implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   messages: Array<{ type: 'user' | 'bot'; content: string; timestamp: Date }> = [];
   currentQuery = '';
   sending = false;
@@ -52,11 +54,13 @@ export class AiChatbot implements OnInit {
           this.suggestions = response.suggestions;
         }
         this.sending = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error sending message:', err);
         this.addBotMessage('I apologize, but I\'m having trouble processing your request. Please try again.');
         this.sending = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -67,6 +71,7 @@ export class AiChatbot implements OnInit {
       content,
       timestamp: new Date()
     });
+    this.cdr.markForCheck();
     this.scrollToBottom();
   }
 
@@ -76,6 +81,7 @@ export class AiChatbot implements OnInit {
       content,
       timestamp: new Date()
     });
+    this.cdr.markForCheck();
     this.scrollToBottom();
   }
 

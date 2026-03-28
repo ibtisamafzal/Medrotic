@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService, MedicalHistory } from '../../services/patient.service';
 import { Subscription } from 'rxjs';
 import { portalUpdated$ } from '../../services/patient.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-access-records',
@@ -12,6 +13,8 @@ import { portalUpdated$ } from '../../services/patient.service';
   styleUrl: './access-records.scss',
 })
 export class AccessRecords implements OnInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   loading = false;
   exporting = false;
   searchQuery = '';
@@ -19,7 +22,10 @@ export class AccessRecords implements OnInit, OnDestroy {
   filteredRecords: MedicalHistory[] = [];
   private sub?: Subscription;
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.loadRecords();
@@ -37,10 +43,12 @@ export class AccessRecords implements OnInit, OnDestroy {
         this.records = records;
         this.filteredRecords = records;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading records:', err);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -84,11 +92,13 @@ export class AccessRecords implements OnInit, OnDestroy {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
         this.exporting = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error exporting records:', err);
-        alert('Error exporting records. Please try again.');
+        this.alertService.error('Error exporting records. Please try again.');
         this.exporting = false;
+        this.cdr.markForCheck();
       }
     });
   }

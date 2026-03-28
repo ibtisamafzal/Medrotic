@@ -102,9 +102,7 @@
                 </div>
               </td>
               <td>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteDocument(doc.id!)">
-                  Delete
-                </button>
+                <app-dashboard-table-actions [showDelete]="true" (delete)="deleteDocument(doc.id!)" />
               </td>
             </tr>
             <tr *ngIf="documents.length === 0">

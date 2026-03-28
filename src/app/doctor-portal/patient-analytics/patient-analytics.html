@@ -1,99 +1,155 @@
 <div class="patient-analytics-page">
-  <div class="page-header mb-4">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="page-title">Patient Analytics</h2>
-        <p class="page-subtitle" *ngIf="patient">{{ patient.name }}</p>
-      </div>
-      <a [routerLink]="['/doctor-portal/patient-details', patientId]" class="btn btn-outline-secondary">
-        Back to Patient Details
-      </a>
-    </div>
-  </div>
-
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
-
-  <div *ngIf="!loading && analytics" class="row g-4">
-    <!-- Key Metrics -->
-    <div class="col-12 col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <div class="display-4 text-primary mb-2">{{ analytics.totalVisits }}</div>
-          <p class="text-muted mb-0">Total Visits</p>
+  <!-- Hub: pick a patient (sidebar links here without :id) -->
+  <ng-container *ngIf="!patientId">
+    <div class="page-header mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+        <div>
+          <h2 class="page-title">Patient analytics</h2>
+          <p class="page-subtitle mb-0">Choose a patient to view visits, prescriptions, imaging, and trends — all inside the doctor portal.</p>
         </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <div class="display-4 text-success mb-2">{{ analytics.totalPrescriptions }}</div>
-          <p class="text-muted mb-0">Prescriptions</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <div class="display-4 text-info mb-2">{{ analytics.totalXrays }}</div>
-          <p class="text-muted mb-0">X-Rays</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-3">
-      <div class="card text-center">
-        <div class="card-body">
-          <div class="h4 text-warning mb-2">{{ analytics.lastVisit | date:'shortDate' }}</div>
-          <p class="text-muted mb-0">Last Visit</p>
-        </div>
+        <a routerLink="/doctor-portal/patient-management" class="btn btn-outline-secondary btn-sm">Patient management</a>
       </div>
     </div>
 
-    <!-- Health Trends -->
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">Health Trends</h5>
+    <div class="analytics-hub-search">
+      <div class="analytics-hub-search__field">
+        <svg class="analytics-hub-search__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+        </svg>
+        <input
+          type="search"
+          class="form-control analytics-hub-search__input"
+          [(ngModel)]="hubSearch"
+          (input)="onHubSearchInput()"
+          placeholder="Search by name, CNIC, or phone"
+          aria-label="Filter patients for analytics"
+        />
+      </div>
+      <p class="analytics-hub-search__meta text-muted small mb-0">{{ hubFiltered.length }} patient<span *ngIf="hubFiltered.length !== 1">s</span> shown</p>
+    </div>
+
+    <div class="analytics-hub-card">
+      <div *ngIf="hubLoading" class="analytics-hub-card__loading text-center py-5">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading</span></div>
+      </div>
+
+      <div *ngIf="!hubLoading" class="table-responsive">
+        <table class="table analytics-hub-table mb-0">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>CNIC</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of hubFiltered; trackBy: trackPatientId">
+              <td class="fw-semibold">{{ p.name }}</td>
+              <td>{{ p.cnic || '—' }}</td>
+              <td>{{ p.phone || '—' }}</td>
+              <td>
+                <span class="analytics-status" [class.analytics-status--active]="p.status === 'active'" [class.analytics-status--inactive]="p.status !== 'active'">{{ p.status || '—' }}</span>
+              </td>
+              <td class="text-end">
+                <a [routerLink]="['/doctor-portal/patient-analytics', p.id]" class="btn btn-primary btn-sm">View analytics</a>
+              </td>
+            </tr>
+            <tr *ngIf="hubFiltered.length === 0">
+              <td colspan="5" class="text-center text-muted py-5">No patients match your search.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Detail: single patient -->
+  <ng-container *ngIf="patientId">
+    <div class="page-header mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h2 class="page-title">Patient analytics</h2>
+          <p class="page-subtitle mb-0" *ngIf="patient">{{ patient.name }}</p>
         </div>
-        <div class="card-body">
-          <div *ngIf="analytics.healthTrends && analytics.healthTrends.length > 0">
-            <p class="text-muted">Health trend data visualization would go here</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a routerLink="/doctor-portal/patient-analytics" class="btn btn-outline-secondary btn-sm">All patients</a>
+          <a [routerLink]="['/doctor-portal/patient-details', patientId]" class="btn btn-outline-primary btn-sm">Patient details</a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && analytics" class="row g-4">
+      <div class="col-6 col-md-3">
+        <div class="analytics-metric-tile">
+          <span class="analytics-metric-tile__value analytics-metric-tile__value--primary">{{ analytics.totalVisits }}</span>
+          <span class="analytics-metric-tile__label">Total visits</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="analytics-metric-tile">
+          <span class="analytics-metric-tile__value analytics-metric-tile__value--success">{{ analytics.totalPrescriptions }}</span>
+          <span class="analytics-metric-tile__label">Prescriptions</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="analytics-metric-tile">
+          <span class="analytics-metric-tile__value analytics-metric-tile__value--info">{{ analytics.totalXrays }}</span>
+          <span class="analytics-metric-tile__label">X-rays</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="analytics-metric-tile">
+          <span class="analytics-metric-tile__value analytics-metric-tile__value--muted" *ngIf="analytics.lastVisit; else noLastVisit">{{ analytics.lastVisit | date:'mediumDate' }}</span>
+          <ng-template #noLastVisit><span class="analytics-metric-tile__value analytics-metric-tile__value--muted">—</span></ng-template>
+          <span class="analytics-metric-tile__label">Last visit</span>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="analytics-panel">
+          <h3 class="analytics-panel__title">Health trends</h3>
+          <div *ngIf="analytics.healthTrends && analytics.healthTrends.length > 0" class="text-muted small">
+            Trend points: {{ analytics.healthTrends.length }}. Detailed charting can plug in here when time-series data is available.
           </div>
-          <div *ngIf="!analytics.healthTrends || analytics.healthTrends.length === 0" class="text-center text-muted py-4">
-            No health trend data available
+          <div *ngIf="!analytics.healthTrends || analytics.healthTrends.length === 0" class="analytics-panel__empty text-muted">
+            No health trend data recorded yet.
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Medications -->
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">Medication Adherence</h5>
-        </div>
-        <div class="card-body">
+      <div class="col-12">
+        <div class="analytics-panel">
+          <h3 class="analytics-panel__title">Medication adherence</h3>
           <div *ngIf="analytics.medications && analytics.medications.length > 0">
-            <div *ngFor="let med of analytics.medications" class="mb-3">
+            <div *ngFor="let med of analytics.medications" class="analytics-med-row mb-3">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="fw-bold">{{ med.name }}</span>
-                <span class="badge" [class.bg-success]="med.adherence >= 80" [class.bg-warning]="med.adherence >= 50 && med.adherence < 80" [class.bg-danger]="med.adherence < 50">
+                <span class="fw-semibold">{{ med.name }}</span>
+                <span class="analytics-pill" [class.analytics-pill--ok]="med.adherence >= 80" [class.analytics-pill--mid]="med.adherence >= 50 && med.adherence < 80" [class.analytics-pill--low]="med.adherence < 50">
                   {{ med.adherence }}%
                 </span>
               </div>
-              <div class="progress" style="height: 8px;">
-                <div class="progress-bar" [class.bg-success]="med.adherence >= 80" [class.bg-warning]="med.adherence >= 50 && med.adherence < 80" [class.bg-danger]="med.adherence < 50" [style.width.%]="med.adherence"></div>
+              <div class="analytics-progress">
+                <div class="analytics-progress__fill" [class.analytics-progress__fill--ok]="med.adherence >= 80" [class.analytics-progress__fill--mid]="med.adherence >= 50 && med.adherence < 80" [class.analytics-progress__fill--low]="med.adherence < 50" [style.width.%]="med.adherence"></div>
               </div>
             </div>
           </div>
-          <div *ngIf="!analytics.medications || analytics.medications.length === 0" class="text-center text-muted py-4">
-            No medication data available
+          <div *ngIf="!analytics.medications || analytics.medications.length === 0" class="analytics-panel__empty text-muted">
+            No medication adherence data available.
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <div *ngIf="!loading && !analytics" class="analytics-empty-alert" role="status">
+      Analytics could not be loaded. Check your connection and try again.
+    </div>
+  </ng-container>
 </div>

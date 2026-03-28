@@ -27,6 +27,7 @@ const routes: Routes = [
       { path: 'upload-prescription', component: UploadPrescription },
       { path: 'upload-xray', component: UploadXray },
       { path: 'secure-communication', component: SecureCommunication },
+      { path: 'patient-analytics', component: PatientAnalytics },
       { path: 'patient-analytics/:id', component: PatientAnalytics },
       { path: 'notifications', component: Notifications },
       { path: 'document-storage', component: DocumentStorage }

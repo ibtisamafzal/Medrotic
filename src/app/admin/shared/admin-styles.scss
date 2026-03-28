@@ -110,6 +110,12 @@
   overflow: hidden;
   padding: 0; // Full-bleed table — no padding on the card itself
 
+  // Avoid horizontal scrollbars; layout uses fixed table + ellipsis / wrapped actions.
+  .table-responsive {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   .table {
     margin-bottom: 0;
     white-space: nowrap;

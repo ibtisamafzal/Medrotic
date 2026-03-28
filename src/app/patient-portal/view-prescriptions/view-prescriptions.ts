@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PatientService, Prescription } from '../../services/patient.service';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,8 @@ import { portalUpdated$ } from '../../services/patient.service';
   styleUrl: './view-prescriptions.scss',
 })
 export class ViewPrescriptions implements OnInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   loading = false;
   prescriptions: Prescription[] = [];
   private sub?: Subscription;
@@ -34,10 +36,12 @@ export class ViewPrescriptions implements OnInit, OnDestroy {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading prescriptions:', err);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

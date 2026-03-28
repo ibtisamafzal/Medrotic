@@ -1,6 +1,7 @@
 using Medrotic.Api.Data;
 using Medrotic.Api.DTOs;
 using Medrotic.Api.Models;
+using Medrotic.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,31 @@ namespace Medrotic.Api.Controllers
             return Regex.Replace(cnic, @"\D", "");
         }
 
+        /// <summary>Maps persisted account verification to Manage Doctors status (pending | verified | rejected).</summary>
+        private static string MapDoctorVerificationStatus(string? raw)
+        {
+            var s = (raw ?? "verified").Trim().ToLowerInvariant();
+            if (s == "rejected") return "rejected";
+            if (s == "verified" || s == "approved") return "verified";
+            return "pending";
+        }
+
+        /// <summary>Maps persisted account verification to User Verification list status (pending | verified | rejected).</summary>
+        private static string MapUserVerificationListStatus(string? raw)
+        {
+            var s = (raw ?? "verified").Trim().ToLowerInvariant();
+            if (s == "rejected") return "rejected";
+            if (s == "verified" || s == "approved") return "verified";
+            return "pending";
+        }
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AppDbContext _context;
+        private readonly ISystemLogStore _systemLog;
 
         // Lightweight in-memory stores so "missing API" UI doesn't hard-fail.
         // These are not meant to be authoritative persistence.
         private static readonly ConcurrentDictionary<string, IntegrationItem> IntegrationsStore = new();
-        private static readonly ConcurrentDictionary<string, string> UserStatusStore = new();
 
         public sealed class IntegrationItem
         {
@@ -46,10 +65,11 @@ namespace Medrotic.Api.Controllers
         }
 
 
-        public AdminController(UserManager<ApplicationUser> userManager, AppDbContext context)
+        public AdminController(UserManager<ApplicationUser> userManager, AppDbContext context, ISystemLogStore systemLog)
         {
             _userManager = userManager;
             _context = context;
+            _systemLog = systemLog;
         }
 
         // ────────────────────────────────────────────────
@@ -102,11 +122,11 @@ namespace Medrotic.Api.Controllers
                     .Select(d => new
                     {
                         id = d.Id,
-                        // Fields used by different frontend modules
                         name = d.FullName,
                         email = d.Email,
                         phone = d.PhoneNumber,
-                        license = d.CNIC ?? string.Empty,
+                        cnic = d.CNIC ?? string.Empty,
+                        license = d.CNIC ?? string.Empty, // legacy alias; use `cnic`
                         specialization = d.Specialty ?? string.Empty,
                         specialty = d.Specialty ?? string.Empty,
                         experience = d.ExperienceYears ?? 0,
@@ -116,12 +136,9 @@ namespace Medrotic.Api.Controllers
                         hospital = d.Hospital != null ? d.Hospital.Name : "Not Assigned",
                         qualifications = (string[]?)null,
                         rating = (double?)null,
-                        // UI expects a status badge; without a persisted workflow we default to pending.
-                        status = "pending",
+                        accountVerificationStatus = d.AccountVerificationStatus ?? "verified",
                         createdAt = d.LastActivity,
                         updatedAt = d.LastActivity,
-
-                        // Keep original fields for compatibility
                         d.Id,
                         d.FullName,
                         d.Email,
@@ -138,20 +155,12 @@ namespace Medrotic.Api.Controllers
                     })
                     .ToListAsync();
 
-                // Map in-memory verification status to the `status` badge expected by the frontend.
-                // Note: we do this after materialization to avoid LINQ-to-SQL translation issues.
                 var doctors = doctorsRaw.Select(d =>
                 {
                     var dict = new Dictionary<string, object?>();
                     foreach (var prop in d.GetType().GetProperties())
                         dict[prop.Name] = prop.GetValue(d);
-
-                    var storedStatus = UserStatusStore.TryGetValue(d.id, out var s) ? s : "pending";
-                    dict["status"] =
-                        storedStatus == "verified" ? "verified" :
-                        storedStatus == "rejected" ? "rejected" :
-                        "pending";
-
+                    dict["status"] = MapDoctorVerificationStatus(d.accountVerificationStatus);
                     return dict;
                 }).ToList();
 
@@ -165,15 +174,27 @@ namespace Medrotic.Api.Controllers
         [HttpPost("doctors")]
         public async Task<IActionResult> AddDoctor([FromBody] RegisterUserDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                _systemLog.Add("warning", "Add doctor rejected: validation failed.", "Admin");
+                return BadRequest(ModelState);
+            }
             try
             {
                 if (dto.Role != "Doctor") return BadRequest(new { Message = "This endpoint is only for adding Doctors." });
                 if (string.IsNullOrEmpty(dto.Specialty) || !dto.ExperienceYears.HasValue) return BadRequest(new { Message = "Specialty and ExperienceYears are required for doctors." });
-                if (await _userManager.FindByEmailAsync(dto.Email) != null) return BadRequest(new { Message = "Email already registered." });
+                if (await _userManager.FindByEmailAsync(dto.Email) != null)
+                {
+                    _systemLog.Add("warning", $"Add doctor failed: duplicate email {dto.Email}.", "Admin");
+                    return BadRequest(new { Message = "Email already registered." });
+                }
                 var normalizedCnic = NormalizeCnic(dto.CNIC);
                 if (normalizedCnic.Length != 13) return BadRequest(new { Message = "CNIC must be exactly 13 digits." });
-                if (await _context.Users.AnyAsync(u => u.CNIC == normalizedCnic)) return BadRequest(new { Message = "CNIC already registered." });
+                if (await _context.Users.AnyAsync(u => u.CNIC == normalizedCnic))
+                {
+                    _systemLog.Add("warning", "Add doctor failed: CNIC already registered.", "Admin");
+                    return BadRequest(new { Message = "CNIC already registered." });
+                }
                 if (!string.IsNullOrEmpty(dto.HospitalId) && await _context.Hospitals.FindAsync(dto.HospitalId) == null) return BadRequest(new { Message = "Invalid Hospital ID." });
                 var doctor = new ApplicationUser
                 {
@@ -187,17 +208,24 @@ namespace Medrotic.Api.Controllers
                     City = dto.City,
                     Province = dto.Province,
                     PhoneNumber = dto.PhoneNumber,
-                    DateOfBirth = dto.DateOfBirth ?? DateTime.UtcNow.AddYears(-30),
-                    Gender = dto.Gender ?? "Not Specified",
-                    HospitalId = dto.HospitalId
+                    DateOfBirth = dto.DateOfBirth!.Value,
+                    Gender = dto.Gender!,
+                    HospitalId = dto.HospitalId,
+                    AccountVerificationStatus = "pending"
                 };
-                var result = await _userManager.CreateAsync(doctor, dto.Password ?? "Doctor@123");
-                if (!result.Succeeded) return BadRequest(new { Message = "Doctor creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description)) });
+                var result = await _userManager.CreateAsync(doctor, dto.Password);
+                if (!result.Succeeded)
+                {
+                    _systemLog.Add("error", "Doctor creation failed: " + string.Join("; ", result.Errors.Select(e => e.Description)), "Admin");
+                    return BadRequest(new { Message = "Doctor creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description)) });
+                }
                 await _userManager.AddToRoleAsync(doctor, "Doctor");
+                _systemLog.Add("info", $"Doctor account created: {doctor.Email} ({doctor.FullName}).", "Admin");
                 return Ok(new { Message = $"Doctor '{doctor.FullName}' created successfully and assigned to hospital ID {doctor.HospitalId ?? "None"}.", DoctorId = doctor.Id });
             }
             catch (Exception ex)
             {
+                _systemLog.Add("error", "Add doctor exception: " + ex.Message, "Admin");
                 return StatusCode(500, new { Message = "An error occurred while adding doctor.", Error = ex.Message });
             }
         }
@@ -383,7 +411,6 @@ namespace Medrotic.Api.Controllers
                     .Take(pageSize)
                     .Select(p => new
                     {
-                        // Frontend expects lowercase/camelCase fields.
                         id = p.Id,
                         name = p.FullName,
                         email = p.Email,
@@ -391,8 +418,7 @@ namespace Medrotic.Api.Controllers
                         dateOfBirth = p.DateOfBirth.ToString("yyyy-MM-dd"),
                         createdAt = p.LastActivity,
                         updatedAt = p.LastActivity,
-
-                        // Keep original fields for compatibility.
+                        accountVerificationStatus = p.AccountVerificationStatus ?? "verified",
                         p.Id,
                         p.FullName,
                         p.Email,
@@ -405,15 +431,15 @@ namespace Medrotic.Api.Controllers
                     })
                     .ToList();
 
-                // Map in-memory approval/rejection into the `status` badge expected by the frontend.
                 var patients = patientsRaw.Select(p =>
                 {
                     var dict = new Dictionary<string, object?>();
                     foreach (var prop in p.GetType().GetProperties())
                         dict[prop.Name] = prop.GetValue(p);
 
-                    var storedStatus = UserStatusStore.TryGetValue(p.id, out var s) ? s : null;
-                    dict["status"] = storedStatus == "rejected" ? "inactive" : "active";
+                    var v = (p.accountVerificationStatus ?? "verified").Trim().ToLowerInvariant();
+                    dict["verificationStatus"] = MapDoctorVerificationStatus(p.accountVerificationStatus);
+                    dict["status"] = v == "rejected" ? "inactive" : "active";
                     return dict;
                 }).ToList();
 
@@ -615,10 +641,17 @@ namespace Medrotic.Api.Controllers
         {
             try
             {
+                var patients = await _userManager.GetUsersInRoleAsync("Patient");
+                var doctors = await _userManager.GetUsersInRoleAsync("Doctor");
+                var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                var now = DateTime.UtcNow;
+                var activeAppointments = await _context.Appointments.CountAsync(a =>
+                    a.Status != "Cancelled" && a.AppointmentDate >= now);
+
                 var analytics = new AnalyticsDto
                 {
-                    TotalPatients = await _userManager.GetUsersInRoleAsync("Patient").ContinueWith(t => t.Result.Count),
-                    TotalDoctors = await _userManager.GetUsersInRoleAsync("Doctor").ContinueWith(t => t.Result.Count),
+                    TotalPatients = patients.Count,
+                    TotalDoctors = doctors.Count,
                     TotalHospitals = await _context.Hospitals.CountAsync(),
                     TotalMedicalRecords = await _context.MedicalRecords.CountAsync(),
                     TotalDocuments = await _context.Documents.CountAsync(),
@@ -632,8 +665,8 @@ namespace Medrotic.Api.Controllers
                 var patientGrowth = new List<object>();
                 var doctorGrowth = new List<object>();
 
-                var allPatients = await _userManager.GetUsersInRoleAsync("Patient");
-                var allDoctors = await _userManager.GetUsersInRoleAsync("Doctor");
+                var allPatients = patients;
+                var allDoctors = doctors;
 
                 for (int i = 0; i < 6; i++)
                 {
@@ -650,12 +683,11 @@ namespace Medrotic.Api.Controllers
                     Data = new {
                         totalPatients = analytics.TotalPatients,
                         totalDoctors = analytics.TotalDoctors,
-                        totalAdmins = 0,
+                        totalAdmins = admins.Count,
+                        activeAppointments,
                         patientGrowth,
                         doctorGrowth,
                         kpis = new {
-                            avgResponseTime = 0,
-                            systemUptime = 100,
                             activeUsers = analytics.ActiveUsersLastMonth,
                             dataStorage = analytics.TotalDocuments
                         }
@@ -953,18 +985,41 @@ namespace Medrotic.Api.Controllers
                 if (admin == null || admin.Role != "Admin")
                     return NotFound(new { Message = "Admin profile not found." });
 
-                if (dto.FullName != null) admin.FullName = dto.FullName;
-                if (dto.PhoneNumber != null) admin.PhoneNumber = dto.PhoneNumber;
-                if (dto.City != null) admin.City = dto.City;
-                if (dto.Province != null) admin.Province = dto.Province;
-                if (dto.DateOfBirth.HasValue) admin.DateOfBirth = dto.DateOfBirth.Value;
-                if (dto.Gender != null) admin.Gender = dto.Gender;
+                if (!string.IsNullOrWhiteSpace(dto.FullName))
+                    admin.FullName = dto.FullName.Trim();
+                if (dto.PhoneNumber != null)
+                    admin.PhoneNumber = string.IsNullOrWhiteSpace(dto.PhoneNumber) ? admin.PhoneNumber : dto.PhoneNumber.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.City))
+                    admin.City = dto.City.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.Province))
+                    admin.Province = dto.Province.Trim();
+                if (dto.DateOfBirth.HasValue)
+                    admin.DateOfBirth = dto.DateOfBirth.Value;
+                if (!string.IsNullOrWhiteSpace(dto.Gender))
+                    admin.Gender = dto.Gender.Trim();
+
+                admin.LastActivity = DateTime.UtcNow;
 
                 var result = await _userManager.UpdateAsync(admin);
                 if (!result.Succeeded)
                     return BadRequest(new { Message = "Admin profile update failed.", Errors = result.Errors.Select(e => e.Description) });
 
-                return Ok(new { Message = "Admin profile updated successfully." });
+                var fresh = await _userManager.FindByIdAsync(adminId);
+                return Ok(new
+                {
+                    Message = "Admin profile updated successfully.",
+                    Data = new
+                    {
+                        id = fresh!.Id,
+                        fullName = fresh.FullName,
+                        email = fresh.Email,
+                        phoneNumber = fresh.PhoneNumber,
+                        city = fresh.City,
+                        province = fresh.Province,
+                        dateOfBirth = fresh.DateOfBirth,
+                        gender = fresh.Gender
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -992,8 +1047,26 @@ namespace Medrotic.Api.Controllers
         {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "Doctor id is required." });
 
-            // Best-effort in-memory status (authorization is not affected).
-            UserStatusStore[id] = request.Verified ? "verified" : "rejected";
+            var doctor = await _userManager.FindByIdAsync(id);
+            if (doctor == null || doctor.Role != "Doctor")
+                return NotFound(new { Message = "Doctor not found." });
+
+            doctor.AccountVerificationStatus = request.Verified ? "verified" : "rejected";
+            doctor.LastActivity = DateTime.UtcNow;
+            var update = await _userManager.UpdateAsync(doctor);
+            if (!update.Succeeded)
+                return BadRequest(new { Message = "Doctor verification update failed.", Errors = update.Errors.Select(e => e.Description) });
+
+            var adminId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _systemLog.Add(
+                "info",
+                request.Verified ? $"Doctor verified: {doctor.Email}" : $"Doctor rejected: {doctor.Email}",
+                "Admin",
+                detail: $"DoctorId={id}; FullName={doctor.FullName}",
+                category: "AccountVerification",
+                actorUserId: adminId,
+                resourceId: id,
+                resourceType: "Doctor");
 
             return Ok(new { Message = "Doctor verification updated successfully.", Data = new { id, verified = request.Verified } });
         }
@@ -1009,6 +1082,7 @@ namespace Medrotic.Api.Controllers
                     name = u.FullName,
                     email = u.Email,
                     role = (u.Role ?? string.Empty).ToLowerInvariant(),
+                    accountVerificationStatus = u.AccountVerificationStatus ?? "verified",
                     createdAt = u.LastActivity,
                     updatedAt = u.LastActivity
                 })
@@ -1020,7 +1094,7 @@ namespace Medrotic.Api.Controllers
                 u.name,
                 u.email,
                 u.role,
-                status = UserStatusStore.TryGetValue(u.id, out var storedStatus) ? storedStatus : "pending",
+                status = MapUserVerificationListStatus(u.accountVerificationStatus),
                 u.createdAt,
                 u.updatedAt
             }).ToList();
@@ -1033,7 +1107,18 @@ namespace Medrotic.Api.Controllers
         public async Task<IActionResult> ApproveUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "User id is required." });
-            UserStatusStore[id] = "approved";
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound(new { Message = "User not found." });
+
+            user.AccountVerificationStatus = "verified";
+            user.LastActivity = DateTime.UtcNow;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(new { Message = "Approve failed.", Errors = result.Errors.Select(e => e.Description) });
+
+            var adminId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _systemLog.Add("info", $"User approved: {user.Email} ({user.Role})", "Admin", detail: $"UserId={id}", category: "AccountVerification", actorUserId: adminId, resourceId: id, resourceType: "User");
+
             return Ok(new { Message = "User approved successfully." });
         }
 
@@ -1042,7 +1127,18 @@ namespace Medrotic.Api.Controllers
         public async Task<IActionResult> RejectUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "User id is required." });
-            UserStatusStore[id] = "rejected";
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound(new { Message = "User not found." });
+
+            user.AccountVerificationStatus = "rejected";
+            user.LastActivity = DateTime.UtcNow;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(new { Message = "Reject failed.", Errors = result.Errors.Select(e => e.Description) });
+
+            var adminId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _systemLog.Add("warning", $"User rejected: {user.Email} ({user.Role})", "Admin", detail: $"UserId={id}", category: "AccountVerification", actorUserId: adminId, resourceId: id, resourceType: "User");
+
             return Ok(new { Message = "User rejected successfully." });
         }
 
@@ -1072,6 +1168,7 @@ namespace Medrotic.Api.Controllers
                 await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
             user.Role = identityRole;
+            user.AccountVerificationStatus = "pending";
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
                 return BadRequest(new { Message = "User role update failed.", Errors = updateResult.Errors.Select(e => e.Description) });
@@ -1080,24 +1177,23 @@ namespace Medrotic.Api.Controllers
             if (!addResult.Succeeded)
                 return BadRequest(new { Message = "Failed to assign Identity role.", Errors = addResult.Errors.Select(e => e.Description) });
 
-            // Keep status workflow: after a role change, treat it as pending again.
-            UserStatusStore[id] = "pending";
-
             return Ok(new { Message = "User role updated successfully.", Data = new { id, role = normalized } });
         }
 
         // GET /api/admin/logs
         [HttpGet("logs")]
-        public async Task<IActionResult> GetLogs(int limit = 100)
+        public IActionResult GetLogs(int limit = 100)
         {
-            return Ok(new { Message = "Logs retrieved successfully.", Data = new object[0], Total = 0 });
+            var data = _systemLog.GetRecent(limit, null);
+            return Ok(new { Message = "Logs retrieved successfully.", Data = data, Total = data.Count });
         }
 
         // GET /api/admin/logs/errors
         [HttpGet("logs/errors")]
-        public async Task<IActionResult> GetErrorLogs(int limit = 100)
+        public IActionResult GetErrorLogs(int limit = 100)
         {
-            return Ok(new { Message = "Error logs retrieved successfully.", Data = new object[0], Total = 0 });
+            var data = _systemLog.GetRecent(limit, "error");
+            return Ok(new { Message = "Error logs retrieved successfully.", Data = data, Total = data.Count });
         }
 
         // GET /api/admin/performance
@@ -1107,11 +1203,11 @@ namespace Medrotic.Api.Controllers
             var totalUsers = await _context.Users.CountAsync();
             var totalDocuments = await _context.Documents.CountAsync();
 
-            // Placeholder metrics.
+            // Only counts from the database are real; response-time and uptime are not measured yet.
             var performance = new
             {
-                avgResponseTimeMs = 0,
-                systemUptime = 100,
+                avgResponseTimeMs = (double?)null,
+                systemUptimePercent = (double?)null,
                 activeUsers = totalUsers,
                 dataStorage = totalDocuments
             };
@@ -1252,8 +1348,8 @@ namespace Medrotic.Api.Controllers
 
             var kpis = new
             {
-                avgResponseTime = 0,
-                systemUptime = 100,
+                avgResponseTime = (double?)null,
+                systemUptime = (double?)null,
                 activeUsers = activeUsers,
                 dataStorage = totalDocuments
             };

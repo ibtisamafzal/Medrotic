@@ -14,13 +14,146 @@
     .page-subtitle {
       color: rgba(0, 16, 71, 0.6);
       margin: 0;
+      max-width: 40rem;
     }
-  }
-
-  .card {
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-radius: 12px;
   }
 }
 
+.uxray-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem 1.65rem;
+  box-shadow: 0 2px 16px rgba(0, 16, 71, 0.05);
+}
+
+.uxray-section {
+  margin-bottom: 1.35rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.uxray-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(0, 16, 71, 0.45);
+  margin-bottom: 0.5rem;
+}
+
+.uxray-control {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 16, 71, 0.12);
+  font-size: 0.9375rem;
+
+  &:focus {
+    border-color: rgba(52, 97, 255, 0.45);
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.12);
+  }
+}
+
+.uxray-textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.uxray-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  border: 2px dashed rgba(52, 97, 255, 0.28);
+  border-radius: 14px;
+  background: rgba(52, 97, 255, 0.03);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  margin: 0;
+
+  &:hover {
+    border-color: rgba(52, 97, 255, 0.45);
+    background: rgba(52, 97, 255, 0.06);
+  }
+
+  &--has-file {
+    border-style: solid;
+    border-color: rgba(16, 185, 129, 0.45);
+    background: rgba(16, 185, 129, 0.05);
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(52, 97, 255, 0.1);
+    color: #3461ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    color: rgba(0, 16, 71, 0.75);
+  }
+}
+
+.uxray-preview {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 16, 71, 0.1);
+  background: #f8fafc;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+
+  &__img {
+    max-width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    border-radius: 8px;
+    vertical-align: middle;
+  }
+}
+
+.uxray-ai-panel {
+  border-radius: 12px;
+  border: 1px solid rgba(52, 97, 255, 0.2);
+  background: rgba(52, 97, 255, 0.06);
+  padding: 1rem 1.15rem;
+
+  &__title {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1d4ed8;
+    margin-bottom: 0.5rem;
+  }
+
+  &__body {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: rgba(0, 16, 71, 0.85);
+  }
+}
+
+.uxray-actions-row {
+  margin-bottom: 1rem;
+}
+
+.uxray-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(0, 16, 71, 0.08);
+}

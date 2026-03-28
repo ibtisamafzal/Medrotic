@@ -5,13 +5,14 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth.service';
 import { Header } from '../../common/header/header';
 import { Footer } from '../../common/footer/footer';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 import { AlertService } from '../../services/alert.service';
 import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -86,31 +87,6 @@ export class LoginComponent implements OnInit {
         this.redirectByRole(user.role);
       }
     }
-  }
-
-  onCNICInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const formatted = this.authService.formatCNIC(input.value);
-    this.cnic = formatted;
-    input.value = formatted;
-  }
-
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let digits = input.value.replace(/\D/g, '');
-
-    if (digits.startsWith('92')) {
-      digits = digits.slice(2, 12);
-      this.phone = digits.length <= 3 ? `+92-${digits}` : `+92-${digits.slice(0, 3)}-${digits.slice(3)}`;
-    } else {
-      if (digits.startsWith('3')) {
-        digits = `0${digits}`;
-      }
-      digits = digits.slice(0, 11);
-      this.phone = digits.length <= 4 ? digits : `${digits.slice(0, 4)}-${digits.slice(4)}`;
-    }
-
-    input.value = this.phone;
   }
 
   togglePasswordVisibility(): void {

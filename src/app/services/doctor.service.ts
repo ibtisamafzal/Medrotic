@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { formatPakistaniCnicDisplay } from '../common/shared/pak-input-format.directive';
 
 export interface Doctor {
   id: string;
@@ -11,7 +12,8 @@ export interface Doctor {
   email: string;
   phone?: string;
   specialization?: string;
-  licenseNumber?: string;
+  /** Pakistani national ID (formatted when displayed). */
+  cnic?: string;
   hospital?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -28,6 +30,9 @@ export interface Patient {
   dateOfBirth?: string;
   gender?: 'male' | 'female' | 'other';
   address?: string;
+  /** Required when registering a new patient (API). */
+  city?: string;
+  province?: string;
   medicalHistory?: string;
   status: 'active' | 'inactive';
   createdAt?: string;
@@ -207,10 +212,29 @@ export class DoctorService {
 
   // Get all doctors
   getDoctors(): Observable<Doctor[]> {
-    return this.http.get<ApiEnvelope<Doctor[]>>(`${this.adminBaseUrl}/doctors`).pipe(
-      this.extractData<Doctor[]>(),
+    return this.http.get<ApiEnvelope<any[]>>(`${this.adminBaseUrl}/doctors`).pipe(
+      this.extractData<any[]>(),
+      map((rows) => (rows ?? []).map((d) => this.normalizeDoctorListRow(d))),
       catchError(() => of([]))
     );
+  }
+
+  private normalizeDoctorListRow(d: any): Doctor {
+    const rawCnic = d?.cnic ?? d?.CNIC ?? d?.license ?? '';
+    const digits = String(rawCnic).replace(/\D/g, '');
+    const cnic = digits.length === 13 ? formatPakistaniCnicDisplay(digits) : String(rawCnic ?? '').trim();
+    return {
+      id: String(d?.id ?? d?.Id ?? ''),
+      name: String(d?.name ?? d?.FullName ?? ''),
+      fullName: d?.FullName ?? d?.name,
+      email: String(d?.email ?? d?.Email ?? ''),
+      phone: d?.phone ?? d?.PhoneNumber,
+      specialization: String(d?.specialization ?? d?.specialty ?? d?.Specialty ?? ''),
+      cnic,
+      hospital: d?.hospital ?? d?.HospitalName ?? d?.hospitalName,
+      createdAt: d?.createdAt,
+      updatedAt: d?.updatedAt,
+    };
   }
 
   // Get doctor by ID
@@ -236,11 +260,8 @@ export class DoctorService {
   }
 
   // Get doctor's patients
-  getDoctorPatients(doctorId: string): Observable<any[]> {
-    return this.http.get<ApiEnvelope<any[]>>(`${this.adminBaseUrl}/patients`).pipe(
-      this.extractData<any[]>(),
-      catchError(() => of([]))
-    );
+  getDoctorPatients(_doctorId: string): Observable<any[]> {
+    return this.http.get<ApiEnvelope<any[]>>(`${this.adminBaseUrl}/patients`).pipe(this.extractData<any[]>());
   }
 
   // Patient Management APIs
@@ -275,8 +296,7 @@ export class DoctorService {
           (p.cnic || '').toLowerCase().includes(term) ||
           (!!normalizedSearch && this.normalizeCnic(p.cnic || '') === normalizedSearch)
         );
-      }),
-      catchError(() => of(this.getLocalPatientsCache()))
+      })
     );
   }
 
@@ -405,62 +425,60 @@ export class DoctorService {
 
   registerPatient(patient: Partial<Patient>): Observable<Patient> {
     const normalizedCnic = this.normalizeCnic(patient.cnic || '');
+    if (normalizedCnic.length !== 13) {
+      return throwError(() => ({ error: { message: 'A valid 13-digit CNIC is required.' } }));
+    }
+
+    const fullName = (patient.name || patient.fullName || '').trim();
+    if (fullName.length < 3) {
+      return throwError(() => ({ error: { message: 'Full name must be at least 3 characters.' } }));
+    }
+
+    const city = (patient.city || '').trim();
+    const province = (patient.province || '').trim();
+    if (city.length < 2 || province.length < 2) {
+      return throwError(() => ({ error: { message: 'City and province are required.' } }));
+    }
+
+    const rawPhone = (patient.phone || '').replace(/\D/g, '');
+    if (rawPhone.length < 10) {
+      return throwError(() => ({ error: { message: 'A valid phone number (at least 10 digits) is required.' } }));
+    }
+    let n = rawPhone;
+    if (n.startsWith('0')) n = '92' + n.slice(1);
+    else if (!n.startsWith('92')) n = '92' + n;
+    const phoneNumber = '+' + n;
+
+    const genderApi =
+      patient.gender === 'female' ? 'Female' :
+      patient.gender === 'other' ? 'Other' :
+      'Male';
+
     const upsertPayload = {
-      fullName: patient.name || patient.fullName || '',
+      fullName,
       cnic: normalizedCnic,
-      email: patient.email || null,
-      phoneNumber: patient.phone || null,
-      dateOfBirth: patient.dateOfBirth || null,
-      gender: patient.gender || null,
-      city: '',
-      province: '',
-      createPortalAccount: !!patient.email
+      email: (patient.email || '').trim() || null,
+      phoneNumber,
+      dateOfBirth: patient.dateOfBirth ? new Date(patient.dateOfBirth).toISOString() : null,
+      gender: genderApi,
+      city,
+      province,
+      createPortalAccount: !!(patient.email || '').trim()
     };
 
     return this.http.post<any>(`${this.baseUrl}/patients/upsert-by-cnic`, upsertPayload).pipe(
-      map((response) => response?.data ?? response?.Data ?? response),
-      catchError((error) => {
-        // Compatibility fallback for backend instances not yet updated
-        // with /api/doctor/patients/upsert-by-cnic.
-        if (error?.status !== 404) {
-          return throwError(() => error);
-        }
-
-        const fallbackEmail =
-          (patient.email || '').trim() ||
-          `${normalizedCnic || Date.now()}@noaccount.medrotic.local`;
-        const genderValue =
-          patient.gender === 'female' ? 'Female' :
-          patient.gender === 'other' ? 'Other' :
-          'Male';
-
-        const legacyPayload = {
-          fullName: patient.name || patient.fullName || 'Patient',
-          email: fallbackEmail,
-          password: 'Patient@123!',
-          confirmPassword: 'Patient@123!',
+      map((response) => {
+        const data = response?.data ?? response?.Data ?? response;
+        const created = {
+          id: String(data?.id ?? data?.Id ?? ''),
+          name: fullName,
+          email: (patient.email || '').trim() || '',
+          phone: phoneNumber,
           cnic: normalizedCnic,
-          phoneNumber: (patient.phone || '03001234567').replace(/\s/g, ''),
-          dateOfBirth: patient.dateOfBirth || '1990-01-01T00:00:00.000Z',
-          gender: genderValue,
-          city: 'Sahiwal',
-          province: 'Punjab'
+          status: 'active' as const
         };
-
-        return this.http.post<any>(`${this.authBaseUrl}/register-patient`, legacyPayload).pipe(
-          map(() => {
-            const created = {
-            id: '',
-            name: legacyPayload.fullName,
-            email: legacyPayload.email,
-            phone: legacyPayload.phoneNumber,
-            cnic: normalizedCnic,
-            status: 'active'
-            } as Patient;
-            this.saveLocalPatientToCache(created);
-            return created;
-          })
-        );
+        if (created.id) this.saveLocalPatientToCache(created);
+        return created;
       })
     );
   }
@@ -571,17 +589,38 @@ export class DoctorService {
   getMessages(patientId?: string): Observable<Message[]> {
     let params = new HttpParams();
     if (patientId) params = params.set('patientId', patientId);
-    return this.http.get<ApiEnvelope<Message[]>>(`${this.baseUrl}/messages`, { params }).pipe(
-      this.extractData<Message[]>(),
-      catchError(() => of([]))
+    return this.http.get<any>(`${this.baseUrl}/messages`, { params }).pipe(
+      map((response) => {
+        const rows = (response?.data ?? response?.Data ?? []) as any[];
+        return (rows || []).map((m) => ({
+          id: m.id ?? m.Id,
+          to: m.to ?? m.To ?? '',
+          from: m.from ?? m.From,
+          content: m.content ?? m.Content ?? '',
+          medicalRecordId: m.medicalRecordId ?? m.MedicalRecordId,
+          channel: m.channel ?? m.Channel,
+          timestamp: m.timestamp ?? m.Timestamp ?? m.sentAt,
+          read: m.read ?? m.Read ?? m.isRead
+        })) as Message[];
+      })
     );
   }
 
   // Patient Analytics APIs
   getPatientAnalytics(patientId: string): Observable<PatientAnalytics> {
-    return this.http.get<any>(`${this.baseUrl}/analytics`).pipe(
-      map((response) => response?.data ?? response),
-      catchError(() => of({} as PatientAnalytics))
+    return this.http.get<any>(`${this.baseUrl}/patients/${encodeURIComponent(patientId)}/analytics`).pipe(
+      map((response) => {
+        const d = response?.data ?? response?.Data ?? {};
+        return {
+          patientId: String(d.patientId ?? d.PatientId ?? patientId),
+          totalVisits: Number(d.totalVisits ?? d.TotalVisits ?? 0),
+          totalPrescriptions: Number(d.totalPrescriptions ?? d.TotalPrescriptions ?? 0),
+          totalXrays: Number(d.totalXrays ?? d.TotalXrays ?? 0),
+          lastVisit: d.lastVisit ?? d.LastVisit,
+          healthTrends: d.healthTrends ?? d.HealthTrends ?? [],
+          medications: d.medications ?? d.Medications ?? []
+        } as PatientAnalytics;
+      })
     );
   }
 

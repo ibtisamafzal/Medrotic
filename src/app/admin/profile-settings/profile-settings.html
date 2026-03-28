@@ -12,23 +12,28 @@
       <div class="settings-card fade-in-up" [style.animation-delay]="'100ms'">
         <h3 class="card-title">Profile Information</h3>
         <form (ngSubmit)="updateProfile()">
+          <div *ngIf="profileLoading" class="text-muted small mb-2">Loading profile…</div>
           <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" [(ngModel)]="profile.name" name="name" required>
+            <label class="form-label" for="admin-profile-name">Name</label>
+            <input id="admin-profile-name" type="text" class="form-control" [(ngModel)]="profile.name" name="name" required [disabled]="profileLoading || profileSaving">
           </div>
           <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" required>
+            <label class="form-label" for="admin-profile-email">Email</label>
+            <input id="admin-profile-email" type="email" class="form-control" [(ngModel)]="profile.email" name="email" readonly title="Email is managed by your account; contact support to change it.">
+            <small class="text-muted">Read-only. Sign-in email is not changed from this form.</small>
           </div>
           <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="tel" class="form-control" [(ngModel)]="profile.phone" name="phone" pkInputFormat="phone">
+            <label class="form-label" for="admin-profile-phone">Phone</label>
+            <input id="admin-profile-phone" type="tel" class="form-control" [(ngModel)]="profile.phone" name="phone" pkInputFormat="phone" [disabled]="profileLoading || profileSaving">
           </div>
           <div class="mb-3">
-            <label class="form-label">Role</label>
-            <input type="text" class="form-control" [value]="profile.role" disabled>
+            <label class="form-label" for="admin-profile-role">Role</label>
+            <input id="admin-profile-role" type="text" class="form-control" [value]="profile.role" disabled>
           </div>
-          <button type="submit" class="btn btn-primary">Update Profile</button>
+          <button type="submit" class="btn btn-primary" [disabled]="profileLoading || profileSaving">
+            <span *ngIf="profileSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            {{ profileSaving ? 'Saving…' : 'Update Profile' }}
+          </button>
         </form>
       </div>
     </div>
@@ -57,44 +62,70 @@
 
     <!-- Preferences -->
     <div class="col-12">
-      <div class="settings-card fade-in-up" [style.animation-delay]="'300ms'">
-        <h3 class="card-title">Preferences</h3>
+      <div class="settings-card preferences-panel fade-in-up" [style.animation-delay]="'300ms'">
+        <div class="preferences-panel-header">
+          <div>
+            <h3 class="card-title preferences-title">Preferences</h3>
+            <p class="preferences-lead">Notifications and regional defaults for the admin console.</p>
+          </div>
+        </div>
         <form (ngSubmit)="savePreferences()">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="emailNotifications" [(ngModel)]="preferences.emailNotifications" name="emailNotifications">
-                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
-              </div>
-              <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="pushNotifications" [(ngModel)]="preferences.pushNotifications" name="pushNotifications">
-                <label class="form-check-label" for="pushNotifications">Push Notifications</label>
-              </div>
-              <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="smsNotifications" [(ngModel)]="preferences.smsNotifications" name="smsNotifications">
-                <label class="form-check-label" for="smsNotifications">SMS Notifications</label>
+          <div class="row g-4 align-items-stretch">
+            <div class="col-lg-7">
+              <p class="preferences-section-label">Notifications</p>
+              <div class="preference-rows">
+                <label class="preference-row" for="emailNotifications">
+                  <div class="preference-row-text">
+                    <span class="preference-row-title">Email</span>
+                    <span class="preference-row-desc">Security alerts and weekly summaries</span>
+                  </div>
+                  <input class="preference-toggle" type="checkbox" id="emailNotifications" [(ngModel)]="preferences.emailNotifications" name="emailNotifications">
+                </label>
+                <label class="preference-row" for="pushNotifications">
+                  <div class="preference-row-text">
+                    <span class="preference-row-title">Push</span>
+                    <span class="preference-row-desc">In-browser notifications while signed in</span>
+                  </div>
+                  <input class="preference-toggle" type="checkbox" id="pushNotifications" [(ngModel)]="preferences.pushNotifications" name="pushNotifications">
+                </label>
+                <label class="preference-row" for="smsNotifications">
+                  <div class="preference-row-text">
+                    <span class="preference-row-title">SMS</span>
+                    <span class="preference-row-desc">Critical incidents only</span>
+                  </div>
+                  <input class="preference-toggle" type="checkbox" id="smsNotifications" [(ngModel)]="preferences.smsNotifications" name="smsNotifications">
+                </label>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="form-label">Language</label>
-                <select class="form-select" [(ngModel)]="preferences.language" name="language">
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                  <option value="fr">French</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Timezone</label>
-                <select class="form-select" [(ngModel)]="preferences.timezone" name="timezone">
-                  <option value="UTC">UTC</option>
-                  <option value="EST">EST</option>
-                  <option value="PST">PST</option>
-                </select>
+            <div class="col-lg-5">
+              <p class="preferences-section-label">Regional</p>
+              <div class="preference-fields">
+                <div class="mb-3">
+                  <label class="form-label preference-field-label" for="pref-language">Language</label>
+                  <select class="form-select" id="pref-language" [(ngModel)]="preferences.language" name="language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                  </select>
+                </div>
+                <div class="mb-0">
+                  <label class="form-label preference-field-label" for="pref-timezone">Timezone</label>
+                  <select class="form-select" id="pref-timezone" [(ngModel)]="preferences.timezone" name="timezone">
+                    <option value="UTC">UTC</option>
+                    <option value="EST">Eastern (US)</option>
+                    <option value="PST">Pacific (US)</option>
+                    <option value="PKT">Pakistan (PKT)</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Preferences</button>
+          <div class="preferences-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="prefsSaving">
+              <span *ngIf="prefsSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              {{ prefsSaving ? 'Saving…' : 'Save preferences' }}
+            </button>
+          </div>
         </form>
       </div>
     </div>

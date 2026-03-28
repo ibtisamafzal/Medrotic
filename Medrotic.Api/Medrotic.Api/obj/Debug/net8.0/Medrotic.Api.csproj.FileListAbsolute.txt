@@ -854,3 +854,4 @@ D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\Medrotic.A
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\Medrotic.Api.staticwebassets.endpoints.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\_build2\_build\metrics_store.json
 D:\Medrotic\Medrotic.Api\Medrotic.Api\bin\Debug\net8.0\Medrotic.Api.staticwebassets.runtime.json
+D:\Medrotic\Medrotic.Api\Medrotic.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

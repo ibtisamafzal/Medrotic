@@ -89,8 +89,14 @@
                 </div>
               </div>
               <div class="doctor-actions">
-                <button class="btn btn-outline-primary btn-sm">View Profile</button>
-                <button class="btn btn-primary btn-sm">Book Appointment</button>
+                <app-dashboard-table-actions
+                  [showViewButton]="true"
+                  [showBook]="true"
+                  viewTitle="View profile"
+                  bookTitle="Book appointment"
+                  (viewClick)="viewDoctorProfile(doctor)"
+                  (book)="bookAppointment(doctor)"
+                />
               </div>
             </div>
           </div>

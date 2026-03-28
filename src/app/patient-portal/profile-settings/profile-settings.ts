@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService, Patient } from '../../services/patient.service';
@@ -6,6 +6,7 @@ import { AuthService } from '../../auth/auth.service';
 import { notifyPortalUpdated } from '../../services/patient.service';
 import { finalize } from 'rxjs/operators';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -14,6 +15,8 @@ import { PakInputFormatDirective } from '../../common/shared/pak-input-format.di
   styleUrl: './profile-settings.scss',
 })
 export class ProfileSettings implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   loading = false;
   saving = false;
   profile: Partial<Patient> = {
@@ -29,7 +32,13 @@ export class ProfileSettings implements OnInit {
   cnicVerified = false;
   cnicVerificationMessage = '';
 
-  constructor(private patientService: PatientService, private authService: AuthService) {}
+  loadError = false;
+
+  constructor(
+    private patientService: PatientService,
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.loadProfile();
@@ -37,13 +46,13 @@ export class ProfileSettings implements OnInit {
 
   loadProfile() {
     this.loading = true;
-    // In real app, get current user's profile
-    // For now, using mock data
+    this.loadError = false;
     this.patientService
       .getPatientById('current')
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.cdr.markForCheck();
         })
       )
       .subscribe({
@@ -53,19 +62,22 @@ export class ProfileSettings implements OnInit {
           const displayName = patient?.name ?? patient?.fullName ?? '';
           if (displayName) this.authService.updateCurrentUserName(displayName);
           this.cnicVerified = patient.cnicVerified || false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
           console.error('Error loading profile:', err);
-          // Mock data for development
+          this.loadError = true;
           this.profile = {
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            phone: '+923001234567',
-            dateOfBirth: '1990-01-01',
-            address: '123 Main St, City',
-            cnic: '12345-1234567-1',
+            name: '',
+            email: '',
+            phone: '',
+            dateOfBirth: '',
+            address: '',
+            cnic: '',
             cnicVerified: false
           };
+          this.alertService.error('Could not load your profile from the server.');
+          this.cdr.markForCheck();
         }
       });
   }
@@ -84,11 +96,13 @@ export class ProfileSettings implements OnInit {
         this.cnicVerified = result.verified;
         this.cnicVerificationMessage = result.message || (result.verified ? 'CNIC verified successfully' : 'CNIC verification failed');
         this.cnicVerifying = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error verifying CNIC:', err);
         this.cnicVerificationMessage = 'Error verifying CNIC. Please try again.';
         this.cnicVerifying = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -119,7 +133,7 @@ export class ProfileSettings implements OnInit {
     this.patientService.updateProfile(payload).subscribe({
       next: () => {
         this.saving = false;
-        alert('Profile updated successfully');
+        this.alertService.success('Profile updated successfully');
         // Reload from backend so form doesn't blank and values stay in sync.
         // Update dashboard welcome header immediately (no need to wait for reload).
         const displayName = (this.profile?.name ?? (this.profile as any)?.fullName ?? '').toString().trim();
@@ -127,11 +141,13 @@ export class ProfileSettings implements OnInit {
         this.loadProfile();
         // Notify other portal components that profile-visible data may have changed.
         notifyPortalUpdated();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error updating profile:', err);
-        alert('Error updating profile. Please try again.');
+        this.alertService.error('Error updating profile. Please try again.');
         this.saving = false;
+        this.cdr.markForCheck();
       }
     });
   }

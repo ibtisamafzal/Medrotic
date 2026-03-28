@@ -19,6 +19,8 @@ export class RegisterPatient {
     cnic: '',
     dateOfBirth: '',
     gender: 'male',
+    city: '',
+    province: '',
     address: '',
     medicalHistory: '',
     status: 'active'
@@ -38,6 +40,17 @@ export class RegisterPatient {
   onSubmit() {
     if (!this.patient.name || !this.patient.cnic) {
       this.error = 'Name and CNIC are required';
+      return;
+    }
+    const phoneDigits = (this.patient.phone ?? '').replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
+      this.error = 'A valid phone number (at least 10 digits) is required.';
+      return;
+    }
+    const city = (this.patient.city ?? '').trim();
+    const province = (this.patient.province ?? '').trim();
+    if (city.length < 2 || province.length < 2) {
+      this.error = 'City and province are required.';
       return;
     }
 

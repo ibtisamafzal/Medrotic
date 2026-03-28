@@ -757,6 +757,22 @@
   },
   {
     "ContainingType": "Medrotic.Api.Controllers.AuthController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Auth/change-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.ChangePasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AuthController",
     "Method": "ForgetPassword",
     "RelativePath": "api/Auth/forget-password",
     "HttpMethod": "POST",
@@ -1077,6 +1093,22 @@
   },
   {
     "ContainingType": "Medrotic.Api.Controllers.DoctorController",
+    "Method": "GetPatientAnalytics",
+    "RelativePath": "api/doctor/patients/{patientId}/analytics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.DoctorController",
     "Method": "SendNotification",
     "RelativePath": "api/doctor/patients/{patientId}/notifications",
     "HttpMethod": "POST",
@@ -1323,6 +1355,27 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.PatientController",
+    "Method": "GetMyAppointments",
+    "RelativePath": "api/patient/appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

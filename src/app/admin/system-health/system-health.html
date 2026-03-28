@@ -7,7 +7,7 @@
       </div>
       <div class="d-flex gap-2 align-items-center">
         <label class="form-check-label d-flex align-items-center gap-2">
-          <input type="checkbox" class="form-check-input" [(ngModel)]="autoRefresh" (change)="toggleAutoRefresh()">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="autoRefresh" (ngModelChange)="onAutoRefreshModelChange()">
           <span>Auto Refresh</span>
         </label>
         <button class="btn btn-outline-primary btn-sm" (click)="loadLogs(); loadErrorReports(); loadPerformanceStats()">
@@ -19,13 +19,8 @@
 
   <!-- Performance Stats -->
   <div class="row g-4 mb-4">
-    <div class="col-6 col-md-6 col-lg-3" *ngFor="let stat of [
-      { value: (performanceStats.uptime || '99.9') + '%', label: 'System Uptime', icon: 'uptime', color: '#10b981' },
-      { value: (performanceStats.avgResponseTime || '120') + 'ms', label: 'Avg Response Time', icon: 'response', color: '#3461ff' },
-      { value: errorLogs.length.toString(), label: 'Error Reports', icon: 'error', color: '#ef4444' },
-      { value: (performanceStats.activeUsers || '0').toString(), label: 'Active Users', icon: 'users', color: '#f59e0b' }
-    ]; let i = index">
-      <div class="stat-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
+    <div class="col-6 col-md-6 col-lg-3" *ngFor="let stat of statCards; trackBy: trackStatCardLabel">
+      <div class="stat-card">
         <div class="stat-icon" [style.background]="'rgba(' + getRgbFromHex(stat.color) + ', 0.1)'">
           <svg *ngIf="stat.icon === 'uptime'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="stat.color" stroke-width="2"/>
@@ -63,19 +58,61 @@
             <option value="error">Error</option>
           </select>
         </div>
-        
+
         <div class="logs-container">
-          <div class="log-item fade-in-up" *ngFor="let log of getFilteredLogs(); let i = index" [class]="getLogLevelClass(log.level)" [style.animation-delay]="(500 + i * 30) + 'ms'">
-            <div class="log-icon">{{ getLogIcon(log.level) }}</div>
-            <div class="log-content">
-              <div class="log-header">
-                <span class="log-level-badge">{{ log.level | titlecase }}</span>
-                <span class="log-timestamp">{{ log.timestamp | date: 'short' }}</span>
+          <article
+            class="log-item"
+            *ngFor="let log of getFilteredLogs(); trackBy: trackLogById"
+            [class]="getLogLevelClass(log.level)"
+            [class.log-item--expanded]="isExpanded(log)"
+          >
+            <div class="log-item-main">
+              <div class="log-icon" aria-hidden="true">{{ getLogIcon(log.level) }}</div>
+              <div class="log-content">
+                <div class="log-header">
+                  <div class="log-header-left">
+                    <span class="log-level-badge">{{ log.level | titlecase }}</span>
+                    <span class="log-category-pill" *ngIf="log.category">{{ log.category }}</span>
+                  </div>
+                  <time class="log-timestamp" [attr.datetime]="log.timestamp">{{ log.timestamp | date: 'medium' }}</time>
+                </div>
+                <p class="log-message">{{ log.message }}</p>
+                <div class="log-meta-line" *ngIf="log.source">
+                  <span class="log-meta-label">Source</span>
+                  <code class="log-meta-value">{{ log.source }}</code>
+                </div>
               </div>
-              <p class="log-message">{{ log.message }}</p>
-              <span class="log-source" *ngIf="log.source">{{ log.source }}</span>
+              <button
+                *ngIf="logHasDetails(log)"
+                type="button"
+                class="log-expand-btn"
+                (click)="toggleExpanded(log)"
+                [attr.aria-expanded]="isExpanded(log)"
+                [title]="isExpanded(log) ? 'Hide details' : 'Show details'"
+              >
+                <svg class="log-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
             </div>
-          </div>
+
+            <div class="log-detail-panel" *ngIf="isExpanded(log) && logHasDetails(log)">
+              <div class="log-detail-grid">
+                <div class="log-detail-cell" *ngIf="log.detail">
+                  <span class="log-detail-label">Detail</span>
+                  <pre class="log-detail-body log-detail-body--pre">{{ log.detail }}</pre>
+                </div>
+                <div class="log-detail-cell" *ngIf="log.actorUserId">
+                  <span class="log-detail-label">Actor user ID</span>
+                  <code class="log-detail-body">{{ log.actorUserId }}</code>
+                </div>
+                <div class="log-detail-cell" *ngIf="log.resourceType || log.resourceId">
+                  <span class="log-detail-label">Resource</span>
+                  <code class="log-detail-body">{{ log.resourceType || '—' }} <span *ngIf="log.resourceId">· {{ log.resourceId }}</span></code>
+                </div>
+              </div>
+            </div>
+          </article>
           <div class="empty-state" *ngIf="getFilteredLogs().length === 0">
             <p>No logs found</p>
           </div>

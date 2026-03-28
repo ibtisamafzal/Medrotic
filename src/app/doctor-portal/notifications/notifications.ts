@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DoctorService } from '../../services/doctor.service';
 
@@ -9,34 +9,55 @@ import { DoctorService } from '../../services/doctor.service';
   styleUrl: './notifications.scss',
 })
 export class Notifications implements OnInit {
-  notifications: any[] = [];
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  /** Patient-linked messages / alerts from the same API used in Secure Communication. */
+  notifications: Array<{
+    id?: string;
+    message: string;
+    timestamp?: string;
+    read?: boolean;
+    type: 'info' | 'success' | 'warning';
+  }> = [];
   loading = false;
+  loadError: string | null = null;
 
   constructor(private doctorService: DoctorService) {}
 
   ngOnInit() {
-    this.loadNotifications();
+    this.load();
   }
 
-  loadNotifications() {
+  load() {
     this.loading = true;
-    // Mock notifications - in real app, this would come from API
-    setTimeout(() => {
-      this.notifications = [
-        { id: '1', message: 'New patient registered: John Doe', type: 'info', timestamp: new Date(), read: false },
-        { id: '2', message: 'Prescription uploaded for patient: Jane Smith', type: 'success', timestamp: new Date(Date.now() - 3600000), read: false },
-        { id: '3', message: 'X-Ray analysis completed', type: 'info', timestamp: new Date(Date.now() - 7200000), read: true },
-        { id: '4', message: 'New message from patient: Mike Johnson', type: 'warning', timestamp: new Date(Date.now() - 86400000), read: true }
-      ];
-      this.loading = false;
-    }, 500);
+    this.loadError = null;
+    this.doctorService.getMessages().subscribe({
+      next: (msgs) => {
+        this.notifications = (msgs || []).map((m) => ({
+          id: m.id,
+          message: m.content ?? '',
+          timestamp: m.timestamp,
+          read: !!m.read,
+          type: 'info' as const,
+        }));
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error loading notifications:', err);
+        this.notifications = [];
+        this.loadError = 'Notifications could not be loaded. Check your connection and try again.';
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
-  markAsRead(notification: any) {
+  markAsRead(notification: { read?: boolean }) {
     notification.read = true;
   }
 
   markAllAsRead() {
-    this.notifications.forEach(n => n.read = true);
+    this.notifications.forEach((n) => (n.read = true));
   }
 }

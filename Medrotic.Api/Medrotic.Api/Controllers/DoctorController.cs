@@ -1,6 +1,7 @@
 using Medrotic.Api.Data;
 using Medrotic.Api.DTOs;
 using Medrotic.Api.Models;
+using Medrotic.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,12 +24,14 @@ namespace Medrotic.Api.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
+        private readonly ISystemLogStore _systemLog;
 
-        public DoctorController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
+        public DoctorController(AppDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment, ISystemLogStore systemLog)
         {
             _context = context;
             _userManager = userManager;
             _environment = environment;
+            _systemLog = systemLog;
         }
 
         private string GetCurrentDoctorId()
@@ -157,20 +160,56 @@ namespace Medrotic.Api.Controllers
                 if (doctor == null)
                     return NotFound(new { Message = "Doctor profile not found." });
 
-                if (dto.FullName != null) doctor.FullName = dto.FullName;
-                if (dto.Specialty != null) doctor.Specialty = dto.Specialty;
-                if (dto.ExperienceYears.HasValue) doctor.ExperienceYears = dto.ExperienceYears;
-                if (dto.PhoneNumber != null) doctor.PhoneNumber = dto.PhoneNumber;
-                if (dto.City != null) doctor.City = dto.City;
-                if (dto.Province != null) doctor.Province = dto.Province;
-                if (dto.DateOfBirth.HasValue) doctor.DateOfBirth = dto.DateOfBirth.Value;
-                if (dto.Gender != null) doctor.Gender = dto.Gender;
+                var hasAny =
+                    !string.IsNullOrWhiteSpace(dto.FullName) ||
+                    !string.IsNullOrWhiteSpace(dto.Specialty) ||
+                    dto.ExperienceYears.HasValue ||
+                    !string.IsNullOrWhiteSpace(dto.PhoneNumber) ||
+                    !string.IsNullOrWhiteSpace(dto.City) ||
+                    !string.IsNullOrWhiteSpace(dto.Province) ||
+                    dto.DateOfBirth.HasValue ||
+                    !string.IsNullOrWhiteSpace(dto.Gender);
+
+                if (!hasAny)
+                    return BadRequest(new { Message = "No profile fields were provided to update." });
+
+                if (!string.IsNullOrWhiteSpace(dto.FullName))
+                    doctor.FullName = dto.FullName.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.Specialty))
+                    doctor.Specialty = dto.Specialty.Trim();
+                if (dto.ExperienceYears.HasValue)
+                    doctor.ExperienceYears = dto.ExperienceYears;
+                if (dto.PhoneNumber != null)
+                    doctor.PhoneNumber = string.IsNullOrWhiteSpace(dto.PhoneNumber) ? doctor.PhoneNumber : dto.PhoneNumber.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.City))
+                    doctor.City = dto.City.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.Province))
+                    doctor.Province = dto.Province.Trim();
+                if (dto.DateOfBirth.HasValue)
+                    doctor.DateOfBirth = dto.DateOfBirth.Value;
+                if (!string.IsNullOrWhiteSpace(dto.Gender))
+                    doctor.Gender = dto.Gender.Trim();
+
+                doctor.LastActivity = DateTime.UtcNow;
 
                 var result = await _userManager.UpdateAsync(doctor);
                 if (!result.Succeeded)
                     return BadRequest(new { Message = "Doctor profile update failed.", Errors = result.Errors.Select(e => e.Description) });
 
-                return Ok(new { Message = "Doctor profile updated successfully." });
+                var fresh = await _userManager.FindByIdAsync(doctorId);
+                _systemLog.Add("info", $"Doctor profile updated: {fresh?.Email}.", "Doctor");
+
+                var payload = new
+                {
+                    id = fresh!.Id,
+                    fullName = fresh.FullName,
+                    email = fresh.Email,
+                    phoneNumber = fresh.PhoneNumber,
+                    specialty = fresh.Specialty,
+                    cnic = fresh.CNIC
+                };
+
+                return Ok(new { Message = "Doctor profile updated successfully.", Data = payload });
             }
             catch (Exception ex)
             {
@@ -448,6 +487,60 @@ namespace Medrotic.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while retrieving patient medical data.", Error = ex.Message });
+            }
+        }
+
+        [HttpGet("patients/{patientId}/analytics")]
+        public async Task<IActionResult> GetPatientAnalytics(string patientId)
+        {
+            try
+            {
+                var doctorUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(doctorUserId))
+                    return Unauthorized(new { Message = "Invalid authentication token." });
+
+                var patient = await ResolvePatientByIdentifierAsync(patientId);
+                if (patient == null || patient.Role != "Patient")
+                    return NotFound(new { Message = "Patient not found or invalid role." });
+
+                var records = await _context.MedicalRecords
+                    .Where(r => r.PatientId == patient.Id)
+                    .ToListAsync();
+
+                static bool IsXrayPath(string? path)
+                {
+                    if (string.IsNullOrWhiteSpace(path)) return false;
+                    var lower = path.ToLowerInvariant();
+                    return lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".png") || lower.EndsWith(".webp");
+                }
+
+                static bool IsPrescriptionPath(string? path)
+                {
+                    if (string.IsNullOrWhiteSpace(path)) return false;
+                    return path.ToLowerInvariant().EndsWith(".pdf");
+                }
+
+                var totalVisits = records.Count;
+                var totalXrays = records.Count(r => IsXrayPath(r.ReportFilePath));
+                var totalPrescriptions = records.Count(r => IsPrescriptionPath(r.ReportFilePath));
+                DateTime? lastVisit = records.Count == 0 ? null : records.Max(r => r.RecordDate);
+
+                var dto = new
+                {
+                    patientId = patient.Id,
+                    totalVisits,
+                    totalPrescriptions,
+                    totalXrays,
+                    lastVisit = lastVisit?.ToString("o"),
+                    healthTrends = new object[] { },
+                    medications = new object[] { }
+                };
+
+                return Ok(new { Message = "Patient analytics retrieved successfully.", Data = dto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving patient analytics.", Error = ex.Message });
             }
         }
 

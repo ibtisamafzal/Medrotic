@@ -64,6 +64,8 @@
             <label class="form-label">CNIC Number</label>
             <input type="text" class="form-control" [(ngModel)]="profile.cnic" name="cnic" 
                    pkInputFormat="cnic"
+                   maxlength="15"
+                   inputmode="numeric"
                    placeholder="12345-1234567-1" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}">
             <small class="form-text text-muted">Format: 12345-1234567-1</small>
           </div>

@@ -2,7 +2,7 @@
   <div class="page-header mb-4 fade-in-down">
     <div class="d-flex justify-content-between align-items-center">
       <div>
-        <h2 class="page-title">Welcome, Dr. {{ currentUser?.name || 'Doctor' }}!</h2>
+        <h2 class="page-title">Welcome, Dr. {{ welcomeDisplayName }}!</h2>
         <p class="page-subtitle">Overview of your patients and practice metrics</p>
       </div>
       <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
@@ -19,11 +19,11 @@
   <!-- Key Metrics Cards -->
   <div class="row g-4 mb-4">
     <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
-      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff' },
-      { label: 'Active Patients', value: metrics.activePatients, icon: 'active', color: '#10b981' },
-      { label: 'Prescriptions', value: metrics.totalPrescriptions, icon: 'prescriptions', color: '#f59e0b' },
-      { label: 'X-Rays', value: metrics.totalXrays, icon: 'xrays', color: '#ef4444' }
-    ]; let i = index">
+      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff', viz: 'relative' },
+      { label: 'Active Patients', value: metrics.activePatients, icon: 'active', color: '#10b981', viz: 'share' },
+      { label: 'Prescriptions', value: metrics.totalPrescriptions, icon: 'prescriptions', color: '#f59e0b', viz: 'relative' },
+      { label: 'X-Rays', value: metrics.totalXrays, icon: 'xrays', color: '#ef4444', viz: 'relative' }
+    ]; trackBy: trackByMetricLabel; let i = index">
       <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
         <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
           <svg *ngIf="metric.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,8 +43,70 @@
           </svg>
         </div>
         <div class="metric-content">
-          <h3 class="metric-value count-up">{{ metric.value }}</h3>
+          <h3 class="metric-value count-up">{{ formatMetricCount(metric.value) }}</h3>
           <p class="metric-label">{{ metric.label }}</p>
+          <div class="metric-viz" *ngIf="metricBarInsight(metric) as bar">
+            <div class="metric-viz__track">
+              <div
+                class="metric-viz__fill"
+                [style.width.%]="bar.pct"
+                [style.background]="'linear-gradient(90deg, ' + metric.color + ', ' + metric.color + 'CC)'"
+              ></div>
+            </div>
+            <span class="metric-viz__caption">{{ bar.caption }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Practice snapshot: roster + Rx / X-ray mix -->
+  <div class="row g-4 mb-4" *ngIf="practiceSnapshot as snap">
+    <div class="col-12 col-lg-4">
+      <div class="doctor-snapshot-card">
+        <h3 class="doctor-snapshot-card__title">Roster coverage</h3>
+        <p class="doctor-snapshot-card__sub">Active patients vs total assigned</p>
+        <div class="doctor-donut-wrap">
+          <div
+            class="doctor-donut"
+            [style.background]="'conic-gradient(#10b981 ' + snap.activePct + '%, #e8ecf4 0)'"
+            role="img"
+            [attr.aria-label]="snap.activePct + ' percent active'"
+          >
+            <div class="doctor-donut__hole">
+              <span class="doctor-donut__pct">{{ snap.activePct }}%</span>
+              <span class="doctor-donut__lab">active</span>
+            </div>
+          </div>
+        </div>
+        <ul class="doctor-snapshot-legend">
+          <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--active"></span>Active <strong>{{ formatMetricCount(metrics.activePatients) }}</strong></li>
+          <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--rest"></span>Total <strong>{{ formatMetricCount(metrics.totalPatients) }}</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-12 col-lg-8">
+      <div class="doctor-snapshot-card doctor-snapshot-card--wide">
+        <h3 class="doctor-snapshot-card__title">Document activity</h3>
+        <p class="doctor-snapshot-card__sub">Prescriptions vs imaging uploads (relative volume)</p>
+        <div class="doctor-mix-bar" *ngIf="snap.rx + snap.xr > 0; else noMix">
+          <div
+            class="doctor-mix-bar__seg doctor-mix-bar__seg--rx"
+            [style.flex-grow]="snap.rx"
+            [title]="'Prescriptions: ' + formatMetricCount(metrics.totalPrescriptions)"
+          ></div>
+          <div
+            class="doctor-mix-bar__seg doctor-mix-bar__seg--xr"
+            [style.flex-grow]="snap.xr"
+            [title]="'X-rays: ' + formatMetricCount(metrics.totalXrays)"
+          ></div>
+        </div>
+        <ng-template #noMix>
+          <p class="text-muted small mb-0">No prescription or X-ray counts yet — numbers will fill this bar as you add records.</p>
+        </ng-template>
+        <div class="doctor-mix-labels" *ngIf="snap.rx + snap.xr > 0">
+          <span><i class="doctor-mix-dot doctor-mix-dot--rx"></i>Prescriptions <strong>{{ formatMetricCount(metrics.totalPrescriptions) }}</strong></span>
+          <span><i class="doctor-mix-dot doctor-mix-dot--xr"></i>X-rays <strong>{{ formatMetricCount(metrics.totalXrays) }}</strong></span>
         </div>
       </div>
     </div>
@@ -80,7 +142,7 @@
           <h3 class="section-title">Messages</h3>
         </div>
         <div class="action-content">
-          <div class="action-value">{{ metrics.pendingMessages }}</div>
+          <div class="action-value">{{ formatMetricCount(metrics.pendingMessages) }}</div>
           <p class="action-label">Unread messages from patients</p>
           <a routerLink="/doctor-portal/secure-communication" class="btn btn-outline-primary btn-sm mt-3">View Messages</a>
         </div>
@@ -109,6 +171,39 @@
     </div>
   </div>
 
+  <!-- Upcoming appointments (from your schedule in the system) -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="section-card fade-in-up" [style.animation-delay]="'550ms'">
+        <h3 class="section-title mb-3">Upcoming appointments</h3>
+        <p class="text-muted small mb-3" *ngIf="appointmentsLoadError">{{ appointmentsLoadError }}</p>
+        <div class="table-responsive" *ngIf="!appointmentsLoadError">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>When</th>
+                <th>Patient ID</th>
+                <th>Status</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of upcomingAppointments">
+                <td>{{ (a.appointmentDate || a.AppointmentDate) | date:'short' }}</td>
+                <td>{{ a.patientId || a.PatientId }}</td>
+                <td>{{ a.status || a.Status }}</td>
+                <td class="text-muted small">{{ a.notes || a.Notes || '—' }}</td>
+              </tr>
+              <tr *ngIf="upcomingAppointments.length === 0">
+                <td colspan="4" class="text-center text-muted py-4">No upcoming appointments scheduled</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Assigned Patients & Recent Uploads -->
   <div class="row g-4">
     <div class="col-12 col-lg-6">
@@ -130,7 +225,7 @@
                 <td>{{ patient.cnic || 'N/A' }}</td>
                 <td>{{ patient.phone || 'N/A' }}</td>
                 <td>
-                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-sm btn-outline-primary">View</a>
+                  <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
                 </td>
               </tr>
               <tr *ngIf="assignedPatients.length === 0">
@@ -192,7 +287,7 @@
                 <td>{{ patient.phone || 'N/A' }}</td>
                 <td>{{ patient.updatedAt ? (patient.updatedAt | date:'short') : 'N/A' }}</td>
                 <td>
-                  <a [routerLink]="['/doctor-portal/patient-details', patient.id]" class="btn btn-sm btn-outline-primary">View</a>
+                  <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
                 </td>
               </tr>
               <tr *ngIf="recentPatients.length === 0">
@@ -214,6 +309,12 @@
               <path d="M2.5 18.3333C2.5 15.1117 5.11167 12.5 8.33333 12.5H11.6667C14.8883 12.5 17.5 15.1117 17.5 18.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
             <span>Patient Management</span>
+          </a>
+          <a routerLink="/doctor-portal/patient-analytics" class="quick-link-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+            </svg>
+            <span>Patient analytics</span>
           </a>
           <a routerLink="/doctor-portal/secure-communication" class="quick-link-item">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

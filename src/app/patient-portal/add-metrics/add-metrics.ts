@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService, HealthMetric, notifyPortalUpdated } from '../../services/patient.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-add-metrics',
@@ -10,6 +11,8 @@ import { PatientService, HealthMetric, notifyPortalUpdated } from '../../service
   styleUrl: './add-metrics.scss',
 })
 export class AddMetrics implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   saving = false;
   submitted = false;
   
@@ -27,7 +30,10 @@ export class AddMetrics implements OnInit {
 
   recentMetrics: HealthMetric[] = [];
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.loadRecentMetrics();
@@ -37,9 +43,11 @@ export class AddMetrics implements OnInit {
     this.patientService.getMetrics().subscribe({
       next: (metrics) => {
         this.recentMetrics = metrics.slice(0, 5);
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading metrics:', err);
+        this.cdr.markForCheck();
       }
     });
   }
@@ -55,16 +63,18 @@ export class AddMetrics implements OnInit {
       next: (saved) => {
         this.saving = false;
         this.submitted = false;
-        alert('Health metrics saved successfully');
+        this.alertService.success('Health metrics saved successfully.');
         this.resetForm();
         this.loadRecentMetrics();
         // Trigger real-time refresh across portal components (dashboard/history).
         notifyPortalUpdated();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error saving metrics:', err);
-        alert('Error saving metrics. Please try again.');
+        this.alertService.error('Error saving metrics. Please try again.');
         this.saving = false;
+        this.cdr.markForCheck();
       }
     });
   }

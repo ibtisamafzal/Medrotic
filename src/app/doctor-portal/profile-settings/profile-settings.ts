@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DoctorService, Doctor } from '../../services/doctor.service';
 import { AuthService } from '../../auth/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { notifyPortalUpdated } from '../../services/patient.service';
-import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
+import { formatPakistaniCnicDisplay, PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-profile-settings',
@@ -14,12 +14,14 @@ import { PakInputFormatDirective } from '../../common/shared/pak-input-format.di
   styleUrl: './profile-settings.scss',
 })
 export class ProfileSettings implements OnInit {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   doctor: Partial<Doctor> = {
     name: '',
     email: '',
     phone: '',
     specialization: '',
-    licenseNumber: '',
+    cnic: '',
     hospital: ''
   };
   passwordForm = {
@@ -44,21 +46,15 @@ export class ProfileSettings implements OnInit {
     this.loadProfile();
   }
 
-  async loadProfile() {
-    this.loading = true;
+  async loadProfile(showSpinner = true) {
+    if (showSpinner) {
+      this.loading = true;
+    }
     const currentUser = this.authService.currentUserValue;
     try {
       const resp = await firstValueFrom(this.doctorService.getProfile());
       const d = resp?.data ?? resp?.Data ?? resp ?? {};
-      this.doctor = {
-        id: d?.id ?? d?.Id,
-        name: d?.fullName ?? d?.FullName ?? currentUser?.name ?? '',
-        email: d?.email ?? d?.Email ?? currentUser?.email ?? '',
-        phone: d?.phoneNumber ?? d?.PhoneNumber ?? '',
-        specialization: d?.specialty ?? d?.Specialty ?? '',
-        licenseNumber: d?.cnic ?? d?.CNIC ?? '',
-        hospital: d?.hospitalName ?? ''
-      };
+      this.applyDoctorPayload(d, currentUser);
     } catch (err) {
       console.error('Error loading doctor profile:', err);
       this.error = 'Unable to load profile from API.';
@@ -68,29 +64,59 @@ export class ProfileSettings implements OnInit {
         email: currentUser?.email ?? '',
         phone: '',
         specialization: '',
-        licenseNumber: '',
+        cnic: '',
         hospital: ''
       };
     } finally {
-      this.loading = false;
+      if (showSpinner) {
+        this.loading = false;
+      }
+      this.cdr.markForCheck();
     }
   }
 
+  private applyDoctorPayload(d: any, currentUser: any) {
+    this.doctor = {
+      id: d?.id ?? d?.Id,
+      name: d?.fullName ?? d?.FullName ?? currentUser?.name ?? '',
+      email: d?.email ?? d?.Email ?? currentUser?.email ?? '',
+      phone: d?.phoneNumber ?? d?.PhoneNumber ?? '',
+      specialization: d?.specialty ?? d?.Specialty ?? '',
+      cnic: formatPakistaniCnicDisplay(String(d?.cnic ?? d?.CNIC ?? '')),
+      hospital: d?.hospitalName ?? ''
+    };
+  }
+
   onSubmit() {
+    const fullName = (this.doctor.name ?? '').trim();
+    if (fullName.length < 3) {
+      this.error = 'Full name must be at least 3 characters.';
+      this.cdr.markForCheck();
+      return;
+    }
+
     this.saving = true;
     this.error = '';
     this.success = false;
+    this.cdr.markForCheck();
 
-    this.doctorService.updateProfile({
-      fullName: this.doctor.name,
-      specialty: this.doctor.specialization,
-      phoneNumber: this.doctor.phone
-    }).subscribe({
-      next: () => {
-        this.success = true;
-        this.saving = false;
+    const body: Record<string, string> = { fullName };
+    const spec = (this.doctor.specialization ?? '').trim();
+    if (spec) {
+      body['specialty'] = spec;
+    }
+    const phone = (this.doctor.phone ?? '').trim();
+    if (phone) {
+      body['phoneNumber'] = phone;
+    }
 
-        // Keep dashboard welcome header in real-time (do not wait for logout/login).
+    this.doctorService.updateProfile(body).subscribe({
+      next: (resp) => {
+        const d = resp?.data ?? resp?.Data;
+        if (d) {
+          this.applyDoctorPayload(d, this.authService.currentUserValue);
+        }
+
         const current = this.authService.currentUserValue;
         const nextName = (this.doctor.name ?? '').toString().trim();
         if (nextName && current?.email && this.doctor.email && current.email === this.doctor.email) {
@@ -98,13 +124,20 @@ export class ProfileSettings implements OnInit {
         }
         notifyPortalUpdated();
 
+        this.success = true;
+        this.saving = false;
+        void this.loadProfile(false);
+
         setTimeout(() => {
           this.success = false;
+          this.cdr.markForCheck();
         }, 3000);
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.error = err.error?.message || 'Failed to update profile';
         this.saving = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -127,17 +160,20 @@ export class ProfileSettings implements OnInit {
       this.passwordForm.currentPassword,
       this.passwordForm.newPassword
     ).subscribe({
-      next: (response) => {
+      next: () => {
         this.passwordSuccess = true;
         this.changingPassword = false;
         this.passwordForm = { currentPassword: '', newPassword: '', confirmPassword: '' };
         setTimeout(() => {
           this.passwordSuccess = false;
+          this.cdr.markForCheck();
         }, 3000);
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.passwordError = err.error?.message || 'Failed to change password';
         this.changingPassword = false;
+        this.cdr.markForCheck();
       }
     });
   }

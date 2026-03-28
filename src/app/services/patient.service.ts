@@ -92,6 +92,17 @@ export interface TestReport {
   uploadedAt?: string;
 }
 
+/** Row from GET /api/patient/appointments */
+export interface PatientAppointment {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  doctorName?: string;
+  appointmentDate: string;
+  status?: string;
+  notes?: string;
+}
+
 export interface Prescription {
   id: string;
   patientId: string;
@@ -371,6 +382,30 @@ export class PatientService {
       this.extractData<Doctor[]>(),
       catchError(() => of([]))
     );
+  }
+
+  /** Scheduled appointments for the logged-in patient (from database). */
+  getMyAppointments(page = 1, pageSize = 50): Observable<{ data: PatientAppointment[]; total: number }> {
+    return this.http
+      .get<any>(`${this.baseUrl}/appointments?page=${page}&pageSize=${pageSize}`)
+      .pipe(
+        map((r) => {
+          const raw = (r?.data ?? r?.Data ?? []) as any[];
+          const data = (raw || []).map((a) => ({
+            id: String(a.id ?? a.Id ?? ''),
+            patientId: String(a.patientId ?? a.PatientId ?? ''),
+            doctorId: String(a.doctorId ?? a.DoctorId ?? ''),
+            doctorName: a.doctorName ?? a.DoctorName ?? '',
+            appointmentDate: (a.appointmentDate ?? a.AppointmentDate ?? '').toString(),
+            status: a.status ?? a.Status,
+            notes: a.notes ?? a.Notes
+          })) as PatientAppointment[];
+          return {
+            data,
+            total: r?.total ?? r?.Total ?? data.length
+          };
+        })
+      );
   }
 
   // POST /api/patient/reports { document } → Upload/AI analysis

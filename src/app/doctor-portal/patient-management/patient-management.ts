@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
+import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 import { DoctorService, Patient } from '../../services/doctor.service';
 
 @Component({
   selector: 'app-patient-management',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, DashboardTableActionsComponent, PakInputFormatDirective],
   templateUrl: './patient-management.html',
   styleUrl: './patient-management.scss',
 })
@@ -17,7 +19,10 @@ export class PatientManagement implements OnInit {
   searchTerm = '';
   searchBy = 'cnic'; // 'cnic' | 'name' | 'phone'
 
-  constructor(private doctorService: DoctorService) {}
+  constructor(
+    private doctorService: DoctorService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.loadPatients();
@@ -30,19 +35,14 @@ export class PatientManagement implements OnInit {
         this.patients = patients;
         this.filteredPatients = patients;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        // Mock data for development
-        this.patients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', email: 'john@example.com', status: 'active' },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', email: 'jane@example.com', status: 'active' },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', email: 'mike@example.com', status: 'active' },
-          { id: '4', name: 'Sarah Williams', cnic: '12345-1234567-4', phone: '+923001234570', email: 'sarah@example.com', status: 'active' },
-          { id: '5', name: 'David Brown', cnic: '12345-1234567-5', phone: '+923001234571', email: 'david@example.com', status: 'inactive' }
-        ];
-        this.filteredPatients = this.patients;
+        this.patients = [];
+        this.filteredPatients = [];
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -54,9 +54,14 @@ export class PatientManagement implements OnInit {
     }
 
     const term = this.searchTerm.toLowerCase().trim();
+    const cnicQueryDigits = this.searchTerm.replace(/\D/g, '');
     this.filteredPatients = this.patients.filter(patient => {
       if (this.searchBy === 'cnic') {
-        return patient.cnic?.toLowerCase().includes(term);
+        const pc = (patient.cnic ?? '').replace(/\D/g, '');
+        return (
+          patient.cnic?.toLowerCase().includes(term) ||
+          (!!cnicQueryDigits && pc.includes(cnicQueryDigits))
+        );
       } else if (this.searchBy === 'name') {
         return patient.name?.toLowerCase().includes(term);
       } else if (this.searchBy === 'phone') {
@@ -69,5 +74,9 @@ export class PatientManagement implements OnInit {
   clearSearch() {
     this.searchTerm = '';
     this.filteredPatients = this.patients;
+  }
+
+  trackPatientId(_index: number, p: Patient): string {
+    return String(p.id);
   }
 }

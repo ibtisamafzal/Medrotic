@@ -1,0 +1,31 @@
+@if (state(); as d) {
+  <div class="confirm-dialog-backdrop" role="presentation" (click)="onBackdrop($event)">
+    <div
+      class="confirm-dialog"
+      role="alertdialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'confirm-dialog-title'"
+      [attr.aria-describedby]="'confirm-dialog-message'"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="confirm-dialog__header">
+        <h2 id="confirm-dialog-title" class="confirm-dialog__title">{{ d.title }}</h2>
+      </div>
+      <p id="confirm-dialog-message" class="confirm-dialog__message">{{ d.message }}</p>
+      <div class="confirm-dialog__actions">
+        <button type="button" class="btn btn-outline-secondary confirm-dialog__btn" (click)="cancel()">
+          {{ d.cancelText }}
+        </button>
+        <button
+          type="button"
+          class="btn confirm-dialog__btn"
+          [class.btn-danger]="d.danger"
+          [class.btn-primary]="!d.danger"
+          (click)="confirm()"
+        >
+          {{ d.confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

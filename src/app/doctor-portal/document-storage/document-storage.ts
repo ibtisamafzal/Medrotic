@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DoctorService, Document, Patient } from '../../services/doctor.service';
+import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-document-storage',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, DashboardTableActionsComponent],
   templateUrl: './document-storage.html',
   styleUrl: './document-storage.scss',
 })
@@ -23,7 +26,12 @@ export class DocumentStorage implements OnInit {
     type: 'other'
   };
 
-  constructor(private doctorService: DoctorService) {}
+  constructor(
+    private doctorService: DoctorService,
+    private cdr: ChangeDetectorRef,
+    private confirmDialog: ConfirmDialogService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.loadDocuments();
@@ -37,12 +45,14 @@ export class DocumentStorage implements OnInit {
       next: (documents) => {
         this.documents = documents;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading documents:', err);
         // Mock data for development
         this.documents = [];
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -51,15 +61,13 @@ export class DocumentStorage implements OnInit {
     this.doctorService.getPatients().subscribe({
       next: (patients) => {
         this.patients = patients;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error loading patients:', err);
-        // Mock data for development
-        this.patients = [
-          { id: '1', name: 'John Doe', cnic: '12345-1234567-1', phone: '+923001234567', email: 'john@example.com', status: 'active' },
-          { id: '2', name: 'Jane Smith', cnic: '12345-1234567-2', phone: '+923001234568', email: 'jane@example.com', status: 'active' },
-          { id: '3', name: 'Mike Johnson', cnic: '12345-1234567-3', phone: '+923001234569', email: 'mike@example.com', status: 'active' }
-        ];
+        this.patients = [];
+        this.alertService.error('Could not load patients. Check your connection and try again.');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -92,25 +100,43 @@ export class DocumentStorage implements OnInit {
         this.selectedFile = null;
         this.newDocument = { patientId: '', name: '', type: 'other' };
         this.uploading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error uploading document:', err);
         this.uploading = false;
+        this.cdr.markForCheck();
       }
     });
   }
 
-  deleteDocument(id: string) {
-    if (confirm('Are you sure you want to delete this document?')) {
-      this.doctorService.deleteDocument(id).subscribe({
-        next: () => {
-          this.documents = this.documents.filter(d => d.id !== id);
-        },
-        error: (err) => {
-          console.error('Error deleting document:', err);
-        }
-      });
+  async deleteDocument(id: string) {
+    const ok = await this.confirmDialog.confirm({
+      title: 'Delete document',
+      message: 'Are you sure you want to delete this document? This cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      danger: true,
+    });
+    if (!ok) return;
+    const ix = this.documents.findIndex((d) => d.id === id);
+    const removed = ix >= 0 ? this.documents[ix] : null;
+    if (removed) {
+      this.documents.splice(ix, 1);
+      this.cdr.markForCheck();
     }
+    this.doctorService.deleteDocument(id).subscribe({
+      next: () => {
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        if (removed) {
+          this.documents.splice(ix, 0, removed);
+        }
+        console.error('Error deleting document:', err);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   formatFileSize(bytes?: number): string {

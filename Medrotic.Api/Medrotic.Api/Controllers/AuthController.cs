@@ -2,16 +2,13 @@ using Medrotic.Api.Data;
 using Medrotic.Api.DTOs;
 using Medrotic.Api.Models;
 using Medrotic.Api.Services;
-using Medrotic.Api.Data;
-using Medrotic.Api.DTOs;
-using Medrotic.Api.Models;
-using Medrotic.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -25,17 +22,20 @@ namespace Medrotic.Api.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly AppDbContext _context;
+        private readonly ISystemLogStore _systemLog;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ITokenService tokenService,
-            AppDbContext context)
+            AppDbContext context,
+            ISystemLogStore systemLog)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _systemLog = systemLog ?? throw new ArgumentNullException(nameof(systemLog));
         }
 
         private static string NormalizeCnic(string? cnic)
@@ -110,7 +110,8 @@ namespace Medrotic.Api.Controllers
                 Province = dto.Province ?? string.Empty,
                 PhoneNumber = dto.PhoneNumber ?? string.Empty,
                 DateOfBirth = dto.DateOfBirth,
-                Gender = dto.Gender ?? string.Empty
+                Gender = dto.Gender ?? string.Empty,
+                AccountVerificationStatus = "pending"
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -173,7 +174,8 @@ namespace Medrotic.Api.Controllers
                 PhoneNumber = dto.PhoneNumber ?? string.Empty,
                 DateOfBirth = dto.DateOfBirth ?? DateTime.UtcNow.AddYears(-30),
                 Gender = dto.Gender ?? "Not Specified",
-                HospitalId = dto.HospitalId
+                HospitalId = dto.HospitalId,
+                AccountVerificationStatus = dto.Role == "Admin" ? "verified" : "pending"
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -205,6 +207,7 @@ namespace Medrotic.Api.Controllers
             var user = await FindUserByIdentifierAsync(dto.Identifier);
             if (user == null)
             {
+                _systemLog.Add("warning", "Login failed: unknown identifier.", "Auth");
                 return Unauthorized(new { Message = "Invalid identifier or password." });
             }
 
@@ -213,11 +216,13 @@ namespace Medrotic.Api.Controllers
 
             if (signInResult.IsLockedOut)
             {
+                _systemLog.Add("warning", $"Login blocked: account locked for user id {user.Id}.", "Auth");
                 return Unauthorized(new { Message = "Account is locked out due to too many failed attempts. Try again later." });
             }
 
             if (!signInResult.Succeeded)
             {
+                _systemLog.Add("warning", $"Login failed: bad password for user id {user.Id}.", "Auth");
                 return Unauthorized(new { Message = "Invalid identifier or password." });
             }
 
@@ -393,6 +398,35 @@ namespace Medrotic.Api.Controllers
             Console.WriteLine($"[RESEND OTP] To {dto.Email}: {newOtpCode} (expires at {expiry:yyyy-MM-dd HH:mm:ss})");
 
             return Ok(new { Message = "New OTP has been sent to your email." });
+        }
+
+        // ────────────────────────────────────────────────
+        // Authenticated password change (any signed-in role)
+        // ────────────────────────────────────────────────
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "Invalid authentication token." });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { Message = "User not found." });
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var msg = result.Errors.FirstOrDefault()?.Description ?? "Password change failed.";
+                return BadRequest(new { Message = msg, Errors = result.Errors.Select(e => e.Description) });
+            }
+
+            _systemLog.Add("info", $"Password changed for user {user.Email}", "Auth", category: "Security", actorUserId: userId, resourceId: userId, resourceType: "User");
+
+            return Ok(new { message = "Password changed successfully.", success = true });
         }
 
         // ────────────────────────────────────────────────
