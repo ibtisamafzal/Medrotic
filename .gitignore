@@ -49,9 +49,15 @@ __screenshots__/
 Thumbs.db
 desktop.ini
 
+# TLS private keys (never commit; e.g. certs/medrotic-backend.key)
+/certs/*.key
+
 # .NET / C# Backend
 **/bin/
 **/obj/
+**/_build/
+**/_build2/
+**/bin-temp/
 *.user
 *.suo
 *.userosscache
