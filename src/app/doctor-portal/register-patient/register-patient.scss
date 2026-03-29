@@ -3,24 +3,159 @@
 }
 
 .register-patient-page {
-  .page-header {
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-    }
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
 
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-    }
+.rp-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  &__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #001047;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.02em;
   }
 
-  .card {
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-radius: 12px;
+  &__sub {
+    margin: 0;
+    color: rgba(0, 16, 71, 0.62);
+    max-width: 36rem;
+    line-height: 1.55;
+    font-size: 0.9375rem;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 10px;
+    font-weight: 600;
   }
 }
 
+.rp-shell {
+  background: #fff;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  border-radius: 18px;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  box-shadow: 0 4px 24px rgba(0, 16, 71, 0.06);
+}
+
+.rp-alert {
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.rp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rp-panel {
+  padding: 1.15rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  background: linear-gradient(180deg, #fff 0%, #fafbfd 100%);
+
+  &--muted {
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #001047;
+    margin: 0 0 0.35rem 0;
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    color: rgba(0, 16, 71, 0.55);
+    margin: 0 0 1rem 0;
+    line-height: 1.45;
+  }
+}
+
+.rp-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(0, 16, 71, 0.45);
+  margin-bottom: 0.4rem;
+}
+
+.rp-input,
+.rp-input-group .form-control {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 16, 71, 0.12);
+  font-size: 0.9375rem;
+
+  &:focus {
+    border-color: rgba(52, 97, 255, 0.45);
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.12);
+  }
+}
+
+.rp-input-group {
+  .btn {
+    border-radius: 0 12px 12px 0;
+    font-weight: 600;
+  }
+
+  .form-control {
+    border-radius: 12px 0 0 12px;
+  }
+}
+
+.rp-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+
+  &--info {
+    background: rgba(52, 97, 255, 0.08);
+    border: 1px solid rgba(52, 97, 255, 0.22);
+    color: #1e3a5f;
+  }
+}
+
+.rp-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+
+  &__submit {
+    font-weight: 600;
+    border-radius: 12px;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .rp-footer {
+    flex-direction: column-reverse;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

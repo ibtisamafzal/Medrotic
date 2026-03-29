@@ -1,25 +1,27 @@
 <div class="profile-settings-page">
-  <div class="page-header mb-4">
-    <h2 class="page-title">Profile Settings</h2>
-    <p class="page-subtitle">Manage your profile information, specialty, experience, and password</p>
+  <div class="page-header ps-hero">
+    <div>
+      <h2 class="page-title ps-hero__title">Profile settings</h2>
+      <p class="page-subtitle ps-hero__sub mb-0">Update how you appear to patients and manage your login.</p>
+    </div>
   </div>
 
   <div class="row g-4">
-    <!-- Profile Information -->
     <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">Profile Information</h5>
+      <div class="ps-card">
+        <div class="ps-card__head">
+          <h3 class="ps-card__title">Professional profile</h3>
+          <p class="ps-card__sub">Name, contact, specialty, and practice details.</p>
         </div>
-        <div class="card-body">
-          <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
-            Profile updated successfully!
-            <button type="button" class="btn-close" (click)="success = false" aria-label="Dismiss alert" title="Dismiss">✕</button>
+        <div class="ps-card__body">
+          <div *ngIf="success" class="alert alert-success ps-alert" role="alert">
+            Profile updated successfully.
+            <button type="button" class="btn-close" (click)="success = false" aria-label="Dismiss" title="Dismiss"></button>
           </div>
 
-          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div *ngIf="error" class="alert alert-danger ps-alert" role="alert">
             {{ error }}
-            <button type="button" class="btn-close" (click)="error = ''" aria-label="Dismiss alert" title="Dismiss">✕</button>
+            <button type="button" class="btn-close" (click)="error = ''" aria-label="Dismiss" title="Dismiss"></button>
           </div>
 
           <div *ngIf="loading" class="text-center py-5">
@@ -29,11 +31,12 @@
           </div>
 
           <form *ngIf="!loading" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label class="form-label">Full Name</label>
-              <input 
-                type="text" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-name">Full name</label>
+              <input
+                id="ps-name"
+                type="text"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.name"
                 name="name"
                 placeholder="Your full name"
@@ -41,11 +44,12 @@
                 required>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input 
-                type="email" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-email">Email</label>
+              <input
+                id="ps-email"
+                type="email"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.email"
                 name="email"
                 placeholder="your@email.com"
@@ -53,11 +57,12 @@
                 required>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Phone</label>
-              <input 
-                type="tel" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-phone">Phone</label>
+              <input
+                id="ps-phone"
+                type="tel"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.phone"
                 pkInputFormat="phone"
                 name="phone"
@@ -65,110 +70,116 @@
                 title="Phone number">
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Specialization</label>
-              <input 
-                type="text" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-spec">Specialization</label>
+              <input
+                id="ps-spec"
+                type="text"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.specialization"
                 name="specialization"
-                placeholder="e.g., Cardiology, Pediatrics">
+                placeholder="e.g. Cardiology, Pediatrics">
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">CNIC (National ID)</label>
-              <input 
-                type="text" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-cnic">CNIC (national ID)</label>
+              <input
+                id="ps-cnic"
+                type="text"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.cnic"
                 name="cnic"
                 placeholder="35202-1234567-8"
-                title="Pakistani CNIC — read-only; contact admin to change."
+                title="Pakistani CNIC — read-only"
                 pkInputFormat="cnic"
                 maxlength="15"
                 readonly>
-              <small class="text-muted">Issued by NADRA. Shown for your records; updates go through support or admin.</small>
+              <p class="ps-hint">Shown for your records. Changes go through admin or support.</p>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Hospital/Clinic</label>
-              <input 
-                type="text" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="ps-hosp">Hospital / clinic</label>
+              <input
+                id="ps-hosp"
+                type="text"
+                class="form-control ps-input"
                 [(ngModel)]="doctor.hospital"
                 name="hospital"
-                placeholder="Hospital or clinic name"
+                placeholder="Practice or hospital name"
                 title="Hospital or clinic">
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="saving">
-              <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
-              Save Changes
+            <button type="submit" class="btn btn-primary ps-submit" [disabled]="saving">
+              <span *ngIf="saving" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Save changes
             </button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- Change Password -->
     <div class="col-12 col-lg-6">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="mb-0">Change Password</h5>
+      <div class="ps-card ps-card--accent">
+        <div class="ps-card__head">
+          <h3 class="ps-card__title">Password</h3>
+          <p class="ps-card__sub">Use a strong password you do not reuse elsewhere.</p>
         </div>
-        <div class="card-body">
-          <div *ngIf="passwordSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-            Password changed successfully!
-            <button type="button" class="btn-close" (click)="passwordSuccess = false" aria-label="Dismiss alert" title="Dismiss">✕</button>
+        <div class="ps-card__body">
+          <div *ngIf="passwordSuccess" class="alert alert-success ps-alert" role="alert">
+            Password changed successfully.
+            <button type="button" class="btn-close" (click)="passwordSuccess = false" aria-label="Dismiss" title="Dismiss"></button>
           </div>
 
-          <div *ngIf="passwordError" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div *ngIf="passwordError" class="alert alert-danger ps-alert" role="alert">
             {{ passwordError }}
-            <button type="button" class="btn-close" (click)="passwordError = ''" aria-label="Dismiss alert" title="Dismiss">✕</button>
+            <button type="button" class="btn-close" (click)="passwordError = ''" aria-label="Dismiss" title="Dismiss"></button>
           </div>
 
           <form (ngSubmit)="onChangePassword()">
-            <div class="mb-3">
-              <label class="form-label">Current Password</label>
-              <input 
-                type="password" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="pw-cur">Current password</label>
+              <input
+                id="pw-cur"
+                type="password"
+                class="form-control ps-input"
                 [(ngModel)]="passwordForm.currentPassword"
                 name="currentPassword"
-                placeholder="Enter current password"
+                placeholder="••••••••"
                 title="Current password"
                 required>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">New Password</label>
-              <input 
-                type="password" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="pw-new">New password</label>
+              <input
+                id="pw-new"
+                type="password"
+                class="form-control ps-input"
                 [(ngModel)]="passwordForm.newPassword"
                 name="newPassword"
-                placeholder="Min. 8 characters"
+                placeholder="At least 8 characters"
                 title="New password"
                 required
                 minlength="8">
-              <div class="form-text">Password must be at least 8 characters long</div>
+              <p class="ps-hint">Minimum 8 characters.</p>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Confirm New Password</label>
-              <input 
-                type="password" 
-                class="form-control" 
+            <div class="ps-field">
+              <label class="ps-label" for="pw-confirm">Confirm new password</label>
+              <input
+                id="pw-confirm"
+                type="password"
+                class="form-control ps-input"
                 [(ngModel)]="passwordForm.confirmPassword"
                 name="confirmPassword"
-                placeholder="Re-enter new password"
+                placeholder="Repeat new password"
                 title="Confirm new password"
                 required>
             </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="changingPassword">
-              <span *ngIf="changingPassword" class="spinner-border spinner-border-sm me-2"></span>
-              Change Password
+            <button type="submit" class="btn btn-primary ps-submit" [disabled]="changingPassword">
+              <span *ngIf="changingPassword" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Update password
             </button>
           </form>
         </div>

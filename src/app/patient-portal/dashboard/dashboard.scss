@@ -1,397 +1,519 @@
-:host {
-  display: block;
-}
+// ============================================
+// PATIENT DASHBOARD — Modern Redesign
+// Follows the Medrotic design system
+// ============================================
 
+:host { display: block; }
+
+// ─── Animations ───
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
 @keyframes skeletonShimmer {
-  0% {
-    background-position: -300px 0;
-  }
-
-  100% {
-    background-position: 300px 0;
-  }
+  0%   { background-position: -300px 0; }
+  100% { background-position: 300px 0; }
 }
 
-// ── Skeleton loader styles ─────────────────────────────────
-.skeleton-card {
-  pointer-events: none;
-}
+// ─── Brand tokens ───
+$primary: #3461ff;
+$text:    #001047;
+$text-muted: rgba(0, 16, 71, 0.58);
+$text-faint: rgba(0, 16, 71, 0.42);
+$border:  rgba(0, 16, 71, 0.08);
+$surface: #ffffff;
+$shadow-sm: 0 2px 8px rgba(0, 16, 71, 0.04);
+$shadow-md: 0 4px 22px rgba(0, 16, 71, 0.06);
+$shadow-lg: 0 14px 36px rgba(0, 16, 71, 0.1);
+$radius:  16px;
+$emerald: #10b981;
+$amber:   #f59e0b;
+$red:     #ef4444;
 
-.skeleton-icon,
-.skeleton-line {
-  background: linear-gradient(90deg,
-      #e8ecf0 25%,
-      #f4f6f8 50%,
-      #e8ecf0 75%);
+// ─── Utility ───
+.fade-in-up  { animation: fadeInUp 0.6s ease-out both; }
+.fade-in-down { animation: fadeInDown 0.6s ease-out both; }
+.count-up    { animation: countUp 0.5s ease-out 0.15s both; }
+
+// ─── Skeleton ───
+.skeleton-card { pointer-events: none; }
+.skeleton-icon, .skeleton-line {
+  background: linear-gradient(90deg, #e8ecf0 25%, #f4f6f8 50%, #e8ecf0 75%);
   background-size: 600px 100%;
   animation: skeletonShimmer 1.5s infinite linear;
   border-radius: 8px;
 }
+.skeleton-icon { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; }
+.skeleton-content { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.skeleton-line { height: 14px; &--wide { width: 70%; } &--narrow { width: 45%; } }
 
-.skeleton-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  flex-shrink: 0;
-}
+// ============================================
+// LAYOUT
+// ============================================
+.dashboard-page { max-width: 100%; }
 
-.skeleton-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+// ─── Section labels ───
+.dash-section {
+  margin-bottom: 0;
 
-.skeleton-line {
-  height: 14px;
-
-  &--wide {
-    width: 70%;
-  }
-
-  &--narrow {
-    width: 45%;
-  }
-}
-
-
-.dashboard-page {
-  .page-header {
-    animation: fadeInDown 0.6s ease-out;
-
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-      font-size: 1rem;
-    }
-  }
-
-  .metric-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 1.5rem;
+  &__label {
     display: flex;
     align-items: center;
+    gap: 0.45rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: $text-faint;
+    margin-bottom: 0.85rem;
+
+    img, svg { opacity: 0.55; }
+  }
+}
+
+// ============================================
+// HERO BANNER
+// ============================================
+.dash-hero {
+  animation: fadeInDown 0.6s ease-out;
+  margin-bottom: 1.75rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid $border;
+  border-radius: $radius;
+  background: linear-gradient(135deg, #ffffff 0%, rgba($primary, 0.06) 50%, rgba($primary, 0.12) 100%);
+  box-shadow: $shadow-md;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 240px; height: 100%;
+    background: radial-gradient(circle at 80% 30%, rgba($primary, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &__inner {
+    display: flex; flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    height: 100%;
-    min-height: 120px;
-    animation: fadeInUp 0.6s ease-out both;
+    position: relative; z-index: 1;
+  }
 
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    }
+  &__text { flex: 1; min-width: 240px; }
 
-    .metric-icon {
-      width: 56px;
-      height: 56px;
-      min-width: 56px;
-      border-radius: 12px;
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $primary;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba($primary, 0.08);
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  &__sub { color: $text-muted; margin: 0; font-size: 0.9375rem; line-height: 1.55; }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  &__date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $text-muted;
+    padding: 0.4rem 0.85rem;
+    border-radius: 12px;
+    background: rgba($primary, 0.05);
+    border: 1px solid rgba($primary, 0.1);
+  }
+
+  &__logout { flex-shrink: 0; }
+}
+
+// ============================================
+// METRIC CARDS
+// ============================================
+.dash-metric {
+  background: $surface;
+  border-radius: $radius;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-sm;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid $border;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+  &:hover &__icon-ring { transform: scale(1.08) rotate(3deg); }
+
+  &__icon-ring {
+    width: 48px; height: 48px; min-width: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 0.85rem;
+  }
+
+  &__svg-white {
+    filter: brightness(0) invert(1);
+    width: 22px; height: 22px;
+  }
+
+  &__body { flex: 1; min-width: 0; }
+
+  &__value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 0.15rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  &__unit {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $text-muted;
+  }
+
+  &__no-data {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: $text-faint;
+  }
+
+  &__label {
+    color: $text-muted;
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+}
+
+// ============================================
+// CARE STAT CARDS
+// ============================================
+.care-stat {
+  background: $surface;
+  border-radius: $radius;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+  height: 100%;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover { box-shadow: $shadow-md; transform: translateY(-2px); }
+
+  &__icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.65rem;
+
+    &--blue    { background: rgba($primary, 0.1); }
+    &--emerald { background: rgba($emerald, 0.1); }
+    &--amber   { background: rgba($amber, 0.1); }
+    &--red     { background: rgba($red, 0.1); }
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $text-faint;
+    margin: 0 0 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0;
+
+    &--muted { color: $text-faint; font-weight: 400; font-size: 0.8125rem; }
+  }
+}
+
+// ============================================
+// QUICK ACTIONS
+// ============================================
+.dash-action {
+  background: $surface;
+  border-radius: $radius;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover { transform: translateY(-3px); box-shadow: $shadow-lg; }
+
+  &__icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &--primary { background: rgba($primary, 0.1); }
+    &--success { background: rgba($emerald, 0.1); }
+    &--amber   { background: rgba($amber, 0.1); }
+  }
+
+  &:hover &__icon { transform: scale(1.08); }
+
+  &__body { flex: 1; }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 0.25rem;
+  }
+
+  &__text {
+    font-size: 0.8125rem;
+    color: $text-muted;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  &__btn { align-self: flex-start; }
+}
+
+// ============================================
+// TABLE CARDS (activity, prescriptions)
+// ============================================
+.dash-table-card {
+  background: $surface;
+  border-radius: $radius;
+  border: 1px solid $border;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover { box-shadow: 0 6px 24px rgba(0, 16, 71, 0.08); }
+}
+
+.dash-card-head {
+  padding: 1.15rem 1.35rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(0, 16, 71, 0.06);
+  background: linear-gradient(180deg, #fafbfd 0%, #ffffff 100%);
+
+  &--row { flex-direction: row; align-items: center; }
+
+  &__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  &__sub {
+    font-size: 0.75rem;
+    color: $text-muted;
+    margin: 0.15rem 0 0;
+  }
+}
+
+.dash-table-empty {
+  font-size: 0.8125rem;
+  color: $text-muted;
+}
+
+// ─── Activity list ───
+.activity-list {
+  display: flex;
+  flex-direction: column;
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.85rem 1.35rem;
+    border-bottom: 1px solid rgba(0, 16, 71, 0.05);
+    transition: all 0.2s ease;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: rgba($primary, 0.02); transform: translateX(4px); }
+
+    .activity-icon {
+      width: 32px; height: 32px; min-width: 32px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.3s ease;
+      color: #ffffff;
+
+      &.type-prescription { background: $amber; }
+      &.type-xray         { background: $red; }
+      &.type-test         { background: #8b5cf6; }
+      &.type-visit        { background: $emerald; }
+      &.type-metric       { background: $primary; }
     }
 
-    &:hover .metric-icon {
-      transform: scale(1.1);
-    }
-
-    .metric-content {
+    .activity-content {
       flex: 1;
 
-      .metric-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #001047;
-        margin: 0 0 0.25rem 0;
-        line-height: 1.2;
-
-        .metric-unit {
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: rgba(0, 16, 71, 0.6);
-        }
+      .activity-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: $text;
+        margin: 0 0 0.2rem;
       }
 
-      .metric-label {
-        font-size: 0.875rem;
-        color: rgba(0, 16, 71, 0.6);
+      .activity-meta {
+        font-size: 0.75rem;
+        color: $text-muted;
         margin: 0;
-        font-weight: 500;
       }
     }
   }
+}
 
-  .section-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    height: 100%;
-    animation: fadeInUp 0.6s ease-out both;
+// ─── Prescription list ───
+.prescription-list {
+  display: flex;
+  flex-direction: column;
 
-    .section-header {
+  .prescription-item {
+    padding: 0.85rem 1.35rem;
+    border-bottom: 1px solid rgba(0, 16, 71, 0.05);
+    transition: background 0.15s ease;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: rgba($primary, 0.02); }
+
+    .prescription-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.3rem;
 
-      .section-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #001047;
-        margin: 0;
-      }
-    }
-  }
-
-  .action-card {
-    text-align: center;
-    padding: 2rem;
-
-    .action-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-
-      .action-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-
-        &.metrics {
-          background: linear-gradient(135deg, #3461ff 0%, #5b82ff 100%);
-        }
-
-        &.chatbot {
-          background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-        }
-
-        &.search {
-          background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-        }
-      }
-
-      .action-title {
-        font-size: 1.125rem;
+      .prescription-doctor {
+        font-size: 0.875rem;
         font-weight: 600;
-        color: #001047;
+        color: $text;
         margin: 0;
+      }
+
+      .prescription-date {
+        font-size: 0.75rem;
+        color: $text-muted;
       }
     }
 
-    .action-description {
-      color: rgba(0, 16, 71, 0.6);
-      font-size: 0.875rem;
+    .prescription-medications {
+      font-size: 0.75rem;
+      color: $text-muted;
       margin: 0;
     }
-
-    // Style buttons to match project standards
-    .btn {
-      font-family: 'Public Sans', sans-serif;
-      font-weight: 500;
-      text-transform: capitalize;
-      text-decoration: none !important;
-      border-radius: 8px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover:not(:disabled) {
-        text-decoration: none !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
-      }
-
-      &:active:not(:disabled) {
-        transform: translateY(0);
-        text-decoration: none !important;
-      }
-    }
-
-    .btn-primary {
-      background-color: #3461ff;
-      border-color: #3461ff;
-      color: #ffffff;
-
-      &:hover:not(:disabled) {
-        background-color: #2851e6;
-        border-color: #2851e6;
-        text-decoration: none !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
-      }
-
-      &:active:not(:disabled) {
-        transform: translateY(0);
-        text-decoration: none !important;
-      }
-    }
   }
+}
 
-  .activity-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    .activity-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: 12px;
-      background: #f5f6f9;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: #e8eaf0;
-        transform: translateX(4px);
-      }
-
-      .activity-icon {
-        width: 32px;
-        height: 32px;
-        min-width: 32px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-
-        &.type-prescription {
-          background: #f59e0b;
-        }
-
-        &.type-xray {
-          background: #ef4444;
-        }
-
-        &.type-test {
-          background: #8b5cf6;
-        }
-
-        &.type-visit {
-          background: #10b981;
-        }
-
-        &.type-metric {
-          background: #3461ff;
-        }
-      }
-
-      .activity-content {
-        flex: 1;
-
-        .activity-title {
-          font-size: 0.9375rem;
-          font-weight: 600;
-          color: #001047;
-          margin: 0 0 0.25rem 0;
-        }
-
-        .activity-meta {
-          font-size: 0.8125rem;
-          color: rgba(0, 16, 71, 0.6);
-          margin: 0;
-        }
-      }
-    }
+// ============================================
+// RESPONSIVE
+// ============================================
+@media (max-width: 1280px) {
+  .dash-hero {
+    padding: 1.1rem 1.25rem;
+    &__title { font-size: 1.5rem; }
   }
-
-  .prescription-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    .prescription-item {
-      padding: 1rem;
-      border-radius: 12px;
-      background: #f5f6f9;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: #e8eaf0;
-      }
-
-      .prescription-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-
-        .prescription-doctor {
-          font-size: 0.9375rem;
-          font-weight: 600;
-          color: #001047;
-          margin: 0;
-        }
-
-        .prescription-date {
-          font-size: 0.8125rem;
-          color: rgba(0, 16, 71, 0.6);
-        }
-      }
-
-      .prescription-medications {
-        font-size: 0.8125rem;
-        color: rgba(0, 16, 71, 0.6);
-        margin: 0;
-      }
-    }
+  .dash-metric {
+    padding: 1rem 1.1rem;
+    &__icon-ring { width: 40px; height: 40px; min-width: 40px; border-radius: 11px; margin-bottom: 0.65rem; }
+    &__svg-white { width: 18px; height: 18px; }
+    &__value { font-size: 1.5rem; }
+    &__label { font-size: 0.75rem; }
   }
+}
 
-  .empty-state {
+@media (max-width: 767px) {
+  .dash-hero {
+    padding: 1rem 1.15rem;
+    &__title { font-size: 1.25rem; }
+    &__date  { display: none; }
+  }
+  .dash-metric {
+    padding: 0.9rem;
+    &__icon-ring { width: 36px; height: 36px; min-width: 36px; margin-bottom: 0.5rem; }
+    &__svg-white { width: 16px; height: 16px; }
+    &__value { font-size: 1.25rem; }
+  }
+  .dash-action {
+    padding: 1rem 1.15rem;
+    &__icon { width: 36px; height: 36px; }
+    &__title { font-size: 0.9375rem; }
+  }
+}
+
+@media (max-width: 575px) {
+  .dash-metric {
     text-align: center;
-    padding: 2rem;
+    &__icon-ring { margin-left: auto; margin-right: auto; }
   }
-}
-
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out both;
-}
-
-.fade-in-down {
-  animation: fadeInDown 0.6s ease-out both;
+  .dash-hero__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }

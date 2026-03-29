@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
 import { DoctorService } from '../../services/doctor.service';
@@ -32,6 +32,32 @@ export class Dashboard implements OnInit, OnDestroy {
   recentUploads: any[] = [];
   upcomingAppointments: any[] = [];
   appointmentsLoadError: string | null = null;
+
+  get todayDate(): string {
+    const d = new Date();
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  get assignedPatientsCardClass(): string {
+    const n = this.assignedPatients.length;
+    if (n <= 3) return 'home-data-card--compact';
+    if (n >= 8) return 'home-data-card--expanded';
+    return 'home-data-card--regular';
+  }
+
+  get recentPatientsCardClass(): string {
+    const n = this.recentPatients.length;
+    if (n <= 3) return 'home-data-card--compact';
+    if (n >= 8) return 'home-data-card--expanded';
+    return 'home-data-card--regular';
+  }
+
+  get recentUploadsCardClass(): string {
+    const n = this.recentUploads.length;
+    if (n <= 3) return 'home-data-card--compact';
+    if (n >= 8) return 'home-data-card--expanded';
+    return 'home-data-card--regular';
+  }
 
   constructor(
     private doctorService: DoctorService,

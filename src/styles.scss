@@ -864,6 +864,267 @@ router-outlet+* {
   }
 }
 
+// Portal dashboards: styled selects (custom chevron, no system default)
+$portal-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%233461ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+.doctor-portal-layout,
+.admin-layout,
+.patient-portal-layout {
+  select.form-select,
+  select.form-select.form-select--portal {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: $portal-select-chevron;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.15rem;
+    padding-right: 2.5rem;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 16, 71, 0.12) !important;
+    font-weight: 500;
+    color: #001047;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 16, 71, 0.04) !important;
+
+    &:hover:not(:disabled) {
+      border-color: rgba(52, 97, 255, 0.35) !important;
+      box-shadow: 0 2px 8px rgba(52, 97, 255, 0.08) !important;
+    }
+
+    &:focus {
+      border-color: rgba(52, 97, 255, 0.55) !important;
+      box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.15) !important;
+    }
+  }
+}
+
+:root[data-theme='dark'] .doctor-portal-layout,
+:root[data-theme='dark'] .admin-layout,
+:root[data-theme='dark'] .patient-portal-layout {
+  select.form-select,
+  select.form-select.form-select--portal {
+    background-color: var(--bg-card, #1a2030);
+      color: var(--text-primary, #e8eaf6);
+      border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%2387a7ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+}
+
+// Unified visual language for all doctor portal pages/forms.
+.doctor-portal-layout {
+  --doctor-theme-primary: #3461ff;
+  --doctor-theme-text: #001047;
+  --doctor-theme-muted: rgba(0, 16, 71, 0.62);
+  --doctor-theme-border: rgba(0, 16, 71, 0.08);
+  --doctor-theme-surface: #ffffff;
+  --doctor-theme-surface-soft: #f8fafc;
+  --doctor-theme-shadow: 0 4px 22px rgba(0, 16, 71, 0.06);
+  --doctor-theme-radius: 16px;
+}
+
+.doctor-portal-layout .doctor-content {
+  .page-header,
+  .rp-hero,
+  .uxray-hero,
+  .ps-hero,
+  .page-header--rx {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header {
+    padding: 1.15rem 1.3rem;
+    border: 1px solid var(--doctor-theme-border);
+    border-radius: var(--doctor-theme-radius);
+    background: linear-gradient(125deg, #ffffff 0%, rgba(52, 97, 255, 0.07) 100%);
+    box-shadow: var(--doctor-theme-shadow);
+  }
+
+  .page-header .d-flex {
+    gap: 0.75rem;
+  }
+
+  .page-title,
+  .rp-hero__title,
+  .uxray-hero__title,
+  .ps-hero__title {
+    color: var(--doctor-theme-text);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .page-subtitle,
+  .rp-hero__sub,
+  .uxray-hero__sub,
+  .ps-hero__sub {
+    color: var(--doctor-theme-muted);
+  }
+
+  .card,
+  .section-card,
+  .pm-search-panel,
+  .pm-table-card,
+  .uxray-card,
+  .rp-shell,
+  .rp-panel,
+  .ps-card,
+  .panel,
+  .doctor-snapshot-card {
+    background: var(--doctor-theme-surface);
+    border: 1px solid var(--doctor-theme-border);
+    border-radius: var(--doctor-theme-radius);
+    box-shadow: var(--doctor-theme-shadow);
+  }
+
+  .card-header,
+  .pm-table-card__head,
+  .ps-card__head,
+  .panel--patient {
+    background: linear-gradient(180deg, #fafbfd 0%, #ffffff 100%);
+    border-bottom: 1px solid var(--doctor-theme-border);
+  }
+
+  .rp-panel--muted,
+  .panel--record,
+  .uxray-preview,
+  .preview-inner {
+    background: var(--doctor-theme-surface-soft);
+  }
+
+  .form-label,
+  .pm-field__label,
+  .rp-label,
+  .ps-label,
+  .uxray-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(0, 16, 71, 0.45);
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 16, 71, 0.12);
+    color: var(--doctor-theme-text);
+    font-size: 0.9375rem;
+    background-color: #fff;
+  }
+
+  .form-select {
+    min-height: 2.75rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+    font-weight: 600;
+    background-image:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.98) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%233461ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.25' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: 0 0, right 0.8rem center;
+    background-size: 100% 100%, 1rem;
+    padding-right: 2.35rem;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: rgba(52, 97, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.14);
+  }
+
+  .btn {
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background-color: var(--doctor-theme-primary);
+    border-color: var(--doctor-theme-primary);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: #2851e6;
+    border-color: #2851e6;
+  }
+
+  .table th {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: rgba(0, 16, 71, 0.45);
+    border-bottom: 1px solid var(--doctor-theme-border);
+  }
+
+  .table td {
+    color: rgba(0, 16, 71, 0.88);
+    border-bottom: 1px solid rgba(0, 16, 71, 0.06);
+    vertical-align: middle;
+  }
+}
+
+// ============================================
+// Unified page-header hero card for Admin + Patient portals
+// (mirrors the doctor-portal-layout .page-header treatment)
+// ============================================
+.admin-layout .admin-content,
+.patient-portal-layout .patient-content {
+  .page-header {
+    padding: 1.15rem 1.3rem;
+    border: 1px solid rgba(0, 16, 71, 0.08);
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(52, 97, 255, 0.06) 50%, rgba(52, 97, 255, 0.12) 100%);
+    box-shadow: 0 4px 22px rgba(0, 16, 71, 0.06);
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 100%;
+      background: radial-gradient(circle at 80% 30%, rgba(52, 97, 255, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .d-flex { gap: 0.75rem; }
+  }
+
+  .page-title {
+    color: #001047;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    margin-bottom: 0.35rem;
+  }
+
+  .page-subtitle {
+    color: rgba(0, 16, 71, 0.58);
+    font-size: 0.9375rem;
+    margin: 0;
+    line-height: 1.55;
+  }
+}
+
+// ============================================
+// SVG icon images shared sizing for dashboards
+// ============================================
+.admin-layout,
+.patient-portal-layout,
+.doctor-portal-layout {
+  .svg-icon-img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+
+    &--sm { width: 18px; height: 18px; }
+    &--lg { width: 32px; height: 32px; }
+  }
+}
+
 // Smooth scroll for the whole page
 html {
   scroll-behavior: smooth;
@@ -913,4 +1174,137 @@ html {
   pointer-events: none;
   transition: width 0.1s ease-out;
   box-shadow: var(--progress-shadow);
+}
+
+// ============================================
+// SAAS SPLIT-SCREEN AUTH LAYOUT
+// ============================================
+.auth-split {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background: #ffffff;
+
+  &__brand {
+    display: none; // Hidden on mobile
+    flex: 1;
+    position: relative;
+    background: linear-gradient(135deg, #020c2b 0%, #153296 100%);
+    color: #ffffff;
+    overflow: hidden;
+    padding: 4rem 5rem;
+    flex-direction: column;
+
+    @media (min-width: 992px) { display: flex; }
+    
+    // Abstract mesh background
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(52, 97, 255, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+    margin: auto 0;
+    animation: fadeInUp 0.8s ease-out both;
+  }
+
+  &__logo {
+    display: inline-block;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.3s ease;
+    &:hover { opacity: 0.8; }
+    img { height: 40px; width: auto; }
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  &__sub {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 3.5rem;
+  }
+
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    animation: fadeInUp 0.6s ease-out both;
+    
+    &:nth-child(1) { animation-delay: 0.2s; }
+    &:nth-child(2) { animation-delay: 0.3s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+
+    &-icon {
+      width: 26px; height: 26px;
+      background: #3461ff;
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      flex-shrink: 0;
+    }
+  }
+
+  &__form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+    background: #ffffff;
+    
+    @media (min-width: 992px) {
+      flex: 0 0 540px; // Fixed width right panel
+    }
+    @media (min-width: 1200px) {
+      flex: 0 0 650px;
+    }
+  }
+
+  &__form-inner {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    animation: fadeIn 0.6s ease-out;
+
+    .auth-logo-mobile {
+      display: block;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      img { height: 44px; }
+      @media (min-width: 992px) { display: none; }
+    }
+  }
 }

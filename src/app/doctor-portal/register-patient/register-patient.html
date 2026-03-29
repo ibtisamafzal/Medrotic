@@ -1,151 +1,170 @@
 <div class="register-patient-page">
-  <div class="page-header mb-4">
-    <h2 class="page-title">Register New Patient</h2>
-    <p class="page-subtitle">Add a new patient to your practice</p>
+  <div class="page-header rp-hero">
+    <div class="rp-hero__text">
+      <h2 class="page-title rp-hero__title">Register new patient</h2>
+      <p class="page-subtitle rp-hero__sub mb-0">Add someone to your roster with CNIC-first identity. Required fields are marked.</p>
+    </div>
+    <a routerLink="/doctor-portal/patient-management" class="btn btn-outline-secondary btn-sm rp-hero__back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to roster
+    </a>
   </div>
 
-  <div class="row">
-    <div class="col-12 col-lg-8 mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <div *ngIf="success" class="alert alert-success" role="alert">
-            Patient registered successfully! Redirecting...
-          </div>
-
-          <div *ngIf="error" class="alert alert-danger" role="alert">
-            {{ error }}
-          </div>
-
-          <form (ngSubmit)="onSubmit()" #patientForm="ngForm">
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label class="form-label">Full Name <span class="text-danger">*</span></label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  [(ngModel)]="patient.name"
-                  name="name"
-                  placeholder="Enter full name"
-                  title="Full Name"
-                  required>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">CNIC <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input 
-                    type="text" 
-                    class="form-control" 
-                    [(ngModel)]="patient.cnic"
-                    name="cnic"
-                  pkInputFormat="cnic"
-                  maxlength="15"
-                  inputmode="numeric"
-                    placeholder="12345-1234567-1"
-                    required>
-                  <button type="button" class="btn btn-outline-primary" (click)="searchByCnic()" [disabled]="loading">
-                    Search
-                  </button>
-                </div>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">Email</label>
-                <input 
-                  type="email" 
-                  class="form-control" 
-                  [(ngModel)]="patient.email"
-                  name="email"
-                  placeholder="name@example.com"
-                  title="Email">
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">Phone <span class="text-danger">*</span></label>
-                <input 
-                  type="tel" 
-                  class="form-control" 
-                  [(ngModel)]="patient.phone"
-                  name="phone"
-                  pkInputFormat="phone"
-                  placeholder="03xx-xxxxxxx"
-                  required
-                  title="Phone">
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">City <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="patient.city" name="city" required title="City">
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">Province <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="patient.province" name="province" required title="Province">
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">Date of Birth</label>
-                <input 
-                  type="date" 
-                  class="form-control" 
-                  [(ngModel)]="patient.dateOfBirth"
-                  name="dateOfBirth"
-                  title="Date of Birth">
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label class="form-label">Gender</label>
-                <select class="form-select" [(ngModel)]="patient.gender" name="gender" title="Gender">
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">Address</label>
-                <textarea 
-                  class="form-control" 
-                  rows="3"
-                  [(ngModel)]="patient.address"
-                  name="address"
-                  placeholder="City, area, street"
-                  title="Address"></textarea>
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">Medical History</label>
-                <textarea 
-                  class="form-control" 
-                  rows="4"
-                  [(ngModel)]="patient.medicalHistory"
-                  name="medicalHistory"
-                  title="Medical History"
-                  placeholder="Previous conditions, allergies, medications, etc."></textarea>
-              </div>
-
-              <div class="col-12">
-                <div *ngIf="existingPatientFound" class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
-                  <span>Patient already exists for this CNIC.</span>
-                  <button type="button" class="btn btn-sm btn-primary" (click)="continueWithExistingPatient()">
-                    Continue With Existing
-                  </button>
-                </div>
-
-                <div class="d-flex gap-2 justify-content-end">
-                  <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/patient-management">
-                    Cancel
-                  </button>
-                  <button type="submit" class="btn btn-primary" [disabled]="loading || !patientForm.valid">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    Register Patient
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+  <div class="rp-shell">
+    <div *ngIf="success" class="alert alert-success rp-alert" role="alert">
+      Patient registered successfully. Redirecting…
     </div>
+
+    <div *ngIf="error" class="alert alert-danger rp-alert" role="alert">
+      {{ error }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #patientForm="ngForm" class="rp-form">
+      <section class="rp-panel">
+        <h3 class="rp-panel__title">Identity</h3>
+        <p class="rp-panel__hint">Search by CNIC first if the patient may already exist in the system.</p>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Full name <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              class="form-control rp-input"
+              [(ngModel)]="patient.name"
+              name="name"
+              placeholder="As on CNIC"
+              title="Full name"
+              required>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="rp-label">CNIC <span class="text-danger">*</span></label>
+            <div class="input-group rp-input-group">
+              <input
+                type="text"
+                class="form-control rp-input"
+                [(ngModel)]="patient.cnic"
+                name="cnic"
+                pkInputFormat="cnic"
+                maxlength="15"
+                inputmode="numeric"
+                placeholder="12345-1234567-1"
+                required>
+              <button type="button" class="btn btn-primary" (click)="searchByCnic()" [disabled]="loading">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rp-panel">
+        <h3 class="rp-panel__title">Contact</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Email</label>
+            <input
+              type="email"
+              class="form-control rp-input"
+              [(ngModel)]="patient.email"
+              name="email"
+              placeholder="name@example.com"
+              title="Email">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Phone <span class="text-danger">*</span></label>
+            <input
+              type="tel"
+              class="form-control rp-input"
+              [(ngModel)]="patient.phone"
+              name="phone"
+              pkInputFormat="phone"
+              placeholder="03xx-xxxxxxx"
+              required
+              title="Phone">
+          </div>
+        </div>
+      </section>
+
+      <section class="rp-panel">
+        <h3 class="rp-panel__title">Location</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="rp-label">City <span class="text-danger">*</span></label>
+            <input type="text" class="form-control rp-input" [(ngModel)]="patient.city" name="city" required title="City">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Province <span class="text-danger">*</span></label>
+            <input type="text" class="form-control rp-input" [(ngModel)]="patient.province" name="province" required title="Province">
+          </div>
+
+          <div class="col-12">
+            <label class="rp-label">Address</label>
+            <textarea
+              class="form-control rp-input"
+              rows="2"
+              [(ngModel)]="patient.address"
+              name="address"
+              placeholder="Area, street, landmarks"
+              title="Address"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="rp-panel rp-panel--muted">
+        <h3 class="rp-panel__title">Demographics &amp; history</h3>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Date of birth</label>
+            <input
+              type="date"
+              class="form-control rp-input"
+              [(ngModel)]="patient.dateOfBirth"
+              name="dateOfBirth"
+              title="Date of birth">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="rp-label">Gender</label>
+            <select class="form-select rp-input" [(ngModel)]="patient.gender" name="gender" title="Gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="rp-label">Medical history</label>
+            <textarea
+              class="form-control rp-input"
+              rows="4"
+              [(ngModel)]="patient.medicalHistory"
+              name="medicalHistory"
+              title="Medical history"
+              placeholder="Conditions, allergies, current medications…"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <div *ngIf="existingPatientFound" class="rp-banner rp-banner--info" role="status">
+        <span>Patient already exists for this CNIC.</span>
+        <button type="button" class="btn btn-sm btn-primary" (click)="continueWithExistingPatient()">
+          Use existing record
+        </button>
+      </div>
+
+      <div class="rp-footer">
+        <button type="button" class="btn btn-outline-secondary" routerLink="/doctor-portal/patient-management">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary rp-footer__submit" [disabled]="loading || !patientForm.valid">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+          Register patient
+        </button>
+      </div>
+    </form>
   </div>
 </div>

@@ -115,6 +115,11 @@ export class Dashboard implements OnInit {
     return 'Patient';
   }
 
+  get todayDate(): string {
+    const d = new Date();
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
   hasRecordedMetric(value: string | number | null | undefined): boolean {
     if (value === null || value === undefined) return false;
     if (typeof value === 'number') return !Number.isNaN(value);

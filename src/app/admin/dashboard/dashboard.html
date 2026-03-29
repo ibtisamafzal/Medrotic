@@ -1,145 +1,188 @@
 <div class="dashboard-page">
-  <div class="page-header mb-4 fade-in-down">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="page-title">Welcome, {{ welcomeDisplayName }}!</h2>
-        <p class="page-subtitle">Overview of system metrics and quick access to management sections</p>
+  <!-- ─── Hero Banner ─── -->
+  <header class="dash-hero fade-in-down">
+    <div class="dash-hero__inner">
+      <div class="dash-hero__text">
+        <span class="dash-hero__eyebrow">
+          <img src="images/svg-icons/dashboard-square.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Admin portal
+        </span>
+        <h2 class="dash-hero__title">Welcome, {{ welcomeDisplayName }}!</h2>
+        <p class="dash-hero__sub">Overview of system metrics and quick access to management sections</p>
       </div>
-      <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Logout
-      </button>
-    </div>
-  </div>
-
-  <!-- Key Metrics Cards -->
-  <div class="row g-4 mb-4">
-    <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
-      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff' },
-      { label: 'Total Doctors', value: metrics.totalDoctors, icon: 'doctors', color: '#10b981' },
-      { label: 'Total Users', value: metrics.totalUsers, icon: 'users', color: '#f59e0b' },
-      { label: 'Active Appointments', value: metrics.activeAppointments, icon: 'appointments', color: '#ef4444' }
-    ]; trackBy: trackByMetricLabel; let i = index">
-      <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
-        <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
-          <svg *ngIf="metric.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
-            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'doctors'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
-            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'users'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="metric.color" stroke-width="2"/>
-            <path d="M8 12L11 15L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'appointments'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="metric-content">
-          <h3 class="metric-value count-up">{{ formatMetricCount(metric.value) }}</h3>
-          <p class="metric-label">{{ metric.label }}</p>
-        </div>
+      <div class="dash-hero__actions">
+        <span class="dash-hero__date">
+          <img src="images/svg-icons/calendar-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          {{ todayDate }}
+        </span>
+        <button class="btn btn-outline-danger btn-sm dash-hero__logout" (click)="logout()" title="Logout">
+          <img src="images/svg-icons/logout-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Logout
+        </button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Quick Links -->
-  <div class="row g-4 mb-4">
-    <div class="col-12">
-      <div class="section-card fade-in-up" [style.animation-delay]="'400ms'">
-        <h3 class="section-title mb-4">Quick Links</h3>
-        <div class="row g-3">
-          <div class="col-6 col-md-4 col-lg-3" *ngFor="let link of quickLinks; let i = index">
-            <a [routerLink]="link.route" class="quick-link-card fade-in-up" [style.animation-delay]="(400 + i * 50) + 'ms'">
-              <div class="quick-link-icon" [style.color]="link.color">{{ link.icon }}</div>
-              <h4 class="quick-link-title">{{ link.title }}</h4>
-              <p class="quick-link-count" [class.text-muted]="link.count === null">{{ quickLinkCountLabel(link.count) }}</p>
-            </a>
+  <!-- ─── Key Metrics Cards ─── -->
+  <section class="dash-section" aria-labelledby="admin-metrics-heading">
+    <h2 id="admin-metrics-heading" class="dash-section__label">
+      <img src="images/svg-icons/Analytics-Bars.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      At a glance
+    </h2>
+    <div class="row g-4 mb-4">
+      <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
+        { label: 'Total Patients', value: metrics.totalPatients, icon: 'patient', color: '#3461ff', gradient: 'linear-gradient(135deg, #3461ff 0%, #6b8eff 100%)' },
+        { label: 'Total Doctors', value: metrics.totalDoctors, icon: 'doctor', color: '#10b981', gradient: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' },
+        { label: 'Total Users', value: metrics.totalUsers, icon: 'users', color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)' },
+        { label: 'Active Appointments', value: metrics.activeAppointments, icon: 'calendar', color: '#ef4444', gradient: 'linear-gradient(135deg, #ef4444 0%, #fb7185 100%)' }
+      ]; trackBy: trackByMetricLabel; let i = index">
+        <div class="dash-metric fade-in-up" [style.animation-delay]="(i * 80) + 'ms'">
+          <div class="dash-metric__icon-ring" [style.background]="metric.gradient">
+            <img *ngIf="metric.icon === 'patient'" src="images/svg-icons/patient.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+            <img *ngIf="metric.icon === 'doctor'" src="images/svg-icons/doctor.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+            <img *ngIf="metric.icon === 'users'" src="images/svg-icons/check-rectangle-light.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+            <img *ngIf="metric.icon === 'calendar'" src="images/svg-icons/calendar-light.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+          </div>
+          <div class="dash-metric__body">
+            <h3 class="dash-metric__value count-up">{{ formatMetricCount(metric.value) }}</h3>
+            <p class="dash-metric__label">{{ metric.label }}</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Spotlight insights -->
-  <div class="row g-4 admin-insights-row">
-    <div class="col-12 col-md-6 col-lg-4">
-      <article class="admin-insight-card admin-insight-card--verification">
-        <div class="admin-insight-card__accent" aria-hidden="true"></div>
-        <div class="admin-insight-card__inner">
-          <header class="admin-insight-card__head">
-            <span class="admin-insight-card__eyebrow">Action queue</span>
-            <div class="admin-insight-card__icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
-              </svg>
+  <!-- ─── Quick Links ─── -->
+  <section class="dash-section" aria-labelledby="admin-links-heading">
+    <h2 id="admin-links-heading" class="dash-section__label">
+      <img src="images/svg-icons/discover-square.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Quick links
+    </h2>
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="section-card fade-in-up" [style.animation-delay]="'400ms'">
+          <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-3" *ngFor="let link of quickLinks; let i = index">
+              <a [routerLink]="link.route" class="quick-link-card fade-in-up" [style.animation-delay]="(400 + i * 50) + 'ms'">
+                <div class="quick-link-icon-wrapper" [style.color]="link.color">
+                  <div class="quick-link-mask" [style.-webkit-mask-image]="'url(/images/svg-icons/' + link.iconPath + ')'"></div>
+                </div>
+                <h4 class="quick-link-title">{{ link.title }}</h4>
+                <p class="quick-link-count" [class.text-muted]="link.count === null">{{ quickLinkCountLabel(link.count) }}</p>
+              </a>
             </div>
-          </header>
-          <h3 class="admin-insight-card__title">Pending verifications</h3>
-          <p class="admin-insight-card__metric">{{ formatMetricCount(metrics.pendingVerifications) }}</p>
-          <p class="admin-insight-card__hint">Approve or reject sign-ups before they access the platform.</p>
-          <a routerLink="/admin/user-verification" class="admin-insight-card__link">
-            Open verification
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </article>
-    </div>
-
-    <div class="col-12 col-md-6 col-lg-4">
-      <article class="admin-insight-card admin-insight-card--health">
-        <div class="admin-insight-card__accent" aria-hidden="true"></div>
-        <div class="admin-insight-card__inner">
-          <header class="admin-insight-card__head">
-            <span class="admin-insight-card__eyebrow">Operations</span>
-            <div class="admin-insight-card__icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3.75 13.5l2.25-3 2.25 3 2.25-3 2.25 3 2.25-3 2.25 3M4.5 19.125h15M6 16.875h12"/>
-              </svg>
-            </div>
-          </header>
-          <h3 class="admin-insight-card__title">System health</h3>
-          <div class="admin-insight-card__status">
-            <span class="admin-insight-card__status-dot"></span>
-            <span>All systems operational</span>
           </div>
-          <p class="admin-insight-card__hint">Logs, errors, and performance in one place.</p>
-          <a routerLink="/admin/system-health" class="admin-insight-card__link admin-insight-card__link--muted">
-            View logs &amp; metrics
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
         </div>
-      </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Activity & Spotlight ─── -->
+  <div class="row g-4 mb-4">
+    <!-- Left Column: Activity Table -->
+    <div class="col-12 col-xl-8">
+      <section class="dash-section h-100 mb-0" aria-labelledby="admin-activity-heading">
+        <h2 id="admin-activity-heading" class="dash-section__label">
+          <img src="images/svg-icons/menu-board-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Recent activity & logs
+        </h2>
+        <div class="dash-table-card fade-in-up" [style.animation-delay]="'500ms'">
+          <div class="dash-card-head dash-card-head--row">
+            <div>
+              <h3 class="dash-card-head__title">Recent Activity</h3>
+              <p class="dash-card-head__sub">System logs and events</p>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" (click)="loadSystemLogs()">Refresh</button>
+          </div>
+          <div class="dash-table-card__table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>System Message</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="loadingLogs">
+                  <td colspan="3" class="text-center text-muted py-4">Loading system logs...</td>
+                </tr>
+                <tr *ngFor="let log of systemLogs | slice:0:5; let i = index" class="fade-in-up" [style.animation-delay]="(500 + i * 50) + 'ms'">
+                  <td>
+                    <span class="status-badge" [ngClass]="{
+                      'status-badge--success': log.level === 'info',
+                      'status-badge--warning': log.level === 'warning',
+                      'status-badge--danger': log.level === 'error'
+                    }">
+                      {{ log.level | titlecase }}
+                    </span>
+                  </td>
+                  <td class="fw-medium text-dark">{{ log.message }}</td>
+                  <td class="text-muted">{{ log.timestamp | date:'MMM d, y, h:mm a' }}</td>
+                </tr>
+                <tr *ngIf="systemLogs.length === 0 && !loadingLogs">
+                  <td colspan="3" class="text-center text-muted py-4">No recent system activity</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="dash-table-card__footer">
+            <a routerLink="/admin/system-health" class="dash-table-card__link">View all system events &rarr;</a>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="col-12 col-md-6 col-lg-4">
-      <article class="admin-insight-card admin-insight-card--analytics">
-        <div class="admin-insight-card__accent" aria-hidden="true"></div>
-        <div class="admin-insight-card__inner">
-          <header class="admin-insight-card__head">
-            <span class="admin-insight-card__eyebrow">Growth</span>
-            <div class="admin-insight-card__icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
-              </svg>
+    <!-- Right Column: Spotlight -->
+    <div class="col-12 col-xl-4">
+      <section class="dash-section h-100 mb-0" aria-labelledby="admin-insights-heading">
+        <h2 id="admin-insights-heading" class="dash-section__label">
+          <img src="images/svg-icons/information-circle-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Spotlight
+        </h2>
+        <div class="d-flex flex-column gap-3 h-100">
+          <article class="admin-insight-card admin-insight-card--verification flex-grow-1 fade-in-up" [style.animation-delay]="'600ms'">
+            <div class="admin-insight-card__accent" aria-hidden="true"></div>
+            <div class="admin-insight-card__inner">
+              <header class="admin-insight-card__head">
+                <span class="admin-insight-card__eyebrow">Action queue</span>
+                <div class="admin-insight-card__icon-wrap" aria-hidden="true">
+                  <img src="images/svg-icons/shield-check-light.svg" alt="" class="svg-icon-img" style="filter: invert(1);">
+                </div>
+              </header>
+              <h3 class="admin-insight-card__title">Pending verifications</h3>
+              <p class="admin-insight-card__metric">{{ formatMetricCount(metrics.pendingVerifications) }}</p>
+              <p class="admin-insight-card__hint">Approve or reject sign-ups before they access the platform.</p>
+              <a routerLink="/admin/user-verification" class="admin-insight-card__link">
+                Open verification
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </a>
             </div>
-          </header>
-          <h3 class="admin-insight-card__title">Analytics &amp; reports</h3>
-          <p class="admin-insight-card__metric">{{ formatMetricCount(metrics.totalUsers) }}</p>
-          <p class="admin-insight-card__hint">Registered users across the platform (live from analytics).</p>
-          <a routerLink="/admin/analytics" class="admin-insight-card__link admin-insight-card__link--muted">
-            Explore analytics
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
+          </article>
+
+          <article class="admin-insight-card admin-insight-card--health flex-grow-1 fade-in-up" [style.animation-delay]="'700ms'">
+            <div class="admin-insight-card__accent" aria-hidden="true"></div>
+            <div class="admin-insight-card__inner">
+              <header class="admin-insight-card__head">
+                <span class="admin-insight-card__eyebrow">Operations</span>
+                <div class="admin-insight-card__icon-wrap" aria-hidden="true">
+                  <img src="images/svg-icons/pulse-rectangle.svg" alt="" class="svg-icon-img" style="filter: invert(1);">
+                </div>
+              </header>
+              <h3 class="admin-insight-card__title">System health</h3>
+              <div class="admin-insight-card__status">
+                <span class="admin-insight-card__status-dot"></span>
+                <span>All systems operational</span>
+              </div>
+              <p class="admin-insight-card__hint">Logs, errors, and performance in one place.</p>
+              <a routerLink="/admin/system-health" class="admin-insight-card__link admin-insight-card__link--muted">
+                View logs &amp; metrics
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
         </div>
-      </article>
+      </section>
     </div>
   </div>
 </div>

@@ -3,28 +3,39 @@
 }
 
 .upload-xray-page {
-  .page-header {
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-    }
+  padding-bottom: 2rem;
+}
 
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-      max-width: 40rem;
-    }
+.uxray-hero {
+  margin-bottom: 1.5rem;
+
+  &__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #001047;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  &__sub {
+    margin: 0;
+    color: rgba(0, 16, 71, 0.62);
+    max-width: 40rem;
+    line-height: 1.55;
+    font-size: 0.9375rem;
   }
 }
 
 .uxray-card {
   background: #ffffff;
   border: 1px solid rgba(0, 16, 71, 0.08);
-  border-radius: 16px;
-  padding: 1.5rem 1.65rem;
-  box-shadow: 0 2px 16px rgba(0, 16, 71, 0.05);
+  border-radius: 18px;
+  padding: clamp(1.35rem, 3vw, 1.75rem);
+  box-shadow: 0 4px 24px rgba(0, 16, 71, 0.06);
+}
+
+.uxray-patient-select {
+  font-weight: 500;
 }
 
 .uxray-section {

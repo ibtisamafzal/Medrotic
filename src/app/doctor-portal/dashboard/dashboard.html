@@ -1,342 +1,556 @@
-<div class="dashboard-page">
-  <div class="page-header mb-4 fade-in-down">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="page-title">Welcome, Dr. {{ welcomeDisplayName }}!</h2>
-        <p class="page-subtitle">Overview of your patients and practice metrics</p>
+<div class="dashboard-page dash-home">
+  <!-- ─── Hero banner ─── -->
+  <header class="dash-hero fade-in-down">
+    <div class="dash-hero__inner">
+      <div class="dash-hero__text">
+        <span class="dash-hero__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+              stroke="currentColor" stroke-width="2" />
+            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" />
+          </svg>
+          Doctor portal
+        </span>
+        <h2 class="dash-hero__title">Welcome back, {{ welcomeDisplayName }}</h2>
+        <p class="dash-hero__sub">Your practice at a glance — patients, documents, and what needs attention next.</p>
       </div>
-      <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Logout
-      </button>
+      <div class="dash-hero__actions">
+        <span class="dash-hero__date">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          {{ todayDate }}
+        </span>
+        <button type="button" class="btn btn-outline-danger btn-sm dash-hero__logout" (click)="logout()" title="Logout">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Logout
+        </button>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Key Metrics Cards -->
-  <div class="row g-4 mb-4">
-    <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
-      { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff', viz: 'relative' },
-      { label: 'Active Patients', value: metrics.activePatients, icon: 'active', color: '#10b981', viz: 'share' },
-      { label: 'Prescriptions', value: metrics.totalPrescriptions, icon: 'prescriptions', color: '#f59e0b', viz: 'relative' },
-      { label: 'X-Rays', value: metrics.totalXrays, icon: 'xrays', color: '#ef4444', viz: 'relative' }
-    ]; trackBy: trackByMetricLabel; let i = index">
-      <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
-        <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
-          <svg *ngIf="metric.icon === 'patients'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" [attr.stroke]="metric.color" stroke-width="2"/>
-            <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'active'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" [attr.stroke]="metric.color" stroke-width="2"/>
-            <path d="M8 12L11 15L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'prescriptions'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 6H20M4 6L2 4H22L20 6M4 6V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V6" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8 10L12 14L16 10" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg *ngIf="metric.icon === 'xrays'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 7H21M3 7C2.44772 7 2 7.44772 2 8V18C2 18.5523 2.44772 19 3 19H21C21.5523 19 22 18.5523 22 18V8C22 7.44772 21.5523 7 21 7M3 7V5C3 4.44772 3.44772 4 4 4H20C20.5523 4 21 4.44772 21 5V7" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="metric-content">
-          <h3 class="metric-value count-up">{{ formatMetricCount(metric.value) }}</h3>
-          <p class="metric-label">{{ metric.label }}</p>
-          <div class="metric-viz" *ngIf="metricBarInsight(metric) as bar">
-            <div class="metric-viz__track">
-              <div
-                class="metric-viz__fill"
-                [style.width.%]="bar.pct"
-                [style.background]="'linear-gradient(90deg, ' + metric.color + ', ' + metric.color + 'CC)'"
-              ></div>
+  <!-- ─── Key metrics ─── -->
+  <section class="dash-section" aria-labelledby="dash-metrics-heading">
+    <h2 id="dash-metrics-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+          stroke="currentColor" stroke-width="1.5" />
+      </svg>
+      At a glance
+    </h2>
+    <div class="row g-3 g-lg-4">
+      <div class="col-6 col-lg-3" *ngFor="let metric of [
+        { label: 'Total Patients', value: metrics.totalPatients, icon: 'patients', color: '#3461ff', gradient: 'linear-gradient(135deg, #3461ff 0%, #6b8eff 100%)', viz: 'relative' },
+        { label: 'Active Patients', value: metrics.activePatients, icon: 'active', color: '#10b981', gradient: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)', viz: 'share' },
+        { label: 'Prescriptions', value: metrics.totalPrescriptions, icon: 'prescriptions', color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)', viz: 'relative' },
+        { label: 'X-Rays', value: metrics.totalXrays, icon: 'xrays', color: '#ef4444', gradient: 'linear-gradient(135deg, #ef4444 0%, #fb7185 100%)', viz: 'relative' }
+      ]; trackBy: trackByMetricLabel; let i = index">
+        <div class="dash-metric fade-in-up" [class.dash-metric--patients]="metric.icon === 'patients'"
+          [class.dash-metric--active]="metric.icon === 'active'"
+          [class.dash-metric--rx]="metric.icon === 'prescriptions'" [class.dash-metric--xr]="metric.icon === 'xrays'"
+          [style.animation-delay]="(i * 80) + 'ms'">
+          <div class="dash-metric__icon-ring" [style.background]="metric.gradient">
+            <svg *ngIf="metric.icon === 'patients'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
+                stroke="white" stroke-width="2" />
+              <path d="M5 22C5 18.1117 8.11167 15 12 15C15.8883 15 19 18.1117 19 22" stroke="white" stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+            <svg *ngIf="metric.icon === 'active'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                stroke="white" stroke-width="2" />
+              <path d="M8 12L11 15L16 10" stroke="white" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <svg *ngIf="metric.icon === 'prescriptions'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M9 12H15M12 9V15M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3Z"
+                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <svg *ngIf="metric.icon === 'xrays'" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3 7H21M3 7C2.44772 7 2 7.44772 2 8V18C2 18.5523 2.44772 19 3 19H21C21.5523 19 22 18.5523 22 18V8C22 7.44772 21.5523 7 21 7M3 7V5C3 4.44772 3.44772 4 4 4H20C20.5523 4 21 4.44772 21 5V7"
+                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="dash-metric__body">
+            <h3 class="dash-metric__value count-up">{{ formatMetricCount(metric.value) }}</h3>
+            <p class="dash-metric__label">{{ metric.label }}</p>
+          </div>
+          <div class="dash-metric__bar" *ngIf="metricBarInsight(metric) as bar">
+            <div class="dash-metric__bar-track">
+              <div class="dash-metric__bar-fill" [style.width.%]="bar.pct" [style.background]="metric.gradient"></div>
             </div>
-            <span class="metric-viz__caption">{{ bar.caption }}</span>
+            <span class="dash-metric__bar-caption">{{ bar.caption }}</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Practice snapshot: roster + Rx / X-ray mix -->
-  <div class="row g-4 mb-4" *ngIf="practiceSnapshot as snap">
-    <div class="col-12 col-lg-4">
-      <div class="doctor-snapshot-card">
-        <h3 class="doctor-snapshot-card__title">Roster coverage</h3>
-        <p class="doctor-snapshot-card__sub">Active patients vs total assigned</p>
-        <div class="doctor-donut-wrap">
-          <div
-            class="doctor-donut"
-            [style.background]="'conic-gradient(#10b981 ' + snap.activePct + '%, #e8ecf4 0)'"
-            role="img"
-            [attr.aria-label]="snap.activePct + ' percent active'"
-          >
-            <div class="doctor-donut__hole">
-              <span class="doctor-donut__pct">{{ snap.activePct }}%</span>
-              <span class="doctor-donut__lab">active</span>
-            </div>
-          </div>
-        </div>
-        <ul class="doctor-snapshot-legend">
-          <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--active"></span>Active <strong>{{ formatMetricCount(metrics.activePatients) }}</strong></li>
-          <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--rest"></span>Total <strong>{{ formatMetricCount(metrics.totalPatients) }}</strong></li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-12 col-lg-8">
-      <div class="doctor-snapshot-card doctor-snapshot-card--wide">
-        <h3 class="doctor-snapshot-card__title">Document activity</h3>
-        <p class="doctor-snapshot-card__sub">Prescriptions vs imaging uploads (relative volume)</p>
-        <div class="doctor-mix-bar" *ngIf="snap.rx + snap.xr > 0; else noMix">
-          <div
-            class="doctor-mix-bar__seg doctor-mix-bar__seg--rx"
-            [style.flex-grow]="snap.rx"
-            [title]="'Prescriptions: ' + formatMetricCount(metrics.totalPrescriptions)"
-          ></div>
-          <div
-            class="doctor-mix-bar__seg doctor-mix-bar__seg--xr"
-            [style.flex-grow]="snap.xr"
-            [title]="'X-rays: ' + formatMetricCount(metrics.totalXrays)"
-          ></div>
-        </div>
-        <ng-template #noMix>
-          <p class="text-muted small mb-0">No prescription or X-ray counts yet — numbers will fill this bar as you add records.</p>
-        </ng-template>
-        <div class="doctor-mix-labels" *ngIf="snap.rx + snap.xr > 0">
-          <span><i class="doctor-mix-dot doctor-mix-dot--rx"></i>Prescriptions <strong>{{ formatMetricCount(metrics.totalPrescriptions) }}</strong></span>
-          <span><i class="doctor-mix-dot doctor-mix-dot--xr"></i>X-rays <strong>{{ formatMetricCount(metrics.totalXrays) }}</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quick Actions -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'400ms'">
-        <div class="action-header">
-          <div class="action-icon patients">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 1.66667C10.9205 1.66667 11.6667 2.41286 11.6667 3.33333V8.33333H16.6667C17.5871 8.33333 18.3333 9.07952 18.3333 10C18.3333 10.9205 17.5871 11.6667 16.6667 11.6667H11.6667V16.6667C11.6667 17.5871 10.9205 18.3333 10 18.3333C9.07952 18.3333 8.33333 17.5871 8.33333 16.6667V11.6667H3.33333C2.41286 11.6667 1.66667 10.9205 1.66667 10C1.66667 9.07952 2.41286 8.33333 3.33333 8.33333H8.33333V3.33333C8.33333 2.41286 9.07952 1.66667 10 1.66667Z" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <h3 class="section-title">Register Patient</h3>
-        </div>
-        <div class="action-content">
-          <p class="action-label">Add a new patient to your practice</p>
-          <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm mt-3">Register Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'450ms'">
-        <div class="action-header">
-          <div class="action-icon messages">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3 class="section-title">Messages</h3>
-        </div>
-        <div class="action-content">
-          <div class="action-value">{{ formatMetricCount(metrics.pendingMessages) }}</div>
-          <p class="action-label">Unread messages from patients</p>
-          <a routerLink="/doctor-portal/secure-communication" class="btn btn-outline-primary btn-sm mt-3">View Messages</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'500ms'">
-        <div class="action-header">
-          <div class="action-icon upload">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8.33333 10L10 11.6667L11.6667 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3 class="section-title">Upload Documents</h3>
-        </div>
-        <div class="action-content">
-          <p class="action-label">Upload prescriptions or X-rays</p>
-          <div class="d-flex gap-2 mt-3">
-            <a routerLink="/doctor-portal/upload-prescription" class="btn btn-outline-primary btn-sm">Prescription</a>
-            <a routerLink="/doctor-portal/upload-xray" class="btn btn-outline-primary btn-sm">X-Ray</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Upcoming appointments (from your schedule in the system) -->
-  <div class="row g-4 mb-4">
-    <div class="col-12">
-      <div class="section-card fade-in-up" [style.animation-delay]="'550ms'">
-        <h3 class="section-title mb-3">Upcoming appointments</h3>
-        <p class="text-muted small mb-3" *ngIf="appointmentsLoadError">{{ appointmentsLoadError }}</p>
-        <div class="table-responsive" *ngIf="!appointmentsLoadError">
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th>When</th>
-                <th>Patient ID</th>
-                <th>Status</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let a of upcomingAppointments">
-                <td>{{ (a.appointmentDate || a.AppointmentDate) | date:'short' }}</td>
-                <td>{{ a.patientId || a.PatientId }}</td>
-                <td>{{ a.status || a.Status }}</td>
-                <td class="text-muted small">{{ a.notes || a.Notes || '—' }}</td>
-              </tr>
-              <tr *ngIf="upcomingAppointments.length === 0">
-                <td colspan="4" class="text-center text-muted py-4">No upcoming appointments scheduled</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Assigned Patients & Recent Uploads -->
-  <div class="row g-4">
-    <div class="col-12 col-lg-6">
-      <div class="section-card fade-in-up" [style.animation-delay]="'600ms'">
-        <h3 class="section-title mb-4">Assigned Patients ({{ assignedPatients.length }})</h3>
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>CNIC</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let patient of assignedPatients">
-                <td>{{ patient.name }}</td>
-                <td>{{ patient.cnic || 'N/A' }}</td>
-                <td>{{ patient.phone || 'N/A' }}</td>
-                <td>
-                  <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
-                </td>
-              </tr>
-              <tr *ngIf="assignedPatients.length === 0">
-                <td colspan="4" class="text-center text-muted py-4">No assigned patients</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mt-3">
-          <a routerLink="/doctor-portal/patient-management" class="btn btn-outline-primary btn-sm">View All Patients</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 col-lg-6">
-      <div class="section-card fade-in-up" [style.animation-delay]="'650ms'">
-        <h3 class="section-title mb-4">Recent Uploads</h3>
-        <div class="list-group list-group-flush">
-          <div *ngFor="let upload of recentUploads" class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              <div class="fw-bold">
-                <span class="badge me-2" [class.bg-info]="upload.type === 'prescription'" [class.bg-warning]="upload.type === 'xray'">
-                  {{ upload.type }}
-                </span>
-                {{ upload.title }}
+  <!-- ─── Practice snapshot ─── -->
+  <section class="dash-section" *ngIf="practiceSnapshot as snap" aria-labelledby="dash-insight-heading">
+    <h2 id="dash-insight-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+          stroke="currentColor" stroke-width="1.5" />
+        <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      Practice insight
+    </h2>
+    <div class="row g-4">
+      <div class="col-12 col-lg-4">
+        <div class="dash-insight-card">
+          <div class="dash-insight-card__accent dash-insight-card__accent--emerald" aria-hidden="true"></div>
+          <div class="dash-insight-card__inner">
+            <header class="dash-insight-card__head">
+              <span class="dash-insight-card__eyebrow">Patient roster</span>
+              <div class="dash-insight-card__icon-wrap dash-insight-card__icon-wrap--emerald" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+                  <path d="M8 12L11 15L16 10" />
+                </svg>
               </div>
-              <small class="text-muted">Patient ID: {{ upload.patientId }}</small>
+            </header>
+            <h3 class="dash-insight-card__title">Roster coverage</h3>
+            <div class="doctor-donut-wrap">
+              <div class="doctor-donut"
+                [style.background]="'conic-gradient(#10b981 ' + snap.activePct + '%, #e8ecf4 0)'" role="img"
+                title="Active patients as a share of your roster"
+                [attr.aria-label]="snap.activePct + ' percent of patients are active'">
+                <div class="doctor-donut__hole">
+                  <span class="doctor-donut__pct">{{ snap.activePct }}%</span>
+                  <span class="doctor-donut__lab">active</span>
+                </div>
+              </div>
             </div>
-            <small class="text-muted">{{ upload.date | date:'short' }}</small>
+            <ul class="doctor-snapshot-legend">
+              <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--active"></span>Active
+                <strong>{{ formatMetricCount(metrics.activePatients) }}</strong>
+              </li>
+              <li><span class="doctor-snapshot-legend__swatch doctor-snapshot-legend__swatch--rest"></span>Total
+                <strong>{{ formatMetricCount(metrics.totalPatients) }}</strong>
+              </li>
+            </ul>
           </div>
-          <div *ngIf="recentUploads.length === 0" class="list-group-item text-center text-muted py-4">
-            No recent uploads
+        </div>
+      </div>
+      <div class="col-12 col-lg-8">
+        <div class="dash-insight-card">
+          <div class="dash-insight-card__accent dash-insight-card__accent--amber" aria-hidden="true"></div>
+          <div class="dash-insight-card__inner">
+            <header class="dash-insight-card__head">
+              <span class="dash-insight-card__eyebrow">Documents</span>
+              <div class="dash-insight-card__icon-wrap dash-insight-card__icon-wrap--amber" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M9 12H15M12 9V15M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3Z" />
+                </svg>
+              </div>
+            </header>
+            <h3 class="dash-insight-card__title">Document activity</h3>
+            <p class="dash-insight-card__hint">Prescriptions vs imaging (relative volume)</p>
+            <div class="doctor-mix-bar" *ngIf="snap.rx + snap.xr > 0; else noMix">
+              <div class="doctor-mix-bar__seg doctor-mix-bar__seg--rx" [style.flex-grow]="snap.rx"
+                [title]="'Prescriptions: ' + formatMetricCount(metrics.totalPrescriptions)"></div>
+              <div class="doctor-mix-bar__seg doctor-mix-bar__seg--xr" [style.flex-grow]="snap.xr"
+                [title]="'X-rays: ' + formatMetricCount(metrics.totalXrays)"></div>
+            </div>
+            <ng-template #noMix>
+              <p class="dash-empty-hint mb-0">No prescription or X-ray counts yet — numbers will fill this bar as you
+                add records.</p>
+            </ng-template>
+            <div class="doctor-mix-labels" *ngIf="snap.rx + snap.xr > 0">
+              <span><i class="doctor-mix-dot doctor-mix-dot--rx"></i>Prescriptions <strong>{{
+                  formatMetricCount(metrics.totalPrescriptions) }}</strong></span>
+              <span><i class="doctor-mix-dot doctor-mix-dot--xr"></i>X-rays <strong>{{
+                  formatMetricCount(metrics.totalXrays) }}</strong></span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Recent Patients -->
-  <div class="row g-4 mt-2">
-    <div class="col-12 col-lg-8">
-      <div class="section-card fade-in-up" [style.animation-delay]="'700ms'">
-        <h3 class="section-title mb-4">Recent Patients</h3>
-        <div class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>CNIC</th>
-                <th>Phone</th>
-                <th>Last Visit</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let patient of recentPatients">
-                <td>{{ patient.name }}</td>
-                <td>{{ patient.cnic || 'N/A' }}</td>
-                <td>{{ patient.phone || 'N/A' }}</td>
-                <td>{{ patient.updatedAt ? (patient.updatedAt | date:'short') : 'N/A' }}</td>
-                <td>
-                  <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
-                </td>
-              </tr>
-              <tr *ngIf="recentPatients.length === 0">
-                <td colspan="5" class="text-center text-muted py-4">No recent patients</td>
-              </tr>
-            </tbody>
-          </table>
+  <!-- ─── Quick actions ─── -->
+  <section class="dash-section" aria-labelledby="dash-actions-heading">
+    <h2 id="dash-actions-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M13 10V3L4 14H11V21L20 10H13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      Quick actions
+    </h2>
+    <div class="row g-3 g-lg-4">
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'350ms'">
+          <div class="dash-action__icon dash-action__icon--primary">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">Register patient</h3>
+            <p class="dash-action__text">Add someone new with CNIC-first identity.</p>
+          </div>
+          <a routerLink="/doctor-portal/register-patient" class="btn btn-primary btn-sm dash-action__btn">Register</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'420ms'">
+          <div class="dash-action__icon dash-action__icon--success">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path
+                d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">Messages</h3>
+            <p class="dash-action__text">
+              <span class="dash-action__stat">{{ formatMetricCount(metrics.pendingMessages) }}</span>
+              unread from patients
+            </p>
+          </div>
+          <a routerLink="/doctor-portal/secure-communication"
+            class="btn btn-outline-primary btn-sm dash-action__btn">Open inbox</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'490ms'">
+          <div class="dash-action__icon dash-action__icon--amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <path
+                d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">Upload documents</h3>
+            <p class="dash-action__text">Attach prescriptions or imaging to a patient record.</p>
+          </div>
+          <div class="dash-action__btns">
+            <a routerLink="/doctor-portal/upload-prescription" class="btn btn-outline-primary btn-sm">Prescription</a>
+            <a routerLink="/doctor-portal/upload-xray" class="btn btn-outline-primary btn-sm">X-ray</a>
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="col-12 col-lg-4">
-      <div class="section-card fade-in-up" [style.animation-delay]="'650ms'">
-        <h3 class="section-title mb-4">Quick Links</h3>
-        <div class="d-flex flex-column gap-2">
-          <a routerLink="/doctor-portal/patient-management" class="quick-link-item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M2.5 18.3333C2.5 15.1117 5.11167 12.5 8.33333 12.5H11.6667C14.8883 12.5 17.5 15.1117 17.5 18.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            <span>Patient Management</span>
-          </a>
-          <a routerLink="/doctor-portal/patient-analytics" class="quick-link-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
-              <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
-            </svg>
-            <span>Patient analytics</span>
-          </a>
-          <a routerLink="/doctor-portal/secure-communication" class="quick-link-item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Secure Communication</span>
-          </a>
-          <a routerLink="/doctor-portal/document-storage" class="quick-link-item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.33333 5.83333H16.6667M3.33333 5.83333L1.66667 3.33333H18.3333L16.6667 5.83333M3.33333 5.83333V15.8333C3.33333 16.7538 4.07952 17.5 5 17.5H15C15.9205 17.5 16.6667 16.7538 16.6667 15.8333V5.83333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Document Storage</span>
-          </a>
-          <a routerLink="/doctor-portal/notifications" class="quick-link-item">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 1.66667C8.15905 1.66667 6.66667 3.15905 6.66667 5V8.33333L4.16667 10.8333V12.5H15.8333V10.8333L13.3333 8.33333V5C13.3333 3.15905 11.8409 1.66667 10 1.66667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7.5 12.5V14.1667C7.5 15.0871 8.24619 15.8333 9.16667 15.8333H10.8333C11.7538 15.8333 12.5 15.0871 12.5 14.1667V12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Notifications</span>
-          </a>
+  <!-- ─── Appointments ─── -->
+  <section class="dash-section" aria-labelledby="dash-appt-heading">
+    <h2 id="dash-appt-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Schedule
+    </h2>
+    <div class="dash-table-card fade-in-up" [style.animation-delay]="'550ms'">
+      <div class="dash-card-head">
+        <div>
+          <h3 class="dash-card-head__title">Upcoming appointments</h3>
+          <p class="dash-card-head__sub">Next visits in your calendar</p>
+        </div>
+      </div>
+      <p class="text-warning small mb-3 px-3" *ngIf="appointmentsLoadError">{{ appointmentsLoadError }}</p>
+      <div class="dash-table-wrap" *ngIf="!appointmentsLoadError">
+        <table class="table table-hover mb-0 dash-appt-table">
+          <thead>
+            <tr>
+              <th scope="col">When</th>
+              <th scope="col">Patient ID</th>
+              <th scope="col">Status</th>
+              <th scope="col">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of upcomingAppointments">
+              <td>{{ (a.appointmentDate || a.AppointmentDate) | date:'short' }}</td>
+              <td>{{ a.patientId || a.PatientId }}</td>
+              <td><span class="dash-pill" [class.dash-pill--scheduled]="(a.status || a.Status) === 'Scheduled'"
+                  [class.dash-pill--confirmed]="(a.status || a.Status) === 'Confirmed'">{{ a.status || a.Status
+                  }}</span></td>
+              <td class="text-muted small">{{ a.notes || a.Notes || '—' }}</td>
+            </tr>
+            <tr *ngIf="upcomingAppointments.length === 0">
+              <td colspan="4" class="text-center text-muted py-5 dash-table-empty">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="d-block mx-auto mb-2 opacity-25">
+                  <path
+                    d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                No upcoming appointments
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Assigned + uploads ─── -->
+  <section class="dash-section" aria-labelledby="dash-roster-heading">
+    <h2 id="dash-roster-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Your roster
+    </h2>
+    <div class="row g-4">
+      <div class="col-12 col-lg-6">
+        <div class="dash-table-card fade-in-up" [ngClass]="assignedPatientsCardClass" [style.animation-delay]="'600ms'">
+          <div class="dash-card-head dash-card-head--row">
+            <div>
+              <h3 class="dash-card-head__title">Assigned patients</h3>
+              <p class="dash-card-head__sub">{{ assignedPatients.length }} active</p>
+            </div>
+            <a routerLink="/doctor-portal/patient-management" class="btn btn-outline-primary btn-sm">View all</a>
+          </div>
+          <div class="dash-table-wrap">
+            <table class="table table-hover mb-0 dashboard-roster-table">
+              <thead>
+                <tr>
+                  <th class="dashboard-roster-table__col-name">Name</th>
+                  <th class="dashboard-roster-table__col-cnic">CNIC</th>
+                  <th class="dashboard-roster-table__col-phone">Phone</th>
+                  <th class="dashboard-roster-table__col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let patient of assignedPatients">
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.name">{{ patient.name }}</td>
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.cnic || ''">{{ patient.cnic ||
+                    'N/A' }}</td>
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.phone || ''">{{ patient.phone ||
+                    'N/A' }}</td>
+                  <td class="dashboard-roster-table__col-actions">
+                    <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
+                  </td>
+                </tr>
+                <tr *ngIf="assignedPatients.length === 0">
+                  <td colspan="4" class="text-center text-muted py-5 dash-table-empty">No assigned patients</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="dash-table-card dash-uploads-card fade-in-up" [ngClass]="recentUploadsCardClass"
+          [style.animation-delay]="'650ms'">
+          <div class="dash-card-head">
+            <div>
+              <h3 class="dash-card-head__title">Recent uploads</h3>
+              <p class="dash-card-head__sub">Latest prescriptions &amp; imaging</p>
+            </div>
+          </div>
+          <ul class="dash-upload-list list-unstyled mb-0">
+            <li *ngFor="let upload of recentUploads" class="dash-upload-item">
+              <span class="dash-upload-item__badge" [class.dash-upload-item__badge--rx]="upload.type === 'prescription'"
+                [class.dash-upload-item__badge--xr]="upload.type === 'xray'">
+                {{ upload.type === 'prescription' ? 'Rx' : 'XR' }}
+              </span>
+              <div class="dash-upload-item__body">
+                <span class="dash-upload-item__title">{{ upload.title }}</span>
+                <span class="dash-upload-item__meta">Patient · {{ upload.patientId }}</span>
+              </div>
+              <time class="dash-upload-item__time">{{ upload.date | date:'short' }}</time>
+            </li>
+            <li *ngIf="recentUploads.length === 0" class="dash-upload-empty text-muted py-4 text-center">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="d-block mx-auto mb-2 opacity-25">
+                <path
+                  d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              No recent uploads
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ─── Recent patients + quick links ─── -->
+  <section class="dash-section dash-section--last" aria-labelledby="dash-recent-heading">
+    <h2 id="dash-recent-heading" class="dash-section__label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Activity
+    </h2>
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <div class="dash-table-card fade-in-up" [ngClass]="recentPatientsCardClass" [style.animation-delay]="'700ms'">
+          <div class="dash-card-head">
+            <div>
+              <h3 class="dash-card-head__title">Recent patients</h3>
+              <p class="dash-card-head__sub">Sorted by last update</p>
+            </div>
+          </div>
+          <div class="dash-table-wrap">
+            <table class="table table-hover mb-0 dashboard-roster-table dashboard-roster-table--recent">
+              <thead>
+                <tr>
+                  <th class="dashboard-roster-table__col-name">Name</th>
+                  <th class="dashboard-roster-table__col-cnic">CNIC</th>
+                  <th class="dashboard-roster-table__col-phone">Phone</th>
+                  <th class="dashboard-roster-table__col-visit">Last visit</th>
+                  <th class="dashboard-roster-table__col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let patient of recentPatients">
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.name">{{ patient.name }}</td>
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.cnic || ''">{{ patient.cnic ||
+                    'N/A' }}</td>
+                  <td class="dashboard-roster-table__cell-ellipsis" [title]="patient.phone || ''">{{ patient.phone ||
+                    'N/A' }}</td>
+                  <td class="dashboard-roster-table__cell-ellipsis dashboard-roster-table__cell-nowrap"
+                    [title]="patient.updatedAt ? (patient.updatedAt | date:'short') : ''">{{ patient.updatedAt ?
+                    (patient.updatedAt | date:'short') : 'N/A' }}</td>
+                  <td class="dashboard-roster-table__col-actions">
+                    <app-dashboard-table-actions [viewLink]="['/doctor-portal/patient-details', patient.id]" />
+                  </td>
+                </tr>
+                <tr *ngIf="recentPatients.length === 0">
+                  <td colspan="5" class="text-center text-muted py-5 dash-table-empty">No recent patients</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="dash-shortcuts-card fade-in-up" [style.animation-delay]="'720ms'">
+          <div class="dash-card-head">
+            <div>
+              <h3 class="dash-card-head__title">Shortcuts</h3>
+              <p class="dash-card-head__sub">Jump to common tasks</p>
+            </div>
+          </div>
+          <nav class="dash-links-nav" aria-label="Portal shortcuts">
+            <a routerLink="/doctor-portal/patient-management" class="dash-link-row">
+              <span class="dash-link-row__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="dash-link-row__text">Patient management</span>
+              <span class="dash-link-row__chev" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+            <a routerLink="/doctor-portal/patient-analytics" class="dash-link-row">
+              <span class="dash-link-row__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+                    stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </span>
+              <span class="dash-link-row__text">Patient analytics</span>
+              <span class="dash-link-row__chev" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+            <a routerLink="/doctor-portal/secure-communication" class="dash-link-row">
+              <span class="dash-link-row__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="dash-link-row__text">Secure communication</span>
+              <span class="dash-link-row__chev" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+            <a routerLink="/doctor-portal/document-storage" class="dash-link-row">
+              <span class="dash-link-row__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M22 19C22 19.5304 21.7893 20.0391 21.4142 20.4142C21.0391 20.7893 20.5304 21 20 21H4C3.46957 21 2.96086 20.7893 2.58579 20.4142C2.21071 20.0391 2 19.5304 2 19V5C2 4.46957 2.21071 3.96086 2.58579 3.58579C2.96086 3.21071 3.46957 3 4 3H9L11 6H20C20.5304 6 21.0391 6.21071 21.4142 6.58579C21.7893 6.96086 22 7.46957 22 8V19Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="dash-link-row__text">Document storage</span>
+              <span class="dash-link-row__chev" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+            <a routerLink="/doctor-portal/notifications" class="dash-link-row">
+              <span class="dash-link-row__icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8ZM13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span class="dash-link-row__text">Notifications</span>
+              <span class="dash-link-row__chev" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

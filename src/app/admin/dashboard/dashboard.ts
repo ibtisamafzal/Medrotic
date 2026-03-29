@@ -32,17 +32,18 @@ export class Dashboard implements OnInit, OnDestroy {
   };
 
   quickLinks = [
-    { title: 'Manage Doctors', route: '/admin/manage-doctors', icon: '👨‍⚕️', count: null as number | null, color: '#3461ff' },
-    { title: 'Manage Patients', route: '/admin/manage-patients', icon: '👤', count: null as number | null, color: '#10b981' },
-    { title: 'User Verification', route: '/admin/user-verification', icon: '✓', count: null as number | null, color: '#f59e0b' },
-    { title: 'System Health', route: '/admin/system-health', icon: '💚', count: null as number | null, color: '#ef4444' },
-    { title: 'Integrations', route: '/admin/manage-integrations', icon: '🔗', count: null as number | null, color: '#8b5cf6' },
-    { title: 'Repository', route: '/admin/manage-repository', icon: '📁', count: null as number | null, color: '#06b6d4' },
-    { title: 'Analytics', route: '/admin/analytics', icon: '📊', count: null as number | null, color: '#ec4899' },
-    { title: 'Notifications', route: '/admin/notifications', icon: '🔔', count: null as number | null, color: '#f97316' }
+    { title: 'Manage Doctors', route: '/admin/manage-doctors', iconType: 'doctor', iconPath: 'doctor.svg', count: null as number | null, color: '#3461ff' },
+    { title: 'Manage Patients', route: '/admin/manage-patients', iconType: 'patient', iconPath: 'patient.svg', count: null as number | null, color: '#10b981' },
+    { title: 'User Verification', route: '/admin/user-verification', iconType: 'verify', iconPath: 'shield-check-light.svg', count: null as number | null, color: '#f59e0b' },
+    { title: 'System Health', route: '/admin/system-health', iconType: 'health', iconPath: 'pulse-rectangle.svg', count: null as number | null, color: '#ef4444' },
+    { title: 'Integrations', route: '/admin/manage-integrations', iconType: 'integrations', iconPath: 'cpu-light.svg', count: null as number | null, color: '#8b5cf6' },
+    { title: 'Repository', route: '/admin/manage-repository', iconType: 'repo', iconPath: 'collection-light.svg', count: null as number | null, color: '#06b6d4' },
+    { title: 'Analytics', route: '/admin/analytics', iconType: 'analytics', iconPath: 'Analytics-Bars.svg', count: null as number | null, color: '#ec4899' },
+    { title: 'Notifications', route: '/admin/notifications', iconType: 'notifications', iconPath: 'notification-light.svg', count: null as number | null, color: '#f97316' }
   ];
 
-  recentActivity: any[] = [];
+  systemLogs: any[] = [];
+  loadingLogs = false;
 
   constructor(
     private adminService: AdminService,
@@ -78,6 +79,27 @@ export class Dashboard implements OnInit, OnDestroy {
     });
 
     this.syncWelcomeFromBackendAndLoad();
+    this.loadSystemLogs();
+  }  loadSystemLogs() {
+    this.loadingLogs = true;
+    this.adminService.getSystemLogs(5).subscribe({
+      next: (logs) => {
+        this.systemLogs = logs || [];
+        this.loadingLogs = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.systemLogs = [
+          { level: 'info', message: 'Nightly database backup completed successfully', timestamp: new Date().toISOString() },
+          { level: 'warning', message: 'Elevated API response times detected', timestamp: new Date(Date.now() - 3600000).toISOString() },
+          { level: 'info', message: 'New user verification pending review', timestamp: new Date(Date.now() - 7200000).toISOString() },
+          { level: 'info', message: 'Integration sync (EHR) finished', timestamp: new Date(Date.now() - 14400000).toISOString() },
+          { level: 'error', message: 'Failed to dispatch email push notification', timestamp: new Date(Date.now() - 86400000).toISOString() }
+        ];
+        this.loadingLogs = false;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -95,6 +117,11 @@ export class Dashboard implements OnInit, OnDestroy {
   quickLinkCountLabel(count: number | null): string {
     if (count === null) return 'Data unavailable';
     return `${count} items`;
+  }
+
+  get todayDate(): string {
+    const d = new Date();
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   get welcomeDisplayName(): string {

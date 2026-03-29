@@ -3,24 +3,121 @@
 }
 
 .profile-settings-page {
-  .page-header {
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-    }
+  padding-bottom: 2rem;
+}
 
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-    }
+.ps-hero {
+  &__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #001047;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.02em;
   }
 
-  .card {
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-radius: 12px;
+  &__sub {
+    margin: 0;
+    color: rgba(0, 16, 71, 0.62);
+    max-width: 40rem;
+    line-height: 1.55;
   }
 }
 
+.ps-card {
+  background: #fff;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 22px rgba(0, 16, 71, 0.06);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &--accent {
+    border-color: rgba(52, 97, 255, 0.2);
+    box-shadow: 0 4px 26px rgba(52, 97, 255, 0.1);
+
+    .ps-card__head {
+      background: linear-gradient(135deg, rgba(52, 97, 255, 0.08) 0%, rgba(52, 97, 255, 0.02) 100%);
+    }
+  }
+
+  &__head {
+    padding: 1.15rem 1.35rem;
+    border-bottom: 1px solid rgba(0, 16, 71, 0.07);
+    background: linear-gradient(180deg, #fafbfd 0%, #fff 100%);
+  }
+
+  &__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #001047;
+    margin: 0 0 0.25rem 0;
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgba(0, 16, 71, 0.55);
+    line-height: 1.45;
+  }
+
+  &__body {
+    padding: 1.25rem 1.35rem 1.35rem;
+    flex: 1;
+  }
+}
+
+.ps-alert {
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ps-field {
+  margin-bottom: 1.1rem;
+
+  &:last-of-type {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.ps-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(0, 16, 71, 0.45);
+  margin-bottom: 0.4rem;
+}
+
+.ps-input {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 16, 71, 0.12);
+  font-size: 0.9375rem;
+
+  &:focus {
+    border-color: rgba(52, 97, 255, 0.45);
+    box-shadow: 0 0 0 3px rgba(52, 97, 255, 0.12);
+  }
+
+  &[readonly] {
+    background: rgba(0, 16, 71, 0.04);
+    cursor: default;
+  }
+}
+
+.ps-hint {
+  font-size: 0.75rem;
+  color: rgba(0, 16, 71, 0.5);
+  margin: 0.35rem 0 0;
+}
+
+.ps-submit {
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.5rem 1.25rem;
+}

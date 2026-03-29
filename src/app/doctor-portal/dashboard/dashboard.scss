@@ -1,510 +1,1036 @@
+// ============================================
+// DOCTOR DASHBOARD — Modern Redesign
+// Follows the Medrotic design system: #3461ff primary,
+// #001047 text, Rubik headings, Public Sans body
+// ============================================
+
 :host {
   display: block;
 }
 
-// Animations
+// ─── Animations ───
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes countUp {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(52, 97, 255, 0.25); }
+  50%      { box-shadow: 0 0 0 8px rgba(52, 97, 255, 0); }
+}
+
+// ─── Theme tokens ───
+$primary: #3461ff;
+$primary-hover: #2851e6;
+$text:    #001047;
+$text-muted: rgba(0, 16, 71, 0.58);
+$text-faint: rgba(0, 16, 71, 0.42);
+$border:  rgba(0, 16, 71, 0.08);
+$surface: #ffffff;
+$surface-soft: #f8fafc;
+$shadow-sm: 0 2px 8px rgba(0, 16, 71, 0.04);
+$shadow-md: 0 4px 22px rgba(0, 16, 71, 0.06);
+$shadow-lg: 0 14px 36px rgba(0, 16, 71, 0.1);
+$radius:  16px;
+$radius-sm: 12px;
+$emerald: #10b981;
+$amber:   #f59e0b;
+$red:     #ef4444;
+
+// ─── Utility ───
+.fade-in-up  { animation: fadeInUp 0.6s ease-out both; }
+.fade-in-down { animation: fadeInDown 0.6s ease-out both; }
+.count-up    { animation: countUp 0.5s ease-out 0.15s both; }
+
+// ============================================
+// LAYOUT
+// ============================================
 .dashboard-page {
-  .page-header {
-    animation: fadeInDown 0.6s ease-out;
-    
-    .page-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001047;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
+  max-width: 100%;
+}
 
-    .page-subtitle {
-      color: rgba(0, 16, 71, 0.6);
-      margin: 0;
-      font-size: 1rem;
-    }
-  }
+// ─── Sections ───
+.dash-section {
+  margin-bottom: 1.75rem;
 
-  .metric-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 1.5rem;
+  &--last { margin-bottom: 0; }
+
+  &__label {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    height: 100%;
-    min-height: 120px;
-    animation: fadeInUp 0.6s ease-out both;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    }
-
-    .metric-icon {
-      width: 56px;
-      height: 56px;
-      min-width: 56px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.3s ease;
-    }
-
-    &:hover .metric-icon {
-      transform: scale(1.1);
-    }
-
-    .metric-content {
-      flex: 1;
-      min-width: 0;
-
-      .metric-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #001047;
-        margin: 0 0 0.25rem 0;
-        line-height: 1;
-        animation: countUp 0.6s ease-out 0.3s both;
-      }
-
-      .metric-label {
-        color: rgba(0, 16, 71, 0.6);
-        margin: 0;
-        font-size: 0.875rem;
-        font-weight: 500;
-      }
-
-      .metric-viz {
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid rgba(0, 16, 71, 0.06);
-      }
-
-      .metric-viz__track {
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(0, 16, 71, 0.06);
-        overflow: hidden;
-      }
-
-      .metric-viz__fill {
-        height: 100%;
-        border-radius: 999px;
-        min-width: 4px;
-        transition: width 0.45s ease;
-      }
-
-      .metric-viz__caption {
-        display: block;
-        margin-top: 0.35rem;
-        font-size: 0.6875rem;
-        font-weight: 600;
-        color: rgba(0, 16, 71, 0.45);
-        letter-spacing: 0.02em;
-      }
-    }
-  }
-
-  .doctor-snapshot-card {
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid rgba(0, 16, 71, 0.08);
-    box-shadow: 0 2px 14px rgba(0, 16, 71, 0.05);
-    padding: 1.35rem 1.5rem;
-    height: 100%;
-
-    &__title {
-      font-size: 1.0625rem;
-      font-weight: 700;
-      color: #001047;
-      margin: 0 0 0.25rem 0;
-    }
-
-    &__sub {
-      font-size: 0.8125rem;
-      color: rgba(0, 16, 71, 0.52);
-      margin: 0 0 0.5rem 0;
-    }
-
-    &--wide {
-      min-height: 100%;
-    }
-  }
-
-  .doctor-donut-wrap {
-    display: flex;
-    justify-content: center;
-    padding: 0.5rem 0 1rem;
-  }
-
-  .doctor-donut {
-    position: relative;
-    width: 132px;
-    height: 132px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgba(0, 16, 71, 0.06);
-  }
-
-  .doctor-donut__hole {
-    position: absolute;
-    inset: 22%;
-    background: #ffffff;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 3px rgba(0, 16, 71, 0.06);
-  }
-
-  .doctor-donut__pct {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #001047;
-    line-height: 1.1;
-  }
-
-  .doctor-donut__lab {
-    font-size: 0.65rem;
+    gap: 0.45rem;
+    font-size: 0.6875rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: rgba(0, 16, 71, 0.45);
-  }
+    letter-spacing: 0.07em;
+    color: $text-faint;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0;
 
-  .doctor-snapshot-legend {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.8125rem;
-    color: rgba(0, 16, 71, 0.65);
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.35rem;
-
-      strong {
-        color: #001047;
-        margin-left: auto;
-      }
+    svg {
+      opacity: 0.55;
+      flex-shrink: 0;
     }
   }
+}
 
-  .doctor-snapshot-legend__swatch {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
+// ============================================
+// HERO BANNER
+// ============================================
+.dash-hero {
+  animation: fadeInDown 0.6s ease-out;
+  margin-bottom: 1.75rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid $border;
+  border-radius: $radius;
+  background: linear-gradient(135deg, #ffffff 0%, rgba($primary, 0.06) 50%, rgba($primary, 0.12) 100%);
+  box-shadow: $shadow-md;
+  position: relative;
+  overflow: hidden;
 
-    &--active {
-      background: #10b981;
-    }
-
-    &--rest {
-      background: #e8ecf4;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 240px;
+    height: 100%;
+    background: radial-gradient(circle at 80% 30%, rgba($primary, 0.08) 0%, transparent 70%);
+    pointer-events: none;
   }
 
-  .doctor-mix-bar {
-    display: flex;
-    height: 14px;
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: 0.75rem;
-    background: rgba(0, 16, 71, 0.05);
-  }
-
-  .doctor-mix-bar__seg {
-    min-width: 4px;
-    transition: flex-grow 0.4s ease;
-
-    &--rx {
-      background: linear-gradient(90deg, #f59e0b, #fbbf24);
-    }
-
-    &--xr {
-      background: linear-gradient(90deg, #ef4444, #fb7185);
-    }
-  }
-
-  .doctor-mix-labels {
+  &__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-top: 0.85rem;
-    font-size: 0.8125rem;
-    color: rgba(0, 16, 71, 0.65);
-
-    strong {
-      color: #001047;
-      margin-left: 0.25rem;
-    }
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
   }
 
-  .doctor-mix-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 0.35rem;
-    vertical-align: middle;
-
-    &--rx {
-      background: #f59e0b;
-    }
-
-    &--xr {
-      background: #ef4444;
-    }
+  &__text {
+    flex: 1;
+    min-width: 240px;
   }
 
-  .section-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    height: 100%;
-    transition: all 0.3s ease;
-    animation: fadeInUp 0.6s ease-out both;
-
-    &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    .section-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #001047;
-      margin: 0;
-    }
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $primary;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba($primary, 0.08);
   }
 
-  .action-card {
-    display: flex;
-    flex-direction: column;
-    min-height: 200px;
-
-    .action-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-
-      .action-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-
-        &.patients {
-          background: rgba(52, 97, 255, 0.1);
-          color: #3461ff;
-        }
-
-        &.messages {
-          background: rgba(16, 185, 129, 0.1);
-          color: #10b981;
-        }
-
-        &.upload {
-          background: rgba(245, 158, 11, 0.1);
-          color: #f59e0b;
-        }
-      }
-
-      .section-title {
-        font-size: 1.125rem;
-        margin: 0;
-      }
-    }
-
-    .action-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-
-      // Style buttons to match project standards
-      .btn {
-        font-family: 'Public Sans', sans-serif;
-        font-weight: 500;
-        text-transform: capitalize;
-        text-decoration: none !important;
-        border-radius: 8px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &:hover:not(:disabled) {
-          text-decoration: none !important;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
-        }
-
-        &:active:not(:disabled) {
-          transform: translateY(0);
-          text-decoration: none !important;
-        }
-      }
-
-      .btn-primary {
-        background-color: #3461ff;
-        border-color: #3461ff;
-        color: #ffffff;
-
-        &:hover:not(:disabled) {
-          background-color: #2851e6;
-          border-color: #2851e6;
-          text-decoration: none !important;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
-        }
-
-        &:active:not(:disabled) {
-          transform: translateY(0);
-          text-decoration: none !important;
-        }
-      }
-
-      .btn-outline-primary {
-        &:hover:not(:disabled) {
-          text-decoration: none !important;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(52, 97, 255, 0.2);
-        }
-
-        &:active:not(:disabled) {
-          transform: translateY(0);
-          text-decoration: none !important;
-        }
-      }
-
-      .action-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #001047;
-        line-height: 1;
-        margin-bottom: 0.5rem;
-      }
-
-      .action-label {
-        color: rgba(0, 16, 71, 0.6);
-        margin: 0;
-        font-size: 0.875rem;
-      }
-    }
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
   }
 
-  .quick-link-item {
+  &__sub {
+    color: $text-muted;
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  &__actions {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.875rem 1rem;
-    background: #f5f6f9;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #001047;
-    transition: all 0.3s ease;
-    font-weight: 500;
+    flex-shrink: 0;
+  }
 
-    &:hover {
-      background: rgba(52, 97, 255, 0.1);
-      color: #3461ff;
-      transform: translateX(4px);
+  &__date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $text-muted;
+    padding: 0.4rem 0.85rem;
+    border-radius: $radius-sm;
+    background: rgba($primary, 0.05);
+    border: 1px solid rgba($primary, 0.1);
+
+    svg { opacity: 0.6; }
+  }
+
+  &__logout {
+    flex-shrink: 0;
+  }
+}
+
+// ============================================
+// METRIC CARDS
+// ============================================
+.dash-metric {
+  background: $surface;
+  border-radius: $radius;
+  padding: 1.25rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: $shadow-sm;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid $border;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out both;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: $radius $radius 0 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &--patients::before { background: linear-gradient(90deg, $primary, #6b8eff); }
+  &--active::before   { background: linear-gradient(90deg, $emerald, #34d399); }
+  &--rx::before       { background: linear-gradient(90deg, $amber, #fbbf24); }
+  &--xr::before       { background: linear-gradient(90deg, $red, #fb7185); }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+
+    &::before { opacity: 1; }
+  }
+
+  &:hover &__icon-ring {
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  &__icon-ring {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 0.85rem;
+
+    svg { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15)); }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 0.15rem 0;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  &__label {
+    color: $text-muted;
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  &__bar {
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 16, 71, 0.06);
+  }
+
+  &__bar-track {
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(0, 16, 71, 0.06);
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    min-width: 4px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &__bar-caption {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: $text-faint;
+    letter-spacing: 0.02em;
+  }
+}
+
+// ============================================
+// PRACTICE INSIGHT CARDS (admin-style accent cards)
+// ============================================
+.dash-insight-card {
+  position: relative;
+  height: 100%;
+  background: $surface;
+  border-radius: 18px;
+  border: 1px solid $border;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-lg;
+  }
+
+  &__accent {
+    height: 4px;
+    width: 100%;
+
+    &--emerald { background: linear-gradient(90deg, #059669, #34d399); }
+    &--amber   { background: linear-gradient(90deg, #d97706, #fbbf24); }
+    &--blue    { background: linear-gradient(90deg, $primary, #60a5fa); }
+  }
+
+  &__inner {
+    padding: 1.35rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  &__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: $text-faint;
+  }
+
+  &__icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &--emerald { background: rgba($emerald, 0.12); color: #047857; }
+    &--amber   { background: rgba($amber, 0.12); color: #b45309; }
+    &--blue    { background: rgba($primary, 0.12); color: $primary; }
+  }
+
+  &__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    color: $text-muted;
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+// ─── Donut ───
+.doctor-donut-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.doctor-donut {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 16, 71, 0.06);
+  transition: transform 0.3s ease;
+
+  &:hover { transform: scale(1.04); }
+}
+
+.doctor-donut__hole {
+  position: absolute;
+  inset: 22%;
+  background: $surface;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 16, 71, 0.08);
+}
+
+.doctor-donut__pct {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: $text;
+  line-height: 1.1;
+}
+
+.doctor-donut__lab {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $text-faint;
+}
+
+.doctor-snapshot-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(0, 16, 71, 0.65);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+
+    strong { color: $text; margin-left: auto; }
+  }
+}
+
+.doctor-snapshot-legend__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+
+  &--active { background: $emerald; }
+  &--rest   { background: #e8ecf4; }
+}
+
+// ─── Mix bar ───
+.doctor-mix-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.75rem;
+  background: rgba(0, 16, 71, 0.05);
+}
+
+.doctor-mix-bar__seg {
+  min-width: 4px;
+  transition: flex-grow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--rx { background: linear-gradient(90deg, $amber, #fbbf24); }
+  &--xr { background: linear-gradient(90deg, $red, #fb7185); }
+}
+
+.doctor-mix-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.85rem;
+  font-size: 0.8125rem;
+  color: rgba(0, 16, 71, 0.65);
+
+  strong { color: $text; margin-left: 0.25rem; }
+}
+
+.doctor-mix-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+
+  &--rx { background: $amber; }
+  &--xr { background: $red; }
+}
+
+.dash-empty-hint {
+  color: $text-muted;
+  font-size: 0.8125rem;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+// ============================================
+// QUICK ACTIONS
+// ============================================
+.dash-action {
+  background: $surface;
+  border-radius: $radius;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeInUp 0.6s ease-out both;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba($primary, 0.03) 100%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-lg;
+
+    &::before { opacity: 1; }
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &--primary { background: rgba($primary, 0.1); color: $primary; }
+    &--success { background: rgba($emerald, 0.1); color: $emerald; }
+    &--amber   { background: rgba($amber, 0.1); color: $amber; }
+  }
+
+  &:hover &__icon { transform: scale(1.08); }
+
+  &__body { flex: 1; }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 0.25rem;
+  }
+
+  &__text {
+    font-size: 0.8125rem;
+    color: $text-muted;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  &__stat {
+    font-weight: 700;
+    color: $text;
+    font-size: 1.125rem;
+  }
+
+  &__btn {
+    align-self: flex-start;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+// ============================================
+// TABLE CARDS (appointments, roster, recent)
+// ============================================
+.dash-table-card,
+.dash-uploads-card,
+.dash-shortcuts-card {
+  background: $surface;
+  border-radius: $radius;
+  border: 1px solid $border;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out both;
+
+  &:hover {
+    box-shadow: 0 6px 24px rgba(0, 16, 71, 0.08);
+  }
+}
+
+.home-data-card--compact { min-height: 220px; }
+.home-data-card--regular { min-height: 300px; }
+.home-data-card--expanded { min-height: 380px; }
+
+// ─── Card head ───
+.dash-card-head {
+  padding: 1.15rem 1.35rem 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(0, 16, 71, 0.06);
+  background: linear-gradient(180deg, #fafbfd 0%, #ffffff 100%);
+
+  &--row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  &__sub {
+    font-size: 0.75rem;
+    color: $text-muted;
+    margin: 0.15rem 0 0;
+  }
+}
+
+// ─── Tables ───
+.dash-table-wrap {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.dash-appt-table,
+.dashboard-roster-table {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 0;
+
+  th {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: $text-faint;
+    border-bottom: 1px solid $border;
+    white-space: nowrap;
+    padding: 0.65rem 0.75rem;
+    background: transparent;
+  }
+
+  td {
+    font-size: 0.8125rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 16, 71, 0.05);
+    padding: 0.65rem 0.75rem;
+    color: rgba(0, 16, 71, 0.82);
+    transition: color 0.15s ease;
+  }
+
+  tbody tr:hover td {
+    color: $primary;
+  }
+}
+
+.dashboard-roster-table {
+  &__col-name    { width: 30%; }
+  &__col-cnic    { width: 25%; }
+  &__col-phone   { width: 27%; }
+  &__col-visit   { width: 22%; }
+  &__col-actions { width: 18%; text-align: center; }
+
+  &__cell-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 0;
+  }
+
+  &__cell-nowrap { white-space: nowrap; }
+
+  .dashboard-table-actions {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  .dashboard-table-actions .btn {
+    padding: 0.28rem 0.4rem;
+  }
+}
+
+.dashboard-roster-table--recent {
+  .dashboard-roster-table__col-name    { width: 24%; }
+  .dashboard-roster-table__col-cnic    { width: 20%; }
+  .dashboard-roster-table__col-phone   { width: 20%; }
+  .dashboard-roster-table__col-visit   { width: 20%; }
+  .dashboard-roster-table__col-actions { width: 16%; }
+}
+
+// ─── Pill badges ───
+.dash-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: rgba($primary, 0.08);
+  color: $primary;
+
+  &--scheduled {
+    background: rgba($amber, 0.12);
+    color: #b45309;
+  }
+
+  &--confirmed {
+    background: rgba($emerald, 0.12);
+    color: #047857;
+  }
+}
+
+.dash-table-empty {
+  font-size: 0.8125rem;
+  color: $text-muted;
+}
+
+// ============================================
+// UPLOAD LIST
+// ============================================
+.dash-upload-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.dash-upload-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.35rem;
+  border-bottom: 1px solid rgba(0, 16, 71, 0.05);
+  transition: background 0.15s ease;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: rgba($primary, 0.02); }
+
+  &__badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+
+    &--rx { background: rgba($amber, 0.12); color: #b45309; }
+    &--xr { background: rgba($red, 0.12); color: #b91c1c; }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  &__title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    font-size: 0.6875rem;
+    color: $text-muted;
+  }
+
+  &__time {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: $text-faint;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+.dash-upload-empty {
+  font-size: 0.8125rem;
+}
+
+// ============================================
+// SHORTCUTS NAV
+// ============================================
+.dash-links-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  color: $text;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(0, 16, 71, 0.05);
+
+  &:last-child { border-bottom: none; }
+
+  &:hover {
+    background: rgba($primary, 0.04);
+    color: $primary;
+    padding-left: 1.5rem;
+
+    .dash-link-row__chev svg {
+      transform: translateX(3px);
     }
+  }
+
+  &__icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 10px;
+    background: $surface-soft;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s ease, color 0.2s ease;
+    color: $text-muted;
+  }
+
+  &:hover &__icon {
+    background: rgba($primary, 0.08);
+    color: $primary;
+  }
+
+  &__text {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  &__chev {
+    flex-shrink: 0;
+    color: $text-faint;
+    display: flex;
+    align-items: center;
 
     svg {
-      flex-shrink: 0;
+      transition: transform 0.2s ease;
     }
-  }
-
-  .table-responsive {
-    overflow-x: hidden;
-    max-width: 100%;
-  }
-
-  .table {
-    table-layout: fixed;
-    width: 100%;
   }
 }
 
+// ============================================
+// RESPONSIVE: <=1280px (Standard desktop sizing)
+// ============================================
+@media (max-width: 1280px) {
+  .dash-hero {
+    padding: 1.1rem 1.25rem;
+
+    &__title { font-size: 1.5rem; }
+    &__sub   { font-size: 0.875rem; }
+  }
+
+  .dash-metric {
+    padding: 1rem 1.1rem;
+
+    &__icon-ring {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 11px;
+      margin-bottom: 0.65rem;
+
+      svg { width: 18px; height: 18px; }
+    }
+
+    &__value { font-size: 1.5rem; }
+    &__label { font-size: 0.75rem; }
+  }
+
+  .dash-action {
+    padding: 1.1rem 1.25rem;
+
+    &__icon {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  .dash-card-head {
+    padding: 0.9rem 1.1rem 0.7rem;
+
+    &__title { font-size: 0.9375rem; }
+  }
+}
+
+// ============================================
+// RESPONSIVE: <=991px (Tablet)
+// ============================================
+@media (max-width: 991px) {
+  .dash-hero {
+    &__title { font-size: 1.375rem; }
+    &__actions { flex-wrap: wrap; }
+  }
+
+  .dash-insight-card__inner { min-height: 180px; }
+}
+
+// ============================================
+// RESPONSIVE: <=767px (Mobile)
+// ============================================
 @media (max-width: 767px) {
-  .dashboard-page {
-    .page-header .page-title {
-      font-size: 1.75rem;
+  .dash-hero {
+    padding: 1rem 1.15rem;
+
+    &__title { font-size: 1.25rem; }
+    &__date  { display: none; }
+  }
+
+  .dash-metric {
+    padding: 0.9rem;
+
+    &__icon-ring {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+
+      svg { width: 16px; height: 16px; }
     }
 
-    .metric-card {
-      min-height: 100px;
-      padding: 1rem;
+    &__value { font-size: 1.25rem; }
+    &__label { font-size: 0.6875rem; }
+  }
+
+  .dash-action {
+    padding: 1rem 1.15rem;
+    gap: 0.5rem;
+
+    &__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
     }
 
-    .action-card {
-      min-height: 160px;
+    &__title { font-size: 0.9375rem; }
+    &__text  { font-size: 0.75rem; }
+    &__btns  { flex-direction: column; }
+  }
+
+  .dash-card-head {
+    padding: 0.85rem 1rem 0.7rem;
+  }
+
+  .dash-link-row {
+    padding: 0.65rem 1rem;
+
+    &__icon {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+    }
+
+    &__text { font-size: 0.8125rem; }
+  }
+
+  .dash-upload-item {
+    padding: 0.65rem 1rem;
+
+    &__badge {
+      width: 30px;
+      height: 30px;
+      font-size: 0.625rem;
     }
   }
 }
 
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out both;
+// ============================================
+// RESPONSIVE: <=575px (Small mobile)
+// ============================================
+@media (max-width: 575px) {
+  .dash-metric {
+    text-align: center;
+
+    &__icon-ring {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .dash-hero__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
-.fade-in-down {
-  animation: fadeInDown 0.6s ease-out both;
+// ============================================
+// Force tables to use fixed layout
+// ============================================
+.table {
+  table-layout: fixed;
+  width: 100%;
 }
-
-.count-up {
-  animation: countUp 0.6s ease-out 0.3s both;
-}
-

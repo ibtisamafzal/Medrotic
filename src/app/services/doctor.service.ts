@@ -186,6 +186,31 @@ export class DoctorService {
     return (cnic || '').replace(/\D/g, '');
   }
 
+  /** Backend lists may occasionally include staff/doctor accounts — hide them from patient workflows. */
+  private isExcludedNonPatientRow(p: any): boolean {
+    if (p == null) return true;
+    if (p.isPatient === false || p.IsPatient === false) return true;
+    const hasPatientMarker = p.isPatient === true || p.IsPatient === true;
+    if (!hasPatientMarker) {
+      const doctorLikeFields = [
+        p.specialization,
+        p.Specialization,
+        p.specialty,
+        p.Specialty,
+        p.hospital,
+        p.HospitalName,
+        p.license,
+        p.LicenseNumber
+      ];
+      if (doctorLikeFields.some((x) => String(x ?? '').trim().length > 0)) return true;
+    }
+    const role = String(p.role ?? p.Role ?? p.userRole ?? p.UserRole ?? '').toLowerCase();
+    if (role && (role.includes('doctor') || role.includes('admin') || role.includes('staff'))) return true;
+    const kind = String(p.userType ?? p.UserType ?? p.accountType ?? p.AccountType ?? '').toLowerCase();
+    if (kind === 'doctor' || kind === 'admin') return true;
+    return false;
+  }
+
   private readonly localPatientCacheKey = 'doctor_registered_patients_cache';
 
   private getLocalPatientsCache(): Patient[] {
@@ -271,7 +296,9 @@ export class DoctorService {
     return this.http.get<any>(`${this.baseUrl}/patients`, { params }).pipe(
       this.extractData<Patient[]>(),
       map((items) => {
-        const apiPatients = (items || []).map((p: any) => ({
+        const apiPatients = (items || [])
+          .filter((p: any) => !this.isExcludedNonPatientRow(p))
+          .map((p: any) => ({
           ...p,
           name: p.name ?? p.fullName ?? '',
           phone: p.phone ?? p.phoneNumber ?? p.phone ?? '',
@@ -280,16 +307,18 @@ export class DoctorService {
         const localPatients = this.getLocalPatientsCache();
         const merged = [...apiPatients];
         for (const p of localPatients) {
+          if (this.isExcludedNonPatientRow(p)) continue;
           const exists = merged.some((m) =>
             (m.id && p.id && m.id === p.id) ||
             (!!m.cnic && !!p.cnic && this.normalizeCnic(m.cnic) === this.normalizeCnic(p.cnic))
           );
           if (!exists) merged.push(p);
         }
-        if (!search) return merged;
+        const patientOnly = merged.filter((p) => !this.isExcludedNonPatientRow(p));
+        if (!search) return patientOnly;
         const term = search.toLowerCase().trim();
         const normalizedSearch = this.normalizeCnic(search);
-        return merged.filter((p) =>
+        return patientOnly.filter((p) =>
           (p.name || '').toLowerCase().includes(term) ||
           (p.email || '').toLowerCase().includes(term) ||
           (p.phone || '').toLowerCase().includes(term) ||

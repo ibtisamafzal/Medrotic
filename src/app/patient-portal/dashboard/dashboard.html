@@ -1,222 +1,230 @@
 <div class="dashboard-page">
-  <div class="page-header mb-4 fade-in-down">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h2 class="page-title">Welcome, {{ welcomeDisplayName }}!</h2>
-        <p class="page-subtitle">Overview of your health summary and recent activity</p>
+  <!-- ─── Hero Banner ─── -->
+  <header class="dash-hero fade-in-down">
+    <div class="dash-hero__inner">
+      <div class="dash-hero__text">
+        <span class="dash-hero__eyebrow">
+          <img src="images/svg-icons/healtcare.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Patient portal
+        </span>
+        <h2 class="dash-hero__title">Welcome, {{ welcomeDisplayName }}!</h2>
+        <p class="dash-hero__sub">Overview of your health summary and recent activity</p>
       </div>
-      <button class="btn btn-outline-danger btn-sm" (click)="logout()" title="Logout">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2H6"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M10.6667 11.3333L14 8L10.6667 4.66667" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M14 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        Logout
-      </button>
+      <div class="dash-hero__actions">
+        <span class="dash-hero__date">
+          <img src="images/svg-icons/calendar-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          {{ todayDate }}
+        </span>
+        <button class="btn btn-outline-danger btn-sm dash-hero__logout" (click)="logout()" title="Logout">
+          <img src="images/svg-icons/logout-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+          Logout
+        </button>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Health Summary Cards -->
-  <div class="row g-4 mb-4">
-    <!-- Skeleton loaders while data loads -->
-    <ng-container *ngIf="loading">
-      <div class="col-6 col-md-6 col-lg-3" *ngFor="let _ of [1,2,3,4]">
-        <div class="metric-card skeleton-card">
-          <div class="skeleton-icon"></div>
-          <div class="skeleton-content">
-            <div class="skeleton-line skeleton-line--wide"></div>
-            <div class="skeleton-line skeleton-line--narrow"></div>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <!-- Real metric cards -->
-    <ng-container *ngIf="!loading">
-      <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
-        { label: 'Blood Pressure', value: healthSummary.recentMetrics.bloodPressure, icon: 'bp', color: '#3461ff', unit: 'mmHg' },
-        { label: 'Heart Rate', value: healthSummary.recentMetrics.heartRate, icon: 'hr', color: '#ef4444', unit: 'bpm' },
-        { label: 'Temperature', value: healthSummary.recentMetrics.temperature, icon: 'temp', color: '#f59e0b', unit: '°F' },
-        { label: 'Weight', value: healthSummary.recentMetrics.weight, icon: 'weight', color: '#10b981', unit: 'kg' }
-      ]; trackBy: trackByMetricLabel; let i = index">
-        <div class="metric-card fade-in-up" [style.animation-delay]="(i * 100) + 'ms'">
-          <div class="metric-icon" [style.background]="'rgba(' + getRgbFromHex(metric.color) + ', 0.1)'">
-            <svg *ngIf="metric.icon === 'bp'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-              <path d="M2 17L12 22L22 17" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-              <path d="M2 12L12 17L22 12" [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            <svg *ngIf="metric.icon === 'hr'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.57831 8.50903 2.99871 7.05 2.99871C5.59096 2.99871 4.19169 3.57831 3.16 4.61C2.1283 5.64169 1.54871 7.04097 1.54871 8.5C1.54871 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7564 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39464C21.7564 5.72718 21.351 5.12075 20.84 4.61Z"
-                [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg *ngIf="metric.icon === 'temp'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M14 4V10.54C15.22 11.23 16 12.52 16 14C16 16.21 14.21 18 12 18C9.79 18 8 16.21 8 14C8 12.52 8.78 11.23 10 10.54V4H14Z"
-                [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg *ngIf="metric.icon === 'weight'" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 2H18C19.1 2 20 2.9 20 4V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4C4 2.9 4.9 2 6 2Z"
-                [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              <path
-                d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z"
-                [attr.stroke]="metric.color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <div class="metric-content">
-            <h3 class="metric-value">
-              <ng-container *ngIf="hasRecordedMetric(metric.value); else noMetric">
-                {{ metric.value }} <span class="metric-unit">{{ metric.unit }}</span>
-              </ng-container>
-              <ng-template #noMetric><span class="text-muted fs-6 fw-normal">No data recorded</span></ng-template>
-            </h3>
-            <p class="metric-label">{{ metric.label }}</p>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-  </div>
-
-  <!-- Care overview: real counts from appointments, documents, notifications, and clinical timeline -->
-  <div class="row g-4 mb-4">
-    <div class="col-6 col-md-3">
-      <div class="section-card p-3 h-100">
-        <p class="text-muted small mb-1">Last clinical activity</p>
-        <p class="mb-0 fw-semibold" *ngIf="healthSummary.lastCheckup; else noClinical">
-          {{ healthSummary.lastCheckup | date:'mediumDate' }}
-        </p>
-        <ng-template #noClinical><span class="text-muted">No visits or documents yet</span></ng-template>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="section-card p-3 h-100">
-        <p class="text-muted small mb-1">Upcoming appointments</p>
-        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.upcomingAppointments) }}</p>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="section-card p-3 h-100">
-        <p class="text-muted small mb-1">Lab reports awaiting review</p>
-        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.pendingReports) }}</p>
-      </div>
-    </div>
-    <div class="col-6 col-md-3">
-      <div class="section-card p-3 h-100">
-        <p class="text-muted small mb-1">Unread notifications</p>
-        <p class="mb-0 fw-semibold">{{ formatOptionalCount(healthSummary.unreadNotifications) }}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quick Actions -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'400ms'">
-        <div class="action-header">
-          <div class="action-icon metrics">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M10 1.66667V10M10 18.3333C14.6024 18.3333 18.3333 14.6024 18.3333 10C18.3333 5.39763 14.6024 1.66667 10 1.66667C5.39763 1.66667 1.66667 5.39763 1.66667 10C1.66667 14.6024 5.39763 18.3333 10 18.3333Z"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </div>
-          <h3 class="action-title">Add Health Metrics</h3>
-        </div>
-        <p class="action-description">Record your vitals and health data</p>
-        <a routerLink="/patient-portal/add-metrics" class="btn btn-primary btn-sm mt-3">Add Metrics</a>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'500ms'">
-        <div class="action-header">
-          <div class="action-icon chatbot">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M18.3333 9.16667C18.3333 13.3058 14.8058 16.6667 10 16.6667C9.16667 16.6667 8.33333 16.5 7.5 16.3333L1.66667 18.3333L3.66667 12.5C2.5 11.1667 1.66667 9.5 1.66667 7.5C1.66667 3.36084 5.19417 0 10 0C14.8058 0 18.3333 3.36084 18.3333 7.5V9.16667Z"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <h3 class="action-title">AI Health Chatbot</h3>
-        </div>
-        <p class="action-description">Ask health-related questions</p>
-        <a routerLink="/patient-portal/ai-chatbot" class="btn btn-primary btn-sm mt-3">Chat Now</a>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="section-card action-card fade-in-up" [style.animation-delay]="'600ms'">
-        <div class="action-header">
-          <div class="action-icon search">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M17.5 17.5L13.875 13.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </div>
-          <h3 class="action-title">Find a Doctor</h3>
-        </div>
-        <p class="action-description">Search for doctors by specialty</p>
-        <a routerLink="/patient-portal/doctor-search" class="btn btn-primary btn-sm mt-3">Search Doctors</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recent Activity & Prescriptions -->
-  <div class="row g-4">
-    <div class="col-12 col-lg-8">
-      <div class="section-card fade-in-up" [style.animation-delay]="'700ms'">
-        <div class="section-header">
-          <h3 class="section-title">Recent Activity</h3>
-          <a routerLink="/patient-portal/view-medical-history" class="text-primary text-decoration-none">View All</a>
-        </div>
-        <div class="activity-list" *ngIf="recentActivity.length > 0">
-          <div class="activity-item" *ngFor="let activity of recentActivity">
-            <div class="activity-icon" [class]="'type-' + activity.type">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="8" fill="currentColor" />
-              </svg>
-            </div>
-            <div class="activity-content">
-              <h4 class="activity-title">{{ activity.title }}</h4>
-              <p class="activity-meta">{{ activity.date | date:'short' }}</p>
+  <!-- ─── Health Metrics ─── -->
+  <section class="dash-section" aria-labelledby="patient-metrics-heading">
+    <h2 id="patient-metrics-heading" class="dash-section__label">
+      <img src="images/svg-icons/cardiogram.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Your vitals
+    </h2>
+    <div class="row g-4 mb-4">
+      <!-- Skeleton loaders while data loads -->
+      <ng-container *ngIf="loading">
+        <div class="col-6 col-md-6 col-lg-3" *ngFor="let _ of [1,2,3,4]">
+          <div class="dash-metric skeleton-card">
+            <div class="skeleton-icon"></div>
+            <div class="skeleton-content">
+              <div class="skeleton-line skeleton-line--wide"></div>
+              <div class="skeleton-line skeleton-line--narrow"></div>
             </div>
           </div>
         </div>
-        <div class="empty-state" *ngIf="recentActivity.length === 0">
-          <p class="text-muted">No recent activity</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-lg-4">
-      <div class="section-card fade-in-up" [style.animation-delay]="'800ms'">
-        <div class="section-header">
-          <h3 class="section-title">Recent Prescriptions</h3>
-          <a routerLink="/patient-portal/view-prescriptions" class="text-primary text-decoration-none">View All</a>
-        </div>
-        <div class="prescription-list" *ngIf="recentPrescriptions.length > 0">
-          <div class="prescription-item" *ngFor="let prescription of recentPrescriptions">
-            <div class="prescription-header">
-              <h5 class="prescription-doctor">{{ prescription.doctorName }}</h5>
-              <span class="prescription-date">{{ prescription.date | date:'shortDate' }}</span>
+      </ng-container>
+
+      <!-- Real metric cards -->
+      <ng-container *ngIf="!loading">
+        <div class="col-6 col-md-6 col-lg-3" *ngFor="let metric of [
+          { label: 'Blood Pressure', value: healthSummary.recentMetrics.bloodPressure, icon: 'bp', color: '#3461ff', gradient: 'linear-gradient(135deg, #3461ff 0%, #6b8eff 100%)', unit: 'mmHg' },
+          { label: 'Heart Rate', value: healthSummary.recentMetrics.heartRate, icon: 'hr', color: '#ef4444', gradient: 'linear-gradient(135deg, #ef4444 0%, #fb7185 100%)', unit: 'bpm' },
+          { label: 'Temperature', value: healthSummary.recentMetrics.temperature, icon: 'temp', color: '#f59e0b', gradient: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)', unit: '°F' },
+          { label: 'Weight', value: healthSummary.recentMetrics.weight, icon: 'weight', color: '#10b981', gradient: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)', unit: 'kg' }
+        ]; trackBy: trackByMetricLabel; let i = index">
+          <div class="dash-metric fade-in-up" [style.animation-delay]="(i * 80) + 'ms'">
+            <div class="dash-metric__icon-ring" [style.background]="metric.gradient">
+              <img *ngIf="metric.icon === 'bp'" src="images/svg-icons/blood-pressure.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+              <img *ngIf="metric.icon === 'hr'" src="images/svg-icons/cardiogram.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+              <img *ngIf="metric.icon === 'temp'" src="images/svg-icons/pulse.svg" alt="" class="svg-icon-img dash-metric__svg-white">
+              <img *ngIf="metric.icon === 'weight'" src="images/svg-icons/stethoscope.svg" alt="" class="svg-icon-img dash-metric__svg-white">
             </div>
-            <p class="prescription-medications">{{ prescription.medications?.length || 0 }} medications</p>
+            <div class="dash-metric__body">
+              <h3 class="dash-metric__value">
+                <ng-container *ngIf="hasRecordedMetric(metric.value); else noMetric">
+                  {{ metric.value }} <span class="dash-metric__unit">{{ metric.unit }}</span>
+                </ng-container>
+                <ng-template #noMetric><span class="dash-metric__no-data">No data</span></ng-template>
+              </h3>
+              <p class="dash-metric__label">{{ metric.label }}</p>
+            </div>
           </div>
         </div>
-        <div class="empty-state" *ngIf="recentPrescriptions.length === 0">
-          <p class="text-muted">No prescriptions yet</p>
+      </ng-container>
+    </div>
+  </section>
+
+  <!-- ─── Care overview ─── -->
+  <section class="dash-section" aria-labelledby="patient-care-heading">
+    <h2 id="patient-care-heading" class="dash-section__label">
+      <img src="images/svg-icons/information-circle-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Care overview
+    </h2>
+    <div class="row g-4 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="care-stat fade-in-up" [style.animation-delay]="'200ms'">
+          <div class="care-stat__icon care-stat__icon--blue">
+            <img src="images/svg-icons/clock-circle-light.svg" alt="" class="svg-icon-img svg-icon-img--sm">
+          </div>
+          <p class="care-stat__label">Last clinical activity</p>
+          <p class="care-stat__value" *ngIf="healthSummary.lastCheckup; else noClinical">
+            {{ healthSummary.lastCheckup | date:'mediumDate' }}
+          </p>
+          <ng-template #noClinical><p class="care-stat__value care-stat__value--muted">No visits yet</p></ng-template>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="care-stat fade-in-up" [style.animation-delay]="'260ms'">
+          <div class="care-stat__icon care-stat__icon--emerald">
+            <img src="images/svg-icons/calendar-light.svg" alt="" class="svg-icon-img svg-icon-img--sm">
+          </div>
+          <p class="care-stat__label">Upcoming appointments</p>
+          <p class="care-stat__value">{{ formatOptionalCount(healthSummary.upcomingAppointments) }}</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="care-stat fade-in-up" [style.animation-delay]="'320ms'">
+          <div class="care-stat__icon care-stat__icon--amber">
+            <img src="images/svg-icons/labs.svg" alt="" class="svg-icon-img svg-icon-img--sm">
+          </div>
+          <p class="care-stat__label">Lab reports awaiting review</p>
+          <p class="care-stat__value">{{ formatOptionalCount(healthSummary.pendingReports) }}</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="care-stat fade-in-up" [style.animation-delay]="'380ms'">
+          <div class="care-stat__icon care-stat__icon--red">
+            <img src="images/svg-icons/notification-light.svg" alt="" class="svg-icon-img svg-icon-img--sm">
+          </div>
+          <p class="care-stat__label">Unread notifications</p>
+          <p class="care-stat__value">{{ formatOptionalCount(healthSummary.unreadNotifications) }}</p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ─── Quick Actions ─── -->
+  <section class="dash-section" aria-labelledby="patient-actions-heading">
+    <h2 id="patient-actions-heading" class="dash-section__label">
+      <img src="images/svg-icons/discover-square.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Quick actions
+    </h2>
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'400ms'">
+          <div class="dash-action__icon dash-action__icon--primary">
+            <img src="images/svg-icons/pulse-rectangle.svg" alt="" class="svg-icon-img">
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">Add Health Metrics</h3>
+            <p class="dash-action__text">Record your vitals and health data</p>
+          </div>
+          <a routerLink="/patient-portal/add-metrics" class="btn btn-primary btn-sm dash-action__btn">Add Metrics</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'470ms'">
+          <div class="dash-action__icon dash-action__icon--success">
+            <img src="images/svg-icons/Conversation-Chat.svg" alt="" class="svg-icon-img">
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">AI Health Chatbot</h3>
+            <p class="dash-action__text">Ask health-related questions</p>
+          </div>
+          <a routerLink="/patient-portal/ai-chatbot" class="btn btn-outline-primary btn-sm dash-action__btn">Chat Now</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="dash-action fade-in-up" [style.animation-delay]="'540ms'">
+          <div class="dash-action__icon dash-action__icon--amber">
+            <img src="images/svg-icons/search-light.svg" alt="" class="svg-icon-img">
+          </div>
+          <div class="dash-action__body">
+            <h3 class="dash-action__title">Find a Doctor</h3>
+            <p class="dash-action__text">Search for doctors by specialty</p>
+          </div>
+          <a routerLink="/patient-portal/doctor-search" class="btn btn-outline-primary btn-sm dash-action__btn">Search Doctors</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Recent Activity & Prescriptions ─── -->
+  <section class="dash-section" aria-labelledby="patient-activity-heading">
+    <h2 id="patient-activity-heading" class="dash-section__label">
+      <img src="images/svg-icons/clock-circle-light.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Activity
+    </h2>
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <div class="dash-table-card fade-in-up" [style.animation-delay]="'600ms'">
+          <div class="dash-card-head dash-card-head--row">
+            <div>
+              <h3 class="dash-card-head__title">Recent Activity</h3>
+              <p class="dash-card-head__sub">Medical history timeline</p>
+            </div>
+            <a routerLink="/patient-portal/view-medical-history" class="btn btn-outline-primary btn-sm">View All</a>
+          </div>
+          <div class="activity-list" *ngIf="recentActivity.length > 0">
+            <div class="activity-item" *ngFor="let activity of recentActivity">
+              <div class="activity-icon" [class]="'type-' + activity.type">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="8" cy="8" r="8" fill="currentColor" />
+                </svg>
+              </div>
+              <div class="activity-content">
+                <h4 class="activity-title">{{ activity.title }}</h4>
+                <p class="activity-meta">{{ activity.date | date:'short' }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="dash-table-empty" *ngIf="recentActivity.length === 0">
+            <p class="text-muted py-4 text-center mb-0">No recent activity</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="dash-table-card fade-in-up" [style.animation-delay]="'680ms'">
+          <div class="dash-card-head dash-card-head--row">
+            <div>
+              <h3 class="dash-card-head__title">Recent Prescriptions</h3>
+              <p class="dash-card-head__sub">Latest from your doctors</p>
+            </div>
+            <a routerLink="/patient-portal/view-prescriptions" class="btn btn-outline-primary btn-sm">View All</a>
+          </div>
+          <div class="prescription-list" *ngIf="recentPrescriptions.length > 0">
+            <div class="prescription-item" *ngFor="let prescription of recentPrescriptions">
+              <div class="prescription-header">
+                <h5 class="prescription-doctor">{{ prescription.doctorName }}</h5>
+                <span class="prescription-date">{{ prescription.date | date:'shortDate' }}</span>
+              </div>
+              <p class="prescription-medications">{{ prescription.medications?.length || 0 }} medications</p>
+            </div>
+          </div>
+          <div class="dash-table-empty" *ngIf="recentPrescriptions.length === 0">
+            <p class="text-muted py-4 text-center mb-0">No prescriptions yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

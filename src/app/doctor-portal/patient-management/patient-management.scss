@@ -205,6 +205,18 @@
     text-align: center;
     width: 1%;
     white-space: nowrap;
+    min-width: 5.25rem;
+
+    .dashboard-table-actions {
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 0.3rem;
+      min-height: 0;
+    }
+
+    .dashboard-table-actions .btn {
+      padding: 0.28rem 0.4rem;
+    }
   }
 
   &__empty {

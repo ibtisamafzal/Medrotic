@@ -1,142 +1,159 @@
-<app-header></app-header>
-
-<div class="auth-page-wrapper">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-5 col-md-7 col-sm-9">
-        <div class="auth-card">
-          <div class="auth-card-header text-center">
-            <div class="auth-logo">
-              <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="auth-logo-img" onerror="this.onerror=null; this.src='/images/logo/logo.png';">
-            </div>
-            <h2 class="auth-title">Welcome Back</h2>
-            <p class="auth-subtitle">Sign in to your Medrotic account to continue</p>
-          </div>
-
-          <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="auth-form">
-            <!-- Login Method Selector (Email/Phone/CNIC) -->
-            <div class="form-group">
-              <div class="auth-method-selector" role="group">
-                <input type="radio" class="btn-check" id="login-email" [(ngModel)]="loginMethod" value="email" name="loginMethod">
-                <label class="btn btn-outline-primary" for="login-email">Email</label>
-                
-                <input type="radio" class="btn-check" id="login-phone" [(ngModel)]="loginMethod" value="phone" name="loginMethod">
-                <label class="btn btn-outline-primary" for="login-phone">Phone</label>
-                
-                <input type="radio" class="btn-check" id="login-cnic" [(ngModel)]="loginMethod" value="cnic" name="loginMethod">
-                <label class="btn btn-outline-primary" for="login-cnic">CNIC</label>
-              </div>
-            </div>
-
-            <!-- Email/Phone/CNIC Input -->
-            <div class="form-group">
-              <label [for]="loginMethod + '-input'" class="form-label">{{ getIdentifierLabel() }}</label>
-              <input
-                [id]="loginMethod + '-input'"
-                [type]="loginMethod === 'email' ? 'email' : 'text'"
-                class="custom-input-simple"
-                [placeholder]="getIdentifierPlaceholder()"
-                [title]="getIdentifierLabel() + ' input field'"
-                [attr.aria-label]="getIdentifierLabel()"
-                [(ngModel)]="identifierValue"
-                [name]="loginMethod + 'Input'"
-                required
-                [attr.maxlength]="loginMethod === 'cnic' ? '15' : (loginMethod === 'phone' ? '16' : null)"
-                [pkInputFormat]="loginMethod === 'cnic' ? 'cnic' : loginMethod === 'phone' ? 'phone' : 'text'"
-                [attr.inputmode]="loginMethod === 'phone' ? 'tel' : (loginMethod === 'email' ? 'email' : 'numeric')"
-                [attr.autocomplete]="loginMethod === 'email' ? 'email' : (loginMethod === 'phone' ? 'tel' : 'off')"
-              />
-              <div *ngIf="loginMethod === 'cnic'" class="form-text small">
-                Format: 12345-1234567-1
-              </div>
-            </div>
-
-            <!-- Password Input -->
-            <div class="form-group">
-              <label for="password" class="form-label">Password</label>
-              <div class="custom-input-wrapper password-wrapper">
-                <input
-                  id="password"
-                  [type]="showPassword ? 'text' : 'password'"
-                  class="custom-input password-input"
-                  placeholder="Enter your password"
-                  title="Password input field"
-                  [(ngModel)]="password"
-                  name="password"
-                  required
-                  minlength="8"
-                  autocomplete="current-password"
-                  aria-describedby="passwordHelp"
-                />
-                <button 
-                  class="custom-input-eye-btn" 
-                  type="button"
-                  (click)="togglePasswordVisibility()"
-                  aria-label="Toggle password visibility"
-                  aria-controls="password"
-                  [attr.aria-pressed]="showPassword"
-                >
-                  <img 
-                    [src]="showPassword ? eyeOpenIcon : eyeOffIcon" 
-                    alt=""
-                    class="eye-icon"
-                    aria-hidden="true"
-                  />
-                </button>
-              </div>
-              <div id="passwordHelp" class="form-text small">
-                Password must be at least 8 characters
-              </div>
-            </div>
-
-            <!-- Remember Me & Forgot Password -->
-            <div class="d-flex justify-content-between align-items-center form-options">
-              <div class="form-check">
-                <input 
-                  class="form-check-input" 
-                  type="checkbox" 
-                  id="rememberMe"
-                  [(ngModel)]="rememberMe"
-                  name="rememberMe"
-                />
-                <label class="form-check-label" for="rememberMe">
-                  Remember me
-                </label>
-              </div>
-              <a [routerLink]="['/auth/forgot-password']" class="text-decoration-none forgot-password-link">
-                Forgot Password?
-              </a>
-            </div>
-
-            <!-- Error Message -->
-            <div *ngIf="error" class="alert alert-danger" role="alert">
-              <i class="bi bi-exclamation-circle me-2"></i>
-              {{ error }}
-            </div>
-
-            <!-- Submit Button -->
-            <button 
-              type="submit" 
-              class="btn btn-primary w-100 auth-submit-btn"
-              [disabled]="loading || !loginForm.form.valid"
-              aria-label="Sign in to your account"
-            >
-              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              {{ loading ? 'Signing in...' : 'Sign in' }}
-            </button>
-
-            <!-- Sign Up Link -->
-            <div class="text-center auth-footer">
-              <p class="mb-0 auth-footer-text">
-                Don't have an account?
-                <a [routerLink]="['/auth/register']" class="text-decoration-none signup-link">Sign up</a>
-              </p>
-            </div>
-          </form>
+<div class="auth-split">
+  <!-- Left Side: Branding -->
+  <aside class="auth-split__brand">
+    <a routerLink="/home" class="auth-split__logo" aria-label="Return to Medrotic Home">
+      <img src="/images/logo/logo.svg" alt="Medrotic Logo" style="filter: brightness(0) invert(1);">
+    </a>
+    
+    <div class="auth-split__content">
+      <h1 class="auth-split__title">Empowering healthcare with AI.</h1>
+      <p class="auth-split__sub">Medrotic securely connects patients and doctors through a seamless, intelligent platform to improve lives.</p>
+      
+      <div class="auth-split__features">
+        <div class="auth-split__feature">
+          <span class="auth-split__feature-icon" style="-webkit-mask-image: url('/images/svg-icons/shield-check-light.svg'); mask-image: url('/images/svg-icons/shield-check-light.svg');"></span>
+          <span>End-to-End Encrypted</span>
+        </div>
+        <div class="auth-split__feature">
+          <span class="auth-split__feature-icon" style="-webkit-mask-image: url('/images/svg-icons/cpu-light.svg'); mask-image: url('/images/svg-icons/cpu-light.svg');"></span>
+          <span>AI-Powered Insights</span>
+        </div>
+        <div class="auth-split__feature">
+          <span class="auth-split__feature-icon" style="-webkit-mask-image: url('/images/svg-icons/pulse-rectangle.svg'); mask-image: url('/images/svg-icons/pulse-rectangle.svg');"></span>
+          <span>Unified Telehealth Experience</span>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </aside>
 
-<app-footer></app-footer>
+  <!-- Right Side: Login Form -->
+  <main class="auth-split__form">
+    <div class="auth-split__form-inner">
+      <a routerLink="/home" class="auth-logo-mobile">
+        <img src="/images/logo/logo.svg" alt="Medrotic Logo" onerror="this.onerror=null; this.src='/images/logo/logo.png';">
+      </a>
+      
+      <div class="auth-card-header">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your Medrotic account to continue</p>
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="auth-form mt-4">
+        <!-- Login Method Selector -->
+        <div class="form-group">
+          <div class="auth-method-selector" role="group">
+            <input type="radio" class="btn-check" id="login-email" [(ngModel)]="loginMethod" value="email" name="loginMethod">
+            <label class="btn btn-outline-primary" for="login-email">Email</label>
+            
+            <input type="radio" class="btn-check" id="login-phone" [(ngModel)]="loginMethod" value="phone" name="loginMethod">
+            <label class="btn btn-outline-primary" for="login-phone">Phone</label>
+            
+            <input type="radio" class="btn-check" id="login-cnic" [(ngModel)]="loginMethod" value="cnic" name="loginMethod">
+            <label class="btn btn-outline-primary" for="login-cnic">CNIC</label>
+          </div>
+        </div>
+
+        <!-- Dynamic Identifier Input -->
+        <div class="form-group">
+          <label [for]="loginMethod + '-input'" class="form-label">{{ getIdentifierLabel() }}</label>
+          <input
+            [id]="loginMethod + '-input'"
+            [type]="loginMethod === 'email' ? 'email' : 'text'"
+            class="custom-input-simple"
+            [placeholder]="getIdentifierPlaceholder()"
+            [title]="getIdentifierLabel() + ' input field'"
+            [attr.aria-label]="getIdentifierLabel()"
+            [(ngModel)]="identifierValue"
+            [name]="loginMethod + 'Input'"
+            required
+            [attr.maxlength]="loginMethod === 'cnic' ? '15' : (loginMethod === 'phone' ? '16' : null)"
+            [pkInputFormat]="loginMethod === 'cnic' ? 'cnic' : loginMethod === 'phone' ? 'phone' : 'text'"
+            [attr.inputmode]="loginMethod === 'phone' ? 'tel' : (loginMethod === 'email' ? 'email' : 'numeric')"
+            [attr.autocomplete]="loginMethod === 'email' ? 'email' : (loginMethod === 'phone' ? 'tel' : 'off')"
+          />
+          <div *ngIf="loginMethod === 'cnic'" class="form-text small mt-1">
+            Format: 12345-1234567-1
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="custom-input-wrapper password-wrapper">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="custom-input password-input"
+              placeholder="Enter your password"
+              title="Password input field"
+              [(ngModel)]="password"
+              name="password"
+              required
+              minlength="8"
+              autocomplete="current-password"
+            />
+            <button 
+              class="custom-input-eye-btn" 
+              type="button"
+              (click)="togglePasswordVisibility()"
+              aria-label="Toggle password visibility"
+              aria-controls="password"
+              [attr.aria-pressed]="showPassword"
+            >
+              <img 
+                [src]="showPassword ? eyeOpenIcon : eyeOffIcon" 
+                alt=""
+                class="eye-icon"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="d-flex justify-content-between align-items-center form-options">
+          <div class="form-check m-0">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="rememberMe"
+              [(ngModel)]="rememberMe"
+              name="rememberMe"
+            />
+            <label class="form-check-label" for="rememberMe">
+              Remember me
+            </label>
+          </div>
+          <a [routerLink]="['/auth/forgot-password']" class="text-decoration-none forgot-password-link">
+            Forgot Password?
+          </a>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-circle me-2"></i>
+          {{ error }}
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="btn btn-primary w-100 auth-submit-btn"
+          [disabled]="loading || !loginForm.form.valid"
+          aria-label="Sign in to your account"
+        >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ loading ? 'Signing in...' : 'Sign in' }}
+        </button>
+
+        <!-- Sign Up Link -->
+        <div class="text-center auth-footer">
+          <p class="mb-0 auth-footer-text">
+            Don't have an account?
+            <a [routerLink]="['/auth/register']" class="text-decoration-none signup-link">Create one</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

@@ -1,7 +1,7 @@
 <div class="upload-prescription-page">
-  <div class="page-header">
+  <div class="page-header page-header--rx">
     <h1 class="page-title">Upload prescription</h1>
-    <p class="page-subtitle">Run OCR on the image, review structured medications, then save to the patient’s medical record.</p>
+    <p class="page-subtitle">Run OCR on the image, review structured medications, then attach everything to the correct patient record.</p>
   </div>
 
   <div class="layout-grid">
@@ -12,13 +12,13 @@
           <label class="form-label" for="patientSelect">Patient <span class="text-danger">*</span></label>
           <select
             id="patientSelect"
-            class="form-select form-select-lg"
+            class="form-select form-select-lg rx-patient-select"
             [(ngModel)]="prescription.patientId"
             name="patientId"
             required>
             <option value="">Select a patient</option>
             <option *ngFor="let patient of patients" [value]="patient.id">
-              {{ patient.name }} <span class="text-muted">({{ patient.cnic }})</span>
+              {{ patient.name }} · {{ patient.cnic || '—' }}
             </option>
           </select>
         </section>

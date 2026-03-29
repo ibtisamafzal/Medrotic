@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DoctorService, Patient } from '../../services/doctor.service';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-register-patient',
-  imports: [CommonModule, FormsModule, PakInputFormatDirective],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './register-patient.html',
   styleUrl: './register-patient.scss',
 })
