@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, ResetPasswordRequest } from '../auth.service';
-import { Header } from '../../common/header/header';
-import { Footer } from '../../common/footer/footer';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss'
 })
@@ -25,8 +23,9 @@ export class ResetPassword implements OnInit {
   error: string = '';
   success: boolean = false;
 
-  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
+  // Eye icon paths (use the SVGs from public/images/svg-icons)
+  eyeOpenIcon = '/images/svg-icons/eye-open-light.svg';
+  eyeOffIcon = '/images/svg-icons/eye-disable-light.svg';
 
   constructor(
     private authService: AuthService,

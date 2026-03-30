@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, ForgotPasswordRequest } from '../auth.service';
-import { Header } from '../../common/header/header';
-import { Footer } from '../../common/footer/footer';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss'
 })

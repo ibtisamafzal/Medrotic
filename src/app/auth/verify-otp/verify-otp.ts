@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, VerifyOTPRequest } from '../auth.service';
-import { Header } from '../../common/header/header';
-import { Footer } from '../../common/footer/footer';
 
 @Component({
   selector: 'app-verify-otp',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './verify-otp.html',
   styleUrl: './verify-otp.scss'
 })

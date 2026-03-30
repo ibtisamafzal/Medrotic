@@ -311,7 +311,17 @@ img {
   @media (max-width: 767.98px) {
     min-height: 48px;
     padding: 0.875rem 1rem;
-    font-size: 16px; // Prevents zoom on iOS
+    outline: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #f8fafc;
+    border: 1.5px solid transparent;
+
+    &:focus {
+      background-color: #ffffff;
+      border-color: #3461ff;
+      box-shadow: 0 0 0 4px rgba(52, 97, 255, 0.12);
+      transform: translateY(-1px);
+    }
   }
 
   &:focus {
@@ -1194,6 +1204,7 @@ html {
     overflow: hidden;
     padding: 4rem 5rem;
     flex-direction: column;
+    justify-content: flex-start;
 
     @media (min-width: 992px) { display: flex; }
     
@@ -1214,7 +1225,8 @@ html {
     position: relative;
     z-index: 2;
     max-width: 500px;
-    margin: auto 0;
+    margin: 0;
+    margin-top: 2rem;
     animation: fadeInUp 0.8s ease-out both;
   }
 
@@ -1300,11 +1312,83 @@ html {
     animation: fadeIn 0.6s ease-out;
 
     .auth-logo-mobile {
-      display: block;
-      margin-bottom: 2.5rem;
-      text-align: center;
-      img { height: 44px; }
-      @media (min-width: 992px) { display: none; }
+      display: none !important;
+      margin-bottom: 0;
     }
+  }
+}
+
+// Auth Header Icons
+.auth-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(52, 97, 255, 0.08);
+  border-radius: 14px;
+  margin: 0 auto;
+}
+
+.auth-header-icon {
+  width: 28px;
+  height: 28px;
+  background: #3461ff;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.auth-trust-icon {
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transition: opacity 0.3s ease;
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Auth Transitions & Animations
+.auth-split__form, .auth-split__brand {
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-card-header, .auth-form, .auth-split__content {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-form > * {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.08}s;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

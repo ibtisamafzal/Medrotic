@@ -3,15 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, RegisterPatientRequest } from '../auth.service';
-import { Header } from '../../common/header/header';
-import { Footer } from '../../common/footer/footer';
 import { AlertService } from '../../services/alert.service';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -33,8 +31,9 @@ export class Register {
   error: string = '';
   success: boolean = false;
 
-  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
+  // Eye icon paths (use the SVGs from public/images/svg-icons)
+  eyeOpenIcon = '/images/svg-icons/eye-open-light.svg';
+  eyeOffIcon = '/images/svg-icons/eye-disable-light.svg';
 
   constructor(
     private authService: AuthService,

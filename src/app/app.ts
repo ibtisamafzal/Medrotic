@@ -1,6 +1,7 @@
 import { Component, signal, OnInit, OnDestroy, inject, HostListener, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { Alert } from './common/alert/alert';
 import { AlertService, AlertMessage } from './services/alert.service';
 import { SessionService } from './services/session.service';
@@ -23,14 +24,27 @@ export class App implements OnInit, OnDestroy {
   private sessionService = inject(SessionService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
 
   alertMessage: AlertMessage | null = null;
   showAlert = false;
   scrollProgress = 0;
+  showProgressBar = true;
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.calculateScrollProgress();
+
+      // Monitor route changes to hide progress bar on specific pages
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event: any) => {
+        const url = event.urlAfterRedirects;
+        this.updateProgressBarVisibility(url);
+      });
+
+      // Initial check
+      this.updateProgressBarVisibility(this.router.url);
     }
     // Restore session if Remember Me is enabled
     this.authService.restoreSessionIfRemembered();
@@ -81,6 +95,11 @@ export class App implements OnInit, OnDestroy {
 
     const windowHeight = scrollHeight - clientHeight;
     this.scrollProgress = windowHeight > 0 ? (scrollTop / windowHeight) * 100 : 0;
+  }
+
+  private updateProgressBarVisibility(url: string) {
+    const hiddenRoutes = ['/auth', '/admin', '/doctor-portal', '/patient-portal'];
+    this.showProgressBar = !hiddenRoutes.some(route => url.startsWith(route));
   }
 }
 

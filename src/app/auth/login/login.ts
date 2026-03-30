@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
   // Return URL for redirect after login
   returnUrl: string = '';
 
-  // Eye icon paths (assume these exist in assets)
-  eyeOpenIcon = '/assets/images/icons/eye-open-outline.svg';
-  eyeOffIcon = '/assets/images/icons/eye-off-outline.svg';
+  // Eye icon paths (use the SVGs from public/images/svg-icons)
+  eyeOpenIcon = '/images/svg-icons/eye-open-light.svg';
+  eyeOffIcon = '/images/svg-icons/eye-disable-light.svg';
 
   constructor(
     private authService: AuthService,

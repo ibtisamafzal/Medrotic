@@ -1,5 +1,5 @@
 <!-- Minimal Scroll Progress Bar -->
-<div class="scroll-progress-global" [style.width.%]="scrollProgress"></div>
+<div *ngIf="showProgressBar" class="scroll-progress-global" [style.width.%]="scrollProgress"></div>
 
 <app-route-progress></app-route-progress>
 <router-outlet></router-outlet>
