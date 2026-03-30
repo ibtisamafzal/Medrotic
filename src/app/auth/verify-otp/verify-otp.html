@@ -3,10 +3,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-5 col-md-7 col-sm-9">
         <div class="auth-card">
+          <a routerLink="/home" class="auth-logo-mobile">
+            <img src="/images/logo/logo.svg" alt="Medrotic Logo" onerror="this.onerror=null; this.src='/images/logo/logo.png';">
+          </a>
+
           <div class="auth-card-header text-center">
-            <div class="auth-logo">
-              <img src="/images/logo/logo.svg" alt="Medrotic Logo" class="auth-logo-img" onerror="this.onerror=null; this.src='/images/logo/logo.png';">
-            </div>
             <h2 class="auth-title">Verify OTP</h2>
             <p class="auth-subtitle">
               Enter the 6-digit code sent to 
@@ -19,21 +20,24 @@
             <!-- OTP Input Fields -->
             <div class="otp-container mb-4">
               <div class="otp-inputs d-flex justify-content-center gap-2">
-                <input
-                  *ngFor="let i of [0,1,2,3,4,5]; let idx = index"
-                  type="text"
-                  class="otp-input form-control text-center"
-                  [attr.data-index]="idx"
-                  maxlength="1"
-                  pattern="[0-9]"
-                  [(ngModel)]="otp"
-                  [name]="'otp' + idx"
-                  (input)="onOTPInput($event)"
-                  (paste)="onOTPPaste($event)"
-                  (keydown)="onOTPKeyDown($event, idx)"
-                  (keyup)="onOTPKeyUp($event, idx)"
-                  [value]="getOTPDigit(idx)"
-                />
+                  <input
+                    *ngFor="let i of [0,1,2,3,4,5]; let idx = index"
+                    type="text"
+                    class="otp-input form-control text-center"
+                    [attr.data-index]="idx"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    [(ngModel)]="otp"
+                    [name]="'otp' + idx"
+                    (input)="onOTPInput($event)"
+                    (paste)="onOTPPaste($event)"
+                    (keydown)="onOTPKeyDown($event, idx)"
+                    (keyup)="onOTPKeyUp($event, idx)"
+                    [value]="getOTPDigit(idx)"
+                    placeholder="•"
+                    [title]="'Digit ' + (idx + 1)"
+                    [attr.aria-label]="'Digit ' + (idx + 1)"
+                  />
               </div>
             </div>
 
@@ -55,7 +59,7 @@
 
             <!-- Resend OTP -->
             <div class="text-center mb-3">
-              <p class="mb-2 text-muted small" style="font-size: 0.875rem; color: rgba(0, 16, 71, 0.6);">
+              <p class="mb-2 text-muted small auth-help-text">
                 Didn't receive the code?
               </p>
               <button

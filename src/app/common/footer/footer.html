@@ -69,10 +69,9 @@
         </div>
       </div>
 
-      <!-- Company Links -->
       <div class="col-lg-2 col-md-6 col-sm-6">
-        <h3 class="footer-heading">Company</h3>
-        <ul class="footer-links">
+        <h3 class="footer-heading" (click)="toggleSection('company')" [class.active]="isSectionOpen('company')">Company</h3>
+        <ul class="footer-links" [class.is-open]="isSectionOpen('company')">
           <li><a routerLink="/about">About Us</a></li>
           <li><a routerLink="/contact">Career</a></li>
           <li><a routerLink="/services">Why Choose Us</a></li>
@@ -81,10 +80,9 @@
         </ul>
       </div>
 
-      <!-- Support Links -->
       <div class="col-lg-2 col-md-6 col-sm-6">
-        <h3 class="footer-heading">Support</h3>
-        <ul class="footer-links">
+        <h3 class="footer-heading" (click)="toggleSection('support')" [class.active]="isSectionOpen('support')">Support</h3>
+        <ul class="footer-links" [class.is-open]="isSectionOpen('support')">
           <li><a routerLink="/faq">FAQ</a></li>
           <li><a routerLink="/contact">Documentation</a></li>
           <li><a routerLink="/contact">Tutorial</a></li>
@@ -92,10 +90,9 @@
         </ul>
       </div>
 
-      <!-- Legal Policies Links -->
       <div class="col-lg-2 col-md-6 col-sm-6">
-        <h3 class="footer-heading">Legal Policies</h3>
-        <ul class="footer-links">
+        <h3 class="footer-heading" (click)="toggleSection('legal')" [class.active]="isSectionOpen('legal')">Legal Policies</h3>
+        <ul class="footer-links" [class.is-open]="isSectionOpen('legal')">
           <li><a routerLink="/terms">Terms & Conditions</a></li>
           <li><a routerLink="/privacy">Privacy Policy</a></li>
           <li><a routerLink="/refund-policy">Refund Policy</a></li>
@@ -104,10 +101,9 @@
         </ul>
       </div>
 
-      <!-- Contact Info -->
       <div class="col-lg-2 col-md-6 col-sm-6">
-        <h3 class="footer-heading">Contact</h3>
-        <ul class="footer-links footer-contact">
+        <h3 class="footer-heading" (click)="toggleSection('contact')" [class.active]="isSectionOpen('contact')">Contact</h3>
+        <ul class="footer-links footer-contact" [class.is-open]="isSectionOpen('contact')">
           <li>
             <a href="tel:+923000000000" class="d-flex align-items-center gap-2">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

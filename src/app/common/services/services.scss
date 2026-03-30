@@ -46,7 +46,12 @@ h6 {
 // Services Grid Section
 .services-grid-section {
   padding: 80px 0;
-  background: #fff;
+  background-color: #f8fafc;
+  overflow: visible !important; // Final fix for scrollbars
+
+  @media (max-width: 767.98px) {
+    padding: 40px 0;
+  }
 }
 
 .service-card {

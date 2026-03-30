@@ -25,9 +25,50 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.contact-main-title {
+  text-align: center;
+  margin-bottom: 0;
+  color: #001047;
+  // clamp handled by global h1 but we can override if needed
+}
+
+.contact-sub-title {
+  color: #001047;
+  // clamp handled by global h2
+}
+
+.contact-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(0, 16, 71, 0.7);
+}
+
 .contact-card {
   background-color: #f5f6f9;
-  padding: 3rem 0;
+  padding: 4rem 0;
+
+  @media (max-width: 991.98px) {
+    padding: 2rem 0;
+  }
+}
+
+.contact-inner-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 16, 71, 0.04);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+
+  @media (max-width: 767.98px) {
+    padding: 1.5rem;
+  }
+
+  &:hover {
+    border-color: rgba(52, 97, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 16, 71, 0.06);
+  }
 }
 
 .contact-card .bg-white {
@@ -79,6 +120,11 @@ textarea.form-control {
     }
   }
 
+  .contact-inner-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
   .contact-icon {
     width: 45px !important;
     height: 45px !important;
@@ -98,4 +144,24 @@ textarea.form-control {
 .collaboration-image {
   width: 100%;
   height: auto;
+}
+
+.contact-badge-mini {
+  height: 48px;
+  width: 126px;
+  background: white;
+
+  span {
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+.collab-heading {
+  font-size: 1.625rem !important;
+  color: #001047;
+
+  @media (max-width: 767.98px) {
+    font-size: 1.25rem !important;
+  }
 }

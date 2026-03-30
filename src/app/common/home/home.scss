@@ -6,8 +6,16 @@
 }
 
 .section-spacing {
-  padding: 3.5rem 0;
+  padding: 4rem 0;
   margin: 0;
+
+  @media (max-width: 991.98px) {
+    padding: 2.5rem 0;
+  }
+
+  @media (max-width: 767.98px) {
+    padding: 2rem 0;
+  }
 }
 
 // Performance: skip rendering for off-screen sections until visible
@@ -19,6 +27,13 @@
 .testimonials {
   content-visibility: auto;
   contain-intrinsic-size: 0 400px;
+}
+
+section, 
+.section-padding, 
+.container, 
+.row {
+  overflow: visible !important; // Prevent internal scrollbars globally
 }
 
 h1,
@@ -55,10 +70,21 @@ h6 {
       }
     }
 
+    .hero-subtitle {
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     p {
       font-size: 1.1rem;
       color: rgba(0, 0, 0, 0.6);
       margin-bottom: 0;
+      line-height: 1.5;
+
+      @media (max-width: 767.98px) {
+        font-size: 1rem;
+      }
     }
   }
 
@@ -166,16 +192,17 @@ h6 {
 // ============================================
 
 .hero-panels {
-  margin-top: 4rem;
+  margin-top: 5rem;
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: stretch;
 
   @media (max-width: 991.98px) {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
     margin-top: 3rem;
+    padding: 0 1rem;
   }
 }
 
@@ -250,7 +277,12 @@ h6 {
     border: none;
 
     @media (max-width: 991.98px) {
-      min-height: 400px;
+      min-height: 380px;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 575.98px) {
+      min-height: 320px;
     }
 
     .image-wrapper {
@@ -529,52 +561,247 @@ h6 {
     }
   }
 
-  // Services Connected Card
   &--services {
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 2.25rem !important; // Increased padding
 
-    .services-info {
-      margin-bottom: 1.25rem;
+    @media (max-width: 767.98px) {
+      padding: 1.5rem !important;
     }
 
-    .services-count {
-      font-size: 0.9375rem;
+    .card-header-row {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  // Dashboard UI enhancements
+  .vitals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .vital-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .vital-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: #64748b;
-      margin: 0;
     }
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
+    .vital-value {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+
+      small {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #94a3b8;
+      }
     }
 
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    .vital-trend {
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+
+      &.trend-up { color: #10b981; }
+      &.trend-stable { color: #3b82f6; }
+    }
+  }
+
+  .tasks-mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .task-mini-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    color: #334155;
+    font-weight: 500;
+
+    .task-status {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+
+      &.status-done { background: #10b981; }
+      &.status-pending { background: #3b82f6; }
+    }
+  }
+
+  .satisfaction-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .satisfaction-avatars {
+      display: flex;
+      margin-left: 0;
+
+      .avatar-circle {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #fff;
+        background: #e2e8f0;
+        border-radius: 50%;
+        margin-left: -10px;
+
+        &:first-child { margin-left: 0; }
+        &:nth-child(2) { background: #cbd5e1; }
+        &:nth-child(3) { background: #94a3b8; }
+      }
+    }
+
+    .mini-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #475569;
+    }
+  }
+
+  .connectivity-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1rem;
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 12px;
+    
+    .status-text {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #10b981;
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: #3461ff;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      transition: all 0.2s ease;
+      gap: 6px;
 
-      &:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(52, 97, 255, 0.3);
-      }
-
-      &--more {
-        background: #f1f5f9;
-        color: #64748b;
-        border-color: rgba(148, 163, 184, 0.3);
+      &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: currentColor;
+        border-radius: 50%;
+        display: inline-block;
       }
     }
   }
+
+  .services-grid-mini {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-left: 0.5rem;
+
+    .service-icon-mini {
+      width: 44px;
+      height: 44px;
+      background: #ffffff;
+      border: 3px solid #f8fafc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -12px;
+      box-shadow: 0 4px 10px rgba(0, 16, 71, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+
+      &:first-child { margin-left: 0; }
+      
+      img { 
+        width: 22px; 
+        height: 22px; 
+        object-fit: contain;
+      }
+
+      &.more { 
+        background: #3461ff; 
+        color: #ffffff;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        border-color: #f8fafc;
+        z-index: 0;
+      }
+
+      &:hover {
+        transform: translateY(-5px) scale(1.1);
+        z-index: 10;
+        box-shadow: 0 8px 20px rgba(52, 97, 255, 0.15);
+      }
+    }
+  }
+
+  .connectivity-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1rem;
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 12px;
+    
+    .status-text {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #10b981;
+    }
+  }
+
+  .task-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    color: #475569;
+  }
+
+  .service-active-dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      border: 2px solid #10b981;
+      animation: pulse-ring 1.5s infinite;
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
 
 .sponsor-strip {
@@ -606,6 +833,18 @@ h6 {
   padding: 2.5rem;
   align-items: center;
   margin: 1.5rem 0;
+
+  @media (max-width: 991.98px) {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  @media (max-width: 575.98px) {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
 
   .collab-visual img {
     width: 100%;
@@ -848,19 +1087,33 @@ h6 {
   }
 
   .workflow-icon {
-    width: 86px;
-    height: 86px;
-    border-radius: 24px;
-    background: #3461ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: #3461ff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible; // Ensure child images aren't cut
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  @media (max-width: 767.98px) {
+    width: 52px;
+    height: 52px;
 
     img {
-      width: 46px;
-      height: 46px;
+      width: 28px;
+      height: 28px;
     }
   }
+}
 }
 
 .testimonials {

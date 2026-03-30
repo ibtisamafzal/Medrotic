@@ -9,8 +9,7 @@
           aria-hidden="true">
           <span class="badge-text fw-semibold">Contact Us</span>
         </div>
-        <h1 id="contact-heading" class="fw-semibold text-dark mb-0"
-          style="font-size: 60px; line-height: 72px; letter-spacing: -1.68px;">
+        <h1 id="contact-heading" class="contact-main-title fw-semibold text-dark mb-0 hide-br-mobile">
           Support & care<br>when they need it most
         </h1>
       </div>
@@ -23,61 +22,54 @@
     <div class="contact-card rounded-4 p-4 p-md-5" appScrollAnimate="scale-up">
       <div class="row g-4">
         <div class="col-lg-5" appScrollAnimate="fade-left" [animDelay]="80">
-          <div class="d-inline-flex align-items-center justify-content-center border border-dark rounded-pill mb-4 px-3"
-            style="height: 48px; width: 126px;" aria-hidden="true">
-            <span class="fw-semibold" style="font-size: 16px; letter-spacing: -0.16px;">Get in Touch</span>
+          <div class="contact-inner-card p-4 h-100" appScrollAnimate="fade-up" [animDelay]="100">
+            <div class="contact-icon bg-light rounded-3 p-3 mb-3 d-inline-flex">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <h4 class="mb-2">Our Office</h4>
+            <p class="text-muted mb-0">123 Health Ave, Wellness City</p>
           </div>
-          <h2 id="contact-form-heading" class="fw-medium text-dark mb-4"
-            style="font-size: 36px; line-height: 42px; letter-spacing: -0.72px;">
+
+          <h2 id="contact-form-heading" class="contact-sub-title fw-medium text-dark mb-4">
             Stronger Together for your Health
           </h2>
-          <p class="text-muted mb-5" style="font-size: 16px; line-height: 24px;">
+          <p class="contact-description text-muted mb-5">
             Begin your wellness journey today. Discover personalized support & vibrant living options tailored to
             enhance your loved one's health & happiness.
           </p>
 
-          <div class="d-flex flex-column gap-3" role="list" aria-label="contact information">
-            <div class="bg-white rounded-4 p-4" role="listitem">
-              <div class="d-flex align-items-start">
-                <img src="/images/icons/contact-icon-location.svg" alt="Location" width="60" height="60"
-                  class="contact-icon rounded-circle me-3" aria-hidden="true">
-                <div class="flex-grow-1">
-                  <h6 class="text-muted mb-2" style="font-size: 16px;">Location</h6>
-                  <p class="text-dark mb-0" style="font-size: 14px;">COMSATS University Islamabad, Sahiwal Campus</p>
+          <div class="contact-inner-card p-4 h-100" appScrollAnimate="fade-up">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="contact-icon bg-light rounded-3 p-3 mb-3 d-inline-flex">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+                  </svg>
                 </div>
+                <h4 class="mb-2">Phone</h4>
+                <p class="text-muted">+1 (555) 000-0000</p>
               </div>
-            </div>
-
-            <div class="bg-white rounded-4 p-4" role="listitem">
-              <div class="d-flex align-items-start">
-                <img src="/images/icons/contact-icon-phone-arrow.svg" alt="Phone" width="60" height="60"
-                  class="contact-icon rounded-circle me-3" aria-hidden="true">
-                <div class="flex-grow-1">
-                  <h6 class="text-muted mb-2" style="font-size: 16px;">Phone Number</h6>
-                  <p class="text-dark mb-0">
-                    <a href="tel:+923000000000" class="text-decoration-none text-dark">(+92) 3000000000</a>
-                  </p>
+              <div class="col-md-6">
+                <div class="contact-icon bg-light rounded-3 p-3 mb-3 d-inline-flex">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
                 </div>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-4 p-4" role="listitem">
-              <div class="d-flex align-items-start">
-                <img src="/images/icons/contact-icon-email.svg" alt="Email" width="60" height="60"
-                  class="contact-icon rounded-circle me-3" aria-hidden="true">
-                <div class="flex-grow-1">
-                  <h6 class="text-muted mb-2" style="font-size: 16px;">Email</h6>
-                  <p class="text-dark mb-0">
-                    <a href="mailto:info@medrotic.com" class="text-decoration-none text-dark">info@medrotic.com</a>
-                  </p>
-                </div>
+                <h4 class="mb-2">Email</h4>
+                <p class="text-muted">contact@medrotic.com</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="col-lg-7" appScrollAnimate="fade-right" [animDelay]="120">
-          <div class="bg-white rounded-4 p-4 p-md-5 h-100 shadow-sm">
+          <div class="contact-inner-card p-4 p-md-5 h-100 shadow-sm">
+            <h2 class="contact-sub-title mb-4">Send Us a Message</h2>
+            
             <div *ngIf="showSuccess" class="alert alert-success alert-dismissible fade show d-flex align-items-center"
               role="alert" aria-live="polite">
               <span class="me-2" aria-hidden="true">&#10003;</span>
@@ -97,45 +89,30 @@
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate aria-label="contact form">
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                  <label for="fullName" class="form-label fw-medium">Full Name <span
-                      class="text-danger">*</span></label>
+                  <label for="fullName" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
                   <input type="text" id="fullName" formControlName="fullName"
-                    class="form-control bg-light border-0 rounded-3" placeholder="Adnan Tariq"
-                    aria-describedby="fullName-error" aria-required="true"
-                    [class.is-invalid]="isFieldInvalid('fullName')">
-                  <div *ngIf="isFieldInvalid('fullName')" id="fullName-error" class="invalid-feedback d-block">
-                    {{ getFieldError('fullName') }}
-                  </div>
+                    class="form-control bg-light border-0 rounded-3" placeholder="Enter your full name"
+                    aria-required="true" [class.is-invalid]="isFieldInvalid('fullName')">
                 </div>
                 <div class="col-md-6">
-                  <label for="phoneNumber" class="form-label fw-medium">Phone Number <span
-                      class="text-danger">*</span></label>
+                  <label for="phoneNumber" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
                   <input type="tel" id="phoneNumber" formControlName="phoneNumber"
-                    class="form-control bg-light border-0 rounded-3" placeholder="+92-300-0000000" pkInputFormat="phone"
-                    aria-describedby="phoneNumber-error" aria-required="true"
-                    [class.is-invalid]="isFieldInvalid('phoneNumber')">
-                  <div *ngIf="isFieldInvalid('phoneNumber')" id="phoneNumber-error" class="invalid-feedback d-block">
-                    {{ getFieldError('phoneNumber') }}
-                  </div>
+                    class="form-control bg-light border-0 rounded-3" placeholder="Enter phone number" pkInputFormat="phone"
+                    aria-required="true" [class.is-invalid]="isFieldInvalid('phoneNumber')">
                 </div>
               </div>
 
               <div class="mb-3">
                 <label for="email" class="form-label fw-medium">Email <span class="text-danger">*</span></label>
                 <input type="email" id="email" formControlName="email" class="form-control bg-light border-0 rounded-3"
-                  placeholder="medrotic@info.com" aria-describedby="email-error" aria-required="true"
+                  placeholder="Enter your email address" aria-required="true"
                   [class.is-invalid]="isFieldInvalid('email')">
-                <div *ngIf="isFieldInvalid('email')" id="email-error" class="invalid-feedback d-block">
-                  {{ getFieldError('email') }}
-                </div>
               </div>
 
               <div class="mb-3">
-                <label for="queryType" class="form-label fw-medium">Query Type <span
-                    class="text-danger">*</span></label>
+                <label for="queryType" class="form-label fw-medium">Query Type <span class="text-danger">*</span></label>
                 <select id="queryType" formControlName="queryType" class="form-select bg-light border-0 rounded-3"
-                  aria-describedby="queryType-error" aria-required="true"
-                  [class.is-invalid]="isFieldInvalid('queryType')">
+                  aria-required="true" [class.is-invalid]="isFieldInvalid('queryType')">
                   <option value="" disabled>Select Query Type</option>
                   <option value="General Information">General Information</option>
                   <option value="Appointment">Appointment</option>
@@ -143,26 +120,19 @@
                   <option value="Billing">Billing</option>
                   <option value="Technical Support">Technical Support</option>
                 </select>
-                <div *ngIf="isFieldInvalid('queryType')" id="queryType-error" class="invalid-feedback d-block">
-                  {{ getFieldError('queryType') }}
-                </div>
               </div>
 
               <div class="mb-4">
                 <label for="message" class="form-label fw-medium">Message <span class="text-danger">*</span></label>
                 <textarea id="message" formControlName="message" rows="6"
-                  class="form-control bg-light border-0 rounded-3" placeholder="Write your message"
-                  aria-describedby="message-error" aria-required="true"
-                  [class.is-invalid]="isFieldInvalid('message')"></textarea>
-                <div *ngIf="isFieldInvalid('message')" id="message-error" class="invalid-feedback d-block">
-                  {{ getFieldError('message') }}
-                </div>
+                  class="form-control bg-light border-0 rounded-3" placeholder="How can we help you?"
+                  aria-required="true" [class.is-invalid]="isFieldInvalid('message')"></textarea>
               </div>
 
               <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary rounded-pill px-4 py-3 fw-bold"
+                <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold"
                   [disabled]="isLoading || contactForm.invalid" [attr.aria-busy]="isLoading" aria-live="polite">
-                  <span *ngIf="!isLoading">Send A Message</span>
+                  <span *ngIf="!isLoading">Send Message</span>
                   <span *ngIf="isLoading" class="d-flex align-items-center">
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                     Sending...
@@ -188,9 +158,8 @@
                 class="img-fluid rounded-3 collaboration-image">
             </div>
             <div class="col-md-5 mb-4 mb-md-0">
-              <h3 id="collaboration-heading" class="fw-semibold mb-3"
-                style="font-size: 26px; line-height: 26px; color: #001047;">Enhanced Collaboration</h3>
-              <p class="text-muted mb-0" style="font-size: 12px; line-height: 26px;">Our system makes it easy for
+              <h3 id="collaboration-heading" class="collab-heading fw-semibold mb-3">Enhanced Collaboration</h3>
+              <p class="text-muted small mb-0">Our system makes it easy for
                 healthcare professionals to share and collaborate on patient care.</p>
             </div>
             <div class="col-md-3 text-center text-md-end">

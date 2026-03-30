@@ -8,7 +8,7 @@
         <div class="faq-badge mb-4" appScrollAnimate="fade-up">
           <span class="badge-text">FAQ's</span>
         </div>
-        <h1 class="faq-main-title mb-3" appScrollAnimate="fade-up" [animDelay]="80">
+        <h1 class="faq-main-title mb-3 hide-br-mobile" appScrollAnimate="fade-up" [animDelay]="80">
           All Questions Answered <br>Right Here
         </h1>
       </div>
@@ -19,43 +19,22 @@
 <!-- FAQ Accordion Section -->
 <section class="faq-accordion-section py-5">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" appScrollAnimate="fade-up" [animDelay]="160">
       <div class="col-lg-10">
-        <div class="faq-container bg-light rounded-4 p-4 p-md-5" appScrollAnimate="scale-up">
-          <div class="accordion accordion-flush" id="faqAccordion">
-            <!-- FAQ Items rendered dynamically via Angular -->
-            <div class="accordion-item border-0 mb-3" *ngFor="let faq of faqs; let i = index" appScrollAnimate="fade-up"
-              [animDelay]="i * 60">
-              <h2 class="accordion-header" [id]="'faq' + i">
-                <button class="accordion-button" [class.collapsed]="activeFaqIndex !== i" type="button"
-                  (click)="toggleFaq(i)" [attr.aria-expanded]="activeFaqIndex === i"
-                  [attr.aria-controls]="'collapse' + i">
-                  <div class="faq-content-wrapper w-100 d-flex align-items-center">
-                    <span class="faq-number me-4">{{ faq.number }}</span>
-                    <span class="faq-question flex-grow-1 text-start">{{ faq.question }}</span>
-                    <div class="faq-icon-wrapper ms-3">
-                      <div
-                        class="faq-icon-circle bg-primary rounded-circle d-flex align-items-center justify-content-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"
-                          class="faq-icon-minus" [class.d-none]="activeFaqIndex !== i">
-                          <path d="M2 6H10" stroke="white" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-                          class="faq-icon-plus" [class.d-none]="activeFaqIndex === i">
-                          <path d="M8.5 3V14M3 8.5H14" stroke="white" stroke-width="2" stroke-linecap="round" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </h2>
-              <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="activeFaqIndex === i"
-                [attr.aria-labelledby]="'faq' + i" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  <p class="faq-answer">
-                    {{ faq.answer }}
-                  </p>
-                </div>
+        <div class="faq-accordion accordion" id="faqAccordion">
+          <div class="accordion-item" *ngFor="let faq of faqs; let i = index" appScrollAnimate="fade-up"
+            [animDelay]="i * 100">
+            <h2 class="accordion-header">
+              <button class="accordion-button" [class.collapsed]="activeFaqIndex !== i" type="button" 
+                (click)="toggleFaq(i)" [attr.aria-expanded]="activeFaqIndex === i"
+                [attr.aria-controls]="'collapse' + i">
+                <span class="faq-number d-none d-md-inline-block">{{ (i + 1) | number: '2.0' }}</span>
+                {{ faq.question }}
+              </button>
+            </h2>
+            <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="activeFaqIndex === i">
+              <div class="accordion-body">
+                {{ faq.answer }}
               </div>
             </div>
           </div>

@@ -49,11 +49,20 @@ h6 {
   background: #fff;
 }
 
-.mission-card,
-.vision-card {
+.mission-card, .vision-card {
   height: 100%;
+  padding: 3rem;
+  background: #ffffff;
+  border: 1px solid rgba(0, 16, 71, 0.08);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 16, 71, 0.08);
+  }
 }
 
 .mission-card {
@@ -219,6 +228,12 @@ h6 {
   .mission-image,
   .vision-image {
     height: 300px;
+  }
+
+  .vision-card {
+    .vision-image {
+      order: 4; // Move image below text on mobile
+    }
   }
 
   .vision-content {

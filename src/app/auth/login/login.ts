@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService, LoginRequest } from '../auth.service';
-import { Header } from '../../common/header/header';
-import { Footer } from '../../common/footer/footer';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 import { AlertService } from '../../services/alert.service';
 import { SessionService } from '../../services/session.service';
@@ -12,7 +10,7 @@ import { SessionService } from '../../services/session.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, Header, Footer, PakInputFormatDirective],
+  imports: [CommonModule, FormsModule, RouterModule, PakInputFormatDirective],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
