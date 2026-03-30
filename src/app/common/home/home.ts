@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
+import { AuthService } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +15,45 @@ import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
   styleUrl: './home.scss',
 })
 export class Home {
-  constructor(private navigationService: NavigationService) { }
+  isLoggedIn: boolean = false;
+  private userSubscription?: Subscription;
+
+  constructor(
+    private navigationService: NavigationService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  ngOnInit(): void {
+    this.userSubscription = this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.cdr.markForCheck();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
 
   navigateToAuthOrDashboard(): void {
     this.navigationService.navigateToAuthOrDashboard();
+  }
+
+  getDashboardRoute(): string {
+    const user = this.authService.currentUserValue;
+    if (!user) return '/auth/login';
+    switch (user.role) {
+      case 'admin':
+        return '/admin/dashboard';
+      case 'doctor':
+        return '/doctor-portal/dashboard';
+      case 'patient':
+        return '/patient-portal/dashboard';
+      default:
+        return '/auth/login';
+    }
   }
 
   heroAssets = {

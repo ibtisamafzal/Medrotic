@@ -20,7 +20,7 @@
       <div class="hero-actions d-flex flex-column flex-sm-row justify-content-center gap-3" appScrollAnimate="fade-up"
         [animDelay]="120">
         <button class="btn btn-primary hero-btn" (click)="navigateToAuthOrDashboard()">
-          Get Started
+          {{ isLoggedIn ? 'Dashboard' : 'Get Started' }}
         </button>
       </div>
 
@@ -190,11 +190,17 @@
           <p class="overline">Enhanced Collaboration</p>
           <h3>{{ collaboration.title }}</h3>
           <p>{{ collaboration.copy }}</p>
-          <div class="d-flex justify-content-end">
-            <button class="btn btn-primary rounded-pill px-4" (click)="navigateToAuthOrDashboard()">
-              {{ collaboration.cta }}
-            </button>
-          </div>
+          <!-- Dashboard Button (when logged in) -->
+          <a *ngIf="isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2 w-100 w-lg-auto"
+            [routerLink]="getDashboardRoute()">
+            Dashboard
+          </a>
+
+          <!-- Get Started Button (when not logged in) -->
+          <a *ngIf="!isLoggedIn" class="btn btn-primary rounded-pill px-4 py-2 w-100 w-lg-auto"
+            [routerLink]="['/auth/login']">
+            Get Started
+          </a>
         </div>
       </div>
     </div>
