@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard';
 import { RoleGuard } from './guards/role-guard';
+import { routes as authRoutes } from './auth/auth-routing-module';
 
 export const routes: Routes = [
   // Public routes - Common pages (lazy loaded for smaller initial bundle)
@@ -50,10 +51,10 @@ export const routes: Routes = [
     loadComponent: () => import('./common/affiliate-policy/affiliate-policy').then(m => m.AffiliatePolicy)
   },
 
-  // Auth routes (public)
+  // Auth routes (public) - Eagerly loaded for instant "Get Started" transition
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule)
+    children: authRoutes
   },
 
   // Admin routes - protected by role guard

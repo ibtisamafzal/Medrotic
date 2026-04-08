@@ -55,7 +55,7 @@
   padding: 5rem 0;
   background: linear-gradient(135deg, #f5f6f9 0%, #ffffff 100%);
   font-family: 'Inter', 'Public Sans', sans-serif;
-  animation: fadeIn 0.4s ease-out;
+  animation: fadeIn 0.25s ease-out;
 }
 
 .auth-card {
@@ -66,7 +66,7 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   max-width: 100%;
-  animation: fadeInUp 0.6s ease-out;
+  animation: fadeInUp 0.35s ease-out;
   transform: translateY(0);
 
   &:hover {
@@ -78,7 +78,7 @@
 .auth-card-header {
   margin-bottom: 2.5rem;
   padding-bottom: 0;
-  animation: fadeInUp 0.6s ease-out 0.1s both;
+  animation: fadeInUp 0.35s ease-out 0.05s both;
 }
 
 .auth-logo {
@@ -134,7 +134,7 @@
 }
 
 .auth-form {
-  animation: fadeInUp 0.6s ease-out 0.2s both;
+  animation: fadeInUp 0.35s ease-out 0.1s both;
   
   .form-group {
     margin-bottom: 1.25rem;
