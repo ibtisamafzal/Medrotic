@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
-import { ContactService, ContactFormData } from '../../services/contact.service';
+import { ContactService, ContactFormData, ContactResponse } from '../../services/contact.service';
 import { NavigationService } from '../../services/navigation.service';
 import { ScrollAnimateDirective } from '../shared/scroll-animate.directive';
 import { PakInputFormatDirective } from '../shared/pak-input-format.directive';
@@ -65,8 +66,9 @@ export class Contact implements OnInit {
     };
 
     this.contactService.submitContactForm(formData).subscribe({
-      next: () => {
+      next: (response: ContactResponse) => {
         this.isLoading = false;
+        this.successMessage = response.message || 'Thank you for contacting us! We will get back to you soon.';
         this.showSuccess = true;
         this.contactForm.reset();
         this.resetFormState();
@@ -75,10 +77,10 @@ export class Contact implements OnInit {
           this.showSuccess = false;
         }, 5000);
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.showError = true;
-        this.errorMessage = error.error?.message || 'Failed to send message. Please try again later.';
+        this.errorMessage = this.getSubmitErrorMessage(error);
 
         setTimeout(() => {
           this.showError = false;
@@ -100,6 +102,42 @@ export class Contact implements OnInit {
       control?.markAsUntouched();
       control?.markAsPristine();
     });
+  }
+
+  private getSubmitErrorMessage(error: HttpErrorResponse): string {
+    const apiMessage = this.extractApiErrorMessage(error);
+    if (apiMessage) {
+      return apiMessage;
+    }
+
+    if (error.status === 0) {
+      return 'Unable to connect right now. Please check your internet connection and try again.';
+    }
+
+    if (error.status >= 500) {
+      return 'Our contact service is temporarily unavailable. Please try again in a few minutes.';
+    }
+
+    if (error.status === 400) {
+      return 'Please review your input and try again.';
+    }
+
+    return 'Failed to send message. Please try again later.';
+  }
+
+  private extractApiErrorMessage(error: HttpErrorResponse): string | null {
+    const errorBody = error.error;
+
+    if (typeof errorBody === 'string' && errorBody.trim()) {
+      return errorBody.trim();
+    }
+
+    if (errorBody && typeof errorBody === 'object' && typeof errorBody.message === 'string') {
+      const message = errorBody.message.trim();
+      return message || null;
+    }
+
+    return null;
   }
 
   getFieldError(fieldName: string): string {
