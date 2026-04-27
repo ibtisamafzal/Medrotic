@@ -1,16 +1,15 @@
 export default async function handler(req, res) {
-    try {
-      const serverModule = await import('../dist/frontend/server/server.mjs');
-      const server = serverModule.default || serverModule.app || serverModule;
-      if (typeof server === 'function') {
-        return server(req, res);
-      } else if (server && typeof server.handle === 'function') {
-        return server.handle(req, res);
-      } else {
-        throw new Error('Server module does not export a valid handler');
-      }
-    } catch (error) {
-      console.error('Server error:', error);
-      res.status(500).send('Internal Server Error: ' + error.message);
+  try {
+    const serverModule = await import('../dist/frontend/server/server.mjs');
+    const handlerFn = serverModule.reqHandler || serverModule.default || serverModule.app;
+
+    if (typeof handlerFn === 'function') {
+      return handlerFn(req, res);
     }
+
+    throw new Error('SSR request handler export not found');
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).send('Internal Server Error');
   }
+}
