@@ -108,22 +108,6 @@
           <div class="contact-inner-card p-4 p-md-5 flex-grow-1 shadow-sm mb-0">
             <h2 class="contact-sub-title mb-4">Send Us a Message</h2>
             
-            <div *ngIf="showSuccess" class="alert alert-success alert-dismissible fade show d-flex align-items-center"
-              role="alert" aria-live="polite">
-              <span class="me-2" aria-hidden="true">&#10003;</span>
-              <div>{{ successMessage }}</div>
-              <button type="button" class="btn-close ms-auto" (click)="showSuccess = false"
-                aria-label="Close success message"></button>
-            </div>
-
-            <div *ngIf="showError" class="alert alert-danger alert-dismissible fade show d-flex align-items-center"
-              role="alert" aria-live="assertive">
-              <span class="me-2" aria-hidden="true">&#9888;</span>
-              <div>{{ errorMessage }}</div>
-              <button type="button" class="btn-close ms-auto" (click)="showError = false"
-                aria-label="Close error message"></button>
-            </div>
-
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate aria-label="contact form">
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
@@ -176,6 +160,14 @@
                     Sending...
                   </span>
                 </button>
+              </div>
+
+              <div *ngIf="showSuccess" class="alert alert-success mt-3 mb-0" role="alert" aria-live="polite">
+                {{ successMessage }}
+              </div>
+
+              <div *ngIf="showError" class="alert alert-danger mt-3 mb-0" role="alert" aria-live="assertive">
+                {{ errorMessage }}
               </div>
             </form>
           </div>

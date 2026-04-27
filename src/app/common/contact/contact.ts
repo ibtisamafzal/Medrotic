@@ -68,7 +68,7 @@ export class Contact implements OnInit {
     this.contactService.submitContactForm(formData).subscribe({
       next: (response: ContactResponse) => {
         this.isLoading = false;
-        this.successMessage = response.message || 'Thank you for contacting us! We will get back to you soon.';
+        this.successMessage = response.message || 'Message sent. We will contact you soon.';
         this.showSuccess = true;
         this.contactForm.reset();
         this.resetFormState();
@@ -111,22 +111,26 @@ export class Contact implements OnInit {
     }
 
     if (error.status === 0) {
-      return 'Unable to connect right now. Please check your internet connection and try again.';
+      return 'Connection issue. Please try again.';
     }
 
     if (error.status >= 500) {
-      return 'Our contact service is temporarily unavailable. Please try again in a few minutes.';
+      return 'Could not send your message. Please try again.';
     }
 
     if (error.status === 400) {
-      return 'Please review your input and try again.';
+      return 'Please check your details and try again.';
     }
 
-    return 'Failed to send message. Please try again later.';
+    return 'Could not send your message. Please try again.';
   }
 
   private extractApiErrorMessage(error: HttpErrorResponse): string | null {
     const errorBody = error.error;
+
+    if (error.status >= 500) {
+      return null;
+    }
 
     if (typeof errorBody === 'string' && errorBody.trim()) {
       return errorBody.trim();
