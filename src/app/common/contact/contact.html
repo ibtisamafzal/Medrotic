@@ -169,7 +169,7 @@
 
               <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold"
-                  [disabled]="isLoading || contactForm.invalid" [attr.aria-busy]="isLoading" aria-live="polite">
+                  [disabled]="isLoading" [attr.aria-busy]="isLoading" aria-live="polite">
                   <span *ngIf="!isLoading">Send Message</span>
                   <span *ngIf="isLoading" class="d-flex align-items-center">
                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
