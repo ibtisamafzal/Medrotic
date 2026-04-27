@@ -43,9 +43,35 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(0, 16, 71, 0.7);
 }
 
+.contact-intro-copy {
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+
+  .contact-sub-title {
+    line-height: 1.2;
+  }
+
+  .contact-description {
+    margin-top: 1rem;
+    max-width: 60ch;
+  }
+
+  @media (max-width: 991.98px) {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 575.98px) {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+}
+
 .contact-card {
   background-color: #f5f6f9;
   padding: 4rem 0;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 991.98px) {
     padding: 2rem 0;
@@ -135,15 +161,73 @@ textarea.form-control {
   }
 }
 
+.contact-collaboration-section {
+  margin-top: 1rem;
+  position: relative;
+  z-index: 0;
+}
+
 // Collaboration banner on contact page
-.border.border-primary.border-2.rounded-4 {
+.collaboration-banner {
   margin: 3rem 0;
   padding: 2rem;
+  position: static;
+  overflow: hidden;
+  isolation: isolate;
+  background: #ffffff;
+  min-height: 220px;
+
+  .collaboration-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.05fr) minmax(260px, 1.3fr) auto;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 991.98px) {
+    margin: 2rem 0;
+
+    .collaboration-layout {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    .collaboration-cta {
+      grid-column: 1 / -1;
+      text-align: left !important;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .collaboration-layout {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .collaboration-copy,
+    .collaboration-cta {
+      text-align: left !important;
+    }
+
+    .collaboration-cta .btn {
+      width: 100%;
+    }
+  }
+
+  .collaboration-media,
+  .collaboration-copy,
+  .collaboration-cta {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
 }
 
 .collaboration-image {
   width: 100%;
   height: auto;
+  max-height: 240px;
+  object-fit: cover;
 }
 
 .contact-badge-mini {
@@ -164,4 +248,47 @@ textarea.form-control {
   @media (max-width: 767.98px) {
     font-size: 1.25rem !important;
   }
+}
+
+.office-card {
+  p {
+    line-height: 1.55;
+  }
+}
+
+.office-info-list {
+  margin-top: 0.5rem;
+}
+
+.office-info-item {
+  line-height: 1.45;
+}
+
+.office-contacts {
+  border-top: 1px solid rgba(0, 16, 71, 0.1);
+}
+
+.office-contact-item {
+  h5 {
+    color: #001047;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    line-height: 1.45;
+  }
+}
+
+.office-mini-icon {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 8px;
+  background: #f5f6f9;
+  color: #3461ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
 }
