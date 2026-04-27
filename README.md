@@ -135,6 +135,19 @@ Angular uses `src/environments` for configuration.
 
 Make sure to update the `apiUrl` to point to your deployed Medrotic.Api instance.
 
+For contact form SMTP delivery (handled only on the server), set these environment variables in your hosting platform:
+
+- `SMTP_HOST`
+- `SMTP_PORT` (for example, `587`)
+- `SMTP_SECURE` (`true` or `false`)
+- `SMTP_USER`
+- `SMTP_PASS`
+- `CONTACT_FROM` (optional sender address; defaults to `SMTP_USER`)
+- `CONTACT_FROM_NAME` (optional sender display name, for example `Medrotic Support`)
+- `CONTACT_RECIPIENT` (private inbox address that receives contact form submissions)
+
+Do not place SMTP credentials or contact recipient addresses in frontend files.
+
 ---
 
 ## 📦 Scripts
