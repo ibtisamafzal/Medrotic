@@ -46,7 +46,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let patient of filteredPatients; let i = index" class="fade-in-up patient-row" [style.animation-delay]="(300 + i * 50) + 'ms'">
-            <td>{{ patient.name }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-circle me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background-color: #3461ff; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(52, 97, 255, 0.15);">
+                  <img *ngIf="patient.profilePictureUrl" [src]="patient.profilePictureUrl" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                  <span *ngIf="!patient.profilePictureUrl">{{ patient.name ? patient.name.charAt(0).toUpperCase() : 'P' }}</span>
+                </div>
+                <span>{{ patient.name }}</span>
+              </div>
+            </td>
             <td>{{ patient.email }}</td>
             <td>{{ patient.phone || 'N/A' }}</td>
             <td>{{ patient.dateOfBirth || 'N/A' }}</td>
@@ -85,6 +93,14 @@
           <button type="button" class="btn-close" (click)="closeProfileModal()" aria-label="Close dialog" title="Close">✕</button>
         </div>
         <div class="modal-body profile-readonly">
+          <div class="text-center mb-4">
+            <div class="avatar-preview-container d-inline-flex align-items-center justify-content-center" style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 3px solid #3461ff; box-shadow: 0 4px 12px rgba(52, 97, 255, 0.15); background-color: #f1f5f9;">
+              <img *ngIf="profilePatient.profilePictureUrl" [src]="profilePatient.profilePictureUrl" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+              <div *ngIf="!profilePatient.profilePictureUrl" class="text-uppercase" style="font-size: 2rem; font-weight: 700; color: #3461ff;">
+                {{ profilePatient.name ? profilePatient.name.charAt(0) : 'P' }}
+              </div>
+            </div>
+          </div>
           <p class="mb-2"><span class="text-muted">Name</span><br><strong>{{ profilePatient.name }}</strong></p>
           <p class="mb-2"><span class="text-muted">Email</span><br><strong>{{ profilePatient.email }}</strong></p>
           <p class="mb-2"><span class="text-muted">Phone</span><br><strong>{{ profilePatient.phone || '—' }}</strong></p>

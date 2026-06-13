@@ -636,6 +636,27 @@
   },
   {
     "ContainingType": "Medrotic.Api.Controllers.AdminController",
+    "Method": "UpdateRepositoryItem",
+    "RelativePath": "api/admin/repository/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Medrotic.Api.DTOs.RepositoryItemUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.AdminController",
     "Method": "DeleteRepositoryItem",
     "RelativePath": "api/admin/repository/{id}",
     "HttpMethod": "DELETE",
@@ -1704,6 +1725,22 @@
         "Name": "patientId",
         "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Medrotic.Api.Controllers.ProfileController",
+    "Method": "UploadProfilePicture",
+    "RelativePath": "api/profile/upload-picture",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

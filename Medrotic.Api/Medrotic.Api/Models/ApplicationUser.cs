@@ -40,6 +40,8 @@ namespace Medrotic.Api.Models
         [MaxLength(32)]
         public string AccountVerificationStatus { get; set; } = "verified";
 
+        public string? ProfilePicturePath { get; set; }
+
         public ICollection<Otp> Otps { get; set; } = new List<Otp>();
     }
 }

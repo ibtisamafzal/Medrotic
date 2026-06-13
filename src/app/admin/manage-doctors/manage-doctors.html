@@ -48,7 +48,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let doctor of filteredDoctors; let i = index" class="fade-in-up doctor-row" [style.animation-delay]="(300 + i * 50) + 'ms'">
-            <td>{{ doctor.name }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-circle me-2" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; background-color: #3461ff; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(52, 97, 255, 0.15);">
+                  <img *ngIf="doctor.profilePictureUrl" [src]="doctor.profilePictureUrl" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                  <span *ngIf="!doctor.profilePictureUrl">{{ doctor.name ? doctor.name.charAt(0).toUpperCase() : 'D' }}</span>
+                </div>
+                <span>{{ doctor.name }}</span>
+              </div>
+            </td>
             <td>{{ doctor.email }}</td>
             <td>{{ doctor.cnic }}</td>
             <td>{{ doctor.specialization }}</td>
@@ -245,7 +253,10 @@
         <div class="modal-body">
           <div class="doctor-profile-grid">
             <div class="doctor-profile-card doctor-profile-card--hero">
-              <div class="doctor-profile-avatar">{{ getDoctorInitial(profileDoctor) }}</div>
+              <div class="doctor-profile-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <img *ngIf="profileDoctor.profilePictureUrl" [src]="profileDoctor.profilePictureUrl" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                <span *ngIf="!profileDoctor.profilePictureUrl">{{ getDoctorInitial(profileDoctor) }}</span>
+              </div>
               <div>
                 <h4 class="doctor-profile-name">{{ profileDoctor.name }}</h4>
                 <p class="doctor-profile-sub">{{ profileDoctor.specialization || 'Specialization not set' }}</p>

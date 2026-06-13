@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Medrotic.Api.DTOs
@@ -35,5 +35,6 @@ namespace Medrotic.Api.DTOs
         public string Gender { get; set; } = string.Empty;
 
         public string? HospitalId { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

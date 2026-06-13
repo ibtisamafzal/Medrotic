@@ -30,6 +30,7 @@ export class ProfileSettings implements OnInit {
     email: '',
     phone: '',
     role: 'admin',
+    profilePictureUrl: '',
   };
 
   passwordForm = {
@@ -88,7 +89,9 @@ export class ProfileSettings implements OnInit {
           email: String(d.email ?? d.Email ?? this.authService.currentUserValue?.email ?? '').trim(),
           phone: String(d.phoneNumber ?? d.PhoneNumber ?? '').trim(),
           role: 'admin',
+          profilePictureUrl: String(d.profilePictureUrl ?? d.ProfilePictureUrl ?? d.profilePicturePath ?? d.ProfilePicturePath ?? '').trim(),
         };
+        this.authService.updateCurrentUserProfile(this.profile.name, this.profile.profilePictureUrl);
         this.profileLoading = false;
         this.cdr.markForCheck();
       },
@@ -101,6 +104,32 @@ export class ProfileSettings implements OnInit {
         this.alertService.error('Could not load profile from the server. Showing cached name/email only.');
         this.cdr.markForCheck();
       },
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.profile.profilePictureUrl = e.target?.result as string;
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(file);
+
+    this.adminService.uploadProfilePicture(file).subscribe({
+      next: (res) => {
+        if (res.profilePictureUrl) {
+          this.profile.profilePictureUrl = res.profilePictureUrl;
+          this.authService.updateCurrentUserProfile(this.profile.name, res.profilePictureUrl);
+          this.alertService.success('Profile picture uploaded successfully.');
+          this.cdr.markForCheck();
+        }
+      },
+      error: (err) => {
+        console.warn('Backend upload failed, using local preview:', err);
+      }
     });
   }
 

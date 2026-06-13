@@ -23,6 +23,7 @@ export interface Doctor {
   hospitalId?: string;
   hospitalName?: string;
   status: 'pending' | 'verified' | 'rejected';
+  profilePictureUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -49,6 +50,7 @@ export interface Patient {
   status: 'active' | 'inactive';
   /** Account verification gate (synced with User Verification). */
   verificationStatus?: 'pending' | 'verified' | 'rejected';
+  profilePictureUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -59,6 +61,7 @@ export interface User {
   email: string;
   role: 'admin' | 'doctor' | 'patient';
   status: 'pending' | 'verified' | 'rejected';
+  profilePictureUrl?: string;
   createdAt?: string;
 }
 
@@ -177,6 +180,7 @@ export class AdminService {
       hospitalId: d?.hospitalId ?? d?.HospitalId ?? undefined,
       hospitalName: d?.hospitalName ?? d?.HospitalName ?? undefined,
       status,
+      profilePictureUrl: d?.profilePictureUrl ?? d?.ProfilePictureUrl ?? d?.profilePicturePath ?? d?.ProfilePicturePath ?? undefined,
       createdAt: d?.createdAt ?? d?.CreatedAt,
       updatedAt: d?.updatedAt ?? d?.UpdatedAt,
     };
@@ -599,6 +603,16 @@ export class AdminService {
 
   updateProfile(profile: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/profile`, profile);
+  }
+
+  uploadProfilePicture(file: File): Observable<{ profilePictureUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${environment.apiUrl}/api/profile/upload-picture`, formData).pipe(
+      map((res) => ({
+        profilePictureUrl: res?.profilePictureUrl ?? res?.ProfilePictureUrl ?? ''
+      }))
+    );
   }
 }
 

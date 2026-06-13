@@ -22,7 +22,8 @@ export class ProfileSettings implements OnInit {
     phone: '',
     specialization: '',
     cnic: '',
-    hospital: ''
+    hospital: '',
+    profilePictureUrl: ''
   };
   passwordForm = {
     currentPassword: '',
@@ -65,7 +66,8 @@ export class ProfileSettings implements OnInit {
         phone: '',
         specialization: '',
         cnic: '',
-        hospital: ''
+        hospital: '',
+        profilePictureUrl: ''
       };
     } finally {
       if (showSpinner) {
@@ -83,8 +85,36 @@ export class ProfileSettings implements OnInit {
       phone: d?.phoneNumber ?? d?.PhoneNumber ?? '',
       specialization: d?.specialty ?? d?.Specialty ?? '',
       cnic: formatPakistaniCnicDisplay(String(d?.cnic ?? d?.CNIC ?? '')),
-      hospital: d?.hospitalName ?? ''
+      hospital: d?.hospitalName ?? '',
+      profilePictureUrl: d?.profilePictureUrl ?? d?.ProfilePictureUrl ?? d?.profilePicturePath ?? d?.ProfilePicturePath ?? ''
     };
+    this.authService.updateCurrentUserProfile(this.doctor.name ?? '', this.doctor.profilePictureUrl);
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.doctor.profilePictureUrl = e.target?.result as string;
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(file);
+
+    this.doctorService.uploadProfilePicture(file).subscribe({
+      next: (res) => {
+        if (res.profilePictureUrl) {
+          this.doctor.profilePictureUrl = res.profilePictureUrl;
+          this.authService.updateCurrentUserProfile(this.doctor.name ?? '', res.profilePictureUrl);
+          this.success = true;
+          this.cdr.markForCheck();
+        }
+      },
+      error: (err) => {
+        console.warn('Backend upload failed, using local preview:', err);
+      }
+    });
   }
 
   onSubmit() {

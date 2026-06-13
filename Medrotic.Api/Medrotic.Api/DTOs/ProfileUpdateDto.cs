@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Medrotic.Api.DTOs
 {
@@ -27,5 +27,7 @@ namespace Medrotic.Api.DTOs
 
         [RegularExpression("^(Male|Female|Other)$", ErrorMessage = "Gender must be Male, Female, or Other.")]
         public string? Gender { get; set; }
+
+        public string? ProfilePictureUrl { get; set; }
     }
 }

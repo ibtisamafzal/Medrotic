@@ -151,7 +151,8 @@ namespace Medrotic.Api.Controllers
                         d.Gender,
                         d.DateOfBirth,
                         HospitalId = d.HospitalId,
-                        HospitalName = d.Hospital != null ? d.Hospital.Name : "Not Assigned"
+                        HospitalName = d.Hospital != null ? d.Hospital.Name : "Not Assigned",
+                        profilePictureUrl = d.ProfilePicturePath
                     })
                     .ToListAsync();
 
@@ -427,7 +428,8 @@ namespace Medrotic.Api.Controllers
                         p.City,
                         p.Province,
                         p.Gender,
-                        p.DateOfBirth
+                        p.DateOfBirth,
+                        profilePictureUrl = p.ProfilePicturePath
                     })
                     .ToList();
 
@@ -964,7 +966,8 @@ namespace Medrotic.Api.Controllers
                         admin.Province,
                         admin.DateOfBirth,
                         admin.Gender,
-                        admin.HospitalId
+                        admin.HospitalId,
+                        ProfilePictureUrl = admin.ProfilePicturePath
                     }
                 });
             }
@@ -1020,7 +1023,8 @@ namespace Medrotic.Api.Controllers
                         city = fresh.City,
                         province = fresh.Province,
                         dateOfBirth = fresh.DateOfBirth,
-                        gender = fresh.Gender
+                        gender = fresh.Gender,
+                        profilePictureUrl = fresh.ProfilePicturePath
                     }
                 });
             }

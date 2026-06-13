@@ -11,8 +11,11 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class DoctorPortalLayout {
   sidebarCollapsed = false;
+  currentUser$;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.currentUser$ = this.authService.currentUser;
+  }
 
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;

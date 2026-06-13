@@ -15,6 +15,7 @@ export interface User {
   role: 'admin' | 'doctor' | 'patient';
   name: string;
   token: string;
+  profilePictureUrl?: string;
 }
 
 export interface LoginRequest {
@@ -134,13 +135,18 @@ export class AuthService {
    * Updates only the user's display name; token/role stay unchanged.
    */
   public updateCurrentUserName(newName: string): void {
+    this.updateCurrentUserProfile(newName);
+  }
+
+  public updateCurrentUserProfile(newName: string, profilePictureUrl?: string): void {
     const current = this.currentUserSubject.value;
     if (!current) return;
 
     const trimmed = (newName ?? '').trim();
     const updated: User = {
       ...current,
-      name: trimmed || current.name
+      name: trimmed || current.name,
+      profilePictureUrl: profilePictureUrl !== undefined ? profilePictureUrl : current.profilePictureUrl
     };
 
     this.currentUserSubject.next(updated);

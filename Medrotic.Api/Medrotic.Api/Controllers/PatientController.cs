@@ -223,7 +223,8 @@ namespace Medrotic.Api.Controllers
                     patient.City,
                     patient.Province,
                     patient.DateOfBirth,
-                    patient.Gender
+                    patient.Gender,
+                    ProfilePictureUrl = patient.ProfilePicturePath
                 }
             });
         }
@@ -720,7 +721,8 @@ namespace Medrotic.Api.Controllers
                     phone = d.PhoneNumber,
                     email = d.Email,
                     qualifications = (string[]?)null,
-                    rating = (double?)null
+                    rating = (double?)null,
+                    profilePictureUrl = d.ProfilePicturePath
                 })
                 .ToListAsync();
 

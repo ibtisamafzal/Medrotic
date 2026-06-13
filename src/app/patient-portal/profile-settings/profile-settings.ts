@@ -70,7 +70,7 @@ export class ProfileSettings implements OnInit {
           this.profile = patient;
           // Keep patient dashboard welcome header synced without logout/login.
           const displayName = patient?.name ?? patient?.fullName ?? '';
-          if (displayName) this.authService.updateCurrentUserName(displayName);
+          if (displayName) this.authService.updateCurrentUserProfile(displayName, patient?.profilePictureUrl);
           this.cnicVerified = patient.cnicVerified || false;
           this.cdr.markForCheck();
         },
@@ -90,6 +90,32 @@ export class ProfileSettings implements OnInit {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target?.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.profile.profilePictureUrl = e.target?.result as string;
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(file);
+
+    this.patientService.uploadProfilePicture(file).subscribe({
+      next: (res) => {
+        if (res.profilePictureUrl) {
+          this.profile.profilePictureUrl = res.profilePictureUrl;
+          this.alertService.success('Profile picture uploaded successfully.');
+          this.authService.updateCurrentUserProfile(this.profile.name ?? '', res.profilePictureUrl);
+          this.cdr.markForCheck();
+        }
+      },
+      error: (err) => {
+        console.warn('Backend upload failed, using local preview:', err);
+      }
+    });
   }
 
   verifyCNIC() {

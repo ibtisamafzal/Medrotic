@@ -19,6 +19,7 @@ export interface Patient {
   province?: string;
   gender?: string;
   cnicVerified?: boolean;
+  profilePictureUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -80,6 +81,7 @@ export interface Doctor {
   phone?: string;
   email?: string;
   rating?: number;
+  profilePictureUrl?: string;
 }
 
 // Emits whenever patient-visible portal data changes (e.g., new metrics, profile update).
@@ -261,7 +263,8 @@ export class PatientService {
             province,
             address: [city, province].filter((x: string) => !!x).join(', '),
             dateOfBirth: dob,
-            gender: data?.gender ?? data?.Gender
+            gender: data?.gender ?? data?.Gender,
+            profilePictureUrl: data?.profilePictureUrl ?? data?.ProfilePictureUrl ?? data?.profilePicturePath ?? data?.ProfilePicturePath ?? undefined
           } as Patient;
         }),
         catchError(() => of({ id: 'current', name: '', email: '' } as Patient))
@@ -434,6 +437,7 @@ export class PatientService {
       phone: String(d?.phone ?? d?.PhoneNumber ?? '').trim() || undefined,
       email: String(d?.email ?? d?.Email ?? '').trim() || undefined,
       rating: Number.isFinite(ratingValue) ? ratingValue : undefined,
+      profilePictureUrl: d?.profilePictureUrl ?? d?.ProfilePictureUrl ?? d?.profilePicturePath ?? d?.ProfilePicturePath ?? undefined
     };
   }
 
@@ -622,6 +626,16 @@ export class PatientService {
   // Update profile
   updateProfile(profile: Partial<Patient>): Observable<Patient> {
     return this.http.put<Patient>(`${this.baseUrl}/profile`, profile);
+  }
+
+  uploadProfilePicture(file: File): Observable<{ profilePictureUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${environment.apiUrl}/api/profile/upload-picture`, formData).pipe(
+      map((res) => ({
+        profilePictureUrl: res?.profilePictureUrl ?? res?.ProfilePictureUrl ?? ''
+      }))
+    );
   }
 
   // Explicit profile getter for available backend API.

@@ -15,6 +15,7 @@ export interface Doctor {
   /** Pakistani national ID (formatted when displayed). */
   cnic?: string;
   hospital?: string;
+  profilePictureUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -35,6 +36,7 @@ export interface Patient {
   province?: string;
   medicalHistory?: string;
   status: 'active' | 'inactive';
+  profilePictureUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -257,6 +259,7 @@ export class DoctorService {
       specialization: String(d?.specialization ?? d?.specialty ?? d?.Specialty ?? ''),
       cnic,
       hospital: d?.hospital ?? d?.HospitalName ?? d?.hospitalName,
+      profilePictureUrl: d?.profilePictureUrl ?? d?.ProfilePictureUrl ?? d?.profilePicturePath ?? d?.ProfilePicturePath ?? undefined,
       createdAt: d?.createdAt,
       updatedAt: d?.updatedAt,
     };
@@ -302,7 +305,8 @@ export class DoctorService {
           ...p,
           name: p.name ?? p.fullName ?? '',
           phone: p.phone ?? p.phoneNumber ?? p.phone ?? '',
-          status: p.status ?? 'active'
+          status: p.status ?? 'active',
+          profilePictureUrl: p.profilePictureUrl ?? p.ProfilePictureUrl ?? p.profilePicturePath ?? p.ProfilePicturePath ?? undefined
         })) as Patient[];
         const localPatients = this.getLocalPatientsCache();
         const merged = [...apiPatients];
@@ -722,6 +726,16 @@ export class DoctorService {
 
   deleteDocument(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/documents/${id}`);
+  }
+
+  uploadProfilePicture(file: File): Observable<{ profilePictureUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`${environment.apiUrl}/api/profile/upload-picture`, formData).pipe(
+      map((res) => ({
+        profilePictureUrl: res?.profilePictureUrl ?? res?.ProfilePictureUrl ?? ''
+      }))
+    );
   }
 }
 

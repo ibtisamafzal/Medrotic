@@ -206,7 +206,8 @@ namespace Medrotic.Api.Controllers
                     email = fresh.Email,
                     phoneNumber = fresh.PhoneNumber,
                     specialty = fresh.Specialty,
-                    cnic = fresh.CNIC
+                    cnic = fresh.CNIC,
+                    profilePictureUrl = fresh.ProfilePicturePath
                 };
 
                 return Ok(new { Message = "Doctor profile updated successfully.", Data = payload });
@@ -258,7 +259,8 @@ namespace Medrotic.Api.Controllers
                         gender = p.Gender,
                         status = "active",
                         createdAt = p.LastActivity,
-                        updatedAt = p.LastActivity
+                        updatedAt = p.LastActivity,
+                        profilePictureUrl = p.ProfilePicturePath
                     })
                     .ToListAsync();
 
