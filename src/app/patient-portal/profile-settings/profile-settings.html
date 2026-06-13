@@ -65,14 +65,14 @@
         <div class="card-body">
           <div class="mb-3">
             <label class="form-label">CNIC Number</label>
-            <input type="text" class="form-control" [(ngModel)]="profile.cnic" name="cnic" 
+            <input type="text" class="form-control" [(ngModel)]="profile.cnic" name="cnic"
                    pkInputFormat="cnic"
                    maxlength="15"
                    inputmode="numeric"
                    placeholder="12345-1234567-1" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}">
             <small class="form-text text-muted">Format: 12345-1234567-1</small>
           </div>
-          
+
           <div class="mb-3" *ngIf="cnicVerified">
             <div class="alert alert-success d-flex align-items-center">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="me-2">
@@ -89,7 +89,7 @@
             </div>
           </div>
 
-          <button type="button" class="btn btn-outline-primary w-100" 
+          <button type="button" class="btn btn-outline-primary w-100"
                   (click)="verifyCNIC()" [disabled]="cnicVerifying || !profile.cnic">
             <span *ngIf="cnicVerifying" class="spinner-border spinner-border-sm me-2"></span>
             {{ cnicVerifying ? 'Verifying...' : (cnicVerified ? 'Re-verify CNIC' : 'Verify CNIC') }}
@@ -102,19 +102,54 @@
           <h3 class="card-title">Change Password</h3>
         </div>
         <div class="card-body">
-          <div class="mb-3">
-            <label class="form-label">Current Password</label>
-              <input type="password" class="form-control" title="Current Password" placeholder="Current password">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">New Password</label>
-              <input type="password" class="form-control" title="New Password" placeholder="New password">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Confirm New Password</label>
-              <input type="password" class="form-control" title="Confirm New Password" placeholder="Confirm new password">
-          </div>
-          <button type="button" class="btn btn-outline-secondary w-100">Update Password</button>
+          <form (ngSubmit)="changePassword()" novalidate>
+            <div class="mb-3">
+              <label class="form-label" for="patient-current-password">Current Password</label>
+              <input
+                id="patient-current-password"
+                type="password"
+                class="form-control"
+                [(ngModel)]="passwordForm.currentPassword"
+                name="currentPassword"
+                title="Current Password"
+                placeholder="Current password"
+                autocomplete="current-password"
+              >
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="patient-new-password">New Password</label>
+              <input
+                id="patient-new-password"
+                type="password"
+                class="form-control"
+                [(ngModel)]="passwordForm.newPassword"
+                name="newPassword"
+                title="New Password"
+                placeholder="New password"
+                autocomplete="new-password"
+              >
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="patient-confirm-password">Confirm New Password</label>
+              <input
+                id="patient-confirm-password"
+                type="password"
+                class="form-control"
+                [(ngModel)]="passwordForm.confirmPassword"
+                name="confirmPassword"
+                title="Confirm New Password"
+                placeholder="Confirm new password"
+                autocomplete="new-password"
+              >
+            </div>
+            <div *ngIf="passwordError" class="alert alert-danger py-2 mb-3">
+              {{ passwordError }}
+            </div>
+            <button type="submit" class="btn btn-outline-secondary w-100" [disabled]="passwordSaving">
+              <span *ngIf="passwordSaving" class="spinner-border spinner-border-sm me-2"></span>
+              {{ passwordSaving ? 'Updating...' : 'Update Password' }}
+            </button>
+          </form>
         </div>
       </div>
     </div>

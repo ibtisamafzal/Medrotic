@@ -23,6 +23,49 @@
     </div>
   </header>
 
+  <!-- ─── Charts ─── -->
+  <section class="dash-section" aria-labelledby="admin-charts-heading">
+    <h2 id="admin-charts-heading" class="dash-section__label">
+      <img src="images/svg-icons/Analytics-Bars.svg" alt="" class="svg-icon-img svg-icon-img--sm" aria-hidden="true">
+      Charts & trends
+    </h2>
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-lg-4">
+        <div class="chart-card fade-in-up" [style.animation-delay]="'500ms'">
+          <div class="chart-card__head">
+            <h3 class="chart-card__title">Patient growth</h3>
+            <p class="chart-card__sub">Monthly platform adoption</p>
+          </div>
+          <div class="chart-container">
+            <canvas #dashboardChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="chart-card fade-in-up" [style.animation-delay]="'550ms'">
+          <div class="chart-card__head">
+            <h3 class="chart-card__title">Doctor growth</h3>
+            <p class="chart-card__sub">Provider onboarding trend</p>
+          </div>
+          <div class="chart-container">
+            <canvas #dashboardChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4">
+        <div class="chart-card fade-in-up" [style.animation-delay]="'600ms'">
+          <div class="chart-card__head">
+            <h3 class="chart-card__title">System mix</h3>
+            <p class="chart-card__sub">Current operational footprint</p>
+          </div>
+          <div class="chart-container chart-container--compact">
+            <canvas #dashboardChartCanvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── Key Metrics Cards ─── -->
   <section class="dash-section" aria-labelledby="admin-metrics-heading">
     <h2 id="admin-metrics-heading" class="dash-section__label">
@@ -65,7 +108,7 @@
             <div class="col-6 col-md-4 col-lg-3" *ngFor="let link of quickLinks; let i = index">
               <a [routerLink]="link.route" class="quick-link-card fade-in-up" [style.animation-delay]="(400 + i * 50) + 'ms'">
                 <div class="quick-link-icon-wrapper" [style.color]="link.color">
-                  <div class="quick-link-mask" [style.-webkit-mask-image]="'url(/images/svg-icons/' + link.iconPath + ')'"></div>
+                  <div class="quick-link-mask" [style.-webkit-mask-image]="'url(/images/svg-icons/' + link.iconPath + ')'" ></div>
                 </div>
                 <h4 class="quick-link-title">{{ link.title }}</h4>
                 <p class="quick-link-count" [class.text-muted]="link.count === null">{{ quickLinkCountLabel(link.count) }}</p>
@@ -147,7 +190,7 @@
               <header class="admin-insight-card__head">
                 <span class="admin-insight-card__eyebrow">Action queue</span>
                 <div class="admin-insight-card__icon-wrap" aria-hidden="true">
-                  <img src="images/svg-icons/shield-check-light.svg" alt="" class="svg-icon-img" style="filter: invert(1);">
+                  <img src="images/svg-icons/shield-check-light.svg" alt="" class="svg-icon-img svg-icon-img--inverse">
                 </div>
               </header>
               <h3 class="admin-insight-card__title">Pending verifications</h3>
@@ -166,7 +209,7 @@
               <header class="admin-insight-card__head">
                 <span class="admin-insight-card__eyebrow">Operations</span>
                 <div class="admin-insight-card__icon-wrap" aria-hidden="true">
-                  <img src="images/svg-icons/pulse-rectangle.svg" alt="" class="svg-icon-img" style="filter: invert(1);">
+                  <img src="images/svg-icons/pulse-rectangle.svg" alt="" class="svg-icon-img svg-icon-img--inverse">
                 </div>
               </header>
               <h3 class="admin-insight-card__title">System health</h3>

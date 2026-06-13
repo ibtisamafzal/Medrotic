@@ -5,6 +5,7 @@ import { AdminService, RepositoryItem } from '../../services/admin.service';
 import { AlertService } from '../../services/alert.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { DashboardTableActionsComponent } from '../../common/shared/dashboard-table-actions.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-manage-repository',
@@ -16,8 +17,14 @@ export class ManageRepository implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
 
   items: RepositoryItem[] = [];
+  filteredItems: RepositoryItem[] = [];
   searchTerm = '';
   typeFilter: 'all' | 'document' | 'image' | 'data' = 'all';
+  selectedItem: RepositoryItem | null = null;
+  showViewModal = false;
+  showRenameModal = false;
+  renameSaving = false;
+  renameForm = { name: '' };
 
   constructor(
     private adminService: AdminService,
@@ -48,7 +55,70 @@ export class ManageRepository implements OnInit {
   }
 
   applyFilters() {
-    // Filtering would be done here if needed
+    const term = this.searchTerm.trim().toLowerCase();
+    this.filteredItems = this.items.filter((item) => {
+      const matchesSearch = !term ||
+        item.name.toLowerCase().includes(term) ||
+        (item.uploadedBy ?? '').toLowerCase().includes(term) ||
+        (item.filePath ?? '').toLowerCase().includes(term);
+      const matchesType = this.typeFilter === 'all' || item.type === this.typeFilter;
+      return matchesSearch && matchesType;
+    });
+  }
+
+  openViewModal(item: RepositoryItem) {
+    this.selectedItem = { ...item };
+    this.showViewModal = true;
+    this.syncView();
+  }
+
+  closeViewModal() {
+    this.showViewModal = false;
+    this.selectedItem = null;
+    this.syncView();
+  }
+
+  openRenameModal(item: RepositoryItem) {
+    this.selectedItem = { ...item };
+    this.renameForm = { name: item.name };
+    this.showRenameModal = true;
+    this.syncView();
+  }
+
+  closeRenameModal() {
+    this.showRenameModal = false;
+    this.selectedItem = null;
+    this.renameForm = { name: '' };
+    this.syncView();
+  }
+
+  saveRename() {
+    if (!this.selectedItem) return;
+    const name = (this.renameForm.name ?? '').trim();
+    if (!name) {
+      this.alertService.error('Document name is required.');
+      return;
+    }
+
+    this.renameSaving = true;
+    this.syncView();
+    this.adminService.updateRepositoryItem(this.selectedItem.id, { name }).subscribe({
+      next: (updated) => {
+        this.items = this.items.map((item) => (item.id === updated.id ? { ...item, ...updated } : item));
+        this.applyFilters();
+        this.renameSaving = false;
+        this.closeRenameModal();
+        this.alertService.success('Document renamed successfully.');
+        this.syncView();
+      },
+      error: (err) => {
+        this.renameSaving = false;
+        console.error('Error renaming repository item:', err);
+        const msg = err?.error?.message ?? err?.error?.Message ?? 'Error renaming document. Please try again.';
+        this.alertService.error(typeof msg === 'string' ? msg : 'Error renaming document. Please try again.');
+        this.syncView();
+      }
+    });
   }
 
   onFileSelected(event: any) {
@@ -117,5 +187,18 @@ export class ManageRepository implements OnInit {
       default:
         return '📁';
     }
+  }
+
+  getPreviewUrl(item: RepositoryItem): string {
+    return item.filePath ? `${environment.apiUrl}${item.filePath}` : '';
+  }
+
+  isImage(item: RepositoryItem): boolean {
+    const url = this.getPreviewUrl(item).toLowerCase();
+    return item.type === 'image' || /\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(url);
+  }
+
+  isPdf(item: RepositoryItem): boolean {
+    return /\.pdf(\?|#|$)/i.test(this.getPreviewUrl(item));
   }
 }

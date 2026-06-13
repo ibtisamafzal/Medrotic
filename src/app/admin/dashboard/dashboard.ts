@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
@@ -6,6 +6,8 @@ import { AuthService, User } from '../../auth/auth.service';
 import { VerificationSyncService } from '../../services/verification-sync.service';
 import { Subscription } from 'rxjs';
 import { portalUpdated$ } from '../../services/patient.service';
+import Chart from 'chart.js/auto';
+import { Analytics as AnalyticsData } from '../../services/admin.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,13 +15,19 @@ import { portalUpdated$ } from '../../services/patient.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class Dashboard implements OnInit, OnDestroy {
+export class Dashboard implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChildren('dashboardChartCanvas') chartCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
+
   currentUser: User | null = null;
   private authSub?: Subscription;
   private portalSub?: Subscription;
   private navSub?: Subscription;
   private verificationSub?: Subscription;
   private refreshInFlight = false;
+  private patientGrowthChart: Chart | null = null;
+  private doctorGrowthChart: Chart | null = null;
+  private overviewChart: Chart | null = null;
+  analyticsData: AnalyticsData | null = null;
   /** `null` means the value failed to load or is unknown — do not show as numeric zero. */
   metrics = {
     totalPatients: null as number | null,
@@ -52,6 +60,10 @@ export class Dashboard implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private verificationSync: VerificationSyncService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.renderCharts();
+  }
 
   ngOnInit() {
     this.currentUser = this.authService.currentUserValue;
@@ -107,6 +119,7 @@ export class Dashboard implements OnInit, OnDestroy {
     this.portalSub?.unsubscribe();
     this.navSub?.unsubscribe();
     this.verificationSub?.unsubscribe();
+    this.destroyCharts();
   }
 
   formatMetricCount(value: number | null | undefined): string {
@@ -145,6 +158,98 @@ export class Dashboard implements OnInit, OnDestroy {
 
   private reloadAll(): void {
     this.loadMetrics();
+  }
+
+  private destroyCharts(): void {
+    this.patientGrowthChart?.destroy();
+    this.doctorGrowthChart?.destroy();
+    this.overviewChart?.destroy();
+    this.patientGrowthChart = null;
+    this.doctorGrowthChart = null;
+    this.overviewChart = null;
+  }
+
+  private renderCharts(): void {
+    if (!this.chartCanvases || this.chartCanvases.length < 3) return;
+
+    const canvases = this.chartCanvases.toArray();
+    const patientCanvas = canvases[0].nativeElement;
+    const doctorCanvas = canvases[1].nativeElement;
+    const overviewCanvas = canvases[2].nativeElement;
+
+    const patientGrowth = this.analyticsData?.patientGrowth ?? [];
+    const doctorGrowth = this.analyticsData?.doctorGrowth ?? [];
+
+    this.patientGrowthChart?.destroy();
+    this.patientGrowthChart = new Chart(patientCanvas, {
+      type: 'line',
+      data: {
+        labels: patientGrowth.map((d) => d.month),
+        datasets: [{
+          label: 'Patients',
+          data: patientGrowth.map((d) => d.count),
+          borderColor: '#3461ff',
+          backgroundColor: 'rgba(52, 97, 255, 0.14)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 4,
+          pointBackgroundColor: '#3461ff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,16,71,0.08)' } }, x: { grid: { display: false } } }
+      }
+    });
+
+    this.doctorGrowthChart?.destroy();
+    this.doctorGrowthChart = new Chart(doctorCanvas, {
+      type: 'bar',
+      data: {
+        labels: doctorGrowth.map((d) => d.month),
+        datasets: [{
+          label: 'Doctors',
+          data: doctorGrowth.map((d) => d.count),
+          borderRadius: 10,
+          backgroundColor: '#10b981'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,16,71,0.08)' } }, x: { grid: { display: false } } }
+      }
+    });
+
+    this.overviewChart?.destroy();
+    this.overviewChart = new Chart(overviewCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Patients', 'Doctors', 'Appointments', 'Verifications', 'Integrations', 'Repository'],
+        datasets: [{
+          data: [
+            this.metrics.totalPatients ?? 0,
+            this.metrics.totalDoctors ?? 0,
+            this.metrics.activeAppointments ?? 0,
+            this.metrics.pendingVerifications ?? 0,
+            this.metrics.totalIntegrations ?? 0,
+            this.metrics.repositoryItems ?? 0,
+          ],
+          backgroundColor: ['#3461ff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'],
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    this.cdr.markForCheck();
   }
 
   /** Keeps User Verification quick-link count in sync after approve/reject/verify elsewhere in the app. */
@@ -191,6 +296,7 @@ export class Dashboard implements OnInit, OnDestroy {
     // Load analytics
     this.adminService.getAnalytics().subscribe({
       next: (data) => {
+        this.analyticsData = data;
         this.metrics.totalPatients = data.totalPatients ?? 0;
         this.metrics.totalDoctors = data.totalDoctors ?? 0;
         this.metrics.totalUsers = data.totalUsers ?? 0;
@@ -198,9 +304,11 @@ export class Dashboard implements OnInit, OnDestroy {
         this.quickLinks[0].count = data.totalDoctors ?? 0;
         this.quickLinks[1].count = data.totalPatients ?? 0;
         this.cdr.markForCheck();
+        queueMicrotask(() => this.renderCharts());
       },
       error: (err) => {
         console.error('Error loading analytics:', err);
+        this.analyticsData = null;
         this.metrics.totalPatients = null;
         this.metrics.totalDoctors = null;
         this.metrics.totalUsers = null;
@@ -208,6 +316,7 @@ export class Dashboard implements OnInit, OnDestroy {
         this.quickLinks[0].count = null;
         this.quickLinks[1].count = null;
         this.cdr.markForCheck();
+        queueMicrotask(() => this.renderCharts());
       }
     });
 

@@ -144,18 +144,26 @@ export class ProfileSettings implements OnInit {
   }
 
   changePassword() {
+    const currentPassword = (this.passwordForm.currentPassword ?? '').trim();
+    const newPassword = (this.passwordForm.newPassword ?? '').trim();
+    const confirmPassword = (this.passwordForm.confirmPassword ?? '').trim();
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      this.alertService.error('Please fill in all password fields.');
+      return;
+    }
     if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
       this.alertService.error('New passwords do not match.');
       return;
     }
-    if (this.passwordForm.newPassword.length < 8) {
+    if (newPassword.length < 8) {
       this.alertService.warning('Password must be at least 8 characters.');
       return;
     }
 
     this.passwordSaving = true;
     this.cdr.markForCheck();
-    this.authService.changePassword(this.passwordForm.currentPassword, this.passwordForm.newPassword).subscribe({
+    this.authService.changePassword(currentPassword, newPassword).subscribe({
       next: () => {
         this.passwordSaving = false;
         this.passwordForm = { currentPassword: '', newPassword: '', confirmPassword: '' };

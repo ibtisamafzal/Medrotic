@@ -21,9 +21,9 @@
   <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
     <div class="row g-3">
       <div class="col-12 col-md-8 col-lg-6">
-        <input 
-          type="text" 
-          class="form-control" 
+        <input
+          type="text"
+          class="form-control"
           placeholder="Search by name, email, or CNIC..."
           [(ngModel)]="searchTerm"
           (input)="onSearchChange()">
@@ -60,8 +60,12 @@
             </td>
             <td>
               <app-dashboard-table-actions
+                [showViewButton]="true"
                 [showEdit]="true"
                 [showDelete]="true"
+                viewTitle="View doctor profile"
+                editTitle="Edit doctor"
+                (viewClick)="openProfileModal(doctor)"
                 (edit)="openEditModal(doctor)"
                 (delete)="deleteDoctor(doctor.id)"
               />
@@ -157,10 +161,13 @@
   </div>
   <!-- Edit Doctor Modal -->
   <div class="modal" [class.show]="showEditModal" *ngIf="selectedDoctor && showEditModal" tabindex="-1" (click)="closeEditModal()">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-dialog modal-dialog-centered modal-edit-doctor" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Doctor</h5>
+          <div>
+            <h5 class="modal-title mb-1">Edit Doctor</h5>
+            <small class="text-muted">Update doctor profile information</small>
+          </div>
           <button type="button" class="btn-close" (click)="closeEditModal()" aria-label="Close dialog" title="Close">✕</button>
         </div>
         <div class="modal-body">
@@ -186,6 +193,30 @@
                 <label class="form-label" for="edit-phone">Phone</label>
                 <input id="edit-phone" type="tel" class="form-control" placeholder="+92XXXXXXXXX" [(ngModel)]="selectedDoctor.phone" name="phone" pkInputFormat="phone" title="Doctor phone number">
               </div>
+              <div class="mb-3">
+                <label class="form-label" for="edit-city">City</label>
+                <input id="edit-city" type="text" class="form-control" placeholder="City" [(ngModel)]="selectedDoctor.city" name="city" title="Doctor city">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="edit-province">Province</label>
+                <input id="edit-province" type="text" class="form-control" placeholder="Province" [(ngModel)]="selectedDoctor.province" name="province" title="Doctor province">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="edit-dob">Date of birth</label>
+                <input id="edit-dob" type="date" class="form-control" [(ngModel)]="selectedDoctor.dateOfBirth" name="dateOfBirth" title="Doctor date of birth">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="edit-gender">Gender</label>
+                <select id="edit-gender" class="form-select" [(ngModel)]="selectedDoctor.gender" name="gender" title="Doctor gender">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="edit-exp">Experience (years)</label>
+                <input id="edit-exp" type="number" class="form-control" min="0" max="50" [(ngModel)]="selectedDoctor.experienceYears" name="experienceYears" title="Doctor experience years">
+              </div>
             </div>
           </form>
         </div>
@@ -195,6 +226,74 @@
             <span *ngIf="editSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
             {{ editSaving ? 'Saving...' : 'Update Doctor' }}
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Doctor Profile Modal -->
+  <div class="modal" [class.show]="showProfileModal" *ngIf="profileDoctor && showProfileModal" tabindex="-1" (click)="closeProfileModal()">
+    <div class="modal-dialog modal-dialog-centered modal-edit-doctor" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title mb-1">Doctor Profile</h5>
+            <small class="text-muted">Detailed view of the doctor account</small>
+          </div>
+          <button type="button" class="btn-close" (click)="closeProfileModal()" aria-label="Close dialog" title="Close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="doctor-profile-grid">
+            <div class="doctor-profile-card doctor-profile-card--hero">
+              <div class="doctor-profile-avatar">{{ getDoctorInitial(profileDoctor) }}</div>
+              <div>
+                <h4 class="doctor-profile-name">{{ profileDoctor.name }}</h4>
+                <p class="doctor-profile-sub">{{ profileDoctor.specialization || 'Specialization not set' }}</p>
+                <span [class]="getStatusBadgeClass(profileDoctor.status)">{{ profileDoctor.status | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Email</span>
+              <span class="doctor-profile-value">{{ profileDoctor.email || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Phone</span>
+              <span class="doctor-profile-value">{{ profileDoctor.phone || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">CNIC</span>
+              <span class="doctor-profile-value">{{ profileDoctor.cnic || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">City</span>
+              <span class="doctor-profile-value">{{ profileDoctor.city || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Province</span>
+              <span class="doctor-profile-value">{{ profileDoctor.province || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Gender</span>
+              <span class="doctor-profile-value">{{ profileDoctor.gender || 'N/A' }}</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Experience</span>
+              <span class="doctor-profile-value">{{ profileDoctor.experienceYears ?? 'N/A' }} years</span>
+            </div>
+            <div class="doctor-profile-card">
+              <span class="doctor-profile-label">Date of birth</span>
+              <span class="doctor-profile-value">{{ getDoctorDisplayDate(profileDoctor.dateOfBirth) }}</span>
+            </div>
+            <div class="doctor-profile-card" *ngIf="profileDoctor.hospitalName">
+              <span class="doctor-profile-label">Hospital</span>
+              <span class="doctor-profile-value">{{ profileDoctor.hospitalName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" (click)="profileDoctor && openEditModal(profileDoctor); closeProfileModal()">Edit doctor</button>
+          <button type="button" class="btn btn-primary" (click)="closeProfileModal()">Close</button>
         </div>
       </div>
     </div>

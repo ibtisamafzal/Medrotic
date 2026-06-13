@@ -3,6 +3,8 @@
 // Follows the Medrotic design system
 // ============================================
 
+@use "sass:color";
+
 :host { display: block; }
 
 // ─── Animations ───
@@ -268,7 +270,7 @@ $red:     #ef4444;
   .quick-link-icon-wrapper {
     margin-bottom: 0.85rem;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    
+
     .quick-link-mask {
       width: 44px;
       height: 44px;
@@ -296,6 +298,53 @@ $red:     #ef4444;
     font-size: 0.8125rem;
     font-weight: 500;
   }
+}
+
+// ============================================
+// CHART CARDS
+// ============================================
+.chart-card {
+  background: $surface;
+  border-radius: $radius;
+  border: 1px solid $border;
+  box-shadow: $shadow-sm;
+  padding: 1.25rem;
+  height: 100%;
+
+  &__head {
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text;
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: $text-muted;
+  }
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+
+  &--compact {
+    height: 280px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.svg-icon-img--inverse {
+  filter: invert(1);
 }
 
 // ============================================
@@ -536,9 +585,9 @@ $red:     #ef4444;
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s ease;
-    
+
     &:hover {
-      color: darken($primary, 10%);
+      color: color.adjust($primary, $lightness: -10%);
     }
   }
 }
@@ -547,7 +596,7 @@ $red:     #ef4444;
   width: 100%;
   border-collapse: collapse;
   margin: 0;
-  
+
   th {
     padding: 1rem 1.5rem;
     font-size: 0.75rem;
@@ -559,14 +608,14 @@ $red:     #ef4444;
     border-bottom: 1px solid $border;
     text-align: left;
   }
-  
+
   td {
     padding: 1.25rem 1.5rem;
     vertical-align: middle;
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
     font-size: 0.875rem;
   }
-  
+
   tr:last-child td {
     border-bottom: none;
   }

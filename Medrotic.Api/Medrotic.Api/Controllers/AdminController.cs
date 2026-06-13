@@ -659,7 +659,7 @@ namespace Medrotic.Api.Controllers
                     TotalNotifications = await _context.Notifications.CountAsync(),
                     ActiveUsersLastMonth = await _context.Users.CountAsync(u => u.LastActivity > DateTime.UtcNow.AddMonths(-1))
                 };
-                
+
                 // Calculate monthly distribution arrays dynamically
                 var sixMonthsAgo = DateTime.UtcNow.AddMonths(-5);
                 var patientGrowth = new List<object>();
@@ -678,21 +678,24 @@ namespace Medrotic.Api.Controllers
                     doctorGrowth.Add(new { month = monthName, count = allDoctors.Count(d => d.LastActivity.Month <= targetMonth.Month && d.LastActivity.Year <= targetMonth.Year) });
                 }
 
-                return Ok(new { 
-                    Message = "Analytics data retrieved successfully.", 
-                    Data = new {
+                return Ok(new
+                {
+                    Message = "Analytics data retrieved successfully.",
+                    Data = new
+                    {
                         totalPatients = analytics.TotalPatients,
                         totalDoctors = analytics.TotalDoctors,
                         totalAdmins = admins.Count,
                         activeAppointments,
                         patientGrowth,
                         doctorGrowth,
-                        kpis = new {
+                        kpis = new
+                        {
                             activeUsers = analytics.ActiveUsersLastMonth,
                             dataStorage = analytics.TotalDocuments
                         }
-                    }, 
-                    LastUpdated = DateTime.UtcNow 
+                    },
+                    LastUpdated = DateTime.UtcNow
                 });
             }
             catch (Exception ex)
@@ -1317,12 +1320,32 @@ namespace Medrotic.Api.Controllers
             return Ok(new { Message = "Repository item uploaded successfully.", Data = item });
         }
 
+        // PUT /api/admin/repository/{id}
+        [HttpPut("repository/{id}")]
+        public async Task<IActionResult> UpdateRepositoryItem(string id, [FromBody] RepositoryItemUpdateDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "Repository item id is required." });
+
+            var item = await _context.RepositoryItems.FindAsync(id);
+            if (item == null) return NotFound(new { Message = "Repository item not found." });
+
+            if (!string.IsNullOrWhiteSpace(dto.Name))
+                item.Name = dto.Name.Trim();
+
+            if (!string.IsNullOrWhiteSpace(dto.Type))
+                item.Type = dto.Type.Trim();
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Repository item updated successfully.", Data = item });
+        }
+
         // DELETE /api/admin/repository/{id}
         [HttpDelete("repository/{id}")]
         public async Task<IActionResult> DeleteRepositoryItem(string id)
         {
             if (string.IsNullOrWhiteSpace(id)) return BadRequest(new { Message = "Repository item id is required." });
-            
+
             var item = await _context.RepositoryItems.FindAsync(id);
             if (item == null) return NotFound(new { Message = "Repository item not found." });
 

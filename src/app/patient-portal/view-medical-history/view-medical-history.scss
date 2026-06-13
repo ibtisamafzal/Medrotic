@@ -114,6 +114,13 @@
         border-radius: 12px;
         padding: 1.25rem;
         transition: all 0.3s ease;
+        border: 0;
+        text-align: left;
+        width: auto;
+
+        &.timeline-content--interactive {
+          cursor: pointer;
+        }
 
         &:hover {
           background: #e8eaf0;
@@ -157,6 +164,115 @@
           }
         }
       }
+    }
+  }
+
+  .history-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+
+    &__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 16, 71, 0.55);
+      backdrop-filter: blur(4px);
+    }
+
+    &__dialog {
+      position: relative;
+      width: min(720px, 100%);
+      max-height: calc(100vh - 3rem);
+      overflow: auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+      padding: 1.5rem;
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+
+    &__eyebrow {
+      margin: 0 0 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      color: rgba(0, 16, 71, 0.55);
+    }
+
+    &__title {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #001047;
+    }
+
+    &__close {
+      border: 0;
+      background: #f5f6f9;
+      color: #001047;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 999px;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    &__section {
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      background: #f5f6f9;
+      margin-bottom: 0.85rem;
+
+      h4 {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #001047;
+      }
+
+      p {
+        margin: 0.25rem 0 0;
+        color: rgba(0, 16, 71, 0.75);
+      }
+    }
+  }
+
+  .history-detail {
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    background: #f5f6f9;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &__label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(0, 16, 71, 0.55);
+    }
+
+    &__value {
+      color: #001047;
+      font-weight: 600;
     }
   }
 }

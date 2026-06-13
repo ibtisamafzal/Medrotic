@@ -24,14 +24,15 @@
   <div class="filters-card mb-4 fade-in-up" [style.animation-delay]="'100ms'">
     <div class="row g-3">
       <div class="col-md-6">
-        <input 
-          type="text" 
-          class="form-control" 
+        <input
+          type="text"
+          class="form-control"
           placeholder="Search files..."
-          [(ngModel)]="searchTerm">
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()">
       </div>
       <div class="col-md-6">
-        <select class="form-select" [(ngModel)]="typeFilter">
+        <select class="form-select" [(ngModel)]="typeFilter" (change)="applyFilters()" title="Filter repository file type" aria-label="Filter repository file type">
           <option value="all">All Types</option>
           <option value="document">Documents</option>
           <option value="image">Images</option>
@@ -56,7 +57,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of items; let i = index" class="fade-in-up" [style.animation-delay]="(300 + i * 30) + 'ms'">
+          <tr *ngFor="let item of filteredItems; let i = index" class="fade-in-up" [style.animation-delay]="(300 + i * 30) + 'ms'">
             <td>
               <div class="d-flex align-items-center gap-2">
                 <span class="file-icon">{{ getTypeIcon(item.type) }}</span>
@@ -70,16 +71,95 @@
             <td>{{ item.uploadedBy || 'System' }}</td>
             <td>{{ item.uploadedAt | date: 'short' }}</td>
             <td>
-              <app-dashboard-table-actions [showDelete]="true" (delete)="deleteItem(item.id)" />
+              <app-dashboard-table-actions
+                [showViewButton]="true"
+                [showEdit]="true"
+                [showDelete]="true"
+                viewTitle="View document"
+                editTitle="Rename document"
+                (viewClick)="openViewModal(item)"
+                (edit)="openRenameModal(item)"
+                (delete)="deleteItem(item.id)"
+              />
             </td>
           </tr>
-          <tr *ngIf="items.length === 0">
+          <tr *ngIf="filteredItems.length === 0">
             <td colspan="6" class="text-center py-4">
               <p class="text-muted mb-0">No files in repository</p>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- View Document Modal -->
+  <div class="modal" [class.show]="showViewModal" *ngIf="selectedItem && showViewModal" tabindex="-1" (click)="closeViewModal()">
+    <div class="modal-dialog modal-dialog-centered modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title mb-1">View Document</h5>
+            <small class="text-muted">{{ selectedItem.name }}</small>
+          </div>
+          <button type="button" class="btn-close" (click)="closeViewModal()" aria-label="Close dialog" title="Close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="repository-preview" *ngIf="selectedItem.filePath; else noPreview">
+            <img *ngIf="isImage(selectedItem)" [src]="getPreviewUrl(selectedItem)" [alt]="'Preview of ' + selectedItem.name" title="Document preview" class="repository-preview__media">
+            <iframe *ngIf="isPdf(selectedItem)" [src]="getPreviewUrl(selectedItem)" class="repository-preview__frame" title="Document preview"></iframe>
+            <div *ngIf="!isImage(selectedItem) && !isPdf(selectedItem)" class="repository-preview__fallback">
+              <p class="mb-2">Preview is not available for this file type.</p>
+              <a class="btn btn-outline-primary" [href]="getPreviewUrl(selectedItem)" target="_blank" rel="noopener noreferrer">Open file in new tab</a>
+            </div>
+          </div>
+          <ng-template #noPreview>
+            <div class="repository-preview__fallback">
+              <p class="mb-2">No file path is available for this repository item.</p>
+            </div>
+          </ng-template>
+          <div class="repository-details mt-3">
+            <div><span>Name:</span> {{ selectedItem.name }}</div>
+            <div><span>Type:</span> {{ selectedItem.type | titlecase }}</div>
+            <div><span>Size:</span> {{ formatFileSize(selectedItem.size) }}</div>
+            <div><span>Uploaded by:</span> {{ selectedItem.uploadedBy || 'System' }}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeViewModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Document Modal -->
+  <div class="modal" [class.show]="showRenameModal" *ngIf="selectedItem && showRenameModal" tabindex="-1" (click)="closeRenameModal()">
+    <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title mb-1">Rename Document</h5>
+            <small class="text-muted">Update the display name for this file</small>
+          </div>
+          <button type="button" class="btn-close" (click)="closeRenameModal()" aria-label="Close dialog" title="Close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label" for="repo-name">Document name</label>
+            <input id="repo-name" type="text" class="form-control" [(ngModel)]="renameForm.name" name="name" placeholder="Document name">
+          </div>
+          <div class="text-muted small">
+            File path remains unchanged; only the repository display name is updated.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeRenameModal()" [disabled]="renameSaving">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveRename()" [disabled]="renameSaving">
+            <span *ngIf="renameSaving" class="spinner-border spinner-border-sm me-1"></span>
+            {{ renameSaving ? 'Saving...' : 'Save Name' }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

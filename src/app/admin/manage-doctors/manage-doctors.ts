@@ -21,8 +21,10 @@ export class ManageDoctors implements OnInit, OnDestroy {
 
   doctors: Doctor[] = [];
   filteredDoctors: Doctor[] = [];
+  profileDoctor: Doctor | null = null;
   selectedDoctor: Doctor | null = null;
   showAddModal = false;
+  showProfileModal = false;
   showEditModal = false;
 
   addSaving = false;
@@ -89,6 +91,18 @@ export class ManageDoctors implements OnInit, OnDestroy {
       this.selectedDoctor = { ...this.selectedDoctor, ...patch };
     }
     this.applyFilters();
+  }
+
+  openProfileModal(doctor: Doctor) {
+    this.profileDoctor = { ...doctor };
+    this.showProfileModal = true;
+    this.syncView();
+  }
+
+  closeProfileModal() {
+    this.showProfileModal = false;
+    this.profileDoctor = null;
+    this.syncView();
   }
 
   applyFilters() {
@@ -256,7 +270,13 @@ export class ManageDoctors implements OnInit, OnDestroy {
       error: (err) => {
         this.editSaving = false;
         console.error('Error updating doctor:', err);
-        this.alertService.error('Error updating doctor. Please try again.');
+        const e = err?.error;
+        let msg = e?.message as string | undefined;
+        if (!msg && e?.errors && typeof e.errors === 'object') {
+          const parts = Object.values(e.errors).flat() as string[];
+          msg = parts.filter(Boolean).join(' ');
+        }
+        this.alertService.error(msg || 'Error updating doctor. Please try again.');
         this.syncView();
       }
     });
@@ -306,6 +326,17 @@ export class ManageDoctors implements OnInit, OnDestroy {
       default:
         return 'badge bg-secondary';
     }
+  }
+
+  getDoctorDisplayDate(value?: string): string {
+    if (!value) return 'N/A';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
+  }
+
+  getDoctorInitial(doctor: Doctor | null): string {
+    const name = doctor ? (doctor.name ?? '').trim() : '';
+    return name ? name.charAt(0) : 'D';
   }
 
 }

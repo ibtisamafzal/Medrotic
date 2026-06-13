@@ -15,6 +15,7 @@ export class ViewMedicalHistory implements OnInit, OnDestroy {
 
   loading = false;
   history: MedicalHistory[] = [];
+  selectedItem: MedicalHistory | null = null;
   private sub?: Subscription;
 
   constructor(private patientService: PatientService) {}
@@ -28,6 +29,16 @@ export class ViewMedicalHistory implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+  }
+
+  openDetails(item: MedicalHistory): void {
+    this.selectedItem = item;
+    this.cdr.markForCheck();
+  }
+
+  closeDetails(): void {
+    this.selectedItem = null;
+    this.cdr.markForCheck();
   }
 
   loadHistory() {
@@ -69,5 +80,12 @@ export class ViewMedicalHistory implements OnInit, OnDestroy {
       metric: 'primary'
     };
     return colors[type] || 'secondary';
+  }
+
+  getHistorySummary(item: MedicalHistory): string {
+    const parts = [item.disease, item.diagnosis, item.treatment, item.description]
+      .map((value) => (value ?? '').trim())
+      .filter((value) => value.length > 0);
+    return parts.length > 0 ? parts.join(' • ') : 'No additional summary available.';
   }
 }

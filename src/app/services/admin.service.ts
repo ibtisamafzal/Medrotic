@@ -15,6 +15,13 @@ export interface Doctor {
   cnic: string;
   specialization: string;
   phone?: string;
+  city?: string;
+  province?: string;
+  dateOfBirth?: string;
+  gender?: 'Male' | 'Female' | 'Other';
+  experienceYears?: number;
+  hospitalId?: string;
+  hospitalName?: string;
   status: 'pending' | 'verified' | 'rejected';
   createdAt?: string;
   updatedAt?: string;
@@ -84,6 +91,7 @@ export interface RepositoryItem {
   size: number;
   uploadedAt: string;
   uploadedBy?: string;
+  filePath?: string;
 }
 
 export interface Analytics {
@@ -161,6 +169,13 @@ export class AdminService {
       cnic,
       specialization: String(d?.specialization ?? d?.specialty ?? d?.Specialty ?? ''),
       phone: d?.phone ?? d?.PhoneNumber ?? undefined,
+      city: d?.city ?? d?.City ?? undefined,
+      province: d?.province ?? d?.Province ?? undefined,
+      dateOfBirth: d?.dateOfBirth ?? d?.DateOfBirth ?? undefined,
+      gender: d?.gender ?? d?.Gender ?? undefined,
+      experienceYears: d?.experienceYears ?? d?.ExperienceYears ?? undefined,
+      hospitalId: d?.hospitalId ?? d?.HospitalId ?? undefined,
+      hospitalName: d?.hospitalName ?? d?.HospitalName ?? undefined,
       status,
       createdAt: d?.createdAt ?? d?.CreatedAt,
       updatedAt: d?.updatedAt ?? d?.UpdatedAt,
@@ -251,12 +266,34 @@ export class AdminService {
   }
 
   updateDoctor(id: string, doctor: Partial<Doctor>): Observable<Doctor> {
+    const cnicDigits = doctor.cnic ? doctor.cnic.replace(/\D/g, '') : undefined;
+    
+    let phoneNumber = doctor.phone;
+    if (phoneNumber) {
+      const rawPhone = phoneNumber.replace(/\D/g, '');
+      if (rawPhone.length >= 10) {
+        let n = rawPhone;
+        if (n.startsWith('0')) {
+          n = '92' + n.slice(1);
+        } else if (!n.startsWith('92')) {
+          n = '92' + n;
+        }
+        phoneNumber = '+' + n;
+      }
+    }
+
     const payload = {
       fullName: doctor.name,
       email: doctor.email,
-      cnic: doctor.cnic,
+      cnic: cnicDigits,
       specialty: doctor.specialization,
-      phoneNumber: doctor.phone
+      phoneNumber: phoneNumber,
+      city: doctor.city,
+      province: doctor.province,
+      dateOfBirth: doctor.dateOfBirth,
+      gender: doctor.gender,
+      experienceYears: doctor.experienceYears,
+      hospitalId: doctor.hospitalId
     };
     return this.http.put<Doctor>(`${this.baseUrl}/doctors/${id}`, payload);
   }
@@ -360,7 +397,10 @@ export class AdminService {
 
   // Repository
   getRepositoryItems(): Observable<RepositoryItem[]> {
-    return this.http.get<any>(`${this.baseUrl}/repository`).pipe(this.extractData<RepositoryItem[]>());
+    return this.http.get<any>(`${this.baseUrl}/repository`).pipe(
+      this.extractData<RepositoryItem[]>(),
+      map((items) => (items ?? []).map((item) => this.normalizeRepositoryItem(item)))
+    );
   }
 
   uploadRepositoryItem(file: File): Observable<RepositoryItem> {
@@ -369,12 +409,32 @@ export class AdminService {
     formData.append('name', file.name);
     formData.append('type', 'document');
     return this.http.post<any>(`${this.baseUrl}/repository/upload`, formData).pipe(
-      this.extractData<RepositoryItem>()
+      this.extractData<RepositoryItem>(),
+      map((item) => this.normalizeRepositoryItem(item))
+    );
+  }
+
+  updateRepositoryItem(id: string, payload: Partial<RepositoryItem>): Observable<RepositoryItem> {
+    return this.http.put<any>(`${this.baseUrl}/repository/${id}`, payload).pipe(
+      this.extractData<RepositoryItem>(),
+      map((item) => this.normalizeRepositoryItem(item))
     );
   }
 
   deleteRepositoryItem(id: string): Observable<void> {
     return this.http.delete<any>(`${this.baseUrl}/repository/${id}`).pipe(map(() => void 0));
+  }
+
+  private normalizeRepositoryItem(item: any): RepositoryItem {
+    return {
+      id: String(item?.id ?? item?.Id ?? ''),
+      name: String(item?.name ?? item?.Name ?? '').trim(),
+      type: (item?.type ?? item?.Type ?? 'document') as RepositoryItem['type'],
+      size: Number(item?.size ?? item?.Size ?? 0),
+      uploadedAt: String(item?.uploadedAt ?? item?.UploadedAt ?? new Date().toISOString()),
+      uploadedBy: item?.uploadedBy ?? item?.UploadedBy ?? undefined,
+      filePath: item?.filePath ?? item?.FilePath ?? undefined,
+    };
   }
 
   // Analytics

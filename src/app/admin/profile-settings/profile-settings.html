@@ -45,7 +45,7 @@
     <div class="col-md-6">
       <div class="settings-card fade-in-up" [style.animation-delay]="'200ms'">
         <h3 class="card-title">Change Password</h3>
-        <form (ngSubmit)="changePassword()">
+        <form (ngSubmit)="changePassword()" novalidate>
           <div class="mb-3">
             <label class="form-label">Current Password</label>
             <input type="password" class="form-control" [(ngModel)]="passwordForm.currentPassword" name="currentPassword" required>

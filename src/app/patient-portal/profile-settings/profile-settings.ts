@@ -7,6 +7,7 @@ import { notifyPortalUpdated } from '../../services/patient.service';
 import { finalize } from 'rxjs/operators';
 import { PakInputFormatDirective } from '../../common/shared/pak-input-format.directive';
 import { AlertService } from '../../services/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile-settings',
@@ -27,7 +28,16 @@ export class ProfileSettings implements OnInit {
     address: '',
     cnic: ''
   };
-  
+
+  passwordForm = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  };
+
+  passwordSaving = false;
+  passwordError = '';
+
   cnicVerifying = false;
   cnicVerified = false;
   cnicVerificationMessage = '';
@@ -90,7 +100,7 @@ export class ProfileSettings implements OnInit {
 
     this.cnicVerifying = true;
     this.cnicVerificationMessage = '';
-    
+
     this.patientService.verifyCNIC(this.profile.cnic!).subscribe({
       next: (result) => {
         this.cnicVerified = result.verified;
@@ -147,6 +157,55 @@ export class ProfileSettings implements OnInit {
         console.error('Error updating profile:', err);
         this.alertService.error('Error updating profile. Please try again.');
         this.saving = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  changePassword() {
+    const currentPassword = (this.passwordForm.currentPassword ?? '').trim();
+    const newPassword = (this.passwordForm.newPassword ?? '').trim();
+    const confirmPassword = (this.passwordForm.confirmPassword ?? '').trim();
+
+    this.passwordError = '';
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      this.passwordError = 'Please fill in all password fields.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      this.passwordError = 'New passwords do not match.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      this.passwordError = 'Password must be at least 8 characters.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.passwordSaving = true;
+    this.cdr.markForCheck();
+
+    this.authService.changePassword(currentPassword, newPassword).subscribe({
+      next: () => {
+        this.passwordSaving = false;
+        this.passwordForm = { currentPassword: '', newPassword: '', confirmPassword: '' };
+        this.passwordError = '';
+        this.alertService.success('Password changed successfully');
+        this.cdr.markForCheck();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.passwordSaving = false;
+        const backendMessage =
+          err?.error?.message ??
+          err?.error?.Message ??
+          (Array.isArray(err?.error) ? err.error.join(' ') : 'Password change failed.');
+        this.passwordError = typeof backendMessage === 'string' ? backendMessage : 'Password change failed.';
+        this.alertService.error(this.passwordError);
         this.cdr.markForCheck();
       }
     });

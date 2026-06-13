@@ -31,6 +31,17 @@ export interface MedicalHistory {
   title: string;
   description?: string;
   doctorName?: string;
+  hospitalName?: string;
+  diagnosis?: string;
+  treatment?: string;
+  disease?: string;
+  symptoms?: string;
+  notes?: string;
+  fileName?: string;
+  filePath?: string;
+  reportFilePath?: string | null;
+  currentState?: string;
+  source?: 'record' | 'document' | 'metric';
   attachments?: string[];
   createdAt: string;
 }
@@ -199,9 +210,20 @@ export class PatientService {
       recordDate: item.recordDate ?? item.RecordDate,
       type,
       title,
-      description: item.description ?? item.Description,
+      description: item.description ?? item.Description ?? item.notes ?? item.Notes,
       doctorName: item.doctorName ?? item.DoctorName,
-      attachments: [],
+      hospitalName: item.hospitalName ?? item.HospitalName,
+      diagnosis: item.diagnosis ?? item.Diagnosis,
+      treatment: item.treatment ?? item.Treatment,
+      disease: item.disease ?? item.Disease,
+      symptoms: item.symptoms ?? item.Symptoms,
+      notes: item.notes ?? item.Notes,
+      fileName: item.fileName ?? item.FileName ?? this.extractFileName(reportFilePath),
+      filePath: reportFilePath || undefined,
+      reportFilePath: reportFilePath || null,
+      currentState: item.currentState ?? item.CurrentState,
+      source: 'record',
+      attachments: reportFilePath ? [reportFilePath] : [],
       createdAt: item.createdAt ?? item.CreatedAt ?? item.recordDate ?? item.RecordDate ?? new Date().toISOString()
     };
   }
@@ -290,6 +312,7 @@ export class PatientService {
               : docType.includes('pres') || docType === 'prescription' ? 'prescription'
               : docType.includes('report') || docType.includes('lab') || docType === 'report' ? 'test'
               : 'visit';
+            const filePath = d.filePath ?? d.FilePath ?? d.file ?? d.File ?? '';
 
             return {
               id: d.id ?? d.Id ?? '',
@@ -297,7 +320,12 @@ export class PatientService {
               type,
               title: d.name ?? d.fileName ?? d.DocumentType ?? d.documentType ?? 'Document',
               description: d.currentState ?? d.currentState ?? d.CurrentState,
+              fileName: d.fileName ?? d.FileName ?? this.extractFileName(filePath),
+              filePath: filePath || undefined,
+              reportFilePath: filePath || null,
+              currentState: d.currentState ?? d.CurrentState,
               doctorName: '',
+              source: 'document',
               attachments: [],
               createdAt: d.createdAt ?? d.uploadedAt ?? new Date().toISOString()
             } as MedicalHistory;
@@ -317,6 +345,9 @@ export class PatientService {
           title: 'Health Metrics',
           description: m.symptoms ?? m.notes ?? '',
           doctorName: '',
+          symptoms: m.symptoms,
+          notes: m.notes,
+          source: 'metric',
           attachments: [],
           createdAt: m.date ?? new Date().toISOString()
         })) as MedicalHistory[]
@@ -380,8 +411,30 @@ export class PatientService {
     }
     return this.http.get<any>(`${this.baseUrl}/doctors`, { params }).pipe(
       this.extractData<Doctor[]>(),
+      map((rows) => (rows || []).map((doctor) => this.normalizeDoctorSearchResult(doctor))),
       catchError(() => of([]))
     );
+  }
+
+  private normalizeDoctorSearchResult(d: any): Doctor {
+    const qualifications = Array.isArray(d?.qualifications ?? d?.Qualifications)
+      ? (d.qualifications ?? d.Qualifications).map((item: unknown) => String(item).trim()).filter(Boolean)
+      : [];
+    const ratingValue = Number(d?.rating ?? d?.Rating ?? NaN);
+    const experienceValue = Number(d?.experience ?? d?.ExperienceYears ?? d?.experienceYears ?? 0);
+
+    return {
+      id: String(d?.id ?? d?.Id ?? ''),
+      name: String(d?.name ?? d?.FullName ?? d?.fullName ?? '').trim(),
+      specialty: String(d?.specialty ?? d?.Specialty ?? d?.specialization ?? d?.Specialization ?? '').trim(),
+      city: String(d?.city ?? d?.City ?? '').trim(),
+      experience: Number.isFinite(experienceValue) ? experienceValue : 0,
+      qualifications,
+      hospital: String(d?.hospital ?? d?.Hospital ?? d?.HospitalName ?? '').trim() || undefined,
+      phone: String(d?.phone ?? d?.PhoneNumber ?? '').trim() || undefined,
+      email: String(d?.email ?? d?.Email ?? '').trim() || undefined,
+      rating: Number.isFinite(ratingValue) ? ratingValue : undefined,
+    };
   }
 
   /** Scheduled appointments for the logged-in patient (from database). */
