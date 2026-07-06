@@ -48,7 +48,7 @@ graph TD
 
 | Layer | Technology |
 | :--- | :--- |
-| **Frontend Framework** | [Angular 20.3.x](https://angular.dev) |
+| **Frontend Framework** | [Angular 20](https://angular.dev) |
 | **Backend Framework** | [.NET Core API](https://dotnet.microsoft.com/) |
 | **Styling & UI** | Bootstrap 5, SCSS, Custom Premium Animations |
 | **Data Visualization** | Chart.js |
