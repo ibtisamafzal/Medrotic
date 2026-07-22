@@ -48,11 +48,10 @@ graph TD
 
 | Layer | Technology |
 | :--- | :--- |
-| **Frontend Framework** | [Angular 20.3.x](https://angular.dev) |
+| **Frontend Framework** | [Angular 20.3](https://angular.dev) |
 | **Backend Framework** | [.NET Core API](https://dotnet.microsoft.com/) |
 | **Styling & UI** | Bootstrap 5, SCSS, Custom Premium Animations |
 | **Data Visualization** | Chart.js |
-| **Fonts** | Public Sans & Rubik (via FontSource) |
 | **Hosting** | Vercel (Edge Functions & SSR) |
 
 ---
@@ -167,4 +166,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-<p align="center">Made with ❤️ by the Medrotic Team</p>
+<p align="center">Developed by the Medrotic Team at CUI.</p>
