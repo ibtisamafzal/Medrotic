@@ -166,4 +166,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-<p align="center">Developed by the Medrotic Team at CUI.</p>
+<p align="center">Developed by the Medrotic Team at CUI Sahiwal.</p>
