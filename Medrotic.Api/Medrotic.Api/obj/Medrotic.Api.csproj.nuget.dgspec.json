@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj": {}
+    "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj": {}
   },
   "projects": {
-    "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj": {
+    "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+        "projectUniqueName": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
         "projectName": "Medrotic.Api",
-        "projectPath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+        "projectPath": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
         "packagesPath": "C:\\Users\\Laptop Solutions\\.nuget\\packages\\",
-        "outputPath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\obj\\",
+        "outputPath": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -96,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.315/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.320/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

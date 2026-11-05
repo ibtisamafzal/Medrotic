@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4kp/WcGlRSQ=",
+  "dgSpecHash": "spKTRU842W4=",
   "success": true,
-  "projectFilePath": "D:\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+  "projectFilePath": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
@@ -90,5 +90,15 @@
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\Laptop Solutions\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "projectPath": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\xampp\\htdocs\\Medrotic\\Medrotic.Api\\Medrotic.Api\\Medrotic.Api.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
